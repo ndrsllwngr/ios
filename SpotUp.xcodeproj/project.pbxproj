@@ -1,0 +1,593 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E96237DD43D0060FC64 /* AppDelegate.swift */; };
+		CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E98237DD43D0060FC64 /* SceneDelegate.swift */; };
+		CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E9A237DD43D0060FC64 /* ContentView.swift */; };
+		CE400E9D237DD43F0060FC64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE400E9C237DD43F0060FC64 /* Assets.xcassets */; };
+		CE400EA0237DD43F0060FC64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */; };
+		CE400EA3237DD43F0060FC64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */; };
+		CE400EAE237DD43F0060FC64 /* SpotUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */; };
+		CE400EB9237DD43F0060FC64 /* SpotUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CE400EAA237DD43F0060FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE400E8B237DD43D0060FC64 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE400E92237DD43D0060FC64;
+			remoteInfo = SpotUp;
+		};
+		CE400EB5237DD43F0060FC64 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE400E8B237DD43D0060FC64 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE400E92237DD43D0060FC64;
+			remoteInfo = SpotUp;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		CE400E93237DD43D0060FC64 /* SpotUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE400E96237DD43D0060FC64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CE400E98237DD43D0060FC64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		CE400E9A237DD43D0060FC64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		CE400E9C237DD43F0060FC64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		CE400EA2237DD43F0060FC64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CE400EA4237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotUpTests.swift; sourceTree = "<group>"; };
+		CE400EAF237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotUpUITests.swift; sourceTree = "<group>"; };
+		CE400EBA237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE400E90237DD43D0060FC64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EA6237DD43F0060FC64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EB1237DD43F0060FC64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE400E8A237DD43D0060FC64 = {
+			isa = PBXGroup;
+			children = (
+				CE400E95237DD43D0060FC64 /* SpotUp */,
+				CE400EAC237DD43F0060FC64 /* SpotUpTests */,
+				CE400EB7237DD43F0060FC64 /* SpotUpUITests */,
+				CE400E94237DD43D0060FC64 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		CE400E94237DD43D0060FC64 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE400E93237DD43D0060FC64 /* SpotUp.app */,
+				CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */,
+				CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE400E95237DD43D0060FC64 /* SpotUp */ = {
+			isa = PBXGroup;
+			children = (
+				CE400E96237DD43D0060FC64 /* AppDelegate.swift */,
+				CE400E98237DD43D0060FC64 /* SceneDelegate.swift */,
+				CE400E9A237DD43D0060FC64 /* ContentView.swift */,
+				CE400E9C237DD43F0060FC64 /* Assets.xcassets */,
+				CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */,
+				CE400EA4237DD43F0060FC64 /* Info.plist */,
+				CE400E9E237DD43F0060FC64 /* Preview Content */,
+			);
+			path = SpotUp;
+			sourceTree = "<group>";
+		};
+		CE400E9E237DD43F0060FC64 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		CE400EAC237DD43F0060FC64 /* SpotUpTests */ = {
+			isa = PBXGroup;
+			children = (
+				CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */,
+				CE400EAF237DD43F0060FC64 /* Info.plist */,
+			);
+			path = SpotUpTests;
+			sourceTree = "<group>";
+		};
+		CE400EB7237DD43F0060FC64 /* SpotUpUITests */ = {
+			isa = PBXGroup;
+			children = (
+				CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */,
+				CE400EBA237DD43F0060FC64 /* Info.plist */,
+			);
+			path = SpotUpUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE400E92237DD43D0060FC64 /* SpotUp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE400EBD237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUp" */;
+			buildPhases = (
+				CE400E8F237DD43D0060FC64 /* Sources */,
+				CE400E90237DD43D0060FC64 /* Frameworks */,
+				CE400E91237DD43D0060FC64 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SpotUp;
+			productName = SpotUp;
+			productReference = CE400E93237DD43D0060FC64 /* SpotUp.app */;
+			productType = "com.apple.product-type.application";
+		};
+		CE400EA8237DD43F0060FC64 /* SpotUpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE400EC0237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpTests" */;
+			buildPhases = (
+				CE400EA5237DD43F0060FC64 /* Sources */,
+				CE400EA6237DD43F0060FC64 /* Frameworks */,
+				CE400EA7237DD43F0060FC64 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE400EAB237DD43F0060FC64 /* PBXTargetDependency */,
+			);
+			name = SpotUpTests;
+			productName = SpotUpTests;
+			productReference = CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		CE400EB3237DD43F0060FC64 /* SpotUpUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE400EC3237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpUITests" */;
+			buildPhases = (
+				CE400EB0237DD43F0060FC64 /* Sources */,
+				CE400EB1237DD43F0060FC64 /* Frameworks */,
+				CE400EB2237DD43F0060FC64 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				CE400EB6237DD43F0060FC64 /* PBXTargetDependency */,
+			);
+			name = SpotUpUITests;
+			productName = SpotUpUITests;
+			productReference = CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE400E8B237DD43D0060FC64 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = "iOS WiSe 19/20 Gruppe 7";
+				TargetAttributes = {
+					CE400E92237DD43D0060FC64 = {
+						CreatedOnToolsVersion = 11.2;
+					};
+					CE400EA8237DD43F0060FC64 = {
+						CreatedOnToolsVersion = 11.2;
+						TestTargetID = CE400E92237DD43D0060FC64;
+					};
+					CE400EB3237DD43F0060FC64 = {
+						CreatedOnToolsVersion = 11.2;
+						TestTargetID = CE400E92237DD43D0060FC64;
+					};
+				};
+			};
+			buildConfigurationList = CE400E8E237DD43D0060FC64 /* Build configuration list for PBXProject "SpotUp" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CE400E8A237DD43D0060FC64;
+			productRefGroup = CE400E94237DD43D0060FC64 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE400E92237DD43D0060FC64 /* SpotUp */,
+				CE400EA8237DD43F0060FC64 /* SpotUpTests */,
+				CE400EB3237DD43F0060FC64 /* SpotUpUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE400E91237DD43D0060FC64 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE400EA3237DD43F0060FC64 /* LaunchScreen.storyboard in Resources */,
+				CE400EA0237DD43F0060FC64 /* Preview Assets.xcassets in Resources */,
+				CE400E9D237DD43F0060FC64 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EA7237DD43F0060FC64 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EB2237DD43F0060FC64 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE400E8F237DD43D0060FC64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */,
+				CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */,
+				CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EA5237DD43F0060FC64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE400EAE237DD43F0060FC64 /* SpotUpTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CE400EB0237DD43F0060FC64 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE400EB9237DD43F0060FC64 /* SpotUpUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CE400EAB237DD43F0060FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE400E92237DD43D0060FC64 /* SpotUp */;
+			targetProxy = CE400EAA237DD43F0060FC64 /* PBXContainerItemProxy */;
+		};
+		CE400EB6237DD43F0060FC64 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE400E92237DD43D0060FC64 /* SpotUp */;
+			targetProxy = CE400EB5237DD43F0060FC64 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CE400EA2237DD43F0060FC64 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CE400EBB237DD43F0060FC64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CE400EBC237DD43F0060FC64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		CE400EBE237DD43F0060FC64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SpotUp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CE400EBF237DD43F0060FC64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SpotUp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CE400EC1237DD43F0060FC64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SpotUpTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotUp.app/SpotUp";
+			};
+			name = Debug;
+		};
+		CE400EC2237DD43F0060FC64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SpotUpTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotUp.app/SpotUp";
+			};
+			name = Release;
+		};
+		CE400EC4237DD43F0060FC64 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SpotUpUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SpotUp;
+			};
+			name = Debug;
+		};
+		CE400EC5237DD43F0060FC64 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = SpotUpUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SpotUp;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE400E8E237DD43D0060FC64 /* Build configuration list for PBXProject "SpotUp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE400EBB237DD43F0060FC64 /* Debug */,
+				CE400EBC237DD43F0060FC64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE400EBD237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE400EBE237DD43F0060FC64 /* Debug */,
+				CE400EBF237DD43F0060FC64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE400EC0237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE400EC1237DD43F0060FC64 /* Debug */,
+				CE400EC2237DD43F0060FC64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE400EC3237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE400EC4237DD43F0060FC64 /* Debug */,
+				CE400EC5237DD43F0060FC64 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE400E8B237DD43D0060FC64 /* Project object */;
+}
