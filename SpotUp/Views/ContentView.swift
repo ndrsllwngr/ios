@@ -12,17 +12,27 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var session = FirebaseSession()
-
     var body: some View {
-        VStack {
-            LoginView()
+        
+        NavigationView {
+            Group {
+                if (!UserDefaults.standard.bool(forKey: "launchedBefore")) {
+                    OnboardingView()
+                } else if (session.session != nil) {
+                    HomeView()
+                } else {
+                    LoginView()
+                }
+            }
+            .onAppear(perform: getUser)
         }
-      
+        
     }
-    
+
     func getUser() {
         session.listen()
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

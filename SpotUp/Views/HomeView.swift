@@ -10,7 +10,21 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text("HomeView!")
+        
+        VStack {
+            Text("Home View")
+
+            Spacer()
+            Button(action: {
+                FirebaseSession().logOut()
+                
+            }) {
+                Text("Log Out")
+            }
+            
+            
+        }
+        
     }
 }
 
@@ -19,3 +33,5 @@ struct HomeView_Previews: PreviewProvider {
         HomeView()
     }
 }
+
+
