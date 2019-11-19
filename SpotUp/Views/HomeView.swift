@@ -10,21 +10,10 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        
         VStack {
             Text("Home View")
-
             Spacer()
-            Button(action: {
-                FirebaseSession().logOut()
-                
-            }) {
-                Text("Log Out")
-            }
-            
-            
         }
-        
     }
 }
 
