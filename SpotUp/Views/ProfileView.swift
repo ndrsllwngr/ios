@@ -10,7 +10,18 @@ import SwiftUI
 
 struct ProfileView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            VStack {
+                HStack {
+                    Text("Profile")
+                    Spacer()
+                    NavigationLink(destination: SettingsView()) {
+                        Image(systemName: "gear")
+                    }
+                }.padding()
+                Spacer()
+            }
+        }       
     }
 }
 

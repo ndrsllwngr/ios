@@ -13,20 +13,18 @@ struct ContentView: View {
     
     @ObservedObject var session = FirebaseSession()
     var body: some View {
-        
-        NavigationView {
             Group {
-                if (!UserDefaults.standard.bool(forKey: "launchedBefore")) {
+                if !UserDefaults.standard.bool(forKey: "launchedBefore") {
                     OnboardingView()
-                } else if (session.session != nil) {
-                    HomeView()
+                } else if !UserDefaults.standard.bool(forKey: "permissionNotification") {
+                    PermissionView()
+                } else if session.session != nil {
+                    TabBarView()
                 } else {
                     LoginView()
                 }
             }
-            .onAppear(perform: getUser)
-        }
-        
+            .onAppear(perform: getUser)   
     }
 
     func getUser() {
