@@ -10,6 +10,7 @@
 		092D9601141463271EC61D33 /* Pods_SpotUpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */; };
 		6FB0E5B1E0E05D24F32001E8 /* Pods_SpotUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D80AAE63C883B774FDA1E89 /* Pods_SpotUp.framework */; };
 		A639992645919CC44A6E2098 /* Pods_SpotUp_SpotUpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */; };
+		CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE28481523846C8400A2EBE5 /* TabBarView.swift */; };
 		CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E96237DD43D0060FC64 /* AppDelegate.swift */; };
 		CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E98237DD43D0060FC64 /* SceneDelegate.swift */; };
 		CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E9A237DD43D0060FC64 /* ContentView.swift */; };
@@ -21,7 +22,7 @@
 		CE913F0A238316B1006A7DD9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F09238316B1006A7DD9 /* HomeView.swift */; };
 		CE913F0D238317C0006A7DD9 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0C238317C0006A7DD9 /* OnboardingView.swift */; };
 		CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0E238317CC006A7DD9 /* LoginView.swift */; };
-		CE913F1123831818006A7DD9 /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1023831818006A7DD9 /* PermissionsView.swift */; };
+		CE913F1123831818006A7DD9 /* PermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1023831818006A7DD9 /* PermissionView.swift */; };
 		CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1223831852006A7DD9 /* ProfileView.swift */; };
 		CE913F1523831874006A7DD9 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1423831874006A7DD9 /* ListView.swift */; };
 		CE913F17238318A3006A7DD9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F16238318A3006A7DD9 /* SettingsView.swift */; };
@@ -60,6 +61,7 @@
 		5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUp_SpotUpUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2A741F8BF1983EB3199716 /* Pods-SpotUp-SpotUpUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp-SpotUpUITests.debug.xcconfig"; path = "Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		CD0AE2A362C5CB01AF782DA6 /* Pods-SpotUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.release.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.release.xcconfig"; sourceTree = "<group>"; };
+		CE28481523846C8400A2EBE5 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		CE400E93237DD43D0060FC64 /* SpotUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE400E96237DD43D0060FC64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE400E98237DD43D0060FC64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,7 +79,7 @@
 		CE913F09238316B1006A7DD9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		CE913F0C238317C0006A7DD9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE913F0E238317CC006A7DD9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		CE913F1023831818006A7DD9 /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
+		CE913F1023831818006A7DD9 /* PermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionView.swift; sourceTree = "<group>"; };
 		CE913F1223831852006A7DD9 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		CE913F1423831874006A7DD9 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
 		CE913F16238318A3006A7DD9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		CE913F1D2383199B006A7DD9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CE28481523846C8400A2EBE5 /* TabBarView.swift */,
 				CE400E9A237DD43D0060FC64 /* ContentView.swift */,
 				CE913F09238316B1006A7DD9 /* HomeView.swift */,
 				CE913F1423831874006A7DD9 /* ListView.swift */,
@@ -222,7 +225,7 @@
 				CE913F1B238318ED006A7DD9 /* ListViewMap.swift */,
 				CE913F0E238317CC006A7DD9 /* LoginView.swift */,
 				CE913F0C238317C0006A7DD9 /* OnboardingView.swift */,
-				CE913F1023831818006A7DD9 /* PermissionsView.swift */,
+				CE913F1023831818006A7DD9 /* PermissionView.swift */,
 				CE913F1223831852006A7DD9 /* ProfileView.swift */,
 				CE913F16238318A3006A7DD9 /* SettingsView.swift */,
 				CE913F3123832A81006A7DD9 /* SignUpView.swift */,
@@ -498,6 +501,7 @@
 			files = (
 				CE913F2A23831D1C006A7DD9 /* Tag.swift in Sources */,
 				CE913F2223831B6A006A7DD9 /* User.swift in Sources */,
+				CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */,
 				CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */,
 				CE913F1A238318E2006A7DD9 /* ListViewList.swift in Sources */,
 				CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */,
@@ -511,7 +515,7 @@
 				CE913F17238318A3006A7DD9 /* SettingsView.swift in Sources */,
 				CE913F2423831C0E006A7DD9 /* List.swift in Sources */,
 				CE913F0D238317C0006A7DD9 /* OnboardingView.swift in Sources */,
-				CE913F1123831818006A7DD9 /* PermissionsView.swift in Sources */,
+				CE913F1123831818006A7DD9 /* PermissionView.swift in Sources */,
 				CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */,
 				CE913F1523831874006A7DD9 /* ListView.swift in Sources */,
 			);
@@ -681,13 +685,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
+				DEVELOPMENT_TEAM = VSZKG79JS5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SpotUp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp.Timo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -701,13 +706,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
+				DEVELOPMENT_TEAM = VSZKG79JS5;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SpotUp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp.Timo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
