@@ -24,7 +24,7 @@ struct PermissionView: View {
                     Text("Finish")
                 }
                 .simultaneousGesture(TapGesture().onEnded {
-                        UserDefaults.standard.set(true, forKey: "permissionNotification")
+                        UserDefaults.standard.set(true, forKey: "permissionNotificationSet")
                     }
                 )
             }

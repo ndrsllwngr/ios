@@ -16,7 +16,7 @@ struct ContentView: View {
             Group {
                 if !UserDefaults.standard.bool(forKey: "launchedBefore") {
                     OnboardingView()
-                } else if !UserDefaults.standard.bool(forKey: "permissionNotification") {
+                } else if !UserDefaults.standard.bool(forKey: "permissionNotificationSet") {
                     PermissionView()
                 } else if session.session != nil {
                     TabBarView()
