@@ -24,11 +24,10 @@ struct TabBarView: View {
                 Image(systemName: selection == 0 ? "house.fill" : "house")
                 Text("Home")
             }).tag(0)
-            ProfileView()
-                .tabItem({
-                    Image(systemName: selection == 1 ? "person.fill" : "person")
-                    Text("Profil")
-                }).tag(1)
+            ProfileView().tabItem({
+                Image(systemName: selection == 1 ? "person.fill" : "person")
+                Text("Profil")
+            }).tag(1)
         }
         .accentColor(.black)
     }
