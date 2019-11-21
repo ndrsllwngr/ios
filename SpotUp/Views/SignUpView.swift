@@ -18,6 +18,8 @@ struct SignUpView: View {
     var body: some View {
         Group {
             VStack {
+                Text("SignUpView")
+                Spacer()
                 HStack {
                     Text("Email")
                     TextField("Enter Email Address", text: $email)
