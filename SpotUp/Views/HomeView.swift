@@ -10,17 +10,19 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @State var searchQuery: String = ""
     
     var body: some View {
         NavigationView {
 
             VStack {
-                Text("Content")
+                SearchBar(text: $searchQuery)
+                    .padding()
+                Spacer()
             }
             .navigationBarTitle(Text("HomeView"))
 
         }
-        
     }
 }
 
