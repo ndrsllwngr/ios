@@ -8,20 +8,28 @@
 
 import SwiftUI
 
+let lists: [LocationList] = [LocationList(title: "Paris best Spots"), LocationList(title: "Munich Ramen")]
+
 struct ProfileView: View {
+    
+    
     var body: some View {
         NavigationView {
-            VStack {
-                HStack {
-                    Text("ProfileView")
-                    Spacer()
-                    NavigationLink(destination: SettingsView()) {
-                        Image(systemName: "gear")
+            List {
+                ForEach(lists) { locationList in
+                    NavigationLink(
+                        destination: ListView(locationList: locationList)
+                    ) {
+                        ListRow(locationList: locationList)
                     }
-                }.padding()
-                Spacer()
+                }
             }
-        }       
+            .navigationBarTitle(Text("ProfileView"))
+            .navigationBarItems(trailing: NavigationLink(destination: SettingsView()) {
+                Image(systemName: "gear")
+            })
+            
+        }
     }
 }
 
