@@ -13,6 +13,10 @@ struct TabBarView: View {
     
     @State private var selection = 0
     
+    init() {
+        UITabBar.appearance().tintColor = UIColor.red
+        UITabBar.appearance().backgroundColor = UIColor.red
+    }
     
     var body: some View {
         TabView(selection: $selection) {
@@ -34,6 +38,7 @@ struct TabBarView: View {
                 Text("Profil")
             }).tag(1)
         }
+        .accentColor(.white)
     }
 }
 
