@@ -12,7 +12,7 @@ let lists: [LocationList] = [LocationList(title: "Paris best Spots"), LocationLi
 
 struct ProfileView: View {
     
-    
+    @State private var showingChildView = false
     var body: some View {
         NavigationView {
             List {
@@ -23,11 +23,16 @@ struct ProfileView: View {
                         ListRow(locationList: locationList)
                     }
                 }
+                NavigationLink(destination: SettingsView(),
+                               isActive: self.$showingChildView)
+                { EmptyView() }
+                    .frame(width: 0, height: 0)
+                    .disabled(true)
+                    .navigationBarTitle(Text("ProfileView"))
+                    .navigationBarItems(
+                        trailing: Button(action:{ self.showingChildView = true }) { Image(systemName: "gear") }
+                )
             }
-            .navigationBarTitle(Text("ProfileView"))
-            .navigationBarItems(trailing: NavigationLink(destination: SettingsView()) {
-                Image(systemName: "gear")
-            })
             
         }
     }
