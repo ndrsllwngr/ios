@@ -11,12 +11,12 @@ import SwiftUI
 struct SettingsView: View {
     var body: some View {
         VStack {
-            Text("Profil")
+            Text("SettingsView")
             Spacer()
             Button(action: {
                 FirebaseSession().logOut()
             }) {
-                Text("Log Out")
+                Text("Log Out").foregroundColor(.red)
             }
         }
     }

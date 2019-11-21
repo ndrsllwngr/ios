@@ -19,7 +19,8 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Sign In")
+                Text("LogInView")
+                Spacer()
                 TextField("Email", text: $email)
                 
                 SecureField("Password", text: $password)

@@ -13,7 +13,7 @@ struct ProfileView: View {
         NavigationView {
             VStack {
                 HStack {
-                    Text("Profile")
+                    Text("ProfileView")
                     Spacer()
                     NavigationLink(destination: SettingsView()) {
                         Image(systemName: "gear")
