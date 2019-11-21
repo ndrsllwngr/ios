@@ -12,23 +12,37 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var session = FirebaseSession()
+    @State var launchedBefore = false
+    @State var permissionRequestedBefore = false
+    
+    
     var body: some View {
-            Group {
-                if !UserDefaults.standard.bool(forKey: "launchedBefore") {
-                    OnboardingView()
-                } else if !UserDefaults.standard.bool(forKey: "permissionNotificationSet") {
-                    PermissionView()
-                } else if session.session != nil {
-                    TabBarView()
-                } else {
-                    LoginView()
-                }
+        Group {
+            if !self.launchedBefore {
+                OnboardingView(launchedBefore: $launchedBefore)
+            } else if !self.permissionRequestedBefore {
+                PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
+            } else if session.session != nil {
+                TabBarView()
+            } else {
+                LoginView()
             }
-            .onAppear(perform: getUser)   
+        }
+        .onAppear(perform: startUp)
     }
-
+    
+    func startUp() {
+        self.launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
+        self.permissionRequestedBefore = UserDefaults.standard.bool(forKey: "permissionRequestedBefore")
+        getUser()
+        
+    }
+    
     func getUser() {
         session.listen()
+    }
+    
+    func setLaunchedBefore() {
     }
     
 }

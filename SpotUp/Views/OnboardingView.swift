@@ -9,22 +9,28 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    
+    @Binding var launchedBefore: Bool
+    
     var body: some View {
-        
-        NavigationView {
-            NavigationLink(destination: ContentView()) {
+        VStack {
+            Text("OnboardingView")
+            Text("Here you will find Information about the app on first start")
+                .multilineTextAlignment(.center)
+            Spacer()
+            Button (action: {
+                UserDefaults.standard.set(true, forKey: "launchedBefore")
+                self.launchedBefore.toggle()
+            }){
                 Text("Skip")
             }
-            .simultaneousGesture(TapGesture().onEnded {
-                    UserDefaults.standard.set(true, forKey: "launchedBefore")
-                }
-            )
         }
     }
 }
 
 struct OnboardingView_Previews: PreviewProvider {
+    @State static var launchedBefore = false
     static var previews: some View {
-        OnboardingView()
+        OnboardingView(launchedBefore: $launchedBefore)
     }
 }
