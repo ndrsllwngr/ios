@@ -17,22 +17,14 @@ struct TabBarView: View {
     var body: some View {
         TabView(selection: $selection) {
             HomeView().tabItem({
-                if selection == 0 {
-                    Image(systemName: "house.fill")
-                } else {
-                    Image(systemName: "house")
-                }
+                Image(systemName: selection == 0 ? "house.fill" : "house")
                 Text("Home")
             }).tag(0)
-                ProfileView()
-            .tabItem({
-                if selection == 1 {
-                    Image(systemName: "person.fill")
-                } else {
-                    Image(systemName: "person")
-                }
-                Text("Profil")
-            }).tag(1)
+            ProfileView()
+                .tabItem({
+                    Image(systemName: selection == 1 ? "person.fill" : "person")
+                    Text("Profil")
+                }).tag(1)
         }
     }
 }
