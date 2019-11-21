@@ -16,7 +16,7 @@ class FirebaseSession: ObservableObject {
     @Published var isLoggedIn: Bool?
     
     func listen() {
-        _ = Auth.auth().addStateDidChangeListener { (auth, user) in
+        Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
                 self.session = User(uid: user.uid, displayName: user.displayName, email: user.email)
                 self.isLoggedIn = true
