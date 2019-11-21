@@ -10,6 +10,7 @@
 		092D9601141463271EC61D33 /* Pods_SpotUpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */; };
 		6FB0E5B1E0E05D24F32001E8 /* Pods_SpotUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D80AAE63C883B774FDA1E89 /* Pods_SpotUp.framework */; };
 		A639992645919CC44A6E2098 /* Pods_SpotUp_SpotUpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */; };
+		A697DF702386FA1500E50A38 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */; };
 		CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE28481523846C8400A2EBE5 /* TabBarView.swift */; };
 		CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E96237DD43D0060FC64 /* AppDelegate.swift */; };
 		CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E98237DD43D0060FC64 /* SceneDelegate.swift */; };
@@ -61,6 +62,7 @@
 		54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUpTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUp_SpotUpUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A2A741F8BF1983EB3199716 /* Pods-SpotUp-SpotUpUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp-SpotUpUITests.debug.xcconfig"; path = "Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		CD0AE2A362C5CB01AF782DA6 /* Pods-SpotUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.release.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.release.xcconfig"; sourceTree = "<group>"; };
 		CE28481523846C8400A2EBE5 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		CE400E93237DD43D0060FC64 /* SpotUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -239,6 +241,7 @@
 			isa = PBXGroup;
 			children = (
 				CE88DE232386F14500710E25 /* ListRow.swift */,
+				A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -504,6 +507,7 @@
 			files = (
 				CE913F2A23831D1C006A7DD9 /* Tag.swift in Sources */,
 				CE913F2223831B6A006A7DD9 /* User.swift in Sources */,
+				A697DF702386FA1500E50A38 /* CustomSearchBar.swift in Sources */,
 				CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */,
 				CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */,
 				CE88DE242386F14500710E25 /* ListRow.swift in Sources */,
