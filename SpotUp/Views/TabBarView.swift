@@ -30,7 +30,7 @@ struct TabBarView: View {
                     Text("Profil")
                 }).tag(1)
         }
-        .accentColor(.white)
+        .accentColor(.black)
     }
 }
 

@@ -19,6 +19,7 @@
 		CE400EA3237DD43F0060FC64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */; };
 		CE400EAE237DD43F0060FC64 /* SpotUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */; };
 		CE400EB9237DD43F0060FC64 /* SpotUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */; };
+		CE88DE242386F14500710E25 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE88DE232386F14500710E25 /* ListRow.swift */; };
 		CE913F0A238316B1006A7DD9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F09238316B1006A7DD9 /* HomeView.swift */; };
 		CE913F0D238317C0006A7DD9 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0C238317C0006A7DD9 /* OnboardingView.swift */; };
 		CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0E238317CC006A7DD9 /* LoginView.swift */; };
@@ -76,6 +77,7 @@
 		CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotUpUITests.swift; sourceTree = "<group>"; };
 		CE400EBA237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE88DE232386F14500710E25 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
 		CE913F09238316B1006A7DD9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		CE913F0C238317C0006A7DD9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CE913F0E238317CC006A7DD9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -236,6 +238,7 @@
 		CE913F1E23831A24006A7DD9 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				CE88DE232386F14500710E25 /* ListRow.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				CE913F2223831B6A006A7DD9 /* User.swift in Sources */,
 				CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */,
 				CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */,
+				CE88DE242386F14500710E25 /* ListRow.swift in Sources */,
 				CE913F1A238318E2006A7DD9 /* ListViewList.swift in Sources */,
 				CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */,
 				CE913F3223832A81006A7DD9 /* SignUpView.swift in Sources */,

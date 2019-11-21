@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct List: Identifiable {
+struct LocationList: Identifiable {
     var id = UUID()
     // var createdAt =
     // var modifiedAt
     var title: String
-    var titleImage: String
-    var location: String
-    var ownerId: String
-    var tags: [UUID]
-    var items: [Location]
+    //var titleImage: String
+    //var location: String
+    //var ownerId: String
+    //var tags: [UUID]
+    //var items: [Location]
 }
