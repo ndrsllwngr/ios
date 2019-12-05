@@ -27,7 +27,8 @@ struct ListView: View {
             if selection == 0 {
                 ListViewList()
             } else {
-                ListViewMap()
+                Text("Todo Map View")
+                //ListViewMap()
             }
         }
         .navigationBarTitle(locationList.title)

@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let lists: [LocationList] = [LocationList(title: "Paris best Spots"), LocationList(title: "Munich Ramen")]
+let lists: [LocationList] = [LocationList(title: "Paris best Spots"), LocationList(title: "Munich Ramen"), LocationList(title:"DummieList")]
 
 struct ProfileView: View {
     
