@@ -7,277 +7,200 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		092D9601141463271EC61D33 /* Pods_SpotUpTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */; };
-		6FB0E5B1E0E05D24F32001E8 /* Pods_SpotUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D80AAE63C883B774FDA1E89 /* Pods_SpotUp.framework */; };
-		A639992645919CC44A6E2098 /* Pods_SpotUp_SpotUpUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */; };
-		A697DF702386FA1500E50A38 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */; };
-		CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE28481523846C8400A2EBE5 /* TabBarView.swift */; };
-		CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E96237DD43D0060FC64 /* AppDelegate.swift */; };
-		CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E98237DD43D0060FC64 /* SceneDelegate.swift */; };
-		CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400E9A237DD43D0060FC64 /* ContentView.swift */; };
-		CE400E9D237DD43F0060FC64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE400E9C237DD43F0060FC64 /* Assets.xcassets */; };
-		CE400EA0237DD43F0060FC64 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */; };
-		CE400EA3237DD43F0060FC64 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */; };
-		CE400EAE237DD43F0060FC64 /* SpotUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */; };
-		CE400EB9237DD43F0060FC64 /* SpotUpUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */; };
-		CE88DE242386F14500710E25 /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE88DE232386F14500710E25 /* ListRow.swift */; };
-		CE913F0A238316B1006A7DD9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F09238316B1006A7DD9 /* HomeView.swift */; };
-		CE913F0D238317C0006A7DD9 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0C238317C0006A7DD9 /* OnboardingView.swift */; };
-		CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F0E238317CC006A7DD9 /* LoginView.swift */; };
-		CE913F1123831818006A7DD9 /* PermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1023831818006A7DD9 /* PermissionView.swift */; };
-		CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1223831852006A7DD9 /* ProfileView.swift */; };
-		CE913F1523831874006A7DD9 /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1423831874006A7DD9 /* ListView.swift */; };
-		CE913F17238318A3006A7DD9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F16238318A3006A7DD9 /* SettingsView.swift */; };
-		CE913F1A238318E2006A7DD9 /* ListViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F19238318E2006A7DD9 /* ListViewList.swift */; };
-		CE913F1C238318ED006A7DD9 /* ListViewMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F1B238318ED006A7DD9 /* ListViewMap.swift */; };
-		CE913F2223831B6A006A7DD9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F2123831B6A006A7DD9 /* User.swift */; };
-		CE913F2423831C0E006A7DD9 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F2323831C0E006A7DD9 /* List.swift */; };
-		CE913F2623831CA3006A7DD9 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F2523831CA3006A7DD9 /* Location.swift */; };
-		CE913F2A23831D1C006A7DD9 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F2923831D1C006A7DD9 /* Tag.swift */; };
-		CE913F2C23832496006A7DD9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE913F2B23832496006A7DD9 /* GoogleService-Info.plist */; };
-		CE913F30238329BF006A7DD9 /* FirebaseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F2F238329BF006A7DD9 /* FirebaseSession.swift */; };
-		CE913F3223832A81006A7DD9 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE913F3123832A81006A7DD9 /* SignUpView.swift */; };
+		0A51061BADA8DB3C08F596B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FD0CC89D470ACC428DEFEFA /* AppDelegate.swift */; };
+		0B4550801D3CDEB7DC0EA83B /* FirebaseSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AD2C3CDBF1514B17C528BDA /* FirebaseSession.swift */; };
+		0D19D2619D1C96B1C8618E72 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C8B45C4EF59222082ABF01F /* Preview Assets.xcassets */; };
+		1B6E75B66F0AE68BDD8635BF /* ListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B99E0ED3BBF61E5012837E0 /* ListView.swift */; };
+		224A13D3E20671935ED58B53 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1250226DF58F344926B50DB /* HomeView.swift */; };
+		3EF60BB9A2FE0A466F784B33 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C035E3D302545160476DD9E8 /* Assets.xcassets */; };
+		42457EFDBEFD761FB0746FE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DDA489194235C22374456E59 /* GoogleService-Info.plist */; };
+		441B71DA978B9E4BD97C9BDC /* ListViewMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D76C719A0FC7BCC2479900B7 /* ListViewMap.swift */; };
+		44F52FBCC302737E4CB91AC8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F5677A0E8235FE6BA31406 /* ProfileView.swift */; };
+		4A0C52E4BB7167ACF0A2DC85 /* PermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D13E5B94AB7216B3F1D35E9 /* PermissionView.swift */; };
+		4F9F638874879402A6D03D85 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB707E13428FAD3F94569018 /* Tag.swift */; };
+		5D18560943229AB821DB993E /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5626085C5B57D3274917DE01 /* SignUpView.swift */; };
+		68DB01CCFCA033EB4C87838F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE017DF77BA777B8BB645768 /* SceneDelegate.swift */; };
+		761F647AEF13712732BCDA0E /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59BC7D5E7BD2938FAA70030E /* List.swift */; };
+		7A81645F890466B3F6B2F64F /* ListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97E883EED71A85BBA6F29FD6 /* ListRow.swift */; };
+		87EF5C09A4396E2A2662A67C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653B01B2AEBC6512809F08BE /* User.swift */; };
+		96EFE5D5263613FA8832EED0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E412ACEE1C8FB26CCFCDD965 /* OnboardingView.swift */; };
+		9A25D0015A00CC97DC639D66 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B57E2F120AC66618B983493 /* LoginView.swift */; };
+		A2BC4F9F8EAF8EC9C6A2DAC1 /* Pods_SpotUp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C24561A5282692EB840528 /* Pods_SpotUp.framework */; };
+		A30D8D9AB70C4D8A963B8DE2 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E0DA85E5C10550830671D /* CustomSearchBar.swift */; };
+		A7FF8130AC5F8193347B0569 /* ListViewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A926DE666E983D59CB7E8F /* ListViewList.swift */; };
+		C028D45ADFE2B1199223D5BE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2861698409F360FFEBCEA665 /* LaunchScreen.storyboard */; };
+		CB50A666149A05E8CA8892C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8CAE18CCCEAE1B1DD6A25E /* ContentView.swift */; };
+		D4467BA740D6D15CE4C6AC6C /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7256E13DE0B24ABE6432B99D /* TabBarView.swift */; };
+		E13194FEB5A8A38FEA904A85 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFBD4540B7FFAC24F2DF819 /* SettingsView.swift */; };
+		EC8C67CB7C21E35490C637F5 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C268A209C257C81E66029D /* Location.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CE400EAA237DD43F0060FC64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE400E8B237DD43D0060FC64 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE400E92237DD43D0060FC64;
-			remoteInfo = SpotUp;
-		};
-		CE400EB5237DD43F0060FC64 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE400E8B237DD43D0060FC64 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = CE400E92237DD43D0060FC64;
-			remoteInfo = SpotUp;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		02B8561D328E370249010CCD /* Pods-SpotUp-SpotUpUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp-SpotUpUITests.release.xcconfig"; path = "Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests.release.xcconfig"; sourceTree = "<group>"; };
-		0D80AAE63C883B774FDA1E89 /* Pods_SpotUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUpTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUp_SpotUpUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A2A741F8BF1983EB3199716 /* Pods-SpotUp-SpotUpUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp-SpotUpUITests.debug.xcconfig"; path = "Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
-		CD0AE2A362C5CB01AF782DA6 /* Pods-SpotUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.release.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.release.xcconfig"; sourceTree = "<group>"; };
-		CE28481523846C8400A2EBE5 /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
-		CE400E93237DD43D0060FC64 /* SpotUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE400E96237DD43D0060FC64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		CE400E98237DD43D0060FC64 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CE400E9A237DD43D0060FC64 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		CE400E9C237DD43F0060FC64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		CE400EA2237DD43F0060FC64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		CE400EA4237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotUpTests.swift; sourceTree = "<group>"; };
-		CE400EAF237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotUpUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotUpUITests.swift; sourceTree = "<group>"; };
-		CE400EBA237DD43F0060FC64 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CE88DE232386F14500710E25 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
-		CE913F09238316B1006A7DD9 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		CE913F0C238317C0006A7DD9 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		CE913F0E238317CC006A7DD9 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		CE913F1023831818006A7DD9 /* PermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionView.swift; sourceTree = "<group>"; };
-		CE913F1223831852006A7DD9 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
-		CE913F1423831874006A7DD9 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
-		CE913F16238318A3006A7DD9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		CE913F19238318E2006A7DD9 /* ListViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewList.swift; sourceTree = "<group>"; };
-		CE913F1B238318ED006A7DD9 /* ListViewMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewMap.swift; sourceTree = "<group>"; };
-		CE913F2123831B6A006A7DD9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		CE913F2323831C0E006A7DD9 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
-		CE913F2523831CA3006A7DD9 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
-		CE913F2923831D1C006A7DD9 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
-		CE913F2B23832496006A7DD9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		CE913F2F238329BF006A7DD9 /* FirebaseSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSession.swift; sourceTree = "<group>"; };
-		CE913F3123832A81006A7DD9 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
-		E2EB91161FA9E2FBE4407F14 /* Pods-SpotUpTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUpTests.debug.xcconfig"; path = "Target Support Files/Pods-SpotUpTests/Pods-SpotUpTests.debug.xcconfig"; sourceTree = "<group>"; };
-		E40815AE1673B70F472ABE6C /* Pods-SpotUp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.debug.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.debug.xcconfig"; sourceTree = "<group>"; };
-		F0EC4440FA077934C4F81AF9 /* Pods-SpotUpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUpTests.release.xcconfig"; path = "Target Support Files/Pods-SpotUpTests/Pods-SpotUpTests.release.xcconfig"; sourceTree = "<group>"; };
+		1AD2C3CDBF1514B17C528BDA /* FirebaseSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseSession.swift; sourceTree = "<group>"; };
+		20996200FBDA301DBC07D6E6 /* SpotUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpotUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		278A9A45F046CC3AEF2D83B3 /* Pods-SpotUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.release.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.release.xcconfig"; sourceTree = "<group>"; };
+		2B7A688AF676268478FE9D50 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		2CFBD4540B7FFAC24F2DF819 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2D13E5B94AB7216B3F1D35E9 /* PermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionView.swift; sourceTree = "<group>"; };
+		375E0DA85E5C10550830671D /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		3B99E0ED3BBF61E5012837E0 /* ListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListView.swift; sourceTree = "<group>"; };
+		4B57E2F120AC66618B983493 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		5626085C5B57D3274917DE01 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		59BC7D5E7BD2938FAA70030E /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		64336CBEBA0FE487E8348CF7 /* Pods-SpotUp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpotUp.debug.xcconfig"; path = "Target Support Files/Pods-SpotUp/Pods-SpotUp.debug.xcconfig"; sourceTree = "<group>"; };
+		653B01B2AEBC6512809F08BE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		6C8B45C4EF59222082ABF01F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7256E13DE0B24ABE6432B99D /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
+		74C268A209C257C81E66029D /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		8FD0CC89D470ACC428DEFEFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		917F0331D99F34CD132145C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		97E883EED71A85BBA6F29FD6 /* ListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRow.swift; sourceTree = "<group>"; };
+		A4C24561A5282692EB840528 /* Pods_SpotUp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpotUp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1250226DF58F344926B50DB /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		BE017DF77BA777B8BB645768 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		C035E3D302545160476DD9E8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CC8CAE18CCCEAE1B1DD6A25E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D76C719A0FC7BCC2479900B7 /* ListViewMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewMap.swift; sourceTree = "<group>"; };
+		DB707E13428FAD3F94569018 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		DDA489194235C22374456E59 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E0A926DE666E983D59CB7E8F /* ListViewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewList.swift; sourceTree = "<group>"; };
+		E412ACEE1C8FB26CCFCDD965 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		E9F5677A0E8235FE6BA31406 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		CE400E90237DD43D0060FC64 /* Frameworks */ = {
+		3017D3BD49ACA7B01291EB08 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FB0E5B1E0E05D24F32001E8 /* Pods_SpotUp.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EA6237DD43F0060FC64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				092D9601141463271EC61D33 /* Pods_SpotUpTests.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EB1237DD43F0060FC64 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A639992645919CC44A6E2098 /* Pods_SpotUp_SpotUpUITests.framework in Frameworks */,
+				A2BC4F9F8EAF8EC9C6A2DAC1 /* Pods_SpotUp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1AD69BFD1FFF768137198A51 /* Frameworks */ = {
+		100BBB5B60E755070E790C95 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				0D80AAE63C883B774FDA1E89 /* Pods_SpotUp.framework */,
-				5E205B9381D29E5CD6ACBDE6 /* Pods_SpotUp_SpotUpUITests.framework */,
-				54557D8121CD216E7B6D4D4A /* Pods_SpotUpTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		A05BD47BBC3920D92E88F7D8 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				E40815AE1673B70F472ABE6C /* Pods-SpotUp.debug.xcconfig */,
-				CD0AE2A362C5CB01AF782DA6 /* Pods-SpotUp.release.xcconfig */,
-				7A2A741F8BF1983EB3199716 /* Pods-SpotUp-SpotUpUITests.debug.xcconfig */,
-				02B8561D328E370249010CCD /* Pods-SpotUp-SpotUpUITests.release.xcconfig */,
-				E2EB91161FA9E2FBE4407F14 /* Pods-SpotUpTests.debug.xcconfig */,
-				F0EC4440FA077934C4F81AF9 /* Pods-SpotUpTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		CE400E8A237DD43D0060FC64 = {
-			isa = PBXGroup;
-			children = (
-				CE913F2B23832496006A7DD9 /* GoogleService-Info.plist */,
-				CE400E95237DD43D0060FC64 /* SpotUp */,
-				CE400EAC237DD43F0060FC64 /* SpotUpTests */,
-				CE400EB7237DD43F0060FC64 /* SpotUpUITests */,
-				CE400E94237DD43D0060FC64 /* Products */,
-				A05BD47BBC3920D92E88F7D8 /* Pods */,
-				1AD69BFD1FFF768137198A51 /* Frameworks */,
-			);
-			sourceTree = "<group>";
-		};
-		CE400E94237DD43D0060FC64 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CE400E93237DD43D0060FC64 /* SpotUp.app */,
-				CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */,
-				CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		CE400E95237DD43D0060FC64 /* SpotUp */ = {
-			isa = PBXGroup;
-			children = (
-				CE913F1F23831A37006A7DD9 /* Network */,
-				CE913F2023831A4A006A7DD9 /* Models */,
-				CE913F1E23831A24006A7DD9 /* Components */,
-				CE913F1D2383199B006A7DD9 /* Views */,
-				CE400EA4237DD43F0060FC64 /* Info.plist */,
-				CE400E96237DD43D0060FC64 /* AppDelegate.swift */,
-				CE400E98237DD43D0060FC64 /* SceneDelegate.swift */,
-				CE400E9C237DD43F0060FC64 /* Assets.xcassets */,
-				CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */,
-				CE400E9E237DD43F0060FC64 /* Preview Content */,
-			);
-			path = SpotUp;
-			sourceTree = "<group>";
-		};
-		CE400E9E237DD43F0060FC64 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				CE400E9F237DD43F0060FC64 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		CE400EAC237DD43F0060FC64 /* SpotUpTests */ = {
-			isa = PBXGroup;
-			children = (
-				CE400EAD237DD43F0060FC64 /* SpotUpTests.swift */,
-				CE400EAF237DD43F0060FC64 /* Info.plist */,
-			);
-			path = SpotUpTests;
-			sourceTree = "<group>";
-		};
-		CE400EB7237DD43F0060FC64 /* SpotUpUITests */ = {
-			isa = PBXGroup;
-			children = (
-				CE400EB8237DD43F0060FC64 /* SpotUpUITests.swift */,
-				CE400EBA237DD43F0060FC64 /* Info.plist */,
-			);
-			path = SpotUpUITests;
-			sourceTree = "<group>";
-		};
-		CE913F1D2383199B006A7DD9 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				CE28481523846C8400A2EBE5 /* TabBarView.swift */,
-				CE400E9A237DD43D0060FC64 /* ContentView.swift */,
-				CE913F09238316B1006A7DD9 /* HomeView.swift */,
-				CE913F1423831874006A7DD9 /* ListView.swift */,
-				CE913F19238318E2006A7DD9 /* ListViewList.swift */,
-				CE913F1B238318ED006A7DD9 /* ListViewMap.swift */,
-				CE913F0E238317CC006A7DD9 /* LoginView.swift */,
-				CE913F0C238317C0006A7DD9 /* OnboardingView.swift */,
-				CE913F1023831818006A7DD9 /* PermissionView.swift */,
-				CE913F1223831852006A7DD9 /* ProfileView.swift */,
-				CE913F16238318A3006A7DD9 /* SettingsView.swift */,
-				CE913F3123832A81006A7DD9 /* SignUpView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		CE913F1E23831A24006A7DD9 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				CE88DE232386F14500710E25 /* ListRow.swift */,
-				A697DF6F2386FA1500E50A38 /* CustomSearchBar.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		CE913F1F23831A37006A7DD9 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-				CE913F2F238329BF006A7DD9 /* FirebaseSession.swift */,
+				1AD2C3CDBF1514B17C528BDA /* FirebaseSession.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
 		};
-		CE913F2023831A4A006A7DD9 /* Models */ = {
+		113CB4A054012BEA4BB934BA = {
 			isa = PBXGroup;
 			children = (
-				CE913F2123831B6A006A7DD9 /* User.swift */,
-				CE913F2323831C0E006A7DD9 /* List.swift */,
-				CE913F2523831CA3006A7DD9 /* Location.swift */,
-				CE913F2923831D1C006A7DD9 /* Tag.swift */,
+				4BEE7B66267DD1A013196800 /* SpotUp */,
+				B9044BBD484B7206ABFD03B1 /* Products */,
+				B76D515B3907D61852D50A25 /* Pods */,
+				5629F9B8C157613EABE10608 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		11B09CB1306FCBC64550681C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				59BC7D5E7BD2938FAA70030E /* List.swift */,
+				74C268A209C257C81E66029D /* Location.swift */,
+				DB707E13428FAD3F94569018 /* Tag.swift */,
+				653B01B2AEBC6512809F08BE /* User.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		4BEE7B66267DD1A013196800 /* SpotUp */ = {
+			isa = PBXGroup;
+			children = (
+				8FD0CC89D470ACC428DEFEFA /* AppDelegate.swift */,
+				C035E3D302545160476DD9E8 /* Assets.xcassets */,
+				DDA489194235C22374456E59 /* GoogleService-Info.plist */,
+				917F0331D99F34CD132145C6 /* Info.plist */,
+				2861698409F360FFEBCEA665 /* LaunchScreen.storyboard */,
+				BE017DF77BA777B8BB645768 /* SceneDelegate.swift */,
+				595A909BF4ED4A2C560DF256 /* Components */,
+				11B09CB1306FCBC64550681C /* Models */,
+				100BBB5B60E755070E790C95 /* Network */,
+				77AB5D960F903D28DB85720B /* Preview Content */,
+				D30D44076FAED5B8403CFFD2 /* Views */,
+			);
+			path = SpotUp;
+			sourceTree = "<group>";
+		};
+		5629F9B8C157613EABE10608 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A4C24561A5282692EB840528 /* Pods_SpotUp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		595A909BF4ED4A2C560DF256 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				375E0DA85E5C10550830671D /* CustomSearchBar.swift */,
+				97E883EED71A85BBA6F29FD6 /* ListRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		77AB5D960F903D28DB85720B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				6C8B45C4EF59222082ABF01F /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		B76D515B3907D61852D50A25 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				64336CBEBA0FE487E8348CF7 /* Pods-SpotUp.debug.xcconfig */,
+				278A9A45F046CC3AEF2D83B3 /* Pods-SpotUp.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B9044BBD484B7206ABFD03B1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				20996200FBDA301DBC07D6E6 /* SpotUp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D30D44076FAED5B8403CFFD2 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CC8CAE18CCCEAE1B1DD6A25E /* ContentView.swift */,
+				B1250226DF58F344926B50DB /* HomeView.swift */,
+				3B99E0ED3BBF61E5012837E0 /* ListView.swift */,
+				E0A926DE666E983D59CB7E8F /* ListViewList.swift */,
+				D76C719A0FC7BCC2479900B7 /* ListViewMap.swift */,
+				4B57E2F120AC66618B983493 /* LoginView.swift */,
+				E412ACEE1C8FB26CCFCDD965 /* OnboardingView.swift */,
+				2D13E5B94AB7216B3F1D35E9 /* PermissionView.swift */,
+				E9F5677A0E8235FE6BA31406 /* ProfileView.swift */,
+				2CFBD4540B7FFAC24F2DF819 /* SettingsView.swift */,
+				5626085C5B57D3274917DE01 /* SignUpView.swift */,
+				7256E13DE0B24ABE6432B99D /* TabBarView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CE400E92237DD43D0060FC64 /* SpotUp */ = {
+		059F05A4783B3D0E6E0AA625 /* SpotUp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CE400EBD237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUp" */;
+			buildConfigurationList = 17D935FF77C7DB1BFA460DC0 /* Build configuration list for PBXNativeTarget "SpotUp" */;
 			buildPhases = (
-				209D74B16B312446967CE4C3 /* [CP] Check Pods Manifest.lock */,
-				CE400E8F237DD43D0060FC64 /* Sources */,
-				CE400E90237DD43D0060FC64 /* Frameworks */,
-				CE400E91237DD43D0060FC64 /* Resources */,
-				FB0DCE3E6C77FA8B4AFFD1EF /* [CP] Embed Pods Frameworks */,
-				6D083D692036109F716ECB89 /* [CP] Copy Pods Resources */,
+				1EBE88DDD2A52798819F6A9D /* [CP] Check Pods Manifest.lock */,
+				A2F8F037DD0D8DA5919E4031 /* Sources */,
+				DAF87A1E7C03DA4C17223838 /* Resources */,
+				3017D3BD49ACA7B01291EB08 /* Frameworks */,
+				56A675419049331063EE3B2F /* [CP] Embed Pods Frameworks */,
+				CE5E07B153DCAE6AD2C99A83 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -285,122 +208,51 @@
 			);
 			name = SpotUp;
 			productName = SpotUp;
-			productReference = CE400E93237DD43D0060FC64 /* SpotUp.app */;
+			productReference = 20996200FBDA301DBC07D6E6 /* SpotUp.app */;
 			productType = "com.apple.product-type.application";
-		};
-		CE400EA8237DD43F0060FC64 /* SpotUpTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CE400EC0237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpTests" */;
-			buildPhases = (
-				AD41CEED3B9E94810F16A35F /* [CP] Check Pods Manifest.lock */,
-				CE400EA5237DD43F0060FC64 /* Sources */,
-				CE400EA6237DD43F0060FC64 /* Frameworks */,
-				CE400EA7237DD43F0060FC64 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CE400EAB237DD43F0060FC64 /* PBXTargetDependency */,
-			);
-			name = SpotUpTests;
-			productName = SpotUpTests;
-			productReference = CE400EA9237DD43F0060FC64 /* SpotUpTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		CE400EB3237DD43F0060FC64 /* SpotUpUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = CE400EC3237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpUITests" */;
-			buildPhases = (
-				E753B6B890286A9993296FD2 /* [CP] Check Pods Manifest.lock */,
-				CE400EB0237DD43F0060FC64 /* Sources */,
-				CE400EB1237DD43F0060FC64 /* Frameworks */,
-				CE400EB2237DD43F0060FC64 /* Resources */,
-				24D1FBF53987BF307E7852E7 /* [CP] Embed Pods Frameworks */,
-				EA078E23140A4F575A9DDBB8 /* [CP] Copy Pods Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				CE400EB6237DD43F0060FC64 /* PBXTargetDependency */,
-			);
-			name = SpotUpUITests;
-			productName = SpotUpUITests;
-			productReference = CE400EB4237DD43F0060FC64 /* SpotUpUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		CE400E8B237DD43D0060FC64 /* Project object */ = {
+		BAD16ED8F30D209E433340E9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1120;
-				LastUpgradeCheck = 1120;
-				ORGANIZATIONNAME = "iOS WiSe 19/20 Gruppe 7";
-				TargetAttributes = {
-					CE400E92237DD43D0060FC64 = {
-						CreatedOnToolsVersion = 11.2;
-					};
-					CE400EA8237DD43F0060FC64 = {
-						CreatedOnToolsVersion = 11.2;
-						TestTargetID = CE400E92237DD43D0060FC64;
-					};
-					CE400EB3237DD43F0060FC64 = {
-						CreatedOnToolsVersion = 11.2;
-						TestTargetID = CE400E92237DD43D0060FC64;
-					};
-				};
+				LastUpgradeCheck = 1020;
 			};
-			buildConfigurationList = CE400E8E237DD43D0060FC64 /* Build configuration list for PBXProject "SpotUp" */;
-			compatibilityVersion = "Xcode 9.3";
+			buildConfigurationList = 16225EE134EDA3A254A1790C /* Build configuration list for PBXProject "SpotUp" */;
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = CE400E8A237DD43D0060FC64;
-			productRefGroup = CE400E94237DD43D0060FC64 /* Products */;
+			mainGroup = 113CB4A054012BEA4BB934BA;
+			productRefGroup = B9044BBD484B7206ABFD03B1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CE400E92237DD43D0060FC64 /* SpotUp */,
-				CE400EA8237DD43F0060FC64 /* SpotUpTests */,
-				CE400EB3237DD43F0060FC64 /* SpotUpUITests */,
+				059F05A4783B3D0E6E0AA625 /* SpotUp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		CE400E91237DD43D0060FC64 /* Resources */ = {
+		DAF87A1E7C03DA4C17223838 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE400EA3237DD43F0060FC64 /* LaunchScreen.storyboard in Resources */,
-				CE913F2C23832496006A7DD9 /* GoogleService-Info.plist in Resources */,
-				CE400EA0237DD43F0060FC64 /* Preview Assets.xcassets in Resources */,
-				CE400E9D237DD43F0060FC64 /* Assets.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EA7237DD43F0060FC64 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EB2237DD43F0060FC64 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				3EF60BB9A2FE0A466F784B33 /* Assets.xcassets in Resources */,
+				42457EFDBEFD761FB0746FE6 /* GoogleService-Info.plist in Resources */,
+				C028D45ADFE2B1199223D5BE /* LaunchScreen.storyboard in Resources */,
+				0D19D2619D1C96B1C8618E72 /* Preview Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		209D74B16B312446967CE4C3 /* [CP] Check Pods Manifest.lock */ = {
+		1EBE88DDD2A52798819F6A9D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -422,102 +274,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		24D1FBF53987BF307E7852E7 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6D083D692036109F716ECB89 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		AD41CEED3B9E94810F16A35F /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SpotUpTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E753B6B890286A9993296FD2 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-SpotUp-SpotUpUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EA078E23140A4F575A9DDBB8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpotUp-SpotUpUITests/Pods-SpotUp-SpotUpUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		FB0DCE3E6C77FA8B4AFFD1EF /* [CP] Embed Pods Frameworks */ = {
+		56A675419049331063EE3B2F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -534,73 +291,61 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		CE5E07B153DCAE6AD2C99A83 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SpotUp/Pods-SpotUp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		CE400E8F237DD43D0060FC64 /* Sources */ = {
+		A2F8F037DD0D8DA5919E4031 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE913F2A23831D1C006A7DD9 /* Tag.swift in Sources */,
-				CE913F2223831B6A006A7DD9 /* User.swift in Sources */,
-				A697DF702386FA1500E50A38 /* CustomSearchBar.swift in Sources */,
-				CE28481623846C8400A2EBE5 /* TabBarView.swift in Sources */,
-				CE913F1323831852006A7DD9 /* ProfileView.swift in Sources */,
-				CE88DE242386F14500710E25 /* ListRow.swift in Sources */,
-				CE913F1A238318E2006A7DD9 /* ListViewList.swift in Sources */,
-				CE913F0F238317CC006A7DD9 /* LoginView.swift in Sources */,
-				CE913F3223832A81006A7DD9 /* SignUpView.swift in Sources */,
-				CE400E97237DD43D0060FC64 /* AppDelegate.swift in Sources */,
-				CE913F30238329BF006A7DD9 /* FirebaseSession.swift in Sources */,
-				CE913F0A238316B1006A7DD9 /* HomeView.swift in Sources */,
-				CE913F1C238318ED006A7DD9 /* ListViewMap.swift in Sources */,
-				CE913F2623831CA3006A7DD9 /* Location.swift in Sources */,
-				CE400E99237DD43D0060FC64 /* SceneDelegate.swift in Sources */,
-				CE913F17238318A3006A7DD9 /* SettingsView.swift in Sources */,
-				CE913F2423831C0E006A7DD9 /* List.swift in Sources */,
-				CE913F0D238317C0006A7DD9 /* OnboardingView.swift in Sources */,
-				CE913F1123831818006A7DD9 /* PermissionView.swift in Sources */,
-				CE400E9B237DD43D0060FC64 /* ContentView.swift in Sources */,
-				CE913F1523831874006A7DD9 /* ListView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EA5237DD43F0060FC64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CE400EAE237DD43F0060FC64 /* SpotUpTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		CE400EB0237DD43F0060FC64 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				CE400EB9237DD43F0060FC64 /* SpotUpUITests.swift in Sources */,
+				0A51061BADA8DB3C08F596B8 /* AppDelegate.swift in Sources */,
+				CB50A666149A05E8CA8892C8 /* ContentView.swift in Sources */,
+				A30D8D9AB70C4D8A963B8DE2 /* CustomSearchBar.swift in Sources */,
+				0B4550801D3CDEB7DC0EA83B /* FirebaseSession.swift in Sources */,
+				224A13D3E20671935ED58B53 /* HomeView.swift in Sources */,
+				761F647AEF13712732BCDA0E /* List.swift in Sources */,
+				7A81645F890466B3F6B2F64F /* ListRow.swift in Sources */,
+				1B6E75B66F0AE68BDD8635BF /* ListView.swift in Sources */,
+				A7FF8130AC5F8193347B0569 /* ListViewList.swift in Sources */,
+				441B71DA978B9E4BD97C9BDC /* ListViewMap.swift in Sources */,
+				EC8C67CB7C21E35490C637F5 /* Location.swift in Sources */,
+				9A25D0015A00CC97DC639D66 /* LoginView.swift in Sources */,
+				96EFE5D5263613FA8832EED0 /* OnboardingView.swift in Sources */,
+				4A0C52E4BB7167ACF0A2DC85 /* PermissionView.swift in Sources */,
+				44F52FBCC302737E4CB91AC8 /* ProfileView.swift in Sources */,
+				68DB01CCFCA033EB4C87838F /* SceneDelegate.swift in Sources */,
+				E13194FEB5A8A38FEA904A85 /* SettingsView.swift in Sources */,
+				5D18560943229AB821DB993E /* SignUpView.swift in Sources */,
+				D4467BA740D6D15CE4C6AC6C /* TabBarView.swift in Sources */,
+				4F9F638874879402A6D03D85 /* Tag.swift in Sources */,
+				87EF5C09A4396E2A2662A67C /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		CE400EAB237DD43F0060FC64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE400E92237DD43D0060FC64 /* SpotUp */;
-			targetProxy = CE400EAA237DD43F0060FC64 /* PBXContainerItemProxy */;
-		};
-		CE400EB6237DD43F0060FC64 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = CE400E92237DD43D0060FC64 /* SpotUp */;
-			targetProxy = CE400EB5237DD43F0060FC64 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
-		CE400EA1237DD43F0060FC64 /* LaunchScreen.storyboard */ = {
+		2861698409F360FFEBCEA665 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				CE400EA2237DD43F0060FC64 /* Base */,
+				2B7A688AF676268478FE9D50 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -608,7 +353,45 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		CE400EBB237DD43F0060FC64 /* Debug */ = {
+		0A0F86929AA8A42E4E040811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 64336CBEBA0FE487E8348CF7 /* Pods-SpotUp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 42HBE7MJL2;
+				INFOPLIST_FILE = SpotUp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lmu.1920.ios.group7.SpotUp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3D046F3E22EACE62B6C9E2DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 278A9A45F046CC3AEF2D83B3 /* Pods-SpotUp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = 42HBE7MJL2;
+				INFOPLIST_FILE = SpotUp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lmu.1920.ios.group7.SpotUp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B705643D11F82DF2D4BB334A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -618,7 +401,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -649,8 +431,8 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
 					"$(inherited)",
+					"DEBUG=1",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
@@ -659,16 +441,17 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		CE400EBC237DD43F0060FC64 /* Release */ = {
+		B91D27AD40724D8A4E9ECB04 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -678,7 +461,6 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -713,181 +495,36 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
 				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		CE400EBE237DD43F0060FC64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E40815AE1673B70F472ABE6C /* Pods-SpotUp.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
-				DEVELOPMENT_TEAM = VSZKG79JS5;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SpotUp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp.Timo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CE400EBF237DD43F0060FC64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = CD0AE2A362C5CB01AF782DA6 /* Pods-SpotUp.release.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_ASSET_PATHS = "\"SpotUp/Preview Content\"";
-				DEVELOPMENT_TEAM = VSZKG79JS5;
-				ENABLE_PREVIEWS = YES;
-				INFOPLIST_FILE = SpotUp/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUp.Timo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		CE400EC1237DD43F0060FC64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = E2EB91161FA9E2FBE4407F14 /* Pods-SpotUpTests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = SpotUpTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotUp.app/SpotUp";
-			};
-			name = Debug;
-		};
-		CE400EC2237DD43F0060FC64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = F0EC4440FA077934C4F81AF9 /* Pods-SpotUpTests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = SpotUpTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SpotUp.app/SpotUp";
-			};
-			name = Release;
-		};
-		CE400EC4237DD43F0060FC64 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A2A741F8BF1983EB3199716 /* Pods-SpotUp-SpotUpUITests.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = SpotUpUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SpotUp;
-			};
-			name = Debug;
-		};
-		CE400EC5237DD43F0060FC64 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 02B8561D328E370249010CCD /* Pods-SpotUp-SpotUpUITests.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = SpotUpUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.ios.1920.group7.SpotUpUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = SpotUp;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		CE400E8E237DD43D0060FC64 /* Build configuration list for PBXProject "SpotUp" */ = {
+		16225EE134EDA3A254A1790C /* Build configuration list for PBXProject "SpotUp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE400EBB237DD43F0060FC64 /* Debug */,
-				CE400EBC237DD43F0060FC64 /* Release */,
+				B705643D11F82DF2D4BB334A /* Debug */,
+				B91D27AD40724D8A4E9ECB04 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
-		CE400EBD237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUp" */ = {
+		17D935FF77C7DB1BFA460DC0 /* Build configuration list for PBXNativeTarget "SpotUp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CE400EBE237DD43F0060FC64 /* Debug */,
-				CE400EBF237DD43F0060FC64 /* Release */,
+				0A0F86929AA8A42E4E040811 /* Debug */,
+				3D046F3E22EACE62B6C9E2DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CE400EC0237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CE400EC1237DD43F0060FC64 /* Debug */,
-				CE400EC2237DD43F0060FC64 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		CE400EC3237DD43F0060FC64 /* Build configuration list for PBXNativeTarget "SpotUpUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				CE400EC4237DD43F0060FC64 /* Debug */,
-				CE400EC5237DD43F0060FC64 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = "";
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = CE400E8B237DD43D0060FC64 /* Project object */;
+	rootObject = BAD16ED8F30D209E433340E9 /* Project object */;
 }

@@ -1,6 +1,0 @@
-framework module Pods_SpotUpTests {
-  umbrella header "Pods-SpotUpTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
