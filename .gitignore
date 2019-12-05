@@ -1,5 +1,4 @@
 # use https://github.com/yonaskolb/XcodeGen
-.xcodeproj
 
 # Ignore Mac DS_Store files
 .DS_Store
@@ -72,3 +71,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+Pods/
+
+SpotUp.xcodeproj/
+
+SpotUp.xcworkspace/
