@@ -9,10 +9,16 @@
 import SwiftUI
 
 struct ListViewList: View {
-    var body: some View {
-        Text("ListViewList")
-    }
-}
+        var body: some View {
+                NavigationView {
+                    List(locationData) { location in
+                        ListComponent(location : location)
+                    }
+                    .navigationBarTitle(Text("Spots"))
+                }
+            }
+        }
+
 
 struct ListViewList_Previews: PreviewProvider {
     static var previews: some View {
