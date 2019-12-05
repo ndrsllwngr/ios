@@ -23,3 +23,11 @@ pod 'Firebase/Analytics'
 pod 'Firebase/Auth'
 # add pods for any other desired Firebase products
 # https://firebase.google.com/docs/ios/setup#available-pods
+
+pod 'Firebase/Core'
+pod 'Firebase/Firestore'
+# Optionally, include the Swift extensions if you're using Swift.
+pod 'FirebaseFirestoreSwift'
+# source 'https://github.com/CocoaPods/Specs.git'
+pod 'GoogleMaps'
+pod 'GooglePlaces'
