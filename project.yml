@@ -1,0 +1,20 @@
+name: SpotUp
+options:
+  bundleIdPrefix: com.lmu.1920.ios.group7
+targets:
+  SpotUp:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.2"
+    sources: [SpotUp]
+  # SpotUpTests:
+  #   type: application
+  #   platform: iOS
+  #   deploymentTarget: "13.2"
+  #   sources: [SpotUp]
+  # SpotUpUITests:
+  #   type: application
+  #   platform: iOS
+  #   deploymentTarget: "13.2"
+  #   sources: [SpotUp]
+    
