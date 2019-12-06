@@ -4,18 +4,18 @@ platform :ios, '13.2'
 use_frameworks!
 
 target 'SpotUp' do
+  # https://guides.cocoapods.org/using/the-podfile.html
   # Firebase Auth
-  pod 'Firebase'
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Auth'
+  pod 'Firebase/Analytics', '>= 6.13.0'
+  pod 'Firebase/Auth', '>= 6.13.0'
   # Firebase Firestore
-  pod 'Firebase/Core'
-  pod 'Firebase/Firestore'
+  pod 'Firebase/Core', '>= 6.13.0'
+  pod 'Firebase/Firestore', '>= 6.13.0'
   # Optionally, include the Swift extensions if you're using Swift.
-  pod 'FirebaseFirestoreSwift'
+  pod 'FirebaseFirestoreSwift', '>= 0.2'
   # Google Maps
-  pod 'GoogleMaps'
-  pod 'GooglePlaces'
+  pod 'GoogleMaps', '>= 3.6.0'
+  pod 'GooglePlaces', '>= 3.6.0'
 
   # target 'SpotUpTests' do
   #   inherit! :search_paths

@@ -164,8 +164,6 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.3):
     - BoringSSL-GRPC/Interface (= 0.0.3)
   - BoringSSL-GRPC/Interface (0.0.3)
-  - Firebase (6.13.0):
-    - Firebase/Core (= 6.13.0)
   - Firebase/Analytics (6.13.0):
     - Firebase/Core
   - Firebase/Auth (6.13.0):
@@ -286,14 +284,13 @@ PODS:
   - nanopb/encode (0.3.9011)
 
 DEPENDENCIES:
-  - Firebase
-  - Firebase/Analytics
-  - Firebase/Auth
-  - Firebase/Core
-  - Firebase/Firestore
-  - FirebaseFirestoreSwift
-  - GoogleMaps
-  - GooglePlaces
+  - Firebase/Analytics (>= 6.13.0)
+  - Firebase/Auth (>= 6.13.0)
+  - Firebase/Core (>= 6.13.0)
+  - Firebase/Firestore (>= 6.13.0)
+  - FirebaseFirestoreSwift (>= 0.2)
+  - GoogleMaps (>= 3.6.0)
+  - GooglePlaces (>= 3.6.0)
 
 SPEC REPOS:
   trunk:
@@ -346,6 +343,6 @@ SPEC CHECKSUMS:
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
 
-PODFILE CHECKSUM: 914916923ec8acfb33b229ca64807718dd65905e
+PODFILE CHECKSUM: 677a1ab2275a90973d47b8d4da761877909a8d4b
 
 COCOAPODS: 1.8.4
