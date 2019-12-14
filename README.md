@@ -22,7 +22,7 @@ pod install
 
 ## Architecture
 
-- Swift 5.1.1
+- Swift 5.1.2
 - SwiftUI
 - Firebase Authentication
 - Firebase Cloud Firestore
