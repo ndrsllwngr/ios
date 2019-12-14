@@ -18,6 +18,7 @@ pod install
 ### Requirements
 - macOS Catalina Version 10.15.2
 - Xcode.app Version 11.3
+- Homebrew
 
 ## Architecture
 
