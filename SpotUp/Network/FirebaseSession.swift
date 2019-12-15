@@ -12,13 +12,13 @@ import FirebaseAuth
 
 class FirebaseSession: ObservableObject {
     
-    @Published var currentUser: User?
+    @Published var currentUser: FirebaseUser?
     @Published var isLoggedIn: Bool?
     
     func listen() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
-                self.currentUser = User(uid: user.uid, email: user.email)
+                self.currentUser = FirebaseUser(uid: user.uid, email: user.email)
                 self.isLoggedIn = true
                 
             } else {

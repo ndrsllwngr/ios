@@ -9,12 +9,15 @@
 import SwiftUI
 import FirebaseFirestore
 
-let lists: [LocationList] = [LocationList(name: "Paris best Spots", ownerId: "bla"), LocationList(name: "Munich Ramen", ownerId: "bla"), LocationList(name:"DummieList", ownerId: "bla")]
+let lists: [LocationList] = [LocationList(id: "blub", name: "Paris best Spots", ownerId: "bla"), LocationList(id: "blub", name: "Munich Ramen", ownerId: "bla"), LocationList(id: "blub", name:"DummieList", ownerId: "bla")]
 
 struct ProfileView: View {
     @EnvironmentObject var session: FirebaseSession
+    @ObservedObject var locationListsForUser = FirestoreProfile()
     @State private var showingChildView = false
     @State private var showSheet = false
+    
+    
     
     var body: some View {
         NavigationView {
@@ -32,7 +35,7 @@ struct ProfileView: View {
                         ModalView(showSheet: self.$showSheet).environmentObject(self.session)
                 }
                 List {
-                    ForEach(lists) { locationList in
+                    ForEach(locationListsForUser.locationLists) { locationList in
                         NavigationLink(
                             destination: ListView(locationList: locationList)
                         ) {
@@ -48,6 +51,10 @@ struct ProfileView: View {
                         .navigationBarItems(
                             trailing: Button(action:{ self.showingChildView = true }) { Image(systemName: "gear") }
                     )
+                }.onAppear {
+                    self.locationListsForUser.addProfileListener(currentUserId: self.session.currentUser!.uid)
+                }.onDisappear {
+                    self.locationListsForUser.removeProfileListener()
                 }
             }
             
@@ -55,6 +62,7 @@ struct ProfileView: View {
         }
     }
 }
+
 
 struct ModalView: View {
     @EnvironmentObject var session: FirebaseSession
@@ -75,13 +83,13 @@ struct ModalView: View {
                 Button(action: {
                     createLocationList(currentUserId: self.session.currentUser!.uid, listName: self.text)
                     self.showSheet.toggle()
-            }) {
-                Text("Create")
+                }) {
+                    Text("Create")
+                }
             }
+            
         }
-        
     }
-}
 }
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {

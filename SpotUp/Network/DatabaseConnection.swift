@@ -26,20 +26,23 @@ func createUser(uid: String, email: String?) {
 func createLocationList(currentUserId: String, listName: String) {
     let db = Firestore.firestore()
     // Add a new document with a generated ID
-    var ref: DocumentReference? = nil
+    let listRef = db.collection("location_lists").document()
+    let listId = listRef.documentID
     
-    ref = db.collection("location_list").addDocument(data: [
+    listRef.setData([
+        "id": listId,
         "name": listName,
         "owner_id": currentUserId
     ]) { err in
         if let err = err {
             print("Error adding document: \(err)")
         } else {
-            let listId = ref!.documentID
             print("Document added with ID: \(listId)")
             // add list_id to current_user
             db.collection("users").document(currentUserId).updateData(["lists": FieldValue.arrayUnion([listId])])
         }
     }
 }
+
+
 
