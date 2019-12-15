@@ -46,6 +46,7 @@ func createLocationList(currentUserId: String, listName: String) {
 class FirestoreProfile: ObservableObject {
     
     @Published var locationLists: [LocationList] = []
+    @Published var user: User? = nil
     @Published var userListener: ListenerRegistration? = nil
     @Published var listsListener: ListenerRegistration? = nil
     
@@ -57,8 +58,8 @@ class FirestoreProfile: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ (data) in
-                let user = User(email: data["email"] as! String, username: data["username"] as! String, lists: data["lists"] as! [String])
-                let listIds = user.lists
+                self.user = User(email: data["email"] as! String, username: data["username"] as! String, lists: data["lists"] as! [String])
+                let listIds = self.user!.lists
                 
                 // 2. use retrieved listIds to get lists of user
                 if !listIds.isEmpty {
