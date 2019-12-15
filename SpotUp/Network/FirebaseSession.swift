@@ -12,17 +12,18 @@ import FirebaseAuth
 
 class FirebaseSession: ObservableObject {
     
-    @Published var session: User?
+    @Published var currentUser: User?
     @Published var isLoggedIn: Bool?
     
     func listen() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
-                self.session = User(uid: user.uid, displayName: user.displayName, email: user.email)
+                self.currentUser = User(uid: user.uid, email: user.email)
                 self.isLoggedIn = true
+                
             } else {
                 self.isLoggedIn = false
-                self.session = nil
+                self.currentUser = nil
             }
         }
     }
@@ -34,12 +35,18 @@ class FirebaseSession: ObservableObject {
     func logOut() {
         try! Auth.auth().signOut()
         self.isLoggedIn = false
-        self.session = nil
+        self.currentUser = nil
         
     }
     
     func signUp(email: String, password: String, handler: @escaping AuthDataResultCallback) {
-        Auth.auth().createUser(withEmail: email, password: password, completion: handler)
+        Auth.auth().createUser(withEmail: email, password: password) {
+            (authResult, error) in
+            if let user = authResult?.user {
+                createUser(uid: user.uid, email: user.email)
+            }
+        }
+        
     }
     
 }
