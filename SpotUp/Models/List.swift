@@ -9,7 +9,7 @@
 import Foundation
 
 struct LocationList: Identifiable {
-    var id = UUID()
+    var id: String
     // var createdAt =
     // var modifiedAt
     var name: String
