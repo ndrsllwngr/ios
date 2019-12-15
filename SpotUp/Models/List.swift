@@ -12,10 +12,10 @@ struct LocationList: Identifiable {
     var id = UUID()
     // var createdAt =
     // var modifiedAt
-    var title: String
+    var name: String
     //var titleImage: String
     //var location: String
-    //var ownerId: String
+    var ownerId: String
     //var tags: [UUID]
     //var items: [Location]
 }

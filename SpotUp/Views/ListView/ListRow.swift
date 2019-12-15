@@ -13,7 +13,7 @@ struct ListRow: View {
     
     var body: some View {
         HStack {
-            Text(locationList.title)
+            Text(locationList.name)
         }
     }
 }

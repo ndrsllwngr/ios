@@ -31,7 +31,7 @@ struct ListView: View {
                 //ListViewMap()
             }
         }
-        .navigationBarTitle(locationList.title)
+        .navigationBarTitle(locationList.name)
         .navigationBarItems(trailing: ListSettingsButton())
         .sheet(isPresented: $showListSettings) {
             Text("ListSettings")

@@ -22,8 +22,8 @@ struct ContentView: View {
                 OnboardingView(launchedBefore: $launchedBefore)
             } else if !self.permissionRequestedBefore {
                 PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
-            } else if session.session != nil {
-                TabBarView()
+            } else if session.currentUser != nil {
+                TabBarView().environmentObject(session)
             } else {
                 LoginView()
             }
