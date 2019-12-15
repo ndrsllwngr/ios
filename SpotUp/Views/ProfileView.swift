@@ -25,7 +25,6 @@ struct ProfileView: View {
                 VStack {
                     Button(action: {
                         self.showSheet.toggle()
-                        //createLocationList()
                     }) {
                         Text("Create new location list")
                     }
