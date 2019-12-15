@@ -9,19 +9,16 @@
 import SwiftUI
 import FirebaseFirestore
 
-let lists: [LocationList] = [LocationList(id: "blub", name: "Paris best Spots", ownerId: "bla"), LocationList(id: "blub", name: "Munich Ramen", ownerId: "bla"), LocationList(id: "blub", name:"DummieList", ownerId: "bla")]
-
 struct ProfileView: View {
     @EnvironmentObject var session: FirebaseAuthentication
-    @ObservedObject var locationListsForUser = FirestoreProfile()
+    @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State private var showSheet = false
-    
-    
     
     var body: some View {
         NavigationView {
             VStack {
+                Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
                 VStack {
                     Button(action: {
                         self.showSheet.toggle()
@@ -34,7 +31,7 @@ struct ProfileView: View {
                         ModalView(showSheet: self.$showSheet).environmentObject(self.session)
                 }
                 List {
-                    ForEach(locationListsForUser.locationLists) { locationList in
+                    ForEach(profile.locationLists) { locationList in
                         NavigationLink(
                             destination: ListView(locationList: locationList)
                         ) {
@@ -51,9 +48,9 @@ struct ProfileView: View {
                             trailing: Button(action:{ self.showingChildView = true }) { Image(systemName: "gear") }
                     )
                 }.onAppear {
-                    self.locationListsForUser.addProfileListener(currentUserId: self.session.currentUser!.uid)
+                    self.profile.addProfileListener(currentUserId: self.session.currentUser!.uid)
                 }.onDisappear {
-                    self.locationListsForUser.removeProfileListener()
+                    self.profile.removeProfileListener()
                 }
             }
             
