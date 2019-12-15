@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct TabBarView: View {
-    @EnvironmentObject var session: FirebaseSession
+    @EnvironmentObject var session: FirebaseAuthentication
 
     @State private var selection = 0
     

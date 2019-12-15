@@ -10,16 +10,22 @@ import SwiftUI
 
 struct SignUpView: View {
     
+    @State private var username: String = ""
     @State private var email: String = ""
     @State private var password: String = ""
     
-    @EnvironmentObject var session: FirebaseSession
+    @EnvironmentObject var session: FirebaseAuthentication
     
     var body: some View {
         Group {
             VStack {
                 Text("SignUpView")
                 Spacer()
+                HStack {
+                    Text("Username")
+                    TextField("Enter username", text: $username)
+                }
+                .padding()
                 HStack {
                     Text("Email")
                     TextField("Enter Email Address", text: $email)
@@ -41,8 +47,8 @@ struct SignUpView: View {
     }
     
     func signUp() {
-        if !email.isEmpty && !password.isEmpty {
-            session.signUp(email: email, password: password) { (result, error) in
+        if !username.isEmpty && !email.isEmpty && !password.isEmpty {
+            session.signUp(username: username, email: email, password: password) { (result, error) in
                 if error != nil {
                     print("Error")
                 } else {

@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var session = FirebaseSession()
+    @ObservedObject var session = FirebaseAuthentication()
     @State var launchedBefore = false
     @State var permissionRequestedBefore = false
     

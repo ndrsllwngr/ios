@@ -14,7 +14,7 @@ struct SettingsView: View {
             Text("SettingsView")
             Spacer()
             Button(action: {
-                FirebaseSession().logOut()
+                FirebaseAuthentication().logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
             }
