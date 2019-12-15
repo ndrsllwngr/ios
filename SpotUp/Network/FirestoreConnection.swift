@@ -12,9 +12,10 @@ let db = Firestore.firestore()
 let dbUsersRef = db.collection("users")
 let dbLocationListsRef = db.collection("location_lists")
 
-func createUser(uid: String, email: String?) {
+func createUserInFirestore(uid: String, email: String, username: String) {
     dbUsersRef.document(uid).setData([
         "email": email,
+        "username": username,
         "lists": []
     ])
 }
@@ -56,7 +57,7 @@ class FirestoreProfile: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ (data) in
-                let user = User(email: data["email"] as! String, lists: data["lists"] as! [String])
+                let user = User(email: data["email"] as! String, username: data["username"] as! String, lists: data["lists"] as! [String])
                 let listIds = user.lists
                 
                 // 2. use retrieved listIds to get lists of user

@@ -10,5 +10,6 @@ import Foundation
 struct User {
     
     var email: String
+    var username: String
     var lists: [String]
 }

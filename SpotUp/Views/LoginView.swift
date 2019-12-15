@@ -14,7 +14,7 @@ struct LoginView: View {
     @State var email: String = ""
     @State var password: String = ""
     
-    @EnvironmentObject var session: FirebaseSession
+    @EnvironmentObject var session: FirebaseAuthentication
     
     var body: some View {
         NavigationView {

@@ -12,7 +12,7 @@ import FirebaseFirestore
 let lists: [LocationList] = [LocationList(id: "blub", name: "Paris best Spots", ownerId: "bla"), LocationList(id: "blub", name: "Munich Ramen", ownerId: "bla"), LocationList(id: "blub", name:"DummieList", ownerId: "bla")]
 
 struct ProfileView: View {
-    @EnvironmentObject var session: FirebaseSession
+    @EnvironmentObject var session: FirebaseAuthentication
     @ObservedObject var locationListsForUser = FirestoreProfile()
     @State private var showingChildView = false
     @State private var showSheet = false
@@ -64,7 +64,7 @@ struct ProfileView: View {
 
 
 struct ModalView: View {
-    @EnvironmentObject var session: FirebaseSession
+    @EnvironmentObject var session: FirebaseAuthentication
     @Binding var showSheet: Bool
     
     @State private var text: String = ""

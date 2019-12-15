@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseAuth
 
-class FirebaseSession: ObservableObject {
+class FirebaseAuthentication: ObservableObject {
     
     @Published var currentUser: FirebaseUser?
     @Published var isLoggedIn: Bool?
@@ -18,9 +18,8 @@ class FirebaseSession: ObservableObject {
     func listen() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
-                self.currentUser = FirebaseUser(uid: user.uid, email: user.email)
+                self.currentUser = FirebaseUser(uid: user.uid, email: user.email!)
                 self.isLoggedIn = true
-                
             } else {
                 self.isLoggedIn = false
                 self.currentUser = nil
@@ -39,14 +38,28 @@ class FirebaseSession: ObservableObject {
         
     }
     
-    func signUp(email: String, password: String, handler: @escaping AuthDataResultCallback) {
+    func signUp(username: String, email: String, password: String, handler: @escaping AuthDataResultCallback) {
         Auth.auth().createUser(withEmail: email, password: password) {
             (authResult, error) in
             if let user = authResult?.user {
-                createUser(uid: user.uid, email: user.email)
+                createUserInFirestore(uid: user.uid, email: user.email!, username: username)
             }
         }
         
     }
     
 }
+
+class FirebaseUser {
+    
+    var uid: String
+    var email: String
+    // var displayName: String?
+    
+    init(uid: String, email: String) {
+        self.uid = uid
+        self.email = email
+        // self.displayName = displayName
+    }
+}
+

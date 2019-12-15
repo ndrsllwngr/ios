@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let contentView = ContentView()
         
         //Firebase
-        let session = FirebaseSession()
+        let session = FirebaseAuthentication()
         
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
