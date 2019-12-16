@@ -1,5 +1,5 @@
 //
-//  Firebase.swift
+//  FirebaseAuthentication.swift
 //  SpotUp
 //
 //  Created by Timo Erdelt on 18.11.19.

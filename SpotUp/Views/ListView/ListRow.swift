@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct ListRow: View {
-    var locationList: LocationList
+    var placeList: PlaceList
     
     var body: some View {
         HStack {
-            Text(locationList.name)
+            Text(placeList.name)
         }
     }
 }

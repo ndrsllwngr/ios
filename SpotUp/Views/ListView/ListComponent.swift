@@ -9,14 +9,14 @@
 import SwiftUI
 
 struct ListComponent: View {
-    var location: Location
+    var place: Place
     
     var body: some View{
         HStack {
-            location.image
+            place.image
                 .resizable()
                 .frame(width:50, height:50)
-            Text(location.name)
+            Text(place.name)
         }
         
     }
@@ -25,8 +25,8 @@ struct ListComponent: View {
 struct ListComponent_Previews: PreviewProvider {
     static var previews:some View{
     Group {
-        ListComponent(location: locationData[0])
-        ListComponent(location: locationData[1])
+        ListComponent(place: placeData[0])
+        ListComponent(place: placeData[1])
             
     }
           .previewLayout(.fixed(width: 300, height: 70))

@@ -1,5 +1,5 @@
 //
-//  List.swift
+//  PlaceList.swift
 //  SpotUp
 //
 //  Created by Timo Erdelt on 18.11.19.
@@ -8,14 +8,15 @@
 
 import Foundation
 
-struct LocationList: Identifiable {
+struct PlaceList: Identifiable {
     var id: String
     var name: String
     var ownerId: String
+    // var places: [Place]
     // var createdAt =
     // var modifiedAt
     //var titleImage: String
-    //var location: String
+    //var place: String
     //var tags: [UUID]
-    //var items: [Location]
+    //var items: [Place]
 }

@@ -1,5 +1,5 @@
 //
-//  UserLists.swift
+//  FirestoreConnection.swift
 //  SpotUp
 //
 //  Created by Timo Erdelt on 15.12.19.
@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 let db = Firestore.firestore()
 let dbUsersRef = db.collection("users")
-let dbLocationListsRef = db.collection("location_lists")
+let dbPlaceListsRef = db.collection("place_lists")
 
 func createUserInFirestore(uid: String, email: String, username: String) {
     dbUsersRef.document(uid).setData([
@@ -21,12 +21,12 @@ func createUserInFirestore(uid: String, email: String, username: String) {
 }
 
 
-func createLocationList(currentUserId: String, listName: String) {
-    // 1. Add an empty location_list document with a generated ID
-    let listRef = dbLocationListsRef.document()
+func createPlaceList(currentUserId: String, listName: String) {
+    // 1. Add an empty place_list document with a generated ID
+    let listRef = dbPlaceListsRef.document()
     let listId = listRef.documentID
     
-    // 2. Add data to location_list document
+    // 2. Add data to place_list document
     listRef.setData([
         "id": listId,
         "name": listName,
@@ -45,7 +45,7 @@ func createLocationList(currentUserId: String, listName: String) {
 
 class FirestoreProfile: ObservableObject {
     
-    @Published var locationLists: [LocationList] = []
+    @Published var placeLists: [PlaceList] = []
     @Published var user: User? = nil
     @Published var userListener: ListenerRegistration? = nil
     @Published var listsListener: ListenerRegistration? = nil
@@ -63,14 +63,14 @@ class FirestoreProfile: ObservableObject {
                 
                 // 2. use retrieved listIds to get lists of user
                 if !listIds.isEmpty {
-                    self.listsListener = dbLocationListsRef.whereField("id", in: listIds).addSnapshotListener { (querySnapshot, error) in
+                    self.listsListener = dbPlaceListsRef.whereField("id", in: listIds).addSnapshotListener { (querySnapshot, error) in
                         guard let querySnapshot = querySnapshot else {
                             print("Error retrieving Lists")
                             return
                         }
-                        self.locationLists = querySnapshot.documents.map { (documentSnapshot) in
+                        self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
                             let data = documentSnapshot.data()
-                            return LocationList(id: data["id"] as! String, name: data["name"] as! String, ownerId: data["owner_id"] as! String)
+                            return PlaceList(id: data["id"] as! String, name: data["name"] as! String, ownerId: data["owner_id"] as! String)
                         }
                     }
                 }
