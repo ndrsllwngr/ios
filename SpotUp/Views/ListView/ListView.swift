@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+let lists: [LocationList] = [LocationList(id: "blub", name: "Paris best Spots", ownerId: "bla"), LocationList(id: "blub", name: "Munich Ramen", ownerId: "bla"), LocationList(id: "blub", name:"DummieList", ownerId: "bla")]
+
 struct ListView: View {
     @State private var selection = 0
     @State var showListSettings = false

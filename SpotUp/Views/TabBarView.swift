@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct TabBarView: View {
-    @EnvironmentObject var session: FirebaseAuthentication
+    @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
 
     @State private var selection = 0
     
@@ -28,7 +28,7 @@ struct TabBarView: View {
             ProfileView().tabItem({
                 Image(systemName: selection == 1 ? "person.fill" : "person")
                 Text("Profil")
-                }).tag(1).environmentObject(session)
+                }).tag(1).environmentObject(firebaseAuthentication)
         }
         .accentColor(.black)
     }

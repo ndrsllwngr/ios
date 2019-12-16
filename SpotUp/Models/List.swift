@@ -10,12 +10,12 @@ import Foundation
 
 struct LocationList: Identifiable {
     var id: String
+    var name: String
+    var ownerId: String
     // var createdAt =
     // var modifiedAt
-    var name: String
     //var titleImage: String
     //var location: String
-    var ownerId: String
     //var tags: [UUID]
     //var items: [Location]
 }
