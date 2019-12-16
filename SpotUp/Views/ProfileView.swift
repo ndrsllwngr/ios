@@ -18,18 +18,38 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                VStack {
-                    Button(action: {
-                        self.showSheet.toggle()
-                    }) {
-                        Text("Create new place list")
+                Spacer()
+                Image("profile")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                Spacer()
+                HStack {
+                    VStack{
+                        Text("\(self.profile.placeLists.count)")
+                        Text("Placelists")
                     }
-                }.popover(
-                    isPresented: $showSheet,
-                    arrowEdge: .bottom) {
-                        ModalView(showSheet: self.$showSheet).environmentObject(self.firebaseAuthentication)
+                    Spacer()
+                    VStack{
+                        Text("1")
+                        Text("Follower")
+                    }
+                    Spacer()
+                    VStack{
+                        Text("1000")
+                        Text("Following")
+                    }
                 }
+                .padding(.horizontal)
+                Divider()
+                Button(action: {
+                    self.showSheet.toggle()
+                }) {
+                    Text("Create new place list")
+                }
+                
+                
                 List {
                     ForEach(profile.placeLists) { placeList in
                         VStack {
@@ -39,23 +59,34 @@ struct ProfileView: View {
                                 ListRow(placeList: placeList)
                             }
                         }
-                    }
-                    NavigationLink(destination: SettingsView(),
-                                   isActive: self.$showingChildView)
-                    { EmptyView() }
-                        .frame(width: 0, height: 0)
-                        .disabled(true)
-                        .navigationBarTitle(Text("ProfileView"))
-                        .navigationBarItems(
-                            trailing: Button(action:{ self.showingChildView = true }) { Image(systemName: "gear") }
-                    )
+                    }.onDelete(perform: delete)
                 }
             }
-        }.onAppear {
+            .popover(
+                isPresented: $showSheet,
+                arrowEdge: .bottom) {
+                    ModalView(showSheet: self.$showSheet).environmentObject(self.firebaseAuthentication)
+            }
+            .navigationBarTitle(Text(self.profile.user != nil ? "\(self.profile.user!.username)" : ""), displayMode: .inline)
+            .navigationBarItems(trailing: NavigationLink(destination: SettingsView()){
+                Image(systemName: "gear")
+            })
+            
+        }
+        .onAppear {
             self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
-        }.onDisappear {
+        }
+        .onDisappear {
             self.profile.removeProfileListener()
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        offsets.forEach {index in
+            let placeListToDelete = profile.placeLists[index]
+            deletePlaceList(currentUserId: firebaseAuthentication.currentUser!.uid, placeListId: placeListToDelete.id)
+        }
+        
     }
 }
 
