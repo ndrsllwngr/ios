@@ -36,8 +36,6 @@ func createPlaceList(currentUserId: String, listName: String) {
             print("Error adding document: \(err)")
         } else {
             print("Document added with ID: \(listId)")
-            // add list_id to current_user
-            db.collection("users").document(currentUserId).updateData(["lists": FieldValue.arrayUnion([listId])])
         }
     }
 }
@@ -78,7 +76,7 @@ class FirestoreProfile: ObservableObject {
     @Published var listsListener: ListenerRegistration? = nil
     
     func addProfileListener(currentUserId: String) {
-        // 1. get listIds from user profile
+        
         self.userListener = dbUsersRef.document(currentUserId).addSnapshotListener { documentSnapshot, error in
             guard let documentSnapshot = documentSnapshot else {
                 print("Error retrieving user")
@@ -86,23 +84,19 @@ class FirestoreProfile: ObservableObject {
             }
             documentSnapshot.data().flatMap({ (data) in
                 self.user = User(email: data["email"] as! String, username: data["username"] as! String, lists: data["lists"] as! [String])
-                let listIds = self.user!.lists
-                
-                // 2. use retrieved listIds to get lists of user
-                if !listIds.isEmpty {
-                    self.listsListener = dbPlaceListsRef.whereField("id", in: listIds).addSnapshotListener { (querySnapshot, error) in
-                        guard let querySnapshot = querySnapshot else {
-                            print("Error retrieving Lists")
-                            return
-                        }
-                        self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
-                            let data = documentSnapshot.data()
-                            return PlaceList(id: data["id"] as! String, name: data["name"] as! String, ownerId: data["owner_id"] as! String)
-                        }
-                    }
-                }
             })
         }
+        self.listsListener = dbPlaceListsRef.whereField("owner_id", isEqualTo: currentUserId).addSnapshotListener { (querySnapshot, error) in
+            guard let querySnapshot = querySnapshot else {
+                print("Error retrieving Lists")
+                return
+            }
+            self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
+                let data = documentSnapshot.data()
+                return PlaceList(id: data["id"] as! String, name: data["name"] as! String, ownerId: data["owner_id"] as! String)
+            }
+        }
+        
     }
     
     func removeProfileListener(){
