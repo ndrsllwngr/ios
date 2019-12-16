@@ -9,14 +9,16 @@
 import Foundation
 
 struct PlaceList: Identifiable {
-    var id: String
+    var id: String = UUID().uuidString
     var name: String
     var ownerId: String
-    // var places: [Place]
-    // var createdAt =
-    // var modifiedAt
+    var followerIds: [String] = []
+    var isPublic: Bool = true
+    var placeIds: [String] = []
+    //var isCollaborative: Bool = false
+    //var createdAt
+    //var modifiedAt
     //var titleImage: String
-    //var place: String
+    //var location: String
     //var tags: [UUID]
-    //var items: [Place]
 }

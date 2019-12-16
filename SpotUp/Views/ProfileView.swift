@@ -25,7 +25,7 @@ struct ProfileView: View {
                     }
                     .frame(height: 300)
                     VStack(spacing: 5) {
-                        ForEach(profile.placeLists) { placeList in
+                        ForEach(profile.ownedPlaceLists) { placeList in
                                 NavigationLink(
                                     destination: ListView(placeList: placeList)
                                 ) {
@@ -56,7 +56,7 @@ struct ProfileView: View {
     
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
-            let placeListToDelete = profile.placeLists[index]
+            let placeListToDelete = profile.ownedPlaceLists[index]
             deletePlaceList(currentUserId: firebaseAuthentication.currentUser!.uid, placeListId: placeListToDelete.id)
         }
         
@@ -68,11 +68,11 @@ struct ModalView: View {
     @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
     @Binding var showSheet: Bool
     
-    @State private var text: String = ""
+    @State private var placeListName: String = ""
     var body: some View {
         VStack {
             Text("Enter name for new placeList")
-            TextField("PlaceList name", text: $text)
+            TextField("PlaceList name", text: $placeListName)
             HStack {
                 Button(action: {
                     self.showSheet.toggle()
@@ -81,7 +81,8 @@ struct ModalView: View {
                 }
                 Divider()
                 Button(action: {
-                    createPlaceList(currentUserId: self.firebaseAuthentication.currentUser!.uid, listName: self.text)
+                    let newPlaceList = PlaceList(name: self.placeListName, ownerId: self.firebaseAuthentication.currentUser!.uid)
+                    createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
                     Text("Create")
@@ -111,7 +112,7 @@ struct ProfileInfoView: View {
                 .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
             HStack {
                 VStack{
-                    Text("\(self.profile.placeLists.count)")
+                    Text("\(self.profile.ownedPlaceLists.count)")
                     Text("Placelists")
                 }
                 Spacer()
