@@ -11,8 +11,8 @@ import SwiftUI
 struct ListViewList: View {
         var body: some View {
                 NavigationView {
-                    List(locationData) { location in
-                        ListComponent(location : location)
+                    List(placeData) { place in
+                        ListComponent(place : place)
                     }
                     .navigationBarTitle(Text("Spots"))
                 }

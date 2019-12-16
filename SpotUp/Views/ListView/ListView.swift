@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-let lists: [LocationList] = [LocationList(id: "blub", name: "Paris best Spots", ownerId: "bla"), LocationList(id: "blub", name: "Munich Ramen", ownerId: "bla"), LocationList(id: "blub", name:"DummieList", ownerId: "bla")]
+let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", ownerId: "bla"), PlaceList(id: "blub", name: "Munich Ramen", ownerId: "bla"), PlaceList(id: "blub", name:"DummieList", ownerId: "bla")]
 
 struct ListView: View {
     @State private var selection = 0
     @State var showListSettings = false
     
-    var locationList: LocationList
+    var placeList: PlaceList
     var body: some View {
         VStack {
             Picker(selection: $selection, label: Text("label")) {
@@ -33,7 +33,7 @@ struct ListView: View {
                 //ListViewMap()
             }
         }
-        .navigationBarTitle(locationList.name)
+        .navigationBarTitle(placeList.name)
         .navigationBarItems(trailing: ListSettingsButton())
         .sheet(isPresented: $showListSettings) {
             Text("ListSettings")
@@ -43,7 +43,7 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(locationList: lists[0])
+        ListView(placeList: lists[0])
     }
 }
 

@@ -23,7 +23,7 @@ struct ProfileView: View {
                     Button(action: {
                         self.showSheet.toggle()
                     }) {
-                        Text("Create new location list")
+                        Text("Create new place list")
                     }
                 }.popover(
                     isPresented: $showSheet,
@@ -31,12 +31,12 @@ struct ProfileView: View {
                         ModalView(showSheet: self.$showSheet).environmentObject(self.firebaseAuthentication)
                 }
                 List {
-                    ForEach(profile.locationLists) { locationList in
+                    ForEach(profile.placeLists) { placeList in
                         VStack {
                             NavigationLink(
-                                destination: ListView(locationList: locationList)
+                                destination: ListView(placeList: placeList)
                             ) {
-                                ListRow(locationList: locationList)
+                                ListRow(placeList: placeList)
                             }
                         }
                     }
@@ -67,8 +67,8 @@ struct ModalView: View {
     @State private var text: String = ""
     var body: some View {
         VStack {
-            Text("Enter name for new locationList")
-            TextField("LocationList name", text: $text)
+            Text("Enter name for new placeList")
+            TextField("PlaceList name", text: $text)
             HStack {
                 Button(action: {
                     self.showSheet.toggle()
@@ -77,7 +77,7 @@ struct ModalView: View {
                 }
                 Divider()
                 Button(action: {
-                    createLocationList(currentUserId: self.firebaseAuthentication.currentUser!.uid, listName: self.text)
+                    createPlaceList(currentUserId: self.firebaseAuthentication.currentUser!.uid, listName: self.text)
                     self.showSheet.toggle()
                 }) {
                     Text("Create")
