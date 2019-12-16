@@ -42,6 +42,33 @@ func createPlaceList(currentUserId: String, listName: String) {
     }
 }
 
+// ToDo update with more parameters
+func updatePlaceList(placeListId: String, newName: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "name": newName
+    ]) { err in
+        if let err = err {
+            print("Error updating PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully updated")
+        }
+    }
+}
+
+func deletePlaceList(currentUserId: String, placeListId: String) {
+    dbPlaceListsRef.document(placeListId).delete() { err in
+        if let err = err {
+            print("Error deleting PlaceList: \(err)")
+        } else {
+            dbUsersRef.document(currentUserId).updateData([
+                "lists": FieldValue.arrayRemove([placeListId])
+            ])
+            print("PlaceList successfully deleted")
+        }
+    }
+    
+}
 
 class FirestoreProfile: ObservableObject {
     
