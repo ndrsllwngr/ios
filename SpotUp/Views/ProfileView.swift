@@ -10,7 +10,7 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ProfileView: View {
-    @EnvironmentObject var session: FirebaseAuthentication
+    @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State private var showSheet = false
@@ -28,14 +28,16 @@ struct ProfileView: View {
                 }.popover(
                     isPresented: $showSheet,
                     arrowEdge: .bottom) {
-                        ModalView(showSheet: self.$showSheet).environmentObject(self.session)
+                        ModalView(showSheet: self.$showSheet).environmentObject(self.firebaseAuthentication)
                 }
                 List {
                     ForEach(profile.locationLists) { locationList in
-                        NavigationLink(
-                            destination: ListView(locationList: locationList)
-                        ) {
-                            ListRow(locationList: locationList)
+                        VStack {
+                            NavigationLink(
+                                destination: ListView(locationList: locationList)
+                            ) {
+                                ListRow(locationList: locationList)
+                            }
                         }
                     }
                     NavigationLink(destination: SettingsView(),
@@ -47,21 +49,19 @@ struct ProfileView: View {
                         .navigationBarItems(
                             trailing: Button(action:{ self.showingChildView = true }) { Image(systemName: "gear") }
                     )
-                }.onAppear {
-                    self.profile.addProfileListener(currentUserId: self.session.currentUser!.uid)
-                }.onDisappear {
-                    self.profile.removeProfileListener()
                 }
             }
-            
-            
+        }.onAppear {
+            self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
+        }.onDisappear {
+            self.profile.removeProfileListener()
         }
     }
 }
 
 
 struct ModalView: View {
-    @EnvironmentObject var session: FirebaseAuthentication
+    @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
     @Binding var showSheet: Bool
     
     @State private var text: String = ""
@@ -77,7 +77,7 @@ struct ModalView: View {
                 }
                 Divider()
                 Button(action: {
-                    createLocationList(currentUserId: self.session.currentUser!.uid, listName: self.text)
+                    createLocationList(currentUserId: self.firebaseAuthentication.currentUser!.uid, listName: self.text)
                     self.showSheet.toggle()
                 }) {
                     Text("Create")
