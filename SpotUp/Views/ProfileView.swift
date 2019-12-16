@@ -13,53 +13,27 @@ struct ProfileView: View {
     @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
-    @State private var showSheet = false
+    @State var showSheet = false
     
     var body: some View {
         NavigationView {
-            VStack {
-                Spacer()
-                Image("profile")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                Spacer()
-                HStack {
-                    VStack{
-                        Text("\(self.profile.placeLists.count)")
-                        Text("Placelists")
+            ScrollView {
+                VStack {
+                    GeometryReader {geometry in
+                        ProfileInfoView(showSheet: self.$showSheet).environmentObject(self.profile)
+                            .offset(y: geometry.frame(in: .global).minY > 0 ? -geometry.frame(in: .global).minY : 0)
+                    }
+                    .frame(height: 300)
+                    VStack(spacing: 5) {
+                        ForEach(profile.placeLists) { placeList in
+                                NavigationLink(
+                                    destination: ListView(placeList: placeList)
+                                ) {
+                                    ListRow(placeList: placeList)
+                                }
+                        }.onDelete(perform: delete)
                     }
                     Spacer()
-                    VStack{
-                        Text("1")
-                        Text("Follower")
-                    }
-                    Spacer()
-                    VStack{
-                        Text("1000")
-                        Text("Following")
-                    }
-                }
-                .padding(.horizontal)
-                Divider()
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("Create new place list")
-                }
-                
-                
-                List {
-                    ForEach(profile.placeLists) { placeList in
-                        VStack {
-                            NavigationLink(
-                                destination: ListView(placeList: placeList)
-                            ) {
-                                ListRow(placeList: placeList)
-                            }
-                        }
-                    }.onDelete(perform: delete)
                 }
             }
             .popover(
@@ -71,7 +45,6 @@ struct ProfileView: View {
             .navigationBarItems(trailing: NavigationLink(destination: SettingsView()){
                 Image(systemName: "gear")
             })
-            
         }
         .onAppear {
             self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
@@ -121,5 +94,44 @@ struct ModalView: View {
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
+    }
+}
+
+struct ProfileInfoView: View {
+    @EnvironmentObject var profile: FirestoreProfile
+    @Binding var showSheet: Bool
+
+    var body: some View {
+        VStack {
+            Spacer()
+            Image("profile")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+            HStack {
+                VStack{
+                    Text("\(self.profile.placeLists.count)")
+                    Text("Placelists")
+                }
+                Spacer()
+                VStack{
+                    Text("1")
+                    Text("Follower")
+                }
+                Spacer()
+                VStack{
+                    Text("1000")
+                    Text("Following")
+                }
+            }
+            .padding(.horizontal)
+            Divider()
+            Button(action: {
+                self.showSheet.toggle()
+            }) {
+                Text("Create new place list")
+            }
+        }
     }
 }
