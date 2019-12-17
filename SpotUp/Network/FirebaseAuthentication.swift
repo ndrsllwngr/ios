@@ -42,7 +42,8 @@ class FirebaseAuthentication: ObservableObject {
         Auth.auth().createUser(withEmail: email, password: password) {
             (authResult, error) in
             if let user = authResult?.user {
-                createUserInFirestore(uid: user.uid, email: user.email!, username: username)
+                let user = User(id: user.uid, email: user.email!, username: username)
+                createUserInFirestore(user: user)
             }
         }
         
