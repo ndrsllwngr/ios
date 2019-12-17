@@ -104,7 +104,8 @@ struct ProfileInfoView: View {
                 HStack {
                     VStack{
                         Text("\(self.profile.ownedPlaceLists.count)")
-                            .font(.system(size: 12))
+                            .font(.system(size: 14))
+                            .bold()
                         Text("Placelists")
                             .font(.system(size: 12))
                         
@@ -112,7 +113,8 @@ struct ProfileInfoView: View {
                     Spacer()
                     VStack{
                         Text("1")
-                            .font(.system(size: 12))
+                            .font(.system(size: 14))
+                            .bold()
                         Text("Follower")
                             .font(.system(size: 12))
                         
@@ -120,7 +122,8 @@ struct ProfileInfoView: View {
                     Spacer()
                     VStack{
                         Text("1000")
-                            .font(.system(size: 12))
+                            .font(.system(size: 14))
+                            .bold()
                         Text("Following")
                             .font(.system(size: 12))
                         
@@ -158,7 +161,7 @@ struct EditProfileSheet: View {
     var user: User
     @Binding var showSheet: Bool
     @State private var newUserName: String = ""
-
+    
     var body: some View {
         VStack {
             Text("Edit profile")
