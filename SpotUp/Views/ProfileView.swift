@@ -24,7 +24,7 @@ struct ProfileView: View {
                             .offset(y: geometry.frame(in: .global).minY > 0 ? -geometry.frame(in: .global).minY : 0)
                     }
                     .frame(height: 300)
-                    VStack(spacing: 5) {
+                    VStack {
                         ForEach(profile.ownedPlaceLists) { placeList in
                                 NavigationLink(
                                     destination: ListView(placeList: placeList)
@@ -39,7 +39,7 @@ struct ProfileView: View {
             .popover(
                 isPresented: $showSheet,
                 arrowEdge: .bottom) {
-                    ModalView(showSheet: self.$showSheet).environmentObject(self.firebaseAuthentication)
+                    ModalView(user: self.profile.user, showSheet: self.$showSheet)
             }
             .navigationBarTitle(Text(self.profile.user != nil ? "\(self.profile.user!.username)" : ""), displayMode: .inline)
             .navigationBarItems(trailing: NavigationLink(destination: SettingsView()){
@@ -57,7 +57,7 @@ struct ProfileView: View {
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
             let placeListToDelete = profile.ownedPlaceLists[index]
-            deletePlaceList(currentUserId: firebaseAuthentication.currentUser!.uid, placeListId: placeListToDelete.id)
+            deletePlaceList(placeListId: placeListToDelete.id)
         }
         
     }
@@ -65,7 +65,7 @@ struct ProfileView: View {
 
 
 struct ModalView: View {
-    @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
+    var user: User?
     @Binding var showSheet: Bool
     
     @State private var placeListName: String = ""
@@ -81,7 +81,7 @@ struct ModalView: View {
                 }
                 Divider()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, ownerId: self.firebaseAuthentication.currentUser!.uid)
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user!.toSimpleUser())
                     createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {

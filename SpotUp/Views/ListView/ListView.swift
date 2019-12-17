@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", ownerId: "bla"), PlaceList(id: "blub", name: "Munich Ramen", ownerId: "bla"), PlaceList(id: "blub", name:"DummieList", ownerId: "bla")]
+let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: SimpleUser(id: "bla", username: "bla")), PlaceList(id: "blub", name: "Munich Ramen", owner: SimpleUser(id: "bla", username: "bla")), PlaceList(id: "blub", name:"DummieList", owner: SimpleUser(id: "bla", username: "bla"))]
 
 struct ListView: View {
     @State private var selection = 0

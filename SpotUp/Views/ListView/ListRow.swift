@@ -12,9 +12,13 @@ struct ListRow: View {
     var placeList: PlaceList
     
     var body: some View {
-        HStack {
-            Text(placeList.name)
+            VStack(alignment: .leading) {
+                Text(placeList.name)
+                    .bold()
+                Text("von \(placeList.owner.username)")
+            }
+            .padding(.leading)
+            .frame(maxWidth: .infinity)
         }
-    }
 }
 
