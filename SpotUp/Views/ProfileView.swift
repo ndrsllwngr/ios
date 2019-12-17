@@ -14,7 +14,7 @@ struct ProfileView: View {
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State var showSheet = false
-    @State var sheetSelection = 0
+    @State var sheetSelection = "none"
     
     
     var body: some View {
@@ -36,17 +36,17 @@ struct ProfileView: View {
                 Spacer()
             }
             .sheet(isPresented: $showSheet) {
-                if self.sheetSelection == 0 {
+                if self.sheetSelection == "edit_profile" {
                     EditProfileSheet(user: self.profile.user!, showSheet: self.$showSheet)
-                } else if self.sheetSelection == 1 {
+                } else if self.sheetSelection == "settings" {
                     SettingsSheet(showSheet: self.$showSheet)
-                } else {
+                } else if self.sheetSelection == "create_placelist"{
                     CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 }
             }
             .navigationBarTitle(Text("Profil"), displayMode: .inline)
             .navigationBarItems(trailing: Button(action:  {
-                self.sheetSelection = 2
+                self.sheetSelection = "settings"
                 self.showSheet.toggle()
             }) {
                 Image(systemName: "gear")
@@ -77,7 +77,7 @@ struct ProfileView_Previews: PreviewProvider {
 struct ProfileInfoView: View {
     @EnvironmentObject var profile: FirestoreProfile
     @Binding var showSheet: Bool
-    @Binding var sheetSelection: Int
+    @Binding var sheetSelection: String
     
     var body: some View {
         VStack {
@@ -91,7 +91,7 @@ struct ProfileInfoView: View {
                         .padding()
                     Button(action: {
                         self.showSheet.toggle()
-                        self.sheetSelection = 0
+                        self.sheetSelection = "edit_profile"
                     }) {
                         HStack {
                             Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
@@ -137,12 +137,12 @@ struct ProfileInfoView: View {
 
 struct CreateNewPlaceListRow: View {
     @Binding var showSheet: Bool
-    @Binding var sheetSelection: Int
+    @Binding var sheetSelection: String
     
     var body: some View {
         Button(action: {
             print("buttonPressed")
-            self.sheetSelection = 1
+            self.sheetSelection = "create_placelist"
             self.showSheet.toggle()
         }) {
             HStack {
