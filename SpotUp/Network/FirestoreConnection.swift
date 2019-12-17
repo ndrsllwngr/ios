@@ -12,12 +12,8 @@ let db = Firestore.firestore()
 let dbUsersRef = db.collection("users")
 let dbPlaceListsRef = db.collection("place_lists")
 
-func createUserInFirestore(uid: String, email: String, username: String) {
-    dbUsersRef.document(uid).setData([
-        "id": uid,
-        "email": email,
-        "username": username
-    ])
+func createUserInFirestore(user: User) {
+    dbUsersRef.document(user.id).setData(userToData(user: user))
 }
 
 
@@ -26,14 +22,7 @@ func createPlaceList(placeList: PlaceList) {
     let listRef = dbPlaceListsRef.document(placeList.id)
     
     // 2. Add data to place_list document
-    listRef.setData([
-        "id": placeList.id,
-        "name": placeList.name,
-        "owner_id": placeList.owner.id,
-        "follower_ids": placeList.followerIds,
-        "is_public": placeList.isPublic,
-        "place_ids": placeList.placeIds
-    ]) { err in
+    listRef.setData(placeListToData(placeList: placeList)) { err in
         if let err = err {
             print("Error adding document: \(err)")
         } else {
@@ -85,23 +74,18 @@ class FirestoreProfile: ObservableObject {
                 print("Error retrieving user")
                 return
             }
-            documentSnapshot.data().flatMap({ (data) in
-                self.user = User(id: data["id"] as! String, email: data["email"] as! String, username: data["username"] as! String)
+            documentSnapshot.data().flatMap({ data in
+                self.user = dataToUser(data: data)
             })
         }
-        self.ownedListsListener = dbPlaceListsRef.whereField("owner_id", isEqualTo: currentUserId).addSnapshotListener { (querySnapshot, error) in
+        self.ownedListsListener = dbPlaceListsRef.whereField("owner_id", isEqualTo: currentUserId).addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving Lists")
                 return
             }
             self.ownedPlaceLists = querySnapshot.documents.map { (documentSnapshot) in
                 let data = documentSnapshot.data()
-                return PlaceList(id: data["id"] as! String,
-                                 name: data["name"] as! String,
-                                 owner: SimpleUser(id: data["owner_id"] as! String, username: ""),
-                                 followerIds: data["follower_ids"] as! [String],
-                                 isPublic: data["is_public"] as! Bool,
-                                 placeIds: data["place_ids"] as! [String])
+                return dataToPlaceList(data: data)
             }
             for (i, placeList) in self.ownedPlaceLists.enumerated() {
                 dbUsersRef.document(placeList.owner.id).getDocument { document, error in
