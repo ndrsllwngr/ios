@@ -11,7 +11,7 @@ import Foundation
 struct PlaceList: Identifiable {
     var id: String = UUID().uuidString
     var name: String
-    var ownerId: String
+    var owner: SimpleUser
     var followerIds: [String] = []
     var isPublic: Bool = true
     var placeIds: [String] = []

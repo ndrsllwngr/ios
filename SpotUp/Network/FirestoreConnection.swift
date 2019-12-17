@@ -14,6 +14,7 @@ let dbPlaceListsRef = db.collection("place_lists")
 
 func createUserInFirestore(uid: String, email: String, username: String) {
     dbUsersRef.document(uid).setData([
+        "id": uid,
         "email": email,
         "username": username
     ])
@@ -28,7 +29,7 @@ func createPlaceList(placeList: PlaceList) {
     listRef.setData([
         "id": placeList.id,
         "name": placeList.name,
-        "owner_id": placeList.ownerId,
+        "owner_id": placeList.owner.id,
         "follower_ids": placeList.followerIds,
         "is_public": placeList.isPublic,
         "place_ids": placeList.placeIds
@@ -55,14 +56,11 @@ func updatePlaceList(placeListId: String, newName: String) {
     }
 }
 
-func deletePlaceList(currentUserId: String, placeListId: String) {
+func deletePlaceList(placeListId: String) {
     dbPlaceListsRef.document(placeListId).delete() { err in
         if let err = err {
             print("Error deleting PlaceList: \(err)")
         } else {
-            dbUsersRef.document(currentUserId).updateData([
-                "lists": FieldValue.arrayRemove([placeListId])
-            ])
             print("PlaceList successfully deleted")
         }
     }
@@ -73,12 +71,12 @@ class FirestoreProfile: ObservableObject {
     
     @Published var userListener: ListenerRegistration? = nil
     @Published var ownedListsListener: ListenerRegistration? = nil
-    @Published var followedListsListener: ListenerRegistration? = nil
+    //@Published var followedListsListener: ListenerRegistration? = nil
     
     @Published var user: User? = nil
     @Published var ownedPlaceLists: [PlaceList] = []
-    @Published var followedPlaceLists: [PlaceList] = []
-
+    //@Published var followedPlaceLists: [PlaceList] = []
+    
     
     func addProfileListener(currentUserId: String) {
         
@@ -88,7 +86,7 @@ class FirestoreProfile: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ (data) in
-                self.user = User(email: data["email"] as! String, username: data["username"] as! String)
+                self.user = User(id: data["id"] as! String, email: data["email"] as! String, username: data["username"] as! String)
             })
         }
         self.ownedListsListener = dbPlaceListsRef.whereField("owner_id", isEqualTo: currentUserId).addSnapshotListener { (querySnapshot, error) in
@@ -100,33 +98,49 @@ class FirestoreProfile: ObservableObject {
                 let data = documentSnapshot.data()
                 return PlaceList(id: data["id"] as! String,
                                  name: data["name"] as! String,
-                                 ownerId: data["owner_id"] as! String,
+                                 owner: SimpleUser(id: data["owner_id"] as! String, username: ""),
                                  followerIds: data["follower_ids"] as! [String],
                                  isPublic: data["is_public"] as! Bool,
                                  placeIds: data["place_ids"] as! [String])
             }
-        }
-        self.followedListsListener = dbPlaceListsRef.whereField("follower_ids", arrayContains: currentUserId).addSnapshotListener { (querySnapshot, error) in
-            guard let querySnapshot = querySnapshot else {
-                print("Error retrieving Lists")
-                return
+            for (i, placeList) in self.ownedPlaceLists.enumerated() {
+                dbUsersRef.document(placeList.owner.id).getDocument { document, error in
+                    guard let document = document else {
+                        print("Error retrieving user")
+                        return
+                    }
+                    document.data().flatMap({ data in
+                        let username = data["username"] as! String
+                        self.ownedPlaceLists[i].owner.username = username
+                        
+                    })
+                    
+                }
             }
-            self.followedPlaceLists = querySnapshot.documents.map { (documentSnapshot) in
-                let data = documentSnapshot.data()
-                return PlaceList(id: data["id"] as! String,
-                                 name: data["name"] as! String,
-                                 ownerId: data["owner_id"] as! String,
-                                 followerIds: data["follower_ids"] as! [String],
-                                 isPublic: data["is_public"] as! Bool,
-                                 placeIds: data["place_ids"] as! [String])
-            }
+            
         }
+        //        self.followedListsListener = dbPlaceListsRef.whereField("follower_ids", arrayContains: currentUserId).addSnapshotListener { (querySnapshot, error) in
+        //            guard let querySnapshot = querySnapshot else {
+        //                print("Error retrieving Lists")
+        //                return
+        //            }
+        //            self.followedPlaceLists = querySnapshot.documents.map { (documentSnapshot) in
+        //                let data = documentSnapshot.data()
+        //                var placeList =
+        //                return PlaceList(id: data["id"] as! String,
+        //                                 name: data["name"] as! String,
+        //                                 ownerId: data["owner_id"] as! String,
+        //                                 followerIds: data["follower_ids"] as! [String],
+        //                                 isPublic: data["is_public"] as! Bool,
+        //                                 placeIds: data["place_ids"] as! [String])
+        //            }
+        //        }
     }
     
     func removeProfileListener(){
         self.userListener?.remove()
         self.ownedListsListener?.remove()
-        self.followedListsListener?.remove()
+        //self.followedListsListener?.remove()
         print("Successfully removed listener")
     }
     
