@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: SimpleUser(id: "bla", username: "bla")), PlaceList(id: "blub", name: "Munich Ramen", owner: SimpleUser(id: "bla", username: "bla")), PlaceList(id: "blub", name:"DummieList", owner: SimpleUser(id: "bla", username: "bla"))]
+let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla")), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla")), PlaceList(id: "blub", name:"DummieList", owner: ListOwner(id: "bla", username: "bla"))]
 
-struct ListView: View {
+struct PlacelistView: View {
     @State private var selection = 0
     @State var showListSettings = false
     
@@ -27,7 +27,7 @@ struct ListView: View {
             Spacer()
             
             if selection == 0 {
-                ListViewList()
+                PlacelistViewList()
             } else {
                 Text("Todo Map View")
                 //ListViewMap()
@@ -43,7 +43,7 @@ struct ListView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        ListView(placeList: lists[0])
+        PlacelistView(placeList: lists[0])
     }
 }
 

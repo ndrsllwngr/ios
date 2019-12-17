@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ListComponent: View {
+struct ListRowPlace: View {
     var place: Place
     
     var body: some View{
@@ -25,8 +25,8 @@ struct ListComponent: View {
 struct ListComponent_Previews: PreviewProvider {
     static var previews:some View{
     Group {
-        ListComponent(place: placeData[0])
-        ListComponent(place: placeData[1])
+        ListRowPlace(place: placeData[0])
+        ListRowPlace(place: placeData[1])
             
     }
           .previewLayout(.fixed(width: 300, height: 70))

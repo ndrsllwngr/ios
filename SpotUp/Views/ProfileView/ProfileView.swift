@@ -16,7 +16,6 @@ struct ProfileView: View {
     @State var showSheet = false
     @State var sheetSelection = "none"
     
-    
     var body: some View {
         NavigationView {
             VStack {
@@ -25,9 +24,9 @@ struct ProfileView: View {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                     ForEach(profile.ownedPlaceLists) { placeList in
                         NavigationLink(
-                            destination: ListView(placeList: placeList)
+                            destination: PlacelistView(placeList: placeList)
                         ) {
-                            ListRow(placeList: placeList)
+                            PlacesListRow(placeList: placeList)
                         }
                     }
                     .onDelete(perform: delete)
@@ -98,9 +97,7 @@ struct ProfileInfoView: View {
                             Image(systemName: "pencil")
                         }
                     }
-                    
                 }
-                
                 HStack {
                     VStack{
                         Text("\(self.profile.ownedPlaceLists.count)")
@@ -126,111 +123,9 @@ struct ProfileInfoView: View {
                             .bold()
                         Text("Following")
                             .font(.system(size: 12))
-                        
                     }
                 }
             }.padding(.horizontal)
-        }
-        
-    }
-}
-
-struct CreateNewPlaceListRow: View {
-    @Binding var showSheet: Bool
-    @Binding var sheetSelection: String
-    
-    var body: some View {
-        Button(action: {
-            print("buttonPressed")
-            self.sheetSelection = "create_placelist"
-            self.showSheet.toggle()
-        }) {
-            HStack {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                Text("Create new place list")
-            }
-        }
-    }
-}
-
-struct EditProfileSheet: View {
-    
-    var user: User
-    @Binding var showSheet: Bool
-    @State private var newUserName: String = ""
-    
-    var body: some View {
-        VStack {
-            Text("Edit profile")
-            Spacer()
-            TextField(self.user.username, text: $newUserName)
-            HStack {
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("cancel")
-                }
-                Spacer()
-                Button(action: {
-                    let newUser = User(id: self.user.id, email: self.user.email, username: self.newUserName)
-                    updateUser(newUser: newUser)
-                    self.showSheet.toggle()
-                }) {
-                    Text("save")
-                }
-            }
-            Spacer()
-        }
-    }
-}
-
-struct CreatePlacelistSheet: View {
-    
-    var user: User
-    @Binding var showSheet: Bool
-    @State private var placeListName: String = ""
-    
-    var body: some View {
-        VStack(alignment: .center) {
-            Text("Enter a name for your placelist")
-            Spacer()
-            TextField("place list name", text: $placeListName)
-            HStack {
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("cancel")
-                }
-                Spacer()
-                Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toSimpleUser())
-                    createPlaceList(placeList: newPlaceList)
-                    self.showSheet.toggle()
-                }) {
-                    Text("create")
-                }
-            }
-            .frame(width: 300, height: 100)
-            Spacer()
-        }
-    }
-}
-
-struct SettingsSheet: View {
-    @Binding var showSheet: Bool
-    
-    var body: some View {
-        VStack {
-            Text("Settings")
-            Spacer()
-            Button(action: {
-                FirebaseAuthentication().logOut()
-            }) {
-                Text("Log Out").foregroundColor(.red)
-            }
         }
     }
 }

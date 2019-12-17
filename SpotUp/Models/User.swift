@@ -12,12 +12,12 @@ struct User {
     var email: String
     var username: String
     
-    func toSimpleUser() -> SimpleUser {
-        return SimpleUser(id: self.id, username: self.username)
+    func toListOwner() -> ListOwner {
+        return ListOwner(id: self.id, username: self.username)
     }
 }
 
-struct SimpleUser {
+struct ListOwner {
     var id: String
     var username: String
 }

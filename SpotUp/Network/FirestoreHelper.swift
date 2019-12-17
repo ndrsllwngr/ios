@@ -8,8 +8,9 @@
 import Foundation
 import FirebaseFirestore
 
+// Define conversions swift object -> firestore data & firestore data -> swift objects here
 
-// OBJECT TO FIRESTORE DATA
+// Object to firestore data
 func userToData(user: User) -> Dictionary<String, Any> {
     return [
         "id": user.id,
@@ -30,7 +31,7 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
 }
 
 
-// FIRESTORE DATA TO OBJECT
+// Object to firestore data
 func dataToUser(data: Dictionary<String, Any>) -> User {
     return User(id: data["id"] as! String,
                 email: data["email"] as! String,
@@ -41,7 +42,7 @@ func dataToUser(data: Dictionary<String, Any>) -> User {
 func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
     return PlaceList(id: data["id"] as! String,
                      name: data["name"] as! String,
-                     owner: SimpleUser(id: data["owner_id"] as! String, username: ""),
+                     owner: ListOwner(id: data["owner_id"] as! String, username: ""),
                      followerIds: data["follower_ids"] as! [String],
                      isPublic: data["is_public"] as! Bool,
                      placeIds: data["place_ids"] as! [String])
