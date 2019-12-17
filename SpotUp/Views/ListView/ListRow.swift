@@ -12,13 +12,17 @@ struct ListRow: View {
     var placeList: PlaceList
     
     var body: some View {
+        HStack {
+            Image("chincoteague")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50, height: 50)
             VStack(alignment: .leading) {
                 Text(placeList.name)
                     .bold()
                 Text("von \(placeList.owner.username)")
             }
-            .padding(.leading)
-            .frame(maxWidth: .infinity)
         }
+    }
 }
 
