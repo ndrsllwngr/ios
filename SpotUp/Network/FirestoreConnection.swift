@@ -16,6 +16,18 @@ func createUserInFirestore(user: User) {
     dbUsersRef.document(user.id).setData(userToData(user: user))
 }
 
+func updateUser(newUser: User) {
+    let userRef = dbUsersRef.document(newUser.id)
+    userRef.updateData([
+        "username": newUser.username
+    ]) { err in
+        if let err = err {
+            print("Error updating PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully updated")
+        }
+    }
+}
 
 func createPlaceList(placeList: PlaceList) {
     // 1. Add an empty place_list document with a generated ID

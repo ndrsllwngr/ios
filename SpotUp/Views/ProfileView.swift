@@ -14,35 +14,41 @@ struct ProfileView: View {
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State var showSheet = false
+    @State var sheetSelection = 0
+    
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack {
-                    GeometryReader {geometry in
-                        ProfileInfoView(showSheet: self.$showSheet).environmentObject(self.profile)
-                            .offset(y: geometry.frame(in: .global).minY > 0 ? -geometry.frame(in: .global).minY : 0)
+            VStack {
+                ProfileInfoView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
+                List {
+                    CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                    ForEach(profile.ownedPlaceLists) { placeList in
+                        NavigationLink(
+                            destination: ListView(placeList: placeList)
+                        ) {
+                            ListRow(placeList: placeList)
+                        }
                     }
-                    .frame(height: 300)
-                    VStack {
-                        ForEach(profile.ownedPlaceLists) { placeList in
-                                NavigationLink(
-                                    destination: ListView(placeList: placeList)
-                                ) {
-                                    ListRow(placeList: placeList)
-                                }
-                        }.onDelete(perform: delete)
-                    }
+                    .onDelete(perform: delete)
                     Spacer()
                 }
+                Spacer()
             }
-            .popover(
-                isPresented: $showSheet,
-                arrowEdge: .bottom) {
-                    ModalView(user: self.profile.user, showSheet: self.$showSheet)
+            .sheet(isPresented: $showSheet) {
+                if self.sheetSelection == 0 {
+                    EditProfileSheet(user: self.profile.user!, showSheet: self.$showSheet)
+                } else if self.sheetSelection == 1 {
+                    SettingsSheet(showSheet: self.$showSheet)
+                } else {
+                    CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
+                }
             }
-            .navigationBarTitle(Text(self.profile.user != nil ? "\(self.profile.user!.username)" : ""), displayMode: .inline)
-            .navigationBarItems(trailing: NavigationLink(destination: SettingsView()){
+            .navigationBarTitle(Text("Profil"), displayMode: .inline)
+            .navigationBarItems(trailing: Button(action:  {
+                self.sheetSelection = 2
+                self.showSheet.toggle()
+            }) {
                 Image(systemName: "gear")
             })
         }
@@ -59,39 +65,9 @@ struct ProfileView: View {
             let placeListToDelete = profile.ownedPlaceLists[index]
             deletePlaceList(placeListId: placeListToDelete.id)
         }
-        
     }
 }
 
-
-struct ModalView: View {
-    var user: User?
-    @Binding var showSheet: Bool
-    
-    @State private var placeListName: String = ""
-    var body: some View {
-        VStack {
-            Text("Enter name for new placeList")
-            TextField("PlaceList name", text: $placeListName)
-            HStack {
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("Cancel")
-                }
-                Divider()
-                Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user!.toSimpleUser())
-                    createPlaceList(placeList: newPlaceList)
-                    self.showSheet.toggle()
-                }) {
-                    Text("Create")
-                }
-            }
-            
-        }
-    }
-}
 struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView()
@@ -101,37 +77,156 @@ struct ProfileView_Previews: PreviewProvider {
 struct ProfileInfoView: View {
     @EnvironmentObject var profile: FirestoreProfile
     @Binding var showSheet: Bool
+    @Binding var sheetSelection: Int
+    
+    var body: some View {
+        VStack {
+            HStack {
+                VStack {
+                    Image("profile")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                        .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                        .padding()
+                    Button(action: {
+                        self.showSheet.toggle()
+                        self.sheetSelection = 0
+                    }) {
+                        HStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
+                            Image(systemName: "pencil")
+                        }
+                    }
+                    
+                }
+                
+                HStack {
+                    VStack{
+                        Text("\(self.profile.ownedPlaceLists.count)")
+                            .font(.system(size: 12))
+                        Text("Placelists")
+                            .font(.system(size: 12))
+                        
+                    }
+                    Spacer()
+                    VStack{
+                        Text("1")
+                            .font(.system(size: 12))
+                        Text("Follower")
+                            .font(.system(size: 12))
+                        
+                    }
+                    Spacer()
+                    VStack{
+                        Text("1000")
+                            .font(.system(size: 12))
+                        Text("Following")
+                            .font(.system(size: 12))
+                        
+                    }
+                }
+            }.padding(.horizontal)
+        }
+        
+    }
+}
+
+struct CreateNewPlaceListRow: View {
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: Int
+    
+    var body: some View {
+        Button(action: {
+            print("buttonPressed")
+            self.sheetSelection = 1
+            self.showSheet.toggle()
+        }) {
+            HStack {
+                Image(systemName: "plus")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 50, height: 50)
+                Text("Create new place list")
+            }
+        }
+    }
+}
+
+struct EditProfileSheet: View {
+    
+    var user: User
+    @Binding var showSheet: Bool
+    @State private var newUserName: String = ""
 
     var body: some View {
         VStack {
+            Text("Edit profile")
             Spacer()
-            Image("profile")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+            TextField(self.user.username, text: $newUserName)
             HStack {
-                VStack{
-                    Text("\(self.profile.ownedPlaceLists.count)")
-                    Text("Placelists")
+                Button(action: {
+                    self.showSheet.toggle()
+                }) {
+                    Text("cancel")
                 }
                 Spacer()
-                VStack{
-                    Text("1")
-                    Text("Follower")
-                }
-                Spacer()
-                VStack{
-                    Text("1000")
-                    Text("Following")
+                Button(action: {
+                    let newUser = User(id: self.user.id, email: self.user.email, username: self.newUserName)
+                    updateUser(newUser: newUser)
+                    self.showSheet.toggle()
+                }) {
+                    Text("save")
                 }
             }
-            .padding(.horizontal)
-            Divider()
+            Spacer()
+        }
+    }
+}
+
+struct CreatePlacelistSheet: View {
+    
+    var user: User
+    @Binding var showSheet: Bool
+    @State private var placeListName: String = ""
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            Text("Enter a name for your placelist")
+            Spacer()
+            TextField("place list name", text: $placeListName)
+            HStack {
+                Button(action: {
+                    self.showSheet.toggle()
+                }) {
+                    Text("cancel")
+                }
+                Spacer()
+                Button(action: {
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toSimpleUser())
+                    createPlaceList(placeList: newPlaceList)
+                    self.showSheet.toggle()
+                }) {
+                    Text("create")
+                }
+            }
+            .frame(width: 300, height: 100)
+            Spacer()
+        }
+    }
+}
+
+struct SettingsSheet: View {
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Settings")
+            Spacer()
             Button(action: {
-                self.showSheet.toggle()
+                FirebaseAuthentication().logOut()
             }) {
-                Text("Create new place list")
+                Text("Log Out").foregroundColor(.red)
             }
         }
     }
