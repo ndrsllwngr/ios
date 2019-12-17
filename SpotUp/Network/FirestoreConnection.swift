@@ -73,6 +73,8 @@ class FirestoreProfile: ObservableObject {
     @Published var userListener: ListenerRegistration? = nil
     @Published var ownedListsListener: ListenerRegistration? = nil
     //@Published var followedListsListener: ListenerRegistration? = nil
+    @Published var simpleUsersListener: [ListenerRegistration?] = []
+
     
     @Published var user: User? = nil
     @Published var ownedPlaceLists: [PlaceList] = []
@@ -100,18 +102,19 @@ class FirestoreProfile: ObservableObject {
                 return dataToPlaceList(data: data)
             }
             for (i, placeList) in self.ownedPlaceLists.enumerated() {
-                dbUsersRef.document(placeList.owner.id).getDocument { document, error in
-                    guard let document = document else {
+                self.simpleUsersListener.append(dbUsersRef.document(placeList.owner.id).addSnapshotListener { documentSnapshot, error in
+                    guard let documentSnapshot = documentSnapshot else {
                         print("Error retrieving user")
                         return
                     }
-                    document.data().flatMap({ data in
+                    documentSnapshot.data().flatMap({ data in
                         let username = data["username"] as! String
                         self.ownedPlaceLists[i].owner.username = username
                         
                     })
                     
-                }
+                })
+                
             }
             
         }
@@ -136,6 +139,9 @@ class FirestoreProfile: ObservableObject {
     func removeProfileListener(){
         self.userListener?.remove()
         self.ownedListsListener?.remove()
+        self.simpleUsersListener.forEach{ listener in
+            listener?.remove()
+        }
         //self.followedListsListener?.remove()
         print("Successfully removed listener")
     }
