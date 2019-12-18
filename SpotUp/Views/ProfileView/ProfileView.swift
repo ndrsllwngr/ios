@@ -22,14 +22,28 @@ struct ProfileView: View {
                 ProfileInfoView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
                 List {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                    ForEach(profile.ownedPlaceLists) { placeList in
-                        NavigationLink(
-                            destination: PlacelistView(placeList: placeList)
-                        ) {
-                            PlacesListRow(placeList: placeList)
+                    
+                    Section(header: Text("My Placelists")) {
+                        ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser!.uid}){ placeList in
+                            NavigationLink(
+                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: true)
+                            ) {
+                                PlacesListRow(placeList: placeList)
+                            }
+                        }
+                        .onDelete(perform: delete)
+                    }
+                    Section(header: Text("Follower Placelists")) {
+                        ForEach(profile.placeLists.filter{ $0.owner.id != firebaseAuthentication.currentUser!.uid}){ placeList in
+                            NavigationLink(
+                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: false)
+                            ) {
+                                PlacesListRow(placeList: placeList)
+                            }
                         }
                     }
-                    .onDelete(perform: delete)
+                    
+                    
                     Spacer()
                 }
                 Spacer()
@@ -61,8 +75,8 @@ struct ProfileView: View {
     
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
-            let placeListToDelete = profile.ownedPlaceLists[index]
-            deletePlaceList(placeListId: placeListToDelete.id)
+            let placeListToDelete = profile.placeLists[index]
+            deletePlaceList(placeListToDelete: placeListToDelete)
         }
     }
 }
@@ -100,7 +114,7 @@ struct ProfileInfoView: View {
                 }
                 HStack {
                     VStack{
-                        Text("\(self.profile.ownedPlaceLists.count)")
+                        Text("\(self.profile.placeLists.count)")
                             .font(.system(size: 14))
                             .bold()
                         Text("Placelists")
