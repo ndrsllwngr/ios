@@ -1,5 +1,5 @@
 //
-//  Location.swift
+//  Place.swift
 //  SpotUp
 //
 //  Created by Timo Erdelt on 18.11.19.
@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 import CoreLocation
 
-//struct Location: Identifiable {
+//struct Place: Identifiable {
     //var id = UUID()
     //var appleMapsId: String
     //var name: String
 //}
-struct Location: Hashable, Codable, Identifiable{
+struct Place: Hashable, Codable, Identifiable{
     var id: Int
     var name: String
     fileprivate var imageName: String
@@ -24,7 +24,7 @@ struct Location: Hashable, Codable, Identifiable{
     var park: String
     //var category: Category
 
-    var locationCoordinate: CLLocationCoordinate2D {
+    var placeCoordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(
             latitude: coordinates.latitude,
             longitude: coordinates.longitude)
@@ -38,7 +38,7 @@ struct Location: Hashable, Codable, Identifiable{
     }
 }
 
-extension Location {
+extension Place {
     var image: Image {
         ImageStore.shared.image(name: imageName)
     }
