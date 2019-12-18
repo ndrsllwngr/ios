@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ListViewMap: View {
+struct PlacelistViewMap: View {
     var body: some View {
         Text("ListViewMap")
     }
@@ -16,6 +16,6 @@ struct ListViewMap: View {
 
 struct ListViewMap_Previews: PreviewProvider {
     static var previews: some View {
-        ListViewMap()
+        PlacelistViewMap()
     }
 }

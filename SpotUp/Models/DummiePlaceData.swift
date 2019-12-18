@@ -1,5 +1,5 @@
 //
-//  DummieLocationData.swift
+//  DummiePlaceData.swift
 //  SpotUp
 //
 //  Created by Havy Ha on 05.12.19.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-let locationData: [Location] =
+let placeData: [Place] =
     load("landmarkData.json")
 
 func load<T: Decodable>(_ filename: String) -> T {

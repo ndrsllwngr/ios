@@ -2,21 +2,23 @@
 //  User.swift
 //  SpotUp
 //
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
+//  Created by Timo Erdelt on 15.12.19.
 //
 
 import Foundation
 
-class User {
+struct User {
+    var id: String
+    var email: String
+    var username: String
     
-    var uid: String
-    var email: String?
-    var displayName: String?
-    
-    init(uid: String, displayName: String?, email: String?) {
-        self.uid = uid
-        self.email = email
-        self.displayName = displayName
+    func toListOwner() -> ListOwner {
+        return ListOwner(id: self.id, username: self.username)
     }
 }
+
+struct ListOwner {
+    var id: String
+    var username: String
+}
+
