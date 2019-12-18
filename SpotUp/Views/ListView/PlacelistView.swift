@@ -8,13 +8,16 @@
 
 import SwiftUI
 
-let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla")), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla")), PlaceList(id: "blub", name:"DummieList", owner: ListOwner(id: "bla", username: "bla"))]
+let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla"), followerIds: []), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla"), followerIds: [])]
 
 struct PlacelistView: View {
+    
+    var placeList: PlaceList
+    var isOwnedPlacelist: Bool
+
     @State private var selection = 0
     @State var showListSettings = false
     
-    var placeList: PlaceList
     var body: some View {
         VStack {
             Picker(selection: $selection, label: Text("label")) {
@@ -43,7 +46,7 @@ struct PlacelistView: View {
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        PlacelistView(placeList: lists[0])
+        PlacelistView(placeList: lists[0], isOwnedPlacelist: true)
     }
 }
 
