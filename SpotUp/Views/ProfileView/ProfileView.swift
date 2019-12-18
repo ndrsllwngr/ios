@@ -10,7 +10,8 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ProfileView: View {
-    @EnvironmentObject var firebaseAuthentication: FirebaseAuthentication
+    var isMyProfile: Bool = true
+    var profileUserId: String
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State var showSheet = false
@@ -19,22 +20,31 @@ struct ProfileView: View {
     var body: some View {
         NavigationView {
             VStack {
-                ProfileInfoView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
+                ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
                 List {
-                    CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                    
-                    Section(header: Text("My Placelists")) {
-                        ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser!.uid}){ placeList in
-                            NavigationLink(
-                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: true)
-                            ) {
-                                PlacesListRow(placeList: placeList)
+                    if isMyProfile {
+                        CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                        Section(header: Text("Owned Placelists")) {
+                            ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
+                                NavigationLink(
+                                    destination: PlacelistView(placeList: placeList, isOwnedPlacelist: true)
+                                ) {
+                                    PlacesListRow(placeList: placeList)
+                                }
+                            }
+                            .onDelete(perform: delete)
+                        }
+                        Section(header: Text("Followed Placelists")) {
+                            ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
+                                NavigationLink(
+                                    destination: PlacelistView(placeList: placeList, isOwnedPlacelist: false)
+                                ) {
+                                    PlacesListRow(placeList: placeList)
+                                }
                             }
                         }
-                        .onDelete(perform: delete)
-                    }
-                    Section(header: Text("Follower Placelists")) {
-                        ForEach(profile.placeLists.filter{ $0.owner.id != firebaseAuthentication.currentUser!.uid}){ placeList in
+                    } else {
+                        ForEach(profile.placeLists){ placeList in
                             NavigationLink(
                                 destination: PlacelistView(placeList: placeList, isOwnedPlacelist: false)
                             ) {
@@ -42,8 +52,6 @@ struct ProfileView: View {
                             }
                         }
                     }
-                    
-                    
                     Spacer()
                 }
                 Spacer()
@@ -66,7 +74,7 @@ struct ProfileView: View {
             })
         }
         .onAppear {
-            self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
+            self.profile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
         }
         .onDisappear {
             self.profile.removeProfileListener()
@@ -81,13 +89,14 @@ struct ProfileView: View {
     }
 }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
-}
+//struct ProfileView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ProfileView()
+//    }
+//}
 
 struct ProfileInfoView: View {
+    var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -102,15 +111,6 @@ struct ProfileInfoView: View {
                         .frame(width: 100, height: 100)
                         .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
                         .padding()
-                    Button(action: {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "edit_profile"
-                    }) {
-                        HStack {
-                            Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                            Image(systemName: "pencil")
-                        }
-                    }
                 }
                 HStack {
                     VStack{
@@ -139,7 +139,31 @@ struct ProfileInfoView: View {
                             .font(.system(size: 12))
                     }
                 }
-            }.padding(.horizontal)
+            }
+            .padding(.horizontal)
+            if isMyProfile {
+                Button(action: {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "edit_profile"
+                }) {
+                    HStack {
+                        Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
+                        Image(systemName: "pencil")
+                    }
+                }
+                .padding(.horizontal)
+            } else {
+                HStack {
+                    Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
+                    Button(action:  {
+                        print("follow")
+                    }) {
+                        Text("follow")
+                    }
+                    Spacer()
+                }
+                .padding(.horizontal)
+            }
         }
     }
 }
