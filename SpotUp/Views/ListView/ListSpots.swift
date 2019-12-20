@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct PlacelistViewList: View {
+struct ListSpots: View {
         var body: some View {
                 NavigationView {
                     List(placeData) { place in
@@ -22,6 +22,6 @@ struct PlacelistViewList: View {
 
 struct ListViewList_Previews: PreviewProvider {
     static var previews: some View {
-        PlacelistViewList()
+        ListSpots()
     }
 }
