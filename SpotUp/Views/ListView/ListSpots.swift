@@ -20,7 +20,7 @@ struct ListSpots: View {
         }
 
 
-struct ListViewList_Previews: PreviewProvider {
+struct ListSpots_Previews: PreviewProvider {
     static var previews: some View {
         ListSpots()
     }
