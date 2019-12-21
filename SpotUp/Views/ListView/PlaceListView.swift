@@ -10,17 +10,17 @@ import SwiftUI
 
 let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla"), followerIds: []), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla"), followerIds: [])]
 
-struct PlacelistView: View {
+struct PlaceListView: View {
     
     var placeList: PlaceList
     var isOwnedPlacelist: Bool
 
     @State private var selection = 0
-    @State var showListSettings = false
+    @State var showSheet = false
     
     var body: some View {
         VStack {
-            Picker(selection: $selection, label: Text("label")) {
+            Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
                 Text("Map").tag(1)
             }
@@ -30,33 +30,25 @@ struct PlacelistView: View {
             Spacer()
             
             if selection == 0 {
-                PlacelistViewList()
+                ListSpots()
             } else {
-                Text("Todo Map View")
-                //ListViewMap()
+                MapSpots()
             }
         }
         .navigationBarTitle(placeList.name)
-        .navigationBarItems(trailing: ListSettingsButton())
-        .sheet(isPresented: $showListSettings) {
-            Text("ListSettings")
+        .navigationBarItems(trailing: Button(action: {
+            self.showSheet.toggle()
+        }) {
+            Image(systemName: "line.horizontal.3")
+        })
+        .sheet(isPresented: $showSheet) {
+            ListSettings(placeList: self.placeList, showSheet: self.$showSheet)
         }
     }
 }
 
 struct ListView_Previews: PreviewProvider {
     static var previews: some View {
-        PlacelistView(placeList: lists[0], isOwnedPlacelist: true)
-    }
-}
-
-struct ListSettingsButton: View {
-    @State var showListSettings = false
-    var body: some View {
-        Button(action: {
-            self.showListSettings.toggle()
-        }) {
-            Image(systemName: "line.horizontal.3")
-        }
+        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
     }
 }
