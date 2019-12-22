@@ -26,7 +26,7 @@ struct ProfileView: View {
                     Section(header: Text("My Placelists")) {
                         ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser!.uid}){ placeList in
                             NavigationLink(
-                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: true)
+                                destination: PlaceListView(placeList: placeList, isOwnedPlacelist: true)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }
@@ -36,7 +36,7 @@ struct ProfileView: View {
                     Section(header: Text("Follower Placelists")) {
                         ForEach(profile.placeLists.filter{ $0.owner.id != firebaseAuthentication.currentUser!.uid}){ placeList in
                             NavigationLink(
-                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: false)
+                                destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }
