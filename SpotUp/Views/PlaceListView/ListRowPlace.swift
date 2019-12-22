@@ -18,17 +18,16 @@ struct ListRowPlace: View {
                 .frame(width:50, height:50)
             Text(place.name)
         }
-        
     }
 }
 
 struct ListComponent_Previews: PreviewProvider {
     static var previews:some View{
-    Group {
-        ListRowPlace(place: placeData[0])
-        ListRowPlace(place: placeData[1])
-            
-    }
+        Group {
+            ListRowPlace(place: placeData[0])
+            ListRowPlace(place: placeData[1])
+                
+        }
           .previewLayout(.fixed(width: 300, height: 70))
-}
+    }
 }
