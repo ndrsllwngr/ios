@@ -30,9 +30,9 @@ struct PlaceListView: View {
             Spacer()
             
             if selection == 0 {
-                ListSpots()
+                ListView()
             } else {
-                MapSpots()
+                MapView()
             }
         }
         .navigationBarTitle(placeList.name)
@@ -42,7 +42,7 @@ struct PlaceListView: View {
             Image(systemName: "line.horizontal.3")
         })
         .sheet(isPresented: $showSheet) {
-            ListSettings(placeList: self.placeList, showSheet: self.$showSheet)
+            PlaceListSettings(placeList: self.placeList, showSheet: self.$showSheet)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  ListSettings.swift
+//  PlaceListSettings.swift
 //  SpotUp
 //
 //  Created by Fangli Lu on 20.12.19.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListSettings: View {
+struct PlaceListSettings: View {
     var placeList: PlaceList
     @Binding var showSheet: Bool
     @State private var newListName: String = ""

@@ -1,5 +1,5 @@
 //
-//  ListViewMap.swift
+//  MapView.swift
 //  SpotUp
 //
 //  Created by Timo Erdelt on 18.11.19.
@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 import GoogleMaps
 
-struct MapSpots: View {
+struct MapView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack{
@@ -20,9 +20,9 @@ struct MapSpots: View {
     }
 }
 
-struct MapSpots_Previews: PreviewProvider {
+struct MapView_Previews: PreviewProvider {
     static var previews: some View {
-        MapSpots()
+        MapView()
     }
 }
  
