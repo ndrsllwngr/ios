@@ -8,11 +8,11 @@
 
 import SwiftUI
 
-struct PlacelistViewList: View {
+struct ListView: View {
         var body: some View {
                 NavigationView {
                     List(placeData) { place in
-                        ListRowPlace(place : place)
+                        ListRowPlace(place: place)
                     }
                     .navigationBarTitle(Text("Spots"))
                 }
@@ -20,8 +20,8 @@ struct PlacelistViewList: View {
         }
 
 
-struct ListViewList_Previews: PreviewProvider {
+struct ListSpots_Previews: PreviewProvider {
     static var previews: some View {
-        PlacelistViewList()
+        ListView()
     }
 }

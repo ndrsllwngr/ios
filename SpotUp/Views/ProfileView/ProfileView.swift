@@ -46,7 +46,7 @@ struct ProfileView: View {
                     } else {
                         ForEach(profile.placeLists){ placeList in
                             NavigationLink(
-                                destination: PlacelistView(placeList: placeList, isOwnedPlacelist: false)
+                                destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }
