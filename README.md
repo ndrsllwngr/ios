@@ -10,8 +10,7 @@ Follow the instructions everytime you checkout a new branch or pull new files fr
 1. Close Xcode.app
 2. Run the following commands in the console within the `ios`-Folder
 ```sh
-xcodegen generate
-pod install
+xcodegen generate && pod install --repo-update
 ```
 3. Open `SpotUp.xcworkspace` in Xcode.app
 
