@@ -48,3 +48,10 @@ struct Coordinates: Hashable, Codable {
     var latitude: Double
     var longitude: Double
 }
+
+
+struct LocalPlace: Identifiable {
+    var id: String
+    var name: String
+    var coordinates: CLLocationCoordinate2D
+}

@@ -9,17 +9,18 @@
 import SwiftUI
 
 struct ListView: View {
-        var body: some View {
-                NavigationView {
-                    List(placeData) { place in
-                        NavigationLink(destination: ItemContentView(place:place)) {
-                        ListRowPlace(place : place)
-                    }
-                }
-                    .navigationBarTitle(Text("Spots"))
-                }
+    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    
+    var body: some View {
+        List {
+            ForEach(self.placesConnection.places) { place in
+                //NavigationLink(destination: ItemContentView(place:place)) {
+                    ListRowPlace(place : place)
+                //}
             }
         }
+    }
+}
 
 
 struct ListSpots_Previews: PreviewProvider {
