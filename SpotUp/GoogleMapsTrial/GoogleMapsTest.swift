@@ -11,14 +11,15 @@ import GooglePlaces
 
 struct GoogleMapsTest: View {
     
-    @ObservedObject private var googleConnection = GoogleClient()
+    @ObservedObject private var googleConnection = GooglePlacesConnection()
     
     
     var body: some View {
-        VStack {
-            Text(self.googleConnection.placeid != nil ? "\(self.googleConnection.placeid!)" : "")
-        }.onAppear{ self.googleConnection.getPlaceDetails()}
-        }
+    Text("Hallo")
+//        VStack {
+//            Text(self.googleConnection.placeid != nil ? "\(self.googleConnection.placeid!)" : "")
+//        }.onAppear{ self.googleConnection.getPlaceDetails()}
+      }
 
 }
 
