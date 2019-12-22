@@ -25,10 +25,10 @@ struct TabBarView: View {
                 Image(systemName: selection == 0 ? "house.fill" : "house")
                 Text("Home")
             }).tag(0)
-            ProfileView().tabItem({
+            ProfileView(profileUserId: firebaseAuthentication.currentUser!.uid).tabItem({
                 Image(systemName: selection == 1 ? "person.fill" : "person")
                 Text("Profil")
-                }).tag(1).environmentObject(firebaseAuthentication)
+                }).tag(1)
         }
         .accentColor(.black)
     }
