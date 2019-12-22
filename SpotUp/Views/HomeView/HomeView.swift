@@ -9,10 +9,9 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    @ObservedObject var searchSpace = FirestoreSearch()
     @State private var selection = "places"
     @State var searchQuery: String = ""
+    @ObservedObject var searchSpace = FirestoreSearch()
     
     var body: some View {
         
@@ -22,8 +21,8 @@ struct HomeView: View {
                 VStack {
                     
                     TextField("Search", text: $searchQuery)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
                     
                     Picker(selection: $selection, label: Text("View")) {
                         Text("Places").tag("places")
@@ -37,19 +36,62 @@ struct HomeView: View {
                     Spacer()
                     
                     if selection == "places" {
-                        Text("Places")
+                        VStack{
+                            Spacer()
+                                Button(action: {self.printFuse()}) {
+                                    Text("hi")
+                                }
+                        }
+                        
                     } else if selection == "lists" {
-                        ListsResults(searchQuery: $searchQuery)
+                        VStack{
+                            List{
+                                ForEach(self.searchSpace.allPublicPlaceLists) {
+                                    (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
+                                }
+                            }
+                            
+                            Spacer()
+                        }
                     } else {
-                        AccountsResults()
+                        VStack{
+                            List{
+                                ForEach(self.searchSpace.allUsers) {
+                                    (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
+                                }
+                            }
+                            
+                            Spacer()
+                        }
                     }
                 }
                 .navigationBarTitle(Text("Search"))
                 
             }
+            
+        }.onAppear {
+            self.searchSpace.getAllPublicPlaceLists()
+            self.searchSpace.getAllUsers()
+        }
+        .onDisappear {
+            self.searchSpace.cleanAllPublicPlaceLists()
+            self.searchSpace.cleanAllUsers()
         }
     }
+    func printFuse() {
+//        let fuse = Fuse()
+//        let accountsIndexes = fuse.search("Tim", in: ["Timo", "Andreas", "Havy"])
+//        print(self.searchQuery)
+//        print(self.searchSpace.allUsers)
+//        print(accountsIndexes)
+//        accountsIndexes.forEach { item in
+//            print("index: \(item.index)")
+//            print("score: \(item.score)")
+//        }
+    }
 }
+
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

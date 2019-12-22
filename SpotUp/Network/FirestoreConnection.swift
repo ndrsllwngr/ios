@@ -148,11 +148,10 @@ class FirestoreSearch: ObservableObject {
                 let data = documentSnapshot.data()
                 return dataToUser(data: data)
             }
-        }
-        
+        }   
     }
     
-    func  getAllPublicPlaceLists() {
+    func getAllPublicPlaceLists() {
         let ref = dbPlaceListsRef.whereField("is_public", isEqualTo: true)
         ref.getDocuments{ querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
@@ -166,5 +165,12 @@ class FirestoreSearch: ObservableObject {
         }
     }
     
+    func cleanAllUsers() {
+        self.allUsers = []
+    }
+    
+    func cleanAllPublicPlaceLists() {
+        self.allPublicPlaceLists = []
+    }
 }
 
