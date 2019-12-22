@@ -9,25 +9,25 @@
 import SwiftUI
 
 struct ListRowPlace: View {
-    var place: Place
+    var place: LocalPlace
     
     var body: some View{
         HStack {
-            place.image
-                .resizable()
-                .frame(width:50, height:50)
+//            place.image
+//                .resizable()
+//                .frame(width:50, height:50)
             Text(place.name)
         }
     }
 }
 
-struct ListComponent_Previews: PreviewProvider {
-    static var previews:some View{
-        Group {
-            ListRowPlace(place: placeData[0])
-            ListRowPlace(place: placeData[1])
-                
-        }
-          .previewLayout(.fixed(width: 300, height: 70))
-    }
-}
+//struct ListComponent_Previews: PreviewProvider {
+//    static var previews:some View{
+//        Group {
+//            ListRowPlace(place: placeData[0])
+//            ListRowPlace(place: placeData[1])
+//
+//        }
+//          .previewLayout(.fixed(width: 300, height: 70))
+//    }
+//}
