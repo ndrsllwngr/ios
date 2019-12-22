@@ -8,23 +8,34 @@
 
 import SwiftUI
 import MapKit
+import GoogleMaps
+
 //The UIViewRepresentable protocol has two requirements: a makeUIView(context:) method that creates an MKMapView, and an updateUIView(_:context:) method that configures the view and responds to any changes.
 struct ItemMapView: UIViewRepresentable {
-    func makeUIView(context: Context) -> MKMapView {
-        MKMapView(frame: .zero)
+    var coordinate:CLLocationCoordinate2D
+    let marker : GMSMarker = GMSMarker ()
+   
+    func makeUIView(context:Self.Context)-> GMSMapView{GMSServices.provideAPIKey("AIzaSyBJgMwNKkk8i8Ue5TmmLHDrwoNyO5iYMMQ")
+
+        let camera = GMSCameraPosition.camera(withLatitude: coordinate.latitude, longitude: coordinate.longitude, zoom: 6.0)
+        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+       
+        return mapView
     }
-    func updateUIView(_ view: MKMapView, context: Context) {
-        let coordinate = CLLocationCoordinate2D(
-            latitude: 34.011286, longitude: -116.166868)
-        let span = MKCoordinateSpan(latitudeDelta: 2.0, longitudeDelta: 2.0)
-        let region = MKCoordinateRegion(center: coordinate, span: span)
-        view.setRegion(region, animated: true)
+    
+    func updateUIView(_ mapView:GMSMapView, context:Self.Context){
+        marker.position = CLLocationCoordinate2D(latitude:coordinate.latitude, longitude:coordinate.longitude)
+        marker.map = mapView
+        
     }
+    
+    
 }
+
 
 struct ItemMapView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemMapView()
+        ItemMapView(coordinate: placeData[0].placeCoordinate)
     }
 }
 
