@@ -9,39 +9,52 @@
 import SwiftUI
 
 struct ItemContentView: View {
+    var place: Place
+    
     var body: some View {
+        
         VStack {
-            ItemMapView()
+            ItemMapView(coordinate: place.placeCoordinate)
                 .edgesIgnoringSafeArea(.top)
                 .frame(height:400)
             
-            ItemImageView()
-                .frame(width:200,height:200)
-                .offset(y:-90)
-                .padding(.bottom,-90)
+            HStack {
+                ItemImageView(image: place.image)
+                    .frame(width:200,height:200)
+                    .offset(y:-90)
+                    .padding(.bottom,-90)
+                Button(action: {print ("Test")}) {
+                    Text("Add to List")
+                }
+            }
             
             
             VStack(alignment: .leading) {
-                        Text("Turtle Rock")
-                            .font(.title)
-                        HStack {
-                            Text("Joshua Tree National Park")
-                                .font(.subheadline)
-                            Spacer()
-                            Text("California")
-                                .font(.subheadline)
-                        }
-            }
-            .padding(.all)
+                Text(place.name)
+                    .font(.title)
+                HStack {
+                    Text(place.park)
+                        .font(.subheadline)
                     Spacer()
+                    Text(place.state)
+                        .font(.subheadline)
                 }
             }
+            .padding(.all)
+            Spacer()
         }
+        .navigationBarTitle(Text(place.name),displayMode:.inline)
+    }
+    
+    func addToList(){
         
-        
+    }
+}
+
+
 
 struct ItemContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemContentView()
+        ItemContentView(place:placeData[0])
     }
 }

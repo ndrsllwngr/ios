@@ -9,8 +9,9 @@
 import SwiftUI
 
 struct ItemImageView: View {
+    var image: Image
     var body: some View {
-        Image("turtlerock")
+        image
             .resizable()
             .clipShape(Circle())
             .overlay(
@@ -18,11 +19,13 @@ struct ItemImageView: View {
             .shadow(radius: 10)
         
         
+        
     }
 }
 
 struct ItemImageView_Previews: PreviewProvider {
     static var previews: some View {
-        ItemImageView()
+        ItemImageView(image:Image("turtlerock"))
+       
     }
 }

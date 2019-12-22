@@ -12,16 +12,21 @@ struct HomeView: View {
     
     @State var searchQuery: String = ""
     
+    
     var body: some View {
-        NavigationView {
+        
+        VStack {
+            NavigationView {
 
-            VStack {
-                SearchBar(text: $searchQuery)
-                    .padding()
-                Spacer()
+                VStack {
+                    SearchBar(text: $searchQuery)
+                        .padding()
+                    Spacer()
+                    GoogleMapsTest()
+                }
+                .navigationBarTitle(Text("HomeView"))
+
             }
-            .navigationBarTitle(Text("HomeView"))
-
         }
     }
 }

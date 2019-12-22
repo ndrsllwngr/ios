@@ -10,8 +10,9 @@ import Foundation
 import UIKit
 import SwiftUI
 
+//pass json from google Maps to here
 let placeData: [Place] =
-    load("landmarkData.json")
+    load("dummieJson.json")
 
 func load<T: Decodable>(_ filename: String) -> T {
     let data: Data
