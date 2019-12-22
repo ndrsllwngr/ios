@@ -22,8 +22,8 @@ struct TabBarView: View {
     var body: some View {
         TabView(selection: $selection) {
             HomeView().tabItem({
-                Image(systemName: selection == 0 ? "house.fill" : "house")
-                Text("Home")
+                Image(systemName: selection == 0 ? "magnifyingglass" : "magnifyingglass")
+                Text("Search")
             }).tag(0)
             ProfileView(profileUserId: firebaseAuthentication.currentUser!.uid).tabItem({
                 Image(systemName: selection == 1 ? "person.fill" : "person")

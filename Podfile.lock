@@ -224,6 +224,7 @@ PODS:
     - FirebaseCore (~> 6.5)
     - GoogleUtilities/Environment (~> 6.4)
     - GoogleUtilities/UserDefaults (~> 6.4)
+  - Fuse (1.2.0)
   - GoogleAppMeasurement (6.1.7):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -289,6 +290,7 @@ DEPENDENCIES:
   - Firebase/Core (>= 6.13.0)
   - Firebase/Firestore (>= 6.13.0)
   - FirebaseFirestoreSwift (>= 0.2)
+  - Fuse (>= 1.2.0)
   - GoogleMaps (>= 3.7.0)
   - GooglePlaces (>= 3.7.0)
 
@@ -306,6 +308,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseFirestoreSwift
     - FirebaseInstanceID
+    - Fuse
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -331,6 +334,7 @@ SPEC CHECKSUMS:
   FirebaseFirestore: 52120e2833f804a874ba1a9f59aab864a8ae2286
   FirebaseFirestoreSwift: 0437bb10d83f8161a9131da1739998254c78fdf5
   FirebaseInstanceID: ce993a3c3670a8f5d47ce371ac5d143c560608c5
+  Fuse: 287bd95a5c8dbfe6c41af519eaf48856aa1a28f6
   GoogleAppMeasurement: db118eb61a97dd8c4f7014e368d3c335cbbcf80a
   GoogleDataTransport: 8e9b210c97d55fbff306cc5468ff91b9cb32dcf5
   GoogleDataTransportCCTSupport: 202d7cdf9c4a7d81a2bb7f7e7e1ba6faa421b1f2
@@ -343,6 +347,6 @@ SPEC CHECKSUMS:
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
 
-PODFILE CHECKSUM: a72d2844c635da274ac623b009995fdc8f4aed44
+PODFILE CHECKSUM: 8bd35b045186398f84504a2c8c208a616f428435
 
 COCOAPODS: 1.8.4

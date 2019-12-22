@@ -132,3 +132,39 @@ class FirestoreProfile: ObservableObject {
     
 }
 
+class FirestoreSearch: ObservableObject {
+    
+    @Published var allUsers: [User] = []
+    @Published var allPublicPlaceLists: [PlaceList] = []
+    
+    func getAllUsers() {
+        let ref = dbUsersRef
+        ref.getDocuments{ querySnapshot, error in
+            guard let querySnapshot = querySnapshot else {
+                print("Error retrieving all users")
+                return
+            }
+            self.allUsers = querySnapshot.documents.map{(documentSnapshot) in
+                let data = documentSnapshot.data()
+                return dataToUser(data: data)
+            }
+        }
+        
+    }
+    
+    func  getAllPublicPlaceLists() {
+        let ref = dbPlaceListsRef.whereField("is_public", isEqualTo: true)
+        ref.getDocuments{ querySnapshot, error in
+            guard let querySnapshot = querySnapshot else {
+                print("Error retrieving all public place lists")
+                return
+            }
+            self.allPublicPlaceLists = querySnapshot.documents.map{(documentSnapshot) in
+                let data = documentSnapshot.data()
+                return dataToPlaceList(data: data)
+            }
+        }
+    }
+    
+}
+
