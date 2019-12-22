@@ -79,7 +79,7 @@ class FirestoreProfile: ObservableObject {
     
     
     // Call when entering view (.onAppear()) to create listeners for all data needed
-    func addProfileListener(currentUserId: String) {
+    func addProfileListener(currentUserId: String, isMyProfile: Bool) {
         
         // Listener for my user
         self.userProfileListener = dbUsersRef.document(currentUserId).addSnapshotListener { documentSnapshot, error in
@@ -92,8 +92,9 @@ class FirestoreProfile: ObservableObject {
             })
         }
         
+        let ref = isMyProfile ? dbPlaceListsRef.whereField("follower_ids", arrayContains: currentUserId) : dbPlaceListsRef.whereField("follower_ids", arrayContains: currentUserId).whereField("is_public", isEqualTo: true)
         // Listener for my lists
-        self.placeListsListener = dbPlaceListsRef.whereField("follower_ids", arrayContains: currentUserId).addSnapshotListener { querySnapshot, error in
+        self.placeListsListener = ref.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving Lists")
                 return
