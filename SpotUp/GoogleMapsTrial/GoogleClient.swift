@@ -11,8 +11,19 @@ import GooglePlaces
 class GoogleClient:ObservableObject{
     
     @Published var placeid:String?
+    @Published var address:String?
+    @Published var types:[String]?
+    @Published var image:UIImage?
+    @Published var website:URL?
+    @Published var openingHours:[String]?
+    @Published var phoneNumber:String?
+    @Published var priceLevel:GMSPlacesPriceLevel?
+    @Published var isOpen:GMSPlaceOpenStatus?
+    @Published var coordinates:CLLocationCoordinate2D?
     
-        
+    
+    
+    
     func getPlaceID (completion:@escaping ([PlacesID]?) -> ()){
         guard let url = URL(string:"https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=AIzaSyBJgMwNKkk8i8Ue5TmmLHDrwoNyO5iYMMQ&input=Kistenpfennig&inputtype=textquery") else{
             fatalError("Invalid URL")
@@ -36,11 +47,15 @@ class GoogleClient:ObservableObject{
     }
     
     func getPlaceDetails (){
-    let placesClient = GMSPlacesClient.shared()
-    let fields : GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
-        UInt(GMSPlaceField.placeID.rawValue))!
+        let placesClient = GMSPlacesClient.shared()
         
-    placesClient.fetchPlace(fromPlaceID: "ChIJV4k8_9UodTERU5KXbkYpSYs", placeFields: fields, sessionToken: nil, callback: {
+        let fields : GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
+            UInt(GMSPlaceField.placeID.rawValue) | UInt(GMSPlaceField.photos.rawValue) | UInt(GMSPlaceField.formattedAddress.rawValue)
+            | UInt(GMSPlaceField.website.rawValue) | UInt(GMSPlaceField.openingHours.rawValue) | UInt(GMSPlaceField.priceLevel.rawValue)
+            | UInt(GMSPlaceField.phoneNumber.rawValue)
+            )!
+        
+        placesClient.fetchPlace(fromPlaceID: "ChIJV4k8_9UodTERU5KXbkYpSYs", placeFields: fields, sessionToken: nil, callback: {
             (place: GMSPlace?, error: Error?) in
             if let error = error {
                 print("An error occurred: \(error.localizedDescription)")
@@ -48,8 +63,31 @@ class GoogleClient:ObservableObject{
             }
             if let place = place {
                 self.placeid = place.name
+                self.address = place.formattedAddress
+                self.website = place.website
+                self.phoneNumber = place.phoneNumber
+                self.openingHours = place.openingHours?.weekdayText
+                self.priceLevel = place.priceLevel
+                self.isOpen = place.isOpen()
+                self.types = place.types
+                let photoMetaData:GMSPlacePhotoMetadata = place.photos![0]
+                placesClient.loadPlacePhoto(photoMetaData, callback: { (photo, error) -> Void in
+                    if let error = error {
+                        // TODO: Handle the error.
+                        print("Error loading photo metadata: \(error.localizedDescription)")
+                        return
+                    } else {
+                        // Display the first image and its attributions.
+                        self.image = photo;
+                    }
+                })
+                
                 print("The selected place is: \(String(describing: place.name))")
             }
         })
     }
+    
+    
+    
 }
+
