@@ -11,8 +11,8 @@ import GooglePlaces
 import SwiftUI
 
 func getPlaceID()->String{
-  let a = "https://maps.googleapis.com/maps/api/place/textsearch/jsonn?queary=\("Munich")&key=***REMOVED***"
-    
+    let a = "https://maps.googleapis.com/maps/api/place/textsearch/jsonn?queary=\("Munich")&key=***REMOVED***"
+    return a
 }
 
 //func getPlace ()
