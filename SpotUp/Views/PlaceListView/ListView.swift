@@ -12,8 +12,10 @@ struct ListView: View {
         var body: some View {
                 NavigationView {
                     List(placeData) { place in
-                        ListRowPlace(place: place)
+                        NavigationLink(destination: ItemContentView(place:place)) {
+                        ListRowPlace(place : place)
                     }
+                }
                     .navigationBarTitle(Text("Spots"))
                 }
             }
