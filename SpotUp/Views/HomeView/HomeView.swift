@@ -10,8 +10,11 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var selection = "places"
-    @State var searchQuery: String = ""
+    @State private var searchTerm: String = ""
     @ObservedObject var searchSpace = FirestoreSearch()
+    let searchController = UISearchController(searchResultsController: nil)
+    var filteredUsers: [User] = []
+    var filteredLists: [PlaceList] = []
     
     var body: some View {
         
@@ -20,7 +23,7 @@ struct HomeView: View {
                 
                 VStack {
                     
-                    TextField("Search", text: $searchQuery)
+                    TextField("Search \(selection)", text: $searchTerm)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                     
@@ -38,15 +41,12 @@ struct HomeView: View {
                     if selection == "places" {
                         VStack{
                             Spacer()
-                                Button(action: {self.printFuse()}) {
-                                    Text("hi")
-                                }
                         }
                         
                     } else if selection == "lists" {
                         VStack{
                             List{
-                                ForEach(self.searchSpace.allPublicPlaceLists) {
+                                ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
                                     (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
                                 }
                             }
@@ -56,7 +56,7 @@ struct HomeView: View {
                     } else {
                         VStack{
                             List{
-                                ForEach(self.searchSpace.allUsers) {
+                                ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
                                     (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
                                 }
                             }
@@ -77,17 +77,6 @@ struct HomeView: View {
             self.searchSpace.cleanAllPublicPlaceLists()
             self.searchSpace.cleanAllUsers()
         }
-    }
-    func printFuse() {
-//        let fuse = Fuse()
-//        let accountsIndexes = fuse.search("Tim", in: ["Timo", "Andreas", "Havy"])
-//        print(self.searchQuery)
-//        print(self.searchSpace.allUsers)
-//        print(accountsIndexes)
-//        accountsIndexes.forEach { item in
-//            print("index: \(item.index)")
-//            print("score: \(item.score)")
-//        }
     }
 }
 
