@@ -6,7 +6,7 @@ use_frameworks!
 target 'SpotUp' do
   # https://guides.cocoapods.org/using/the-podfile.html
   # Firebase Auth
-  pod 'Firebase/Analytics', '>= 6.13.0'
+  pod 'Firebase/Analytics', '>= 6.14.0'
   pod 'Firebase/Auth', '>= 6.13.0'
   # Firebase Firestore
   pod 'Firebase/Core', '>= 6.13.0'
@@ -27,6 +27,3 @@ target 'SpotUp' do
   # end
 
 end
-
-
-
