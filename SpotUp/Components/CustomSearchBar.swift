@@ -8,16 +8,16 @@
 
 import SwiftUI
 
-struct SearchBar: UIViewRepresentable {
+struct CustomSearchBar: UIViewRepresentable {
 
-    func makeUIView(context: UIViewRepresentableContext<SearchBar>) -> UISearchBar {
+    func makeUIView(context: UIViewRepresentableContext<CustomSearchBar>) -> UISearchBar {
         let searchBar = UISearchBar(frame: .zero)
         searchBar.delegate = context.coordinator
         return searchBar
     }
 
     func updateUIView(_ uiView: UISearchBar,
-                      context: UIViewRepresentableContext<SearchBar>) {
+                      context: UIViewRepresentableContext<CustomSearchBar>) {
         uiView.text = text
     }
     
@@ -42,9 +42,9 @@ struct SearchBar: UIViewRepresentable {
 
 
 }
-struct SearchBar_Previews: PreviewProvider {
+struct CustomSearchBar_Previews: PreviewProvider {
     @State static var searchQuery: String = ""
     static var previews: some View {
-        SearchBar(text: $searchQuery)
+        CustomSearchBar(text: $searchQuery)
     }
 }
