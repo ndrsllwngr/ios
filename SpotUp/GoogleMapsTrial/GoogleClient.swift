@@ -81,8 +81,25 @@ class GoogleClient:ObservableObject{
                         self.image = photo;
                     }
                 })
+                switch self.isOpen{
+                case.closed:
+                    print("It's closed")
+                case.open:
+                    print ("It's open")
+                case.unknown:
+                    print ("Unknown")
+                case .none:
+                    print ("none")
+                case .some(_):
+                    print ("some")
+                }
                 
                 print("The selected place is: \(String(describing: place.name))")
+                print("The Type is: \(String(describing: self.types))" )
+                print("Opening Hours: \(String(describing: self.openingHours))")
+                print("Opening Hours: \(String(describing: self.priceLevel))")
+
+                
             }
         })
     }

@@ -30,6 +30,12 @@ struct GoogleMapsTest: View {
                 Text(self.googleConnection.address != nil ? "\(self.googleConnection.address!)" : "")
                 Text(self.googleConnection.phoneNumber != nil ? "\(self.googleConnection.phoneNumber!)" : "no phone number")
                 
+                Button(action: {
+                    if self.googleConnection.website != nil {
+                        UIApplication.shared.open(self.googleConnection.website!)
+                    }
+                    }){Text("Open Website")}
+                
                 Text("Test")
                 
         
