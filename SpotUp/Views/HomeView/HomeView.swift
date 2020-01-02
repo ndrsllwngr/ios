@@ -12,6 +12,8 @@ struct HomeView: View {
     @State private var selection = "places"
     @State var searchQuery: String = ""
     @ObservedObject var searchSpace = FirestoreSearch()
+    @ObservedObject var googleConnection = GoogleClient()
+
     
     var body: some View {
         
@@ -68,6 +70,7 @@ struct HomeView: View {
                 .navigationBarTitle(Text("Search"))
                 
             }
+            GoogleMapsTest().environmentObject(self.googleConnection)
             
         }.onAppear {
             self.searchSpace.getAllPublicPlaceLists()
@@ -93,10 +96,10 @@ struct HomeView: View {
 
 
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//    }
+//}
 
 

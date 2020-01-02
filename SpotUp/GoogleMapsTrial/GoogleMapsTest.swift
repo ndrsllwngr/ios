@@ -11,7 +11,7 @@ import GooglePlaces
 
 struct GoogleMapsTest: View {
     
-    @ObservedObject private var googleConnection = GoogleClient()
+    @EnvironmentObject var googleConnection: GoogleClient
    var idTestArray = ["ChIJW0DSe-l1nkcRrRdURwBJGmU","ChIJz_Vm4-x1nkcR9eUl33F28dY","ChIJk2XVNXPfnUcRNtjDi6U-rOA","ChIJOwfxTOV1nkcRSZP07RYIkR0"]
 
 
@@ -48,7 +48,7 @@ struct GoogleMapsTest: View {
            
             
             
-        }.onAppear{ self.googleConnection.getPlaceDetails()
+        }.onAppear{ //self.googleConnection.getPlaceDetails()
            self.googleConnection.getPlaceDetails2(testArray: self.idTestArray)
             
         }
