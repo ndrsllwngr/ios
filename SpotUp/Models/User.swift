@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User {
+struct User: Identifiable {
     var id: String
     var email: String
     var username: String
@@ -15,6 +15,8 @@ struct User {
     func toListOwner() -> ListOwner {
         return ListOwner(id: self.id, username: self.username)
     }
+    
+    
 }
 
 struct ListOwner {

@@ -14,6 +14,8 @@ struct PlaceListView: View {
     
     var placeList: PlaceList
     var isOwnedPlacelist: Bool
+    
+    @ObservedObject var placesConnection = GooglePlacesConnection()
 
     @State private var selection = 0
     @State var showSheet = false
@@ -30,9 +32,9 @@ struct PlaceListView: View {
             Spacer()
             
             if selection == 0 {
-                ListView()
+                ListView().environmentObject(placesConnection)
             } else {
-                MapView()
+                MapView().environmentObject(placesConnection)
             }
         }
         .navigationBarTitle(placeList.name)
@@ -43,6 +45,12 @@ struct PlaceListView: View {
         })
         .sheet(isPresented: $showSheet) {
             PlaceListSettings(placeList: self.placeList, showSheet: self.$showSheet)
+        }
+        .onAppear {
+            self.placesConnection.getPlaces(placeIds: self.placeList.placeIds)
+        }
+        .onDisappear {
+            self.placesConnection.places = []
         }
     }
 }
