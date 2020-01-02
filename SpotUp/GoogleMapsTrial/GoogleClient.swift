@@ -49,8 +49,7 @@ class GoogleClient:ObservableObject{
 //        }.resume()
 //    }
     
-    func getPlaceDetails2 (testArray:[String])->[GooglePlaceTest]{
-        let placesClient = GMSPlacesClient.shared()
+    func getPlaceDetails2 (testArray:[String]) {
         let a = GooglePlaceTest()
         
         let fields : GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
@@ -120,7 +119,6 @@ class GoogleClient:ObservableObject{
             })
         }
         print ("after for loop:" , placesArray)
-        return placesArray
         
     }
 
@@ -183,5 +181,3 @@ class GoogleClient:ObservableObject{
                 })
             }
 }
-
-
