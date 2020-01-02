@@ -35,20 +35,55 @@ class FirebaseAuthentication: ObservableObject {
         try! Auth.auth().signOut()
         self.isLoggedIn = false
         self.currentUser = nil
-        
     }
     
     func signUp(username: String, email: String, password: String, handler: @escaping AuthDataResultCallback) {
-        Auth.auth().createUser(withEmail: email, password: password) {
-            (authResult, error) in
+        Auth.auth().createUser(withEmail: email, password: password) { (authResult, error) in
+            if let error = error {
+                print("Error during sign up: \(error)")
+                return
+            }
             if let user = authResult?.user {
                 let user = User(id: user.uid, email: user.email!, username: username)
                 createUserInFirestore(user: user)
             }
         }
-        
     }
     
+    func changeEmail(newEmail: String) {
+        let user = Auth.auth().currentUser
+        
+        user?.updateEmail(to: newEmail) { (error) in
+            if let error = error {
+                print("Error during email change: \(error)")
+            } else {
+                updateUser(newUser: User(id: user?.uid, em))
+                print("Email changed to: \(newEmail)")
+            }
+        }
+    }
+    
+    func changePassword(newPassword: String) {
+        Auth.auth().currentUser?.updatePassword(to: newPassword) { (error) in
+            if let error = error {
+                print("Error during password change: \(error)")
+            } else {
+                print("Email changed to: \(newPassword)")
+
+            }
+        }
+    }
+    
+    func deleteAccount() {
+        let user = Auth.auth().currentUser
+        user?.delete { error in
+            if let error = error {
+                print("Error during user deletion: \(error)")
+            } else {
+                print("Account deleted")
+            }
+        }
+    }
 }
 
 class FirebaseUser {
