@@ -70,15 +70,39 @@ struct CreatePlacelistSheet: View {
 
 struct SettingsSheet: View {
     @Binding var showSheet: Bool
+    @State private var newEmail: String = ""
+    @State private var newPassword: String = ""
+    
     
     var body: some View {
         VStack {
             Text("Settings")
-            Spacer()
+            HStack {
+                TextField("New email", text: $newEmail)
+                Button(action: {
+                    FirebaseAuthentication().changeEmail(newEmail: self.newEmail)
+                }) {
+                    Text("Change Email").foregroundColor(.blue)
+                }
+            }
+            HStack {
+                TextField("New password", text: $newPassword)
+                Button(action: {
+                    FirebaseAuthentication().changePassword(newPassword: self.newPassword)
+                }) {
+                    Text("Change Password").foregroundColor(.blue)
+                }
+            }
             Button(action: {
                 FirebaseAuthentication().logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
+            }
+            Spacer()
+            Button(action: {
+                FirebaseAuthentication().deleteAccount()
+            }) {
+                Text("Delete Account").foregroundColor(.red)
             }
         }
     }

@@ -142,14 +142,17 @@ struct ProfileInfoView: View {
             }
             .padding(.horizontal)
             if isMyProfile {
-                Button(action: {
-                    self.showSheet.toggle()
-                    self.sheetSelection = "edit_profile"
-                }) {
-                    HStack {
-                        Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                        Image(systemName: "pencil")
+                HStack {
+                    Button(action: {
+                        self.showSheet.toggle()
+                        self.sheetSelection = "edit_profile"
+                    }) {
+                        HStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
+                            Image(systemName: "pencil")
+                        }
                     }
+                    Spacer()
                 }
                 .padding(.horizontal)
             } else {
