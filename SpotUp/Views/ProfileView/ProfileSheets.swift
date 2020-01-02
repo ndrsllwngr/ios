@@ -25,8 +25,7 @@ struct EditProfileSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    let newUser = User(id: self.user.id, email: self.user.email, username: self.newUserName)
-                    updateUser(newUser: newUser)
+                    updateUserName(userId: self.user.id, newUserName: self.newUserName)
                     self.showSheet.toggle()
                 }) {
                     Text("save")
@@ -69,26 +68,32 @@ struct CreatePlacelistSheet: View {
 }
 
 struct SettingsSheet: View {
+    var user: User
     @Binding var showSheet: Bool
     @State private var newEmail: String = ""
+    @State private var currentPasswordChangeEmail: String = ""
     @State private var newPassword: String = ""
+    @State private var currentPasswordChangePassword: String = ""
+    @State private var currentPasswordDeleteAccount: String = ""
     
     
     var body: some View {
         VStack {
             Text("Settings")
             HStack {
-                TextField("New email", text: $newEmail)
+                TextField("\(user.email)", text: $newEmail)
+                SecureField("current password", text: $currentPasswordChangeEmail)
                 Button(action: {
-                    FirebaseAuthentication().changeEmail(newEmail: self.newEmail)
+                    FirebaseAuthentication().changeEmail(currentEmail: self.user.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
                 }) {
                     Text("Change Email").foregroundColor(.blue)
                 }
             }
             HStack {
                 TextField("New password", text: $newPassword)
+                SecureField("current password", text: $currentPasswordChangePassword)
                 Button(action: {
-                    FirebaseAuthentication().changePassword(newPassword: self.newPassword)
+                    FirebaseAuthentication().changePassword(currentEmail: self.user.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
                 }) {
                     Text("Change Password").foregroundColor(.blue)
                 }
@@ -99,11 +104,15 @@ struct SettingsSheet: View {
                 Text("Log Out").foregroundColor(.red)
             }
             Spacer()
-            Button(action: {
-                FirebaseAuthentication().deleteAccount()
-            }) {
-                Text("Delete Account").foregroundColor(.red)
+            HStack {
+                SecureField("current password", text: $currentPasswordDeleteAccount)
+                Button(action: {
+                    FirebaseAuthentication().deleteAccount(currentEmail: self.user.email, currentPassword: self.currentPasswordDeleteAccount)
+                }) {
+                    Text("Delete Account").foregroundColor(.red)
+                }
             }
+            
         }
     }
 }

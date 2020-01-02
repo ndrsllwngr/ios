@@ -60,7 +60,7 @@ struct ProfileView: View {
                 if self.sheetSelection == "edit_profile" {
                     EditProfileSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "settings" {
-                    SettingsSheet(showSheet: self.$showSheet)
+                    SettingsSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "create_placelist"{
                     CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 }

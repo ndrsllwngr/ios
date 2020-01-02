@@ -50,37 +50,60 @@ class FirebaseAuthentication: ObservableObject {
         }
     }
     
-    func changeEmail(newEmail: String) {
-        let user = Auth.auth().currentUser
+    func changeEmail(currentEmail: String, currentPassword: String, newEmail: String) {
+        // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
+        self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
+            if error != nil {
+                print("Error during authentication for email change")
+            } else if let result = result {
+                let user = result.user
+                user.updateEmail(to: newEmail) { (error) in
+                    if let error = error {
+                        print("Error during email change: \(error)")
+                    } else {
+                        updateUserEmail(userId: user.uid, newEmail: newEmail)
+                        print("Email changed to: \(newEmail)")
+                    }
+                }
+            }
+        }
         
-        user?.updateEmail(to: newEmail) { (error) in
-            if let error = error {
-                print("Error during email change: \(error)")
-            } else {
-                updateUser(newUser: User(id: user?.uid, em))
-                print("Email changed to: \(newEmail)")
+    }
+    
+    func changePassword(currentEmail: String, currentPassword: String, newPassword: String) {
+        // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
+        self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
+            if error != nil {
+                print("Error during authentication for password change")
+            } else if let result = result {
+                let user = result.user
+                user.updatePassword(to: newPassword) { (error) in
+                    if let error = error {
+                        print("Error during password change: \(error)")
+                    } else {
+                        print("Password changed to: \(newPassword)")
+                    }
+                }
             }
         }
     }
     
-    func changePassword(newPassword: String) {
-        Auth.auth().currentUser?.updatePassword(to: newPassword) { (error) in
-            if let error = error {
-                print("Error during password change: \(error)")
-            } else {
-                print("Email changed to: \(newPassword)")
-
-            }
-        }
-    }
-    
-    func deleteAccount() {
-        let user = Auth.auth().currentUser
-        user?.delete { error in
-            if let error = error {
-                print("Error during user deletion: \(error)")
-            } else {
-                print("Account deleted")
+    func deleteAccount(currentEmail: String, currentPassword: String) {
+        // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
+        self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
+            if error != nil {
+                print("Error during authentication for account deletion")
+            } else if let result = result {
+                let user = result.user
+                // delete user in firestore first, afterwards I am not authenticated anymore TODO think about this again
+                deleteUserInFirestore(userId: user.uid)
+                user.delete { error in
+                    if let error = error {
+                        print("Error during user deletion: \(error)")
+                    } else {
+                        print("Account deleted")
+                    }
+                }
             }
         }
     }
