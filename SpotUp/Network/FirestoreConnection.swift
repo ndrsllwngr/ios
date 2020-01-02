@@ -16,15 +16,39 @@ func createUserInFirestore(user: User) {
     dbUsersRef.document(user.id).setData(userToData(user: user))
 }
 
-func updateUser(newUser: User) {
-    let userRef = dbUsersRef.document(newUser.id)
+func deleteUserInFirestore(userId: String) {
+    let userRef = dbUsersRef.document(userId)
+    userRef.delete() { err in
+        if let err = err {
+            print("Error removing user: \(err)")
+        } else {
+            print("User successfuly deleted from firestore")
+        }
+    }
+}
+
+func updateUserName(userId: String, newUserName: String) {
+    let userRef = dbUsersRef.document(userId)
     userRef.updateData([
-        "username": newUser.username
+        "username": newUserName
     ]) { err in
         if let err = err {
-            print("Error updating PlaceList: \(err)")
+            print("Error updating User username: \(err)")
         } else {
-            print("PlaceList successfully updated")
+            print("User username successfully updated")
+        }
+    }
+}
+
+func updateUserEmail(userId: String, newEmail: String) {
+    let userRef = dbUsersRef.document(userId)
+    userRef.updateData([
+        "email": newEmail
+    ]) { err in
+        if let err = err {
+            print("Error updating User email: \(err)")
+        } else {
+            print("User email successfully updated")
         }
     }
 }
