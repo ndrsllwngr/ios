@@ -12,6 +12,8 @@ import GooglePlaces
 struct GoogleMapsTest: View {
     
     @ObservedObject private var googleConnection = GoogleClient()
+   var idTestArray = ["ChIJW0DSe-l1nkcRrRdURwBJGmU","ChIJz_Vm4-x1nkcR9eUl33F28dY","ChIJk2XVNXPfnUcRNtjDi6U-rOA","ChIJOwfxTOV1nkcRSZP07RYIkR0"]
+
 
     
     var body: some View {
@@ -37,7 +39,7 @@ struct GoogleMapsTest: View {
                     }){Text("Open Website")}
                 
                 Text("Test")
-                
+               // Text(self.googleConnection.placesArray[1].placeid != nil ? "\(self.googleConnection.placesArray[1].placeid!)" : "second function error")
         
                 
             }.padding(.all)
@@ -46,7 +48,10 @@ struct GoogleMapsTest: View {
            
             
             
-        }.onAppear{ self.googleConnection.getPlaceDetails()}
+        }.onAppear{ self.googleConnection.getPlaceDetails()
+           self.googleConnection.getPlaceDetails2(testArray: self.idTestArray)
+            
+        }
         
         
     }

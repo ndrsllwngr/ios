@@ -1,36 +1,31 @@
-////
-////  ResponseModels.swift
-////  SpotUp
-////
-////  Created by Havy Ha on 20.12.19.
-////
 //
-//import SwiftUI
+//  GooglePlaceTest.swift
+//  SpotUp
+//
+//  Created by Havy Ha on 30.12.19.
+//
+
 import Foundation
-import GoogleMaps
 import GooglePlaces
+import GoogleMaps
+
+class GooglePlaceTest{
 //
-//
-//
-//struct GooglePlacesResponse : Codable {
-//    let results : [Places]
-//    enum CodingKeys : String, CodingKey {
-//        case results = "results"
-//    }
-//}
-//
-//
-//
-//// Place struct
-//struct PlacesID: Codable {
-//
-//    let geometry : Location
-// let name : String
-//    let place_id: String
-//    let openingHours : OpenNow?
-//    let photos : [PhotoInfo]?
-//    let types : [String]
-//    let address : String
+    
+    var placeid:String?
+    var address:String?
+    var types:[String]?
+    //var image:UIImage?
+    var metadata:GMSPlacePhotoMetadata?
+    var website:URL?
+    var openingHours:[String]?
+    var phoneNumber:String?
+    var priceLevel:GMSPlacesPriceLevel?
+    var isOpen:GMSPlaceOpenStatus?
+    var coordinates:CLLocationCoordinate2D?
+    
+   
+}
 
 
 //    enum CodingKeys : String, CodingKey {
@@ -41,7 +36,7 @@ import GooglePlaces
 //        case photos = "photos"
 //        case types = "types"
 //        case address = "vicinity"
-//    }
+    
 //
 //
 //    // Location struct
