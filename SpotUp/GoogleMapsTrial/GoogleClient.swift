@@ -21,7 +21,8 @@ class GoogleClient:ObservableObject{
     @Published var priceLevel:GMSPlacesPriceLevel?
     @Published var isOpen:GMSPlaceOpenStatus?
     @Published var coordinates:CLLocationCoordinate2D?
-    
+    @Published var placesArray:[GooglePlaceTest] = []
+
   
     
 
@@ -51,7 +52,6 @@ class GoogleClient:ObservableObject{
     func getPlaceDetails2 (testArray:[String])->[GooglePlaceTest]{
         let placesClient = GMSPlacesClient.shared()
         let a = GooglePlaceTest()
-        var placesArray:[GooglePlaceTest] = []
         
         let fields : GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
             UInt(GMSPlaceField.placeID.rawValue) | UInt(GMSPlaceField.photos.rawValue) | UInt(GMSPlaceField.formattedAddress.rawValue)
@@ -87,8 +87,8 @@ class GoogleClient:ObservableObject{
 //                                self.a.image = photo;
 //                            }
 //                        })
-                        placesArray.append(a)
-                        print("placesArray in for loop:",placesArray[0].placeid)
+                        self.placesArray.append(a)
+                        print("placesArray in for loop:",a.placeid)
                         
 //                        switch self.isOpen{
 //                        case.closed:

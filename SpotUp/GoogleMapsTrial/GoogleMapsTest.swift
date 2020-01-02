@@ -39,7 +39,7 @@ struct GoogleMapsTest: View {
                     }){Text("Open Website")}
                 
                 Text("Test")
-               // Text(self.googleConnection.placesArray[1].placeid != nil ? "\(self.googleConnection.placesArray[1].placeid!)" : "second function error")
+                Text(!self.googleConnection.placesArray.isEmpty ?  "\(self.googleConnection.placesArray[0].placeid!)" : "loading")
         
                 
             }.padding(.all)
