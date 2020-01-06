@@ -81,9 +81,20 @@ struct HomeView: View {
                     
                     Spacer()
                     
+                    // RESULTS
                     VStack {
                         if selection == "places" {
-                            GPViewControllerWrapper()
+                            Button(action: {self.GSM()}){Text("Search Google Places")}
+                            //                            GPViewControllerWrapper()
+                            List { ForEach(self.googlePlaces, id: \.placeID) {
+                                result in HStack {
+                                    Text(result.placeID)
+                                    Text(result.attributedFullText.string)
+                                    Spacer()
+                                    }
+                                }
+                                Spacer()
+                            }.resignKeyboardOnDragGesture()
                             Spacer()
                         };
                         if selection == "lists" {
@@ -122,8 +133,8 @@ struct HomeView: View {
         placesClient.findAutocompletePredictions(fromQuery: self.searchTerm,
                                                  bounds: nil,
                                                  boundsMode: GMSAutocompleteBoundsMode.bias,
-                                                 filter: filter,
-                                                 sessionToken: token,
+                                                 filter: self.filter,
+                                                 sessionToken: self.token,
                                                  callback: { (results, error) in
                                                     if let error = error {
                                                         print("Autocomplete error: \(error)")
@@ -131,25 +142,13 @@ struct HomeView: View {
                                                     }
                                                     if let results = results {
                                                         for result in results {
+                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID)")
                                                             dump(result)
                                                         }
                                                         self.googlePlaces = results
                                                     }
         })
-        
-        //        let regularFont = UIFont.systemFont(ofSize: UIFont.labelFontSize)
-        //        let boldFont = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
-        
-        //        let bolded = prediction.attributedFullText.mutableCopy() as! NSMutableAttributedString
-        //        bolded.enumerateAttribute(kGMSAutocompleteMatchAttribute, in: NSMakeRange(0, bolded.length), options: []) {
-        //          (value, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) -> Void in
-        //            let font = (value == nil) ? regularFont : boldFont
-        //            bolded.addAttribute(NSFontAttributeName, value: font, range: range)
-        //        }
-        //
-        //        label.attributedText = bolded
     }
-    
 }
 
 

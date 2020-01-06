@@ -44,7 +44,6 @@ extension GPViewController: GMSAutocompleteViewControllerDelegate {
     print("Place name: \(place.name)")
     print("Place ID: \(place.placeID)")
     print("Place attributions: \(place.attributions)")
-    
     dismiss(animated: true, completion: nil)
   }
 
