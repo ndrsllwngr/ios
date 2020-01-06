@@ -84,17 +84,21 @@ struct HomeView: View {
                     // RESULTS
                     VStack {
                         if selection == "places" {
-                            Button(action: {self.GSM()}){Text("Search Google Places")}
+//                            Button(action: {self.GSM()}){Text("Search Google Places")}
                             //                            GPViewControllerWrapper()
-                            List { ForEach(self.googlePlaces, id: \.placeID) {
-                                result in HStack {
-                                    Text(result.placeID)
-                                    Text(result.attributedFullText.string)
-                                    Spacer()
-                                    }
-                                }
-                                Spacer()
-                            }.resignKeyboardOnDragGesture()
+//                            List { ForEach(self.googlePlaces, id: \.placeID) {
+//                                result in HStack {
+//                                    Text(result.placeID)
+//                                    Text(result.attributedFullText.string)
+//                                    Spacer()
+//                                    }
+//                                }
+//                                Spacer()
+//                            }
+                            // WARN! GSM modifies states during render
+                            GSM(query: self.searchTerm)
+                            ListsResults(googlePlaces: $googlePlaces)
+                            .resignKeyboardOnDragGesture()
                             Spacer()
                         };
                         if selection == "lists" {
@@ -127,10 +131,10 @@ struct HomeView: View {
         }
     }
     
-    func GSM() {
+    func GSM(query: String) -> Text {
         self.filter.type = .establishment
         
-        placesClient.findAutocompletePredictions(fromQuery: self.searchTerm,
+        placesClient.findAutocompletePredictions(fromQuery: query,
                                                  bounds: nil,
                                                  boundsMode: GMSAutocompleteBoundsMode.bias,
                                                  filter: self.filter,
@@ -148,6 +152,7 @@ struct HomeView: View {
                                                         self.googlePlaces = results
                                                     }
         })
+        return Text("")
     }
 }
 
