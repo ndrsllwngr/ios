@@ -12,6 +12,7 @@ import GooglePlaces
 struct HomeView: View {
     @State private var selection = "places"
     @State private var searchTerm: String = ""
+    @State private var showCancelButton: Bool = false
     @ObservedObject var searchSpace = FirestoreSearch()
     let searchController = UISearchController(searchResultsController: nil)
     @State private var googlePlaces: [GMSAutocompletePrediction] = []
@@ -29,13 +30,46 @@ struct HomeView: View {
         
         VStack {
             NavigationView {
-                
                 VStack {
-                    
-                    TextField("Search \(selection)", text: $searchTerm)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
-                    
+                    // SEARCHBAR
+                    HStack {
+                        HStack {
+                            HStack {
+                                Image(systemName: "magnifyingglass")
+                                    .padding(.leading, 5.0)
+                                
+                                TextField("Search", text: $searchTerm, onEditingChanged: { isEditing in
+                                    self.showCancelButton = true
+                                }, onCommit: {
+                                    print("onCommit")
+                                }).foregroundColor(.primary)
+                                
+                                Button(action: {
+                                    self.searchTerm = ""
+                                }) {
+                                    Image(systemName: "xmark.circle.fill").opacity(searchTerm == "" ? 0 : 1)
+                                }
+                            }
+                            .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                            .foregroundColor(.secondary)
+                            .background(Color(.secondarySystemBackground))
+                            .cornerRadius(10.0)
+                            
+                            if showCancelButton  {
+                                Button("Cancel") {
+                                    UIApplication.shared.endEditing(true) // this must be placed before the other commands here
+                                    self.searchTerm = ""
+                                    self.showCancelButton = false
+                                }
+                                .foregroundColor(Color(.systemBlue))
+                            }
+                        }
+                        .padding(.horizontal)
+                            .navigationBarHidden(showCancelButton) // .animation(.default)
+                        // animation does not work properly
+                        
+                    }
+                    // PICKER
                     Picker(selection: $selection, label: Text("View")) {
                         Text("Places").tag("places")
                         Text("Lists").tag("lists")
@@ -47,41 +81,29 @@ struct HomeView: View {
                     
                     Spacer()
                     
-                    if selection == "places" {
-                        VStack{
-                            Button(action: {self.GSM()}){Text("PUSH")}
-                            List{
-                                ForEach(self.googlePlaces, id: \.placeID) {
-                                    place in Text("\(place.placeID)")
-                                }
-                            }
+                    VStack {
+                        if selection == "places" {
+                            GPViewControllerWrapper()
                             Spacer()
-                        }
-                        
-                    } else if selection == "lists" {
-                        VStack{
-                            List{
-                                ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                    (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
+                        };
+                        if selection == "lists" {
+                            List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
+                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
                                 }
-                            }
-                            
+                                Spacer()
+                            }.resignKeyboardOnDragGesture()
                             Spacer()
-                        }
-                    } else {
-                        VStack{
-                            List{
-                                ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                    (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
+                        };
+                        if selection == "accounts" {
+                            List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
+                                (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
                                 }
-                            }
-                            
+                                Spacer()
+                            }.resignKeyboardOnDragGesture()
                             Spacer()
-                        }
-                    }
+                        };
+                    } .navigationBarTitle(Text("Search"))
                 }
-                .navigationBarTitle(Text("Search"))
-                
             }
             
         }.onAppear {
@@ -109,7 +131,7 @@ struct HomeView: View {
                                                     }
                                                     if let results = results {
                                                         for result in results {
-                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID) and distance \(result.distanceMeters)")
+                                                            dump(result)
                                                         }
                                                         self.googlePlaces = results
                                                     }
@@ -138,4 +160,27 @@ struct HomeView_Previews: PreviewProvider {
     }
 }
 
+extension UIApplication {
+    func endEditing(_ force: Bool) {
+        self.windows
+            .filter{$0.isKeyWindow}
+            .first?
+            .endEditing(force)
+    }
+}
+
+struct ResignKeyboardOnDragGesture: ViewModifier {
+    var gesture = DragGesture().onChanged{_ in
+        UIApplication.shared.endEditing(true)
+    }
+    func body(content: Content) -> some View {
+        content.gesture(gesture)
+    }
+}
+
+extension View {
+    func resignKeyboardOnDragGesture() -> some View {
+        return modifier(ResignKeyboardOnDragGesture())
+    }
+}
 
