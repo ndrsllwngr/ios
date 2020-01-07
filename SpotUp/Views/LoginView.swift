@@ -20,9 +20,7 @@ struct LoginView: View {
         NavigationView {
             VStack {
                 Text("LogInView")
-                Spacer()
                 TextField("Email", text: $email)
-                
                 SecureField("Password", text: $password)
                 Button(action: logIn) {
                     Text("Sign In")
@@ -31,6 +29,7 @@ struct LoginView: View {
                 NavigationLink(destination: SignUpView()) {
                     Text("Sign Up")
                 }
+                Spacer()
             }
                 
             .padding()

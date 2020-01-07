@@ -12,10 +12,16 @@ import GoogleMaps
 
 struct MapView: View {
     @EnvironmentObject var placesConnection: GooglePlacesConnection
-
+    @State var currentIndex: Int = 0
     var body: some View {
             VStack{
-                GoogMapView().environmentObject(self.placesConnection)
+                ZStack{
+                    GoogMapView(currentIndex: self.$currentIndex).environmentObject(self.placesConnection)
+                    if(!self.placesConnection.places.isEmpty){
+                        PlaceCard(currentIndex: self.$currentIndex).environmentObject(self.placesConnection)
+                    }
+                }
+                
         }
     }
 }
@@ -26,27 +32,37 @@ struct MapView_Previews: PreviewProvider {
     }
 }
 
+
+
 struct GoogMapView : UIViewRepresentable {
     @EnvironmentObject var placesConnection: GooglePlacesConnection
-    
+    @Binding var currentIndex: Int
+    var defaultLocation = CLLocationCoordinate2D(
+        latitude: 34.6692097,
+        longitude: 135.503039
+    )
     func makeUIView(context: Context) -> GMSMapView {
-        let initialPlace = placesConnection.places[0]
+       
+        let initialCoords = !placesConnection.places.isEmpty ? placesConnection.places[currentIndex].coordinates : self.defaultLocation
         let camera = GMSCameraPosition.camera(
-            withLatitude: initialPlace.coordinates.latitude,
-            longitude: initialPlace.coordinates.longitude,
+            withLatitude: initialCoords.latitude,
+            longitude: initialCoords.longitude,
             zoom: 16.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
-//        mapView.addSubview(SpotOnMap())
-//        mapView.bringSubviewToFront(SpotOnMap())
+        //mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:400, right: 0)
         return mapView
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
-        for place in self.placesConnection.places {
+        if(placesConnection.places.isEmpty) {return}
+        let currentPlace = placesConnection.places[currentIndex].coordinates
+        view.animate(toLocation: currentPlace)
+        view.clear()
+        for (index,place) in self.placesConnection.places.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
                 latitude: place.coordinates.latitude,
@@ -54,11 +70,52 @@ struct GoogMapView : UIViewRepresentable {
             )
             marker.title = place.name
             //marker.snippet = place.state
-            marker.icon = GMSMarker.markerImage(with: .black) //Set Marker color
+            if(index == currentIndex){
+                marker.icon = GMSMarker.markerImage(with: .black)
+            } else {
+                marker.icon = GMSMarker.markerImage(with: .red)
+            }
             marker.map = view
-            print("Place name",place.name)
-            print("latitude: ",place.coordinates.latitude,"longitude: ",place.coordinates.longitude)
+            
         }
-        
+
     }
 }
+
+struct PlaceCard: View {
+    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @Binding var currentIndex: Int
+    
+    var body: some View {
+        VStack{
+            
+            HStack {
+                if(self.currentIndex > 0){
+                    Button(action: {
+                        self.currentIndex-=1
+                    }) {
+                        Text("Previous Place")
+                    }
+                }
+                
+                Text(self.placesConnection.places[self.currentIndex].name)
+                    .background(Color.black)
+                
+                if(self.currentIndex < (self.placesConnection.places.count - 1)){
+                    Button(action: {
+                        self.currentIndex+=1
+                    }) {
+                        Text("Next Place")
+                    }
+                }
+                
+            }
+            .frame(width: 240, height: 100)
+            .background(Color.white)
+            .offset(y: 120)
+            .shadow(radius: 15)
+        }
+    }
+}
+
+
