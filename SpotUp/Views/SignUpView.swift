@@ -20,7 +20,6 @@ struct SignUpView: View {
         Group {
             VStack {
                 Text("SignUpView")
-                Spacer()
                 HStack {
                     Text("Username")
                     TextField("Enter username", text: $username)
@@ -34,13 +33,13 @@ struct SignUpView: View {
                 
                 HStack {
                     Text("Password")
-                    TextField("Enter Password", text: $password)
+                    SecureField("Enter Password", text: $password)
                 }
                 .padding()
-                
                 Button(action: signUp) {
                     Text("Sign Up")
                 }
+                Spacer()
             }
         }
         .padding()
