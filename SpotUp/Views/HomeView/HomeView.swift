@@ -17,6 +17,7 @@ struct HomeView: View {
     let searchController = UISearchController(searchResultsController: nil)
     @State private var googlePlaces: [GMSAutocompletePrediction] = []
     
+    
     /**
      * Create a new session token. Be sure to use the same token for calling
      * findAutocompletePredictions, as well as the subsequent place details request.
@@ -120,7 +121,6 @@ struct HomeView: View {
                     } .navigationBarTitle(Text("Search"))
                 }
             }
-            
         }.onAppear {
             self.searchSpace.getAllPublicPlaceLists()
             self.searchSpace.getAllUsers()
@@ -158,11 +158,11 @@ struct HomeView: View {
 
 
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
+//struct HomeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HomeView()
+//    }
+//}
 
 extension UIApplication {
     func endEditing(_ force: Bool) {

@@ -12,20 +12,22 @@ let placesClient = GMSPlacesClient.shared()
 
 class GooglePlacesConnection: ObservableObject{
     
-    @Published var places: [LocalPlace] = []
+    @Published var places: [GMSPlace] = []
     
+    let fields : GMSPlaceField = GMSPlaceField(rawValue:
+        UInt(GMSPlaceField.name.rawValue) |
+            UInt(GMSPlaceField.placeID.rawValue) |
+            UInt(GMSPlaceField.coordinate.rawValue) |
+            UInt(GMSPlaceField.photos.rawValue) |
+            UInt(GMSPlaceField.formattedAddress.rawValue) |
+            UInt(GMSPlaceField.website.rawValue) |
+            UInt(GMSPlaceField.openingHours.rawValue) |
+            UInt(GMSPlaceField.priceLevel.rawValue) |
+            UInt(GMSPlaceField.phoneNumber.rawValue)
+        )!
     
     func getPlaces (placeIds: [String]) {
-        
         placeIds.forEach {placeId in
-            
-            print(placeId)
-            let fields : GMSPlaceField = GMSPlaceField(rawValue:
-                UInt(GMSPlaceField.name.rawValue) |
-                    UInt(GMSPlaceField.placeID.rawValue) |
-                    UInt(GMSPlaceField.coordinate.rawValue)
-                )!
-            
             placesClient.fetchPlace(fromPlaceID: placeId, placeFields: fields, sessionToken: nil, callback: {
                 (place: GMSPlace?, error: Error?) in
                 if let error = error {
@@ -33,14 +35,20 @@ class GooglePlacesConnection: ObservableObject{
                     return
                 }
                 if let place = place {
-                    let localPlace = LocalPlace(id: place.placeID!, name: place.name!, coordinates: place.coordinate)
-                    
-                    self.places.append(localPlace)
+                    self.places.append(place)
                     print("The selected place is: \(String(describing: place.name))")
                 }
             })        
         }
         
+    }
+    
+    func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
+        placesClient.fetchPlace(fromPlaceID: placeID, placeFields: fields, sessionToken: nil, callback: handler)
+    }
+    
+    func getPlaceFoto(photoMetadata: GMSPlacePhotoMetadata, handler: @escaping GMSPlacePhotoImageResultCallback) {
+        placesClient.loadPlacePhoto(photoMetadata, callback: handler)
     }
     
     //    func getPlaceID (completion:@escaping ([PlacesID]?) -> ()){
