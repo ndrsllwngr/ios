@@ -91,6 +91,19 @@ func deletePlaceList(placeListToDelete: PlaceList) {
     }
 }
 
+func addPlaceToList(placeID: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "place_ids": FieldValue.arrayUnion([placeID])
+    ]) { err in
+        if let err = err {
+            print("Error adding place to PlaceList: \(err)")
+        } else {
+            print("Place successfully added")
+        }
+    }
+}
+
 class FirestoreProfile: ObservableObject {
     
     @Published var userProfileListener: ListenerRegistration? = nil
@@ -157,7 +170,7 @@ class FirestoreProfile: ObservableObject {
 }
 
 class FirestoreSearch: ObservableObject {
-    
+    // TODO use listeners
     @Published var allUsers: [User] = []
     @Published var allPublicPlaceLists: [PlaceList] = []
     
