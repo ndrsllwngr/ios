@@ -99,7 +99,7 @@ class FirebaseAuthentication: ObservableObject {
                 deleteUserInFirestore(userId: user.uid)
                 user.delete { error in
                     if let error = error {
-                        print("Error during user deletion: \(error)")
+                        print("Error during account deletion: \(error)")
                     } else {
                         print("Account deleted")
                     }
