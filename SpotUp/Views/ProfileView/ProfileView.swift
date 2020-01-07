@@ -60,7 +60,7 @@ struct ProfileView: View {
                 if self.sheetSelection == "edit_profile" {
                     EditProfileSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "settings" {
-                    SettingsSheet(showSheet: self.$showSheet)
+                    SettingsSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "create_placelist"{
                     CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 }
@@ -142,14 +142,17 @@ struct ProfileInfoView: View {
             }
             .padding(.horizontal)
             if isMyProfile {
-                Button(action: {
-                    self.showSheet.toggle()
-                    self.sheetSelection = "edit_profile"
-                }) {
-                    HStack {
-                        Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                        Image(systemName: "pencil")
+                HStack {
+                    Button(action: {
+                        self.showSheet.toggle()
+                        self.sheetSelection = "edit_profile"
+                    }) {
+                        HStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
+                            Image(systemName: "pencil")
+                        }
                     }
+                    Spacer()
                 }
                 .padding(.horizontal)
             } else {
