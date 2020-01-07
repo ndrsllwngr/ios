@@ -41,6 +41,7 @@ struct InnerItemView: View {
     var place: GMSPlace
     @State var image: UIImage?
     @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @State var showSheet = false
     
     var body: some View {
         VStack {
@@ -73,6 +74,9 @@ struct InnerItemView: View {
                 }
             }
             Spacer()
+        }
+        .sheet(isPresented: $showSheet) {
+            AddPlaceToListSheet(showSheet: self.$showSheet, placeId: self.place.placeID!)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
         .onAppear {
