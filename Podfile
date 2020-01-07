@@ -16,8 +16,8 @@ target 'SpotUp' do
   # Google Maps
   pod 'GoogleMaps', '>= 3.7.0'
   pod 'GooglePlaces', '>= 3.7.0'
-  # A lightweight fuzzy-search library, with zero dependencies
-  # pod 'Fuse', '>= 1.2.0'
+  # algolia search
+  # pod 'InstantSearchClient', '>= 7.0'
 
   # target 'SpotUpTests' do
   #   inherit! :search_paths
