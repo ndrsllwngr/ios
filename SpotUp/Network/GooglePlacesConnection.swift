@@ -27,12 +27,7 @@ class GooglePlacesConnection: ObservableObject{
         )!
     
     func getPlaces (placeIds: [String]) {
-        
         placeIds.forEach {placeId in
-            
-            print(placeId)
-            
-            
             placesClient.fetchPlace(fromPlaceID: placeId, placeFields: fields, sessionToken: nil, callback: {
                 (place: GMSPlace?, error: Error?) in
                 if let error = error {
@@ -50,6 +45,10 @@ class GooglePlacesConnection: ObservableObject{
     
     func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
         placesClient.fetchPlace(fromPlaceID: placeID, placeFields: fields, sessionToken: nil, callback: handler)
+    }
+    
+    func getPlaceFoto(photoMetadata: GMSPlacePhotoMetadata, handler: @escaping GMSPlacePhotoImageResultCallback) {
+        placesClient.loadPlacePhoto(photoMetadata, callback: handler)
     }
     
     //    func getPlaceID (completion:@escaping ([PlacesID]?) -> ()){

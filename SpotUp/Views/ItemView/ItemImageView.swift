@@ -9,23 +9,14 @@
 import SwiftUI
 
 struct ItemImageView: View {
-    var image: Image
+    var image: UIImage
     var body: some View {
-        image
+        Image(uiImage: image)
             .resizable()
             .clipShape(Circle())
             .overlay(
                 Circle().stroke(Color.white, lineWidth: 4))
             .shadow(radius: 10)
-        
-        
-        
     }
 }
 
-struct ItemImageView_Previews: PreviewProvider {
-    static var previews: some View {
-        ItemImageView(image:Image("turtlerock"))
-       
-    }
-}
