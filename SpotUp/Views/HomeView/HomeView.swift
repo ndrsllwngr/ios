@@ -14,10 +14,9 @@ struct HomeView: View {
     @State private var searchTerm: String = ""
     @State private var showCancelButton: Bool = false
     @ObservedObject var searchSpace = FirestoreSearch()
-    @ObservedObject var googleConnection = GoogleClient()
     let searchController = UISearchController(searchResultsController: nil)
     @State private var googlePlaces: [GMSAutocompletePrediction] = []
-    @ObservedObject var googleConnection = GoogleClient()
+    
     
     /**
      * Create a new session token. Be sure to use the same token for calling
@@ -122,8 +121,6 @@ struct HomeView: View {
                     } .navigationBarTitle(Text("Search"))
                 }
             }
-            GoogleMapsTest().environmentObject(self.googleConnection)
-            
         }.onAppear {
             self.searchSpace.getAllPublicPlaceLists()
             self.searchSpace.getAllUsers()

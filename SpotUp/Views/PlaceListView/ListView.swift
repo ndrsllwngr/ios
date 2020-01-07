@@ -13,10 +13,10 @@ struct ListView: View {
     
     var body: some View {
         List {
-            ForEach(self.placesConnection.places) { place in
-                //NavigationLink(destination: ItemContentView(place:place)) {
+            ForEach(self.placesConnection.places, id: \.self) { place in
+                NavigationLink(destination: ItemView(place:place)) {
                     ListRowPlace(place : place)
-                //}
+                }
             }
         }
     }
