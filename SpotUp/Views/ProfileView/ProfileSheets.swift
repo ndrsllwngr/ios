@@ -84,7 +84,7 @@ struct SettingsSheet: View {
                 TextField("\(user.email)", text: $newEmail)
                 SecureField("current password", text: $currentPasswordChangeEmail)
                 Button(action: {
-                    FirebaseAuthentication().changeEmail(currentEmail: self.user.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
+                    FirebaseAuthentication.shared.changeEmail(currentEmail: self.user.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
                 }) {
                     Text("Change Email").foregroundColor(.blue)
                 }
@@ -93,13 +93,13 @@ struct SettingsSheet: View {
                 TextField("New password", text: $newPassword)
                 SecureField("current password", text: $currentPasswordChangePassword)
                 Button(action: {
-                    FirebaseAuthentication().changePassword(currentEmail: self.user.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
+                    FirebaseAuthentication.shared.changePassword(currentEmail: self.user.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
                 }) {
                     Text("Change Password").foregroundColor(.blue)
                 }
             }
             Button(action: {
-                FirebaseAuthentication().logOut()
+                FirebaseAuthentication.shared.logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
             }
@@ -107,7 +107,7 @@ struct SettingsSheet: View {
             HStack {
                 SecureField("current password", text: $currentPasswordDeleteAccount)
                 Button(action: {
-                    FirebaseAuthentication().deleteAccount(currentEmail: self.user.email, currentPassword: self.currentPasswordDeleteAccount)
+                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.user.email, currentPassword: self.currentPasswordDeleteAccount)
                 }) {
                     Text("Delete Account").foregroundColor(.red)
                 }
