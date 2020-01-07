@@ -43,7 +43,7 @@ struct GoogMapView : UIViewRepresentable {
     )
     func makeUIView(context: Context) -> GMSMapView {
        
-        let initialCoords = !placesConnection.places.isEmpty ? placesConnection.places[currentIndex].coordinates : self.defaultLocation
+        let initialCoords = !placesConnection.places.isEmpty ? placesConnection.places[currentIndex].coordinate : self.defaultLocation
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,
@@ -59,14 +59,14 @@ struct GoogMapView : UIViewRepresentable {
     
     func updateUIView(_ view: GMSMapView, context: Context) {
         if(placesConnection.places.isEmpty) {return}
-        let currentPlace = placesConnection.places[currentIndex].coordinates
+        let currentPlace = placesConnection.places[currentIndex].coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
         for (index,place) in self.placesConnection.places.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
-                latitude: place.coordinates.latitude,
-                longitude: place.coordinates.longitude
+                latitude: place.coordinate.latitude,
+                longitude: place.coordinate.longitude
             )
             marker.title = place.name
             //marker.snippet = place.state
@@ -98,8 +98,7 @@ struct PlaceCard: View {
                     }
                 }
                 
-                Text(self.placesConnection.places[self.currentIndex].name)
-                    .background(Color.black)
+                Text(self.placesConnection.places[self.currentIndex].name != nil ? self.placesConnection.places[self.currentIndex].name! : "")
                 
                 if(self.currentIndex < (self.placesConnection.places.count - 1)){
                     Button(action: {

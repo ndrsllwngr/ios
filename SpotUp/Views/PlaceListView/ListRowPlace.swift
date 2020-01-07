@@ -7,16 +7,17 @@
 //
 
 import SwiftUI
+import GooglePlaces
 
 struct ListRowPlace: View {
-    var place: LocalPlace
+    var place: GMSPlace
     
     var body: some View{
         HStack {
 //            place.image
 //                .resizable()
 //                .frame(width:50, height:50)
-            Text(place.name)
+            Text(place.name != nil ? place.name! : "" )
         }
     }
 }
