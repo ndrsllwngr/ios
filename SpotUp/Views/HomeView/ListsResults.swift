@@ -14,7 +14,7 @@ struct ListsResults: View {
         List { ForEach(self.googlePlaces, id: \.placeID) {
             result in HStack {
                 //                Text(result.placeID)
-                NavigationLink(destination: ItemView(id: result.placeID)) {
+                NavigationLink(destination: ItemView(placeID: result.placeID)) {
                     Text(result.attributedFullText.string)
                 }
                 Spacer()
