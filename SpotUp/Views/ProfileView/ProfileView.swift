@@ -10,8 +10,9 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ProfileView: View {
-    var isMyProfile: Bool = true
     var profileUserId: String
+    @State var isMyProfile: Bool = false
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
     @State private var showingChildView = false
     @State var showSheet = false
@@ -75,6 +76,7 @@ struct ProfileView: View {
         }
         .onAppear {
             self.profile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
+            self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
         }
         .onDisappear {
             self.profile.removeProfileListener()

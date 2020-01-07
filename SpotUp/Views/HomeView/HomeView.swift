@@ -112,7 +112,7 @@ struct HomeView: View {
                         };
                         if selection == "accounts" {
                             List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
+                                (user: User) in NavigationLink(destination: ProfileView(profileUserId: user.id)){Text(user.username)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()
