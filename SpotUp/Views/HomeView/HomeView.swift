@@ -104,7 +104,7 @@ struct HomeView: View {
                         };
                         if selection == "lists" {
                             List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
+                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)){Text(placeList.name)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()

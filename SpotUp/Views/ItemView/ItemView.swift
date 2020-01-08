@@ -11,18 +11,17 @@ import GooglePlaces
 struct ItemView: View {
     var placeID: String?
     @State var place: GMSPlace?
-    @ObservedObject var placesConnection = GooglePlacesConnection()
     
     var body: some View {
         VStack {
             if (place == nil) {
                 Text("")
             } else {
-                InnerItemView(place: place!).environmentObject(placesConnection)
+                InnerItemView(place: place!)
             }
         }.onAppear {
             if let placeID = self.placeID {
-                self.placesConnection.getPlace(placeID: placeID) { (place: GMSPlace?, error: Error?) in
+                getPlace(placeID: placeID) { (place: GMSPlace?, error: Error?) in
                     if let error = error {
                         print("An error occurred: \(error.localizedDescription)")
                         return
@@ -40,7 +39,6 @@ struct ItemView: View {
 struct InnerItemView: View {
     var place: GMSPlace
     @State var image: UIImage?
-    @EnvironmentObject var placesConnection: GooglePlacesConnection
     @State var showSheet = false
     
     var body: some View {
@@ -81,7 +79,7 @@ struct InnerItemView: View {
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
         .onAppear {
             if let photos = self.place.photos {
-                self.placesConnection.getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")
                         return

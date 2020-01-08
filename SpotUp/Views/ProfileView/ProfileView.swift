@@ -28,7 +28,7 @@ struct ProfileView: View {
                         Section(header: Text("Owned Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeList: placeList, isOwnedPlacelist: true)
+                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: true)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -38,7 +38,7 @@ struct ProfileView: View {
                         Section(header: Text("Followed Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)
+                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -47,7 +47,7 @@ struct ProfileView: View {
                     } else {
                         ForEach(profile.placeLists){ placeList in
                             NavigationLink(
-                                destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)
+                                destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }
