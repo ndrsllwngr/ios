@@ -15,7 +15,7 @@ struct PlaceList: Identifiable {
     var followerIds: [String] // the owner is also always a follower
     var isPublic: Bool = true
     var placeIds: [String] = []
-    //var isCollaborative: Bool = false // only possible if private
+    var isCollaborative: Bool = false // only possible if private
     //var createdAt
     //var modifiedAt
     //var titleImage: String

@@ -55,7 +55,7 @@ struct InnerItemView: View {
                     .offset(y: -90)
                     .padding(.bottom, -90)
                 Button(action: {
-                    print("add to list")
+                    self.showSheet.toggle()
                 }){
                     Text("Add to List")
                 }
@@ -76,7 +76,7 @@ struct InnerItemView: View {
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
-            AddPlaceToListSheet(showSheet: self.$showSheet, placeId: self.place.placeID!)
+            AddPlaceToListSheet(showSheet: self.$showSheet, placeID: self.place.placeID!)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
         .onAppear {

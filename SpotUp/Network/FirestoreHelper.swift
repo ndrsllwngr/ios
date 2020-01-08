@@ -26,7 +26,8 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "owner_id": placeList.owner.id,
         "follower_ids": placeList.followerIds,
         "is_public": placeList.isPublic,
-        "place_ids": placeList.placeIds
+        "place_ids": placeList.placeIds,
+        "is_collaborative": placeList.isCollaborative
     ]
 }
 
@@ -45,5 +46,6 @@ func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
                      owner: ListOwner(id: data["owner_id"] as! String, username: ""),
                      followerIds: data["follower_ids"] as! [String],
                      isPublic: data["is_public"] as! Bool,
-                     placeIds: data["place_ids"] as! [String])
+                     placeIds: data["place_ids"] as! [String],
+                     isCollaborative: data["is_collaborative"] as! Bool)
 }
