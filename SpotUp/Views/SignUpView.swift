@@ -10,49 +10,43 @@ import SwiftUI
 
 struct SignUpView: View {
     
-    @State private var username: String = ""
-    @State private var email: String = ""
-    @State private var password: String = ""
+    @ObservedObject private var userViewModel = UserViewModel()
+    @State var presentAlert = false
     
     
     var body: some View {
-        Group {
-            VStack {
-                Text("SignUpView")
-                HStack {
-                    Text("Username")
-                    TextField("Enter username", text: $username)
+        VStack {
+            Text("Sign Up")
+            Form {
+                Section(footer: Text(userViewModel.usernameMessage).foregroundColor(.red)) {
+                    TextField("Username", text: $userViewModel.username)
+                        .autocapitalization(.none)
                 }
-                .padding()
-                HStack {
-                    Text("Email")
-                    TextField("Enter Email Address", text: $email)
+                Section(footer: Text(userViewModel.emailMessage).foregroundColor(.red)) {
+                    TextField("Email", text: $userViewModel.email)
+                        .autocapitalization(.none)
                 }
-                .padding()
-                
-                HStack {
-                    Text("Password")
-                    SecureField("Enter Password", text: $password)
+                Section(footer: Text(userViewModel.passwordMessage).foregroundColor(.red)) {
+                    SecureField("Password", text: $userViewModel.password)
+                    SecureField("Password again", text: $userViewModel.passwordAgain)
                 }
-                .padding()
-                Button(action: signUp) {
-                    Text("Sign Up")
+                Section {
+                    Button(action: { self.signUp() }) {
+                        Text("Sign up")
+                    }.disabled(!self.userViewModel.isValid)
                 }
-                Spacer()
             }
+            Spacer()
         }
-        .padding()
     }
     
     func signUp() {
-        if !username.isEmpty && !email.isEmpty && !password.isEmpty {
-            FirebaseAuthentication.shared.signUp(username: username, email: email, password: password) { (result, error) in
-                if error != nil {
-                    print("Error")
-                } else {
-                    self.email = ""
-                    self.password = ""
-                }
+        FirebaseAuthentication.shared.signUp(username: userViewModel.username, email: userViewModel.email, password: userViewModel.password) { (result, error) in
+            if error != nil {
+                print("Error")
+            } else {
+//                userViewModel.email = ""
+//                userViewModel.password = ""
             }
         }
     }
