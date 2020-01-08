@@ -175,7 +175,7 @@ class FirestorePlaceList: ObservableObject {
     @Published var placeListListener: ListenerRegistration? = nil
     @Published var placeList: PlaceList? = nil
     @Published var places: [GMSPlace] = []
-
+    
     func addPlaceListListener(placeListId: String) {
         dbPlaceListsRef.document(placeListId).addSnapshotListener { documentSnapshot, error in
             guard let documentSnapshot = documentSnapshot else {
@@ -185,16 +185,18 @@ class FirestorePlaceList: ObservableObject {
             documentSnapshot.data().flatMap({ data in
                 let fetchedPlaceList = dataToPlaceList(data: data)
                 self.placeList = fetchedPlaceList
-                fetchedPlaceList.placeIds.forEach {placeId in
-                    getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
-                        if let error = error {
-                            print("An error occurred : \(error.localizedDescription)")
-                            return
+                fetchedPlaceList.placeIds
+                    .filter{!self.places.map{$0.placeID!}.contains($0)}
+                    .forEach {placeId in
+                        getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
+                            if let error = error {
+                                print("An error occurred : \(error.localizedDescription)")
+                                return
+                            }
+                            if let place = place {
+                                self.places.append(place)
+                            }
                         }
-                        if let place = place {
-                            self.places.append(place)
-                        }
-                    }
                 }
             })
         }
@@ -202,7 +204,6 @@ class FirestorePlaceList: ObservableObject {
     
     func removePlaceListListener() {
         self.placeListListener?.remove()
-        self.places = []
     }
 }
 
