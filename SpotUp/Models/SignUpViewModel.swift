@@ -1,8 +1,7 @@
 import Foundation
 import Combine
-//import Navajo_Swift
 
-class UserViewModel: ObservableObject {
+class SignUpViewModel: ObservableObject {
     // input
     @Published var username = ""
     @Published var email = ""
@@ -40,10 +39,9 @@ class UserViewModel: ObservableObject {
     }
     
     private func isValidEmail(emailID:String) -> Bool {
-        let minLength = emailID.count >= 6
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        return (minLength && emailTest.evaluate(with: emailID))
+        return emailTest.evaluate(with: emailID)
     }
     
     private var isEmailValidEmailAddrPublisher: AnyPublisher<Bool, Never> {
@@ -90,6 +88,16 @@ class UserViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
+    private var isPasswordMinLengthPublisher: AnyPublisher<Bool, Never> {
+        $password
+            .debounce(for: 0.8, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .map { password in
+                return password.count >= 6
+        }
+        .eraseToAnyPublisher()
+    }
+    
     private var arePasswordsEqualPublisher: AnyPublisher<Bool, Never> {
         Publishers.CombineLatest($password, $passwordAgain)
             .debounce(for: 0.2, scheduler: RunLoop.main)
@@ -101,15 +109,19 @@ class UserViewModel: ObservableObject {
     
     enum PasswordCheck {
         case valid
+        case notLongEnough
         case empty
         case noMatch
     }
     
     private var isPasswordValidPublisher: AnyPublisher<PasswordCheck, Never> {
-        Publishers.CombineLatest(isPasswordEmptyPublisher, arePasswordsEqualPublisher)
-            .map { passwordIsEmpty, passwordsAreEqual in
+        Publishers.CombineLatest3(isPasswordEmptyPublisher, isPasswordMinLengthPublisher, arePasswordsEqualPublisher)
+            .map { passwordIsEmpty, passwordIsMinLength, passwordsAreEqual in
                 if (passwordIsEmpty) {
                     return .empty
+                }
+                else if (!passwordIsMinLength) {
+                    return .notLongEnough
                 }
                 else if (!passwordsAreEqual) {
                     return .noMatch
@@ -160,8 +172,10 @@ class UserViewModel: ObservableObject {
                 switch passwordCheck {
                 case .empty:
                     return "Password must not be empty"
+                case .notLongEnough:
+                    return "Password must be at least 6 characters long"
                 case .noMatch:
-                    return "Passwords (minimum length >= 6) don't match"
+                    return "Passwords don't match"
                 default:
                     return ""
                 }

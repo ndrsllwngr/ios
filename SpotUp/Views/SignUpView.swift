@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SignUpView: View {
     
-    @ObservedObject private var userViewModel = UserViewModel()
+    @ObservedObject private var signUpViewModel = SignUpViewModel()
     @State var presentAlert = false
     
     
@@ -18,22 +18,22 @@ struct SignUpView: View {
         VStack {
             Text("Sign Up")
             Form {
-                Section(footer: Text(userViewModel.usernameMessage).foregroundColor(.red)) {
-                    TextField("Username", text: $userViewModel.username)
+                Section(footer: Text(signUpViewModel.usernameMessage).foregroundColor(.red)) {
+                    TextField("Username", text: $signUpViewModel.username)
                         .autocapitalization(.none)
                 }
-                Section(footer: Text(userViewModel.emailMessage).foregroundColor(.red)) {
-                    TextField("Email", text: $userViewModel.email)
+                Section(footer: Text(signUpViewModel.emailMessage).foregroundColor(.red)) {
+                    TextField("Email", text: $signUpViewModel.email)
                         .autocapitalization(.none)
                 }
-                Section(footer: Text(userViewModel.passwordMessage).foregroundColor(.red)) {
-                    SecureField("Password", text: $userViewModel.password)
-                    SecureField("Password again", text: $userViewModel.passwordAgain)
+                Section(footer: Text(signUpViewModel.passwordMessage).foregroundColor(.red)) {
+                    SecureField("Password", text: $signUpViewModel.password)
+                    SecureField("Password again", text: $signUpViewModel.passwordAgain)
                 }
                 Section {
                     Button(action: { self.signUp() }) {
                         Text("Sign up")
-                    }.disabled(!self.userViewModel.isValid)
+                    }.disabled(!self.signUpViewModel.isValid)
                 }
             }
             Spacer()
@@ -41,7 +41,7 @@ struct SignUpView: View {
     }
     
     func signUp() {
-        FirebaseAuthentication.shared.signUp(username: userViewModel.username, email: userViewModel.email, password: userViewModel.password) { (result, error) in
+        FirebaseAuthentication.shared.signUp(username: signUpViewModel.username, email: signUpViewModel.email, password: signUpViewModel.password) { (result, error) in
             if error != nil {
                 print("Error")
             } else {
