@@ -105,6 +105,33 @@ func addPlaceToList(placeID: String, placeListId: String) {
     }
 }
 
+func followPlaceList(userId: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "follower_ids": FieldValue.arrayUnion([userId])
+    ]) { err in
+        if let err = err {
+            print("Error following PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully followed")
+        }
+    }
+}
+
+func unfollowPlaceList(userId: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "follower_ids": FieldValue.arrayRemove([userId])
+    ]) { err in
+        if let err = err {
+            print("Error unfollowing PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully unfollowed")
+        }
+    }
+}
+
+
 class FirestoreProfile: ObservableObject {
     
     @Published var userProfileListener: ListenerRegistration? = nil

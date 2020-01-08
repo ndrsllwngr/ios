@@ -15,13 +15,31 @@ struct PlaceListView: View {
     var placeListId: String
     var isOwnedPlacelist: Bool
     
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
-
+    
     @State private var selection = 0
     @State var showSheet = false
     
     var body: some View {
         VStack {
+            if (self.firestorePlaceList.placeList == nil) {
+                Text("")
+            } else if (!self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    
+                }) {
+                    Text("Follow")
+                }
+            } else {
+                Button(action: {
+                    unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                }) {
+                    Text("Unfollow")
+                }
+            }
+            
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
                 Text("Map").tag(1)
@@ -43,8 +61,8 @@ struct PlaceListView: View {
         }) {
             Image(systemName: "line.horizontal.3")
         })
-        .sheet(isPresented: $showSheet) {
-            PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+            .sheet(isPresented: $showSheet) {
+                PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
         }
         .onAppear {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
