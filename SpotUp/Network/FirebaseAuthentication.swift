@@ -12,8 +12,12 @@ import FirebaseAuth
 
 class FirebaseAuthentication: ObservableObject {
     
+    static let shared = FirebaseAuthentication()
+    
     @Published var currentUser: FirebaseUser?
     @Published var isLoggedIn: Bool?
+    
+    private init(){}
     
     func listen() {
         Auth.auth().addStateDidChangeListener { (auth, user) in
