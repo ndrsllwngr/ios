@@ -9,11 +9,11 @@
 import SwiftUI
 
 struct ListView: View {
-    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     var body: some View {
         List {
-            ForEach(self.placesConnection.places, id: \.self) { place in
+            ForEach(self.firestorePlaceList.places, id: \.self) { place in
                 NavigationLink(destination: ItemView(place:place)) {
                     ListRowPlace(place : place)
                 }

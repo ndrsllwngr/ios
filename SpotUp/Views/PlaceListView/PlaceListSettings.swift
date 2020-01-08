@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PlaceListSettings: View {
-    var placeList: PlaceList
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var showSheet: Bool
     @State private var newListName: String = ""
     
@@ -16,19 +16,23 @@ struct PlaceListSettings: View {
         VStack {
             Text("Edit List")
             Spacer()
-            TextField(self.placeList.name, text: $newListName)
-            HStack {
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("cancel")
-                }
-                Spacer()
-                Button(action: {
-                    updatePlaceList(placeListId: self.placeList.id, newName: self.newListName)
-                    self.showSheet.toggle()
-                }) {
-                    Text("save")
+            if self.firestorePlaceList.placeList == nil {
+                Text("Loading")
+            } else {
+                TextField(self.firestorePlaceList.placeList!.name, text: $newListName)
+                HStack {
+                    Button(action: {
+                        self.showSheet.toggle()
+                    }) {
+                        Text("cancel")
+                    }
+                    Spacer()
+                    Button(action: {
+                        updatePlaceList(placeListId: self.firestorePlaceList.placeList!.id, newName: self.newListName)
+                        self.showSheet.toggle()
+                    }) {
+                        Text("save")
+                    }
                 }
             }
             Spacer()

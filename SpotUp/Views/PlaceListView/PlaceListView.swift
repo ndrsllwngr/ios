@@ -12,10 +12,10 @@ let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner:
 
 struct PlaceListView: View {
     
-    var placeList: PlaceList
+    var placeListId: String
     var isOwnedPlacelist: Bool
     
-    @ObservedObject var placesConnection = GooglePlacesConnection()
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
 
     @State private var selection = 0
     @State var showSheet = false
@@ -32,31 +32,31 @@ struct PlaceListView: View {
             Spacer()
             
             if selection == 0 {
-                ListView().environmentObject(placesConnection)
+                ListView().environmentObject(firestorePlaceList)
             } else {
-                MapView().environmentObject(placesConnection)
+                MapView().environmentObject(firestorePlaceList)
             }
         }
-        .navigationBarTitle(placeList.name)
+        .navigationBarTitle(firestorePlaceList.placeList != nil ? firestorePlaceList.placeList!.name : "")
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {
             Image(systemName: "line.horizontal.3")
         })
         .sheet(isPresented: $showSheet) {
-            PlaceListSettings(placeList: self.placeList, showSheet: self.$showSheet)
+            PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
         }
         .onAppear {
-            self.placesConnection.getPlaces(placeIds: self.placeList.placeIds)
+            self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
         }
         .onDisappear {
-            self.placesConnection.places = []
+            self.firestorePlaceList.removePlaceListListener()
         }
     }
 }
 
-struct ListView_Previews: PreviewProvider {
-    static var previews: some View {
-        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
-    }
-}
+//struct ListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
+//    }
+//}

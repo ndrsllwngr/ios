@@ -104,7 +104,7 @@ struct HomeView: View {
                         };
                         if selection == "lists" {
                             List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeList: placeList, isOwnedPlacelist: false)){Text(placeList.name)}
+                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)){Text(placeList.name)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()
@@ -112,7 +112,7 @@ struct HomeView: View {
                         };
                         if selection == "accounts" {
                             List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (user: User) in NavigationLink(destination: ProfileView(isMyProfile: false, profileUserId: user.id)){Text(user.username)}
+                                (user: User) in NavigationLink(destination: ProfileView(profileUserId: user.id)){Text(user.username)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()

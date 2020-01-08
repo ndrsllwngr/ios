@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var firebaseAuthentication = FirebaseAuthentication()
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @State var launchedBefore = false
     @State var permissionRequestedBefore = false
     
@@ -23,7 +23,7 @@ struct ContentView: View {
             } else if !self.permissionRequestedBefore {
                 PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
             } else if firebaseAuthentication.currentUser != nil {
-                TabBarView().environmentObject(firebaseAuthentication)
+                TabBarView()
             } else {
                 LoginView()
             }
@@ -39,7 +39,7 @@ struct ContentView: View {
     }
     
     func getUser() {
-        firebaseAuthentication.listen()
+        FirebaseAuthentication.shared.listen()
     }
     
     func setLaunchedBefore() {

@@ -14,7 +14,6 @@ struct SignUpView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     
-    @EnvironmentObject var session: FirebaseAuthentication
     
     var body: some View {
         Group {
@@ -47,7 +46,7 @@ struct SignUpView: View {
     
     func signUp() {
         if !username.isEmpty && !email.isEmpty && !password.isEmpty {
-            session.signUp(username: username, email: email, password: password) { (result, error) in
+            FirebaseAuthentication.shared.signUp(username: username, email: email, password: password) { (result, error) in
                 if error != nil {
                     print("Error")
                 } else {

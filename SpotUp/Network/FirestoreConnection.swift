@@ -7,6 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
+import GooglePlaces
 
 let db = Firestore.firestore()
 let dbUsersRef = db.collection("users")
@@ -91,6 +92,19 @@ func deletePlaceList(placeListToDelete: PlaceList) {
     }
 }
 
+func addPlaceToList(placeID: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "place_ids": FieldValue.arrayUnion([placeID])
+    ]) { err in
+        if let err = err {
+            print("Error adding place to PlaceList: \(err)")
+        } else {
+            print("Place successfully added")
+        }
+    }
+}
+
 class FirestoreProfile: ObservableObject {
     
     @Published var userProfileListener: ListenerRegistration? = nil
@@ -156,8 +170,44 @@ class FirestoreProfile: ObservableObject {
     
 }
 
-class FirestoreSearch: ObservableObject {
+class FirestorePlaceList: ObservableObject {
     
+    @Published var placeListListener: ListenerRegistration? = nil
+    @Published var placeList: PlaceList? = nil
+    @Published var places: [GMSPlace] = []
+
+    func addPlaceListListener(placeListId: String) {
+        dbPlaceListsRef.document(placeListId).addSnapshotListener { documentSnapshot, error in
+            guard let documentSnapshot = documentSnapshot else {
+                print("Error retrieving user")
+                return
+            }
+            documentSnapshot.data().flatMap({ data in
+                let fetchedPlaceList = dataToPlaceList(data: data)
+                self.placeList = fetchedPlaceList
+                fetchedPlaceList.placeIds.forEach {placeId in
+                    getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
+                        if let error = error {
+                            print("An error occurred : \(error.localizedDescription)")
+                            return
+                        }
+                        if let place = place {
+                            self.places.append(place)
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    func removePlaceListListener() {
+        self.placeListListener?.remove()
+        self.places = []
+    }
+}
+
+class FirestoreSearch: ObservableObject {
+    // TODO use listeners
     @Published var allUsers: [User] = []
     @Published var allPublicPlaceLists: [PlaceList] = []
     

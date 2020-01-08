@@ -11,14 +11,14 @@ import UIKit
 import GoogleMaps
 
 struct MapView: View {
-    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @State var currentIndex: Int = 0
     var body: some View {
             VStack{
                 ZStack{
-                    GoogMapView(currentIndex: self.$currentIndex).environmentObject(self.placesConnection)
-                    if(!self.placesConnection.places.isEmpty){
-                        PlaceCard(currentIndex: self.$currentIndex).environmentObject(self.placesConnection)
+                    GoogMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
+                    if(!self.firestorePlaceList.places.isEmpty){
+                        PlaceCard(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
                     }
                 }
                 
@@ -35,7 +35,7 @@ struct MapView_Previews: PreviewProvider {
 
 
 struct GoogMapView : UIViewRepresentable {
-    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var currentIndex: Int
     var defaultLocation = CLLocationCoordinate2D(
         latitude: 34.6692097,
@@ -43,7 +43,7 @@ struct GoogMapView : UIViewRepresentable {
     )
     func makeUIView(context: Context) -> GMSMapView {
        
-        let initialCoords = !placesConnection.places.isEmpty ? placesConnection.places[currentIndex].coordinate : self.defaultLocation
+        let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].coordinate : self.defaultLocation
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,
@@ -58,11 +58,11 @@ struct GoogMapView : UIViewRepresentable {
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
-        if(placesConnection.places.isEmpty) {return}
-        let currentPlace = placesConnection.places[currentIndex].coordinate
+        if(firestorePlaceList.places.isEmpty) {return}
+        let currentPlace = firestorePlaceList.places[currentIndex].coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
-        for (index,place) in self.placesConnection.places.enumerated() {
+        for (index,place) in self.firestorePlaceList.places.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
                 latitude: place.coordinate.latitude,
@@ -83,7 +83,7 @@ struct GoogMapView : UIViewRepresentable {
 }
 
 struct PlaceCard: View {
-    @EnvironmentObject var placesConnection: GooglePlacesConnection
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var currentIndex: Int
     
     var body: some View {
@@ -98,9 +98,9 @@ struct PlaceCard: View {
                     }
                 }
                 
-                Text(self.placesConnection.places[self.currentIndex].name != nil ? self.placesConnection.places[self.currentIndex].name! : "")
+                Text(self.firestorePlaceList.places[self.currentIndex].name != nil ? self.firestorePlaceList.places[self.currentIndex].name! : "")
                 
-                if(self.currentIndex < (self.placesConnection.places.count - 1)){
+                if(self.currentIndex < (self.firestorePlaceList.places.count - 1)){
                     Button(action: {
                         self.currentIndex+=1
                     }) {

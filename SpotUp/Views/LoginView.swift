@@ -13,9 +13,7 @@ struct LoginView: View {
     
     @State var email: String = ""
     @State var password: String = ""
-    
-    @EnvironmentObject var session: FirebaseAuthentication
-    
+        
     var body: some View {
         NavigationView {
             VStack {
@@ -38,7 +36,7 @@ struct LoginView: View {
     }
     
     func logIn() {
-        session.logIn(email: email, password: password) { (result, error) in
+        FirebaseAuthentication.shared.logIn(email: email, password: password) { (result, error) in
             if error != nil {
                 print("Error")
             } else {
