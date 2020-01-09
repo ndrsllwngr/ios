@@ -15,14 +15,23 @@ struct ProfileView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
-
+    
     @State private var showingChildView = false
     @State var showSheet = false
     @State var sheetSelection = "none"
+    @State var profileUserIdToNavigateTo: String? = nil
+    @State var goToOtherProfile: Int? = nil
+
     
     var body: some View {
         NavigationView {
             VStack {
+                if (self.profileUserIdToNavigateTo != nil) {
+                    NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
+                               Text("")
+                    }
+                }
+       
                 ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
                 List {
                     if isMyProfile {
@@ -66,6 +75,10 @@ struct ProfileView: View {
                     SettingsSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "create_placelist"{
                     CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
+                } else if self.sheetSelection == "follower" {
+                    UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.profile.user!.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                } else if self.sheetSelection == "following" {
+                    UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.profile.user!.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
                 }
             }
             .navigationBarTitle(Text("Profil"), displayMode: .inline)
@@ -127,21 +140,32 @@ struct ProfileInfoView: View {
                         
                     }
                     Spacer()
-                    VStack{
-                        Text(self.profile.user != nil ? "\(self.profile.user!.isFollowedBy.count)" : "")
-                            .font(.system(size: 14))
-                            .bold()
-                        Text("Follower")
-                            .font(.system(size: 12))
-                        
+                    
+                    Button(action: {
+                        self.sheetSelection = "follower"
+                        self.showSheet.toggle()
+                    }) {
+                        VStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.isFollowedBy.count)" : "")
+                                .font(.system(size: 14))
+                                .bold()
+                            Text("Follower")
+                                .font(.system(size: 12))
+                        }
                     }
+                    
                     Spacer()
-                    VStack{
-                        Text(self.profile.user != nil ? "\(self.profile.user!.isFollowing.count)" : "")
-                            .font(.system(size: 14))
-                            .bold()
-                        Text("Following")
-                            .font(.system(size: 12))
+                    Button(action: {
+                        self.sheetSelection = "following"
+                        self.showSheet.toggle()
+                    }) {
+                        VStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.isFollowing.count)" : "")
+                                .font(.system(size: 14))
+                                .bold()
+                            Text("I am following")
+                                .font(.system(size: 12))
+                        }
                     }
                 }
             }
