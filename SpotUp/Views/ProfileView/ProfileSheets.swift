@@ -99,6 +99,7 @@ struct SettingsSheet: View {
                 }
             }
             Button(action: {
+                self.showSheet.toggle()
                 FirebaseAuthentication.shared.logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
