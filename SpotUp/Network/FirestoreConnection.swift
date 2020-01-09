@@ -105,6 +105,81 @@ func addPlaceToList(placeID: String, placeListId: String) {
     }
 }
 
+func followPlaceList(userId: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "follower_ids": FieldValue.arrayUnion([userId])
+    ]) { err in
+        if let err = err {
+            print("Error following PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully followed")
+        }
+    }
+}
+
+func unfollowPlaceList(userId: String, placeListId: String) {
+    let listRef = dbPlaceListsRef.document(placeListId)
+    listRef.updateData([
+        "follower_ids": FieldValue.arrayRemove([userId])
+    ]) { err in
+        if let err = err {
+            print("Error unfollowing PlaceList: \(err)")
+        } else {
+            print("PlaceList successfully unfollowed")
+        }
+    }
+}
+
+func followUser(myUserId: String, userIdToFollow: String) {
+    let listRefMyUser = dbUsersRef.document(myUserId)
+    listRefMyUser.updateData([
+        "is_following": FieldValue.arrayUnion([userIdToFollow])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully followed")
+        }
+    }
+    let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
+    listRefUserToFollow.updateData([
+        "is_followed_by": FieldValue.arrayUnion([myUserId])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully followed")
+        }
+    }
+}
+
+func unfollowUser(myUserId: String, userIdToFollow: String) {
+    let listRefMyUser = dbUsersRef.document(myUserId)
+    listRefMyUser.updateData([
+        "is_following": FieldValue.arrayRemove([userIdToFollow])
+    ]) { err in
+        if let err = err {
+            print("Error unfollowing user: \(err)")
+        } else {
+            print("User successfully unfollowed")
+        }
+    }
+    let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
+    listRefUserToFollow.updateData([
+        "is_followed_by": FieldValue.arrayRemove([myUserId])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully unfollowed")
+        }
+    }
+}
+
+
+
+
 class FirestoreProfile: ObservableObject {
     
     @Published var userProfileListener: ListenerRegistration? = nil
@@ -183,11 +258,14 @@ class FirestorePlaceList: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ data in
+                print("ListenerTriggered")
                 let fetchedPlaceList = dataToPlaceList(data: data)
                 self.placeList = fetchedPlaceList
+                self.places = []
+                
                 fetchedPlaceList.placeIds
-                    .filter{!self.places.map{$0.placeID!}.contains($0)}
                     .forEach {placeId in
+                        //dispatchGroup.enter()
                         getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
                             if let error = error {
                                 print("An error occurred : \(error.localizedDescription)")
@@ -204,6 +282,8 @@ class FirestorePlaceList: ObservableObject {
     
     func removePlaceListListener() {
         self.placeListListener?.remove()
+        self.placeList = nil
+        self.places = []
     }
 }
 
