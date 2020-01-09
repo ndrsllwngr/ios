@@ -1,19 +1,11 @@
-//
-//  ListsResults.swift
-//  SpotUp
-//
-//  Created by Andreas Ellwanger on 22.12.19.
-//
-
 import SwiftUI
 import GooglePlaces
 
-struct ListsResults: View {
+struct SearchResultsPlaces: View {
     @Binding var googlePlaces: [GMSAutocompletePrediction]
     var body: some View {
         List { ForEach(self.googlePlaces, id: \.placeID) {
             result in HStack {
-                //                Text(result.placeID)
                 NavigationLink(destination: ItemView(placeID: result.placeID)) {
                     Text(result.attributedFullText.string)
                 }
@@ -25,8 +17,8 @@ struct ListsResults: View {
     }
 }
 
-//struct ListsResults_Previews: PreviewProvider {
+//struct SearchResultsPlaces: PreviewProvider {
 //    static var previews: some View {
-////        ListsResults()
+////        SearchResultsPlaces()
 //    }
 //}
