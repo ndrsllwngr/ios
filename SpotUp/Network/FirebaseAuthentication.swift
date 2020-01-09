@@ -20,6 +20,7 @@ class FirebaseAuthentication: ObservableObject {
     private init(){}
     
     func listen() {
+        //try! Auth.auth().signOut()
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
                 self.currentUser = FirebaseUser(uid: user.uid, email: user.email!)
