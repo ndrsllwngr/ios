@@ -1,63 +1,17 @@
 import Foundation
 import Combine
 
-class SignUpViewModel: ObservableObject {
+class LoginViewModel: ObservableObject {
     // input
-    @Published var username = ""
     @Published var email = ""
     @Published var password = ""
-    @Published var passwordAgain = ""
     
     // output
-    @Published var usernameMessage = ""
     @Published var emailMessage = ""
     @Published var passwordMessage = ""
     @Published var isValid = false
     
     private var cancellableSet: Set<AnyCancellable> = []
-    
-    // USERNAME
-    private var isUsernameEmptyPublisher: AnyPublisher<Bool, Never> {
-        $username
-            .debounce(for: 0.8, scheduler: RunLoop.main)
-            .removeDuplicates()
-            .map { username in
-                return username == ""
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    private var isUsernameMinLengthPublisher: AnyPublisher<Bool, Never> {
-        $username
-            .debounce(for: 0.8, scheduler: RunLoop.main)
-            .removeDuplicates()
-            .map { username in
-                return username.count >= 3
-        }
-        .eraseToAnyPublisher()
-    }
-    
-    enum UsernameCheck {
-        case valid
-        case notLongEnough
-        case empty
-    }
-    
-    private var isUsernameValidPublisher: AnyPublisher<UsernameCheck, Never> {
-        Publishers.CombineLatest(isUsernameEmptyPublisher, isUsernameMinLengthPublisher)
-            .map { usernameIsEmpty, usernameIsMinLength in
-                if (usernameIsEmpty) {
-                    return .empty
-                }
-                else if (!usernameIsMinLength) {
-                    return .notLongEnough
-                }
-                else {
-                    return .valid
-                }
-        }
-        .eraseToAnyPublisher()
-    }
     
     // EMAIL
     private var isEmailEmptyPublisher: AnyPublisher<Bool, Never> {
@@ -130,33 +84,20 @@ class SignUpViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    private var arePasswordsEqualPublisher: AnyPublisher<Bool, Never> {
-        Publishers.CombineLatest($password, $passwordAgain)
-            .debounce(for: 0.2, scheduler: RunLoop.main)
-            .map { password, passwordAgain in
-                return password == passwordAgain
-        }
-        .eraseToAnyPublisher()
-    }
-    
     enum PasswordCheck {
         case valid
         case notLongEnough
         case empty
-        case noMatch
     }
     
     private var isPasswordValidPublisher: AnyPublisher<PasswordCheck, Never> {
-        Publishers.CombineLatest3(isPasswordEmptyPublisher, isPasswordMinLengthPublisher, arePasswordsEqualPublisher)
-            .map { passwordIsEmpty, passwordIsMinLength, passwordsAreEqual in
+        Publishers.CombineLatest(isPasswordEmptyPublisher, isPasswordMinLengthPublisher)
+            .map { passwordIsEmpty, passwordIsMinLength in
                 if (passwordIsEmpty) {
                     return .empty
                 }
                 else if (!passwordIsMinLength) {
                     return .notLongEnough
-                }
-                else if (!passwordsAreEqual) {
-                    return .noMatch
                 }
                 else {
                     return .valid
@@ -167,38 +108,21 @@ class SignUpViewModel: ObservableObject {
     
     // TOTAL VALID CHECK
     private var isFormValidPublisher: AnyPublisher<Bool, Never> {
-        Publishers.CombineLatest3(isUsernameValidPublisher, isEmailValidPublisher, isPasswordValidPublisher)
-            .map { usernameIsValid, emailIsValid, passwordIsValid in
-                // The compiler is unable to type-check this expression in reasonable time;
-                // try breaking up the expression into distinct sub-expressions bool checks
-                let firstCheck = (usernameIsValid == .valid) && (emailIsValid == .valid)
-                return firstCheck && (passwordIsValid == .valid)
+        Publishers.CombineLatest(isEmailValidPublisher, isPasswordValidPublisher)
+            .map { emailIsValid, passwordIsValid in
+                return (emailIsValid == .valid) && (passwordIsValid == .valid)
         }
         .eraseToAnyPublisher()
     }
     
     init() {
-        isUsernameValidPublisher
-            .receive(on: RunLoop.main)
-            .map { usernameCheck in
-                switch usernameCheck {
-                case .empty:
-                    return ""
-                case .notLongEnough:
-                    return "Username must at least have 3 characters"
-                default:
-                    return ""
-                }
-        }
-        .assign(to: \.usernameMessage, on: self)
-        .store(in: &cancellableSet)
-        
         isEmailValidPublisher
             .receive(on: RunLoop.main)
             .map { emailCheck in
                 switch emailCheck {
                 case .empty:
                     return ""
+                //                    return "Email must not be empty"
                 case .notValid:
                     return "Email must be a valid email address"
                 default:
@@ -217,8 +141,6 @@ class SignUpViewModel: ObservableObject {
                 //                    return "Password must not be empty"
                 case .notLongEnough:
                     return "Password must be at least 6 characters long"
-                case .noMatch:
-                    return "Passwords don't match"
                 default:
                     return ""
                 }
@@ -231,4 +153,5 @@ class SignUpViewModel: ObservableObject {
             .assign(to: \.isValid, on: self)
             .store(in: &cancellableSet)
     }
+    
 }

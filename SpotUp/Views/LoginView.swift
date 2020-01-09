@@ -11,38 +11,45 @@ import UIKit
 
 struct LoginView: View {
     
-    @State var email: String = ""
-    @State var password: String = ""
+    @ObservedObject private var loginViewModel = LoginViewModel()
         
     var body: some View {
         NavigationView {
             VStack {
-                Text("LogInView")
-                TextField("Email", text: $email)
-                SecureField("Password", text: $password)
-                Button(action: logIn) {
-                    Text("Sign In")
-                }
-                .padding()
-                NavigationLink(destination: SignUpView()) {
-                    Text("Sign Up")
+                Text("Login")
+                Form {
+                    Section(footer: Text(loginViewModel.emailMessage).foregroundColor(.red)) {
+                        TextField("Email", text: $loginViewModel.email)
+                            .autocapitalization(.none)
+                    }
+                    Section(footer: Text(loginViewModel.passwordMessage).foregroundColor(.red)) {
+                        SecureField("Password", text: $loginViewModel.password)
+                    }
+                    Section {
+                        Button(action: { self.logIn() }) {
+                            Text("Login")
+                        }.disabled(!self.loginViewModel.isValid)
+                    }
+                    Section {
+                    NavigationLink(destination: SignUpView()) {
+                        Text("Sign Up")
+                    }
+                    }
                 }
                 Spacer()
             }
-                
-            .padding()
         }
         
     }
     
     func logIn() {
-        FirebaseAuthentication.shared.logIn(email: email, password: password) { (result, error) in
+        FirebaseAuthentication.shared.logIn(email: loginViewModel.email, password: loginViewModel.password) { (result, error) in
             if error != nil {
                 print("Error")
             } else {
                 print("success")
-                self.email = ""
-                self.password = ""
+                self.loginViewModel.email = ""
+                self.loginViewModel.password = ""
             }
         }
     }

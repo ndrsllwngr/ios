@@ -84,40 +84,32 @@ struct HomeView: View {
                     
                     // RESULTS
                     VStack {
-                        if selection == "places" {
-//                            Button(action: {self.GSM()}){Text("Search Google Places")}
-                            //                            GPViewControllerWrapper()
-//                            List { ForEach(self.googlePlaces, id: \.placeID) {
-//                                result in HStack {
-//                                    Text(result.placeID)
-//                                    Text(result.attributedFullText.string)
-//                                    Spacer()
-//                                    }
-//                                }
-//                                Spacer()
-//                            }
+                        if searchTerm == "" {
+                            SearchResultsEmptyStateView()
+                        }
+                        else if selection == "places" {
                             // WARN! GSM modifies states during render
                             GSM(query: self.searchTerm)
-                            ListsResults(googlePlaces: $googlePlaces)
-                            .resignKeyboardOnDragGesture()
+                            SearchResultsPlaces(googlePlaces: $googlePlaces)
+                                .resignKeyboardOnDragGesture()
                             Spacer()
-                        };
-                        if selection == "lists" {
+                        }
+                        else if selection == "lists" {
                             List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
                                 (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)){Text(placeList.name)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()
                             Spacer()
-                        };
-                        if selection == "accounts" {
+                        }
+                        else if selection == "accounts" {
                             List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
                                 (user: User) in NavigationLink(destination: ProfileView(profileUserId: user.id)){Text(user.username)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()
                             Spacer()
-                        };
+                        }
                     } .navigationBarTitle(Text("Search"))
                 }
             }
