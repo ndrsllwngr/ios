@@ -14,6 +14,7 @@ struct HomeView: View {
     @State private var searchTerm: String = ""
     @State private var showCancelButton: Bool = false
     @ObservedObject var searchSpace = FirestoreSearch()
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     let searchController = UISearchController(searchResultsController: nil)
     @State private var googlePlaces: [GMSAutocompletePrediction] = []
     
@@ -104,7 +105,7 @@ struct HomeView: View {
                         };
                         if selection == "lists" {
                             List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false)){Text(placeList.name)}
+                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)){Text(placeList.name)}
                                 }
                                 Spacer()
                             }.resignKeyboardOnDragGesture()

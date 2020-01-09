@@ -24,16 +24,16 @@ struct PlaceListView: View {
     
     var body: some View {
         VStack {
-            if (self.firestorePlaceList.placeList == nil) {
+            if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList == nil) {
                 Text("")
-            } else if (!self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+            } else if (!self.isOwnedPlacelist && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                     
                 }) {
                     Text("Follow")
                 }
-            } else {
+            } else if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
                 Button(action: {
                     unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
