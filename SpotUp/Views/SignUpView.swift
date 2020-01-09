@@ -45,8 +45,10 @@ struct SignUpView: View {
             if error != nil {
                 print("Error")
             } else {
-//                userViewModel.email = ""
-//                userViewModel.password = ""
+                self.signUpViewModel.username = ""
+                self.signUpViewModel.email = ""
+                self.signUpViewModel.password = ""
+                self.signUpViewModel.passwordAgain = ""
             }
         }
     }

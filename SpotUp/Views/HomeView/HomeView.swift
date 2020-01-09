@@ -91,7 +91,7 @@ struct HomeView: View {
                             // WARN! GSM modifies states during render
                             GSM(query: self.searchTerm)
                             SearchResultsPlaces(googlePlaces: $googlePlaces)
-                            .resignKeyboardOnDragGesture()
+                                .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                         else if selection == "lists" {
