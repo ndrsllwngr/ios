@@ -72,7 +72,7 @@ class SearchViewModel: ObservableObject {
                                                     if let results = results {
                                                         for result in results {
                                                             print("Result \(result.attributedFullText) with placeID \(result.placeID)")
-                                                            dump(result)
+                                                            //dump(result)
                                                         }
                                                         searchResult = results
                                                     }

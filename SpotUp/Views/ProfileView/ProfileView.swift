@@ -14,6 +14,8 @@ struct ProfileView: View {
     @State var isMyProfile: Bool = false
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
+
     @State private var showingChildView = false
     @State var showSheet = false
     @State var sheetSelection = "none"
@@ -28,7 +30,7 @@ struct ProfileView: View {
                         Section(header: Text("Owned Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: true)
+                                    destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: true).environmentObject(self.firestorePlaceList)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -38,7 +40,7 @@ struct ProfileView: View {
                         Section(header: Text("Followed Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
+                                    destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -47,7 +49,7 @@ struct ProfileView: View {
                     } else {
                         ForEach(profile.placeLists){ placeList in
                             NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
+                                destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }

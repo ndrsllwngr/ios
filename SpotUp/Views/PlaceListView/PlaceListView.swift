@@ -13,10 +13,11 @@ let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner:
 struct PlaceListView: View {
     
     var placeListId: String
+    var placeListName: String
     var isOwnedPlacelist: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     @State private var selection = 0
     @State var showSheet = false
@@ -55,7 +56,7 @@ struct PlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .navigationBarTitle(firestorePlaceList.placeList != nil ? firestorePlaceList.placeList!.name : "")
+        .navigationBarTitle(self.firestorePlaceList.placeList != nil ? self.firestorePlaceList.placeList!.name : self.placeListName)
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {
