@@ -210,11 +210,14 @@ class FirestorePlaceList: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ data in
+                print("ListenerTriggered")
                 let fetchedPlaceList = dataToPlaceList(data: data)
                 self.placeList = fetchedPlaceList
+                self.places = []
+                
                 fetchedPlaceList.placeIds
-                    .filter{!self.places.map{$0.placeID!}.contains($0)}
                     .forEach {placeId in
+                        //dispatchGroup.enter()
                         getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
                             if let error = error {
                                 print("An error occurred : \(error.localizedDescription)")
@@ -231,6 +234,8 @@ class FirestorePlaceList: ObservableObject {
     
     func removePlaceListListener() {
         self.placeListListener?.remove()
+        self.placeList = nil
+        self.places = []
     }
 }
 
