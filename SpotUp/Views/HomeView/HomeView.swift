@@ -115,12 +115,12 @@ struct HomeView: View {
                 }
             }
         }.onAppear {
-            self.searchSpace.getAllPublicPlaceLists()
-            self.searchSpace.getAllUsers()
+            self.searchSpace.addAllPublicPlaceListsListener()
+            self.searchSpace.addAllUsersListener()
         }
         .onDisappear {
-            self.searchSpace.cleanAllPublicPlaceLists()
-            self.searchSpace.cleanAllUsers()
+            self.searchSpace.removeAllUsersListener()
+            self.searchSpace.removeAllPublicPlaceListsListener()
         }
     }
     

@@ -288,13 +288,15 @@ class FirestorePlaceList: ObservableObject {
 }
 
 class FirestoreSearch: ObservableObject {
-    // TODO use listeners
     @Published var allUsers: [User] = []
     @Published var allPublicPlaceLists: [PlaceList] = []
+    @Published var allAllUsersListener: ListenerRegistration? = nil
+    @Published var allPublicPlaceListsListener: ListenerRegistration? = nil
+
     
-    func getAllUsers() {
+    func addAllUsersListener() {
         let ref = dbUsersRef
-        ref.getDocuments{ querySnapshot, error in
+        self.allAllUsersListener = ref.addSnapshotListener{ querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving all users")
                 return
@@ -306,9 +308,9 @@ class FirestoreSearch: ObservableObject {
         }   
     }
     
-    func getAllPublicPlaceLists() {
+    func addAllPublicPlaceListsListener() {
         let ref = dbPlaceListsRef.whereField("is_public", isEqualTo: true)
-        ref.getDocuments{ querySnapshot, error in
+        self.allPublicPlaceListsListener = ref.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving all public place lists")
                 return
@@ -320,11 +322,13 @@ class FirestoreSearch: ObservableObject {
         }
     }
     
-    func cleanAllUsers() {
+    func removeAllUsersListener() {
+        self.allAllUsersListener?.remove()
         self.allUsers = []
     }
     
-    func cleanAllPublicPlaceLists() {
+    func removeAllPublicPlaceListsListener() {
+        self.allPublicPlaceListsListener?.remove()
         self.allPublicPlaceLists = []
     }
 }
