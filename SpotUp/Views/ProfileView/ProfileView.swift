@@ -102,6 +102,7 @@ struct ProfileView: View {
 struct ProfileInfoView: View {
     var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -127,7 +128,7 @@ struct ProfileInfoView: View {
                     }
                     Spacer()
                     VStack{
-                        Text("1")
+                        Text(self.profile.user != nil ? "\(self.profile.user!.isFollowedBy.count)" : "")
                             .font(.system(size: 14))
                             .bold()
                         Text("Follower")
@@ -136,7 +137,7 @@ struct ProfileInfoView: View {
                     }
                     Spacer()
                     VStack{
-                        Text("1000")
+                        Text(self.profile.user != nil ? "\(self.profile.user!.isFollowing.count)" : "")
                             .font(.system(size: 14))
                             .bold()
                         Text("Following")
@@ -162,10 +163,20 @@ struct ProfileInfoView: View {
             } else {
                 HStack {
                     Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                    Button(action:  {
-                        print("follow")
-                    }) {
-                        Text("follow")
+                    if (self.profile.user == nil) {
+                        Text("")
+                    } else if (!self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                        }) {
+                            Text("Follow")
+                        }
+                    } else if (self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                        }) {
+                            Text("Unfollow")
+                        }
                     }
                     Spacer()
                 }

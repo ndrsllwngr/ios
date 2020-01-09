@@ -131,6 +131,54 @@ func unfollowPlaceList(userId: String, placeListId: String) {
     }
 }
 
+func followUser(myUserId: String, userIdToFollow: String) {
+    let listRefMyUser = dbUsersRef.document(myUserId)
+    listRefMyUser.updateData([
+        "is_following": FieldValue.arrayUnion([userIdToFollow])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully followed")
+        }
+    }
+    let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
+    listRefUserToFollow.updateData([
+        "is_followed_by": FieldValue.arrayUnion([myUserId])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully followed")
+        }
+    }
+}
+
+func unfollowUser(myUserId: String, userIdToFollow: String) {
+    let listRefMyUser = dbUsersRef.document(myUserId)
+    listRefMyUser.updateData([
+        "is_following": FieldValue.arrayRemove([userIdToFollow])
+    ]) { err in
+        if let err = err {
+            print("Error unfollowing user: \(err)")
+        } else {
+            print("User successfully unfollowed")
+        }
+    }
+    let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
+    listRefUserToFollow.updateData([
+        "is_followed_by": FieldValue.arrayRemove([myUserId])
+    ]) { err in
+        if let err = err {
+            print("Error following user: \(err)")
+        } else {
+            print("User successfully unfollowed")
+        }
+    }
+}
+
+
+
 
 class FirestoreProfile: ObservableObject {
     
