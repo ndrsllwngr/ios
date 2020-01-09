@@ -14,7 +14,6 @@ struct HomeView: View {
     @State private var searchTerm: String = ""
     @State private var showCancelButton: Bool = false
     @ObservedObject var searchSpace = FirestoreSearch()
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     let searchController = UISearchController(searchResultsController: nil)
     @State private var googlePlaces: [GMSAutocompletePrediction] = []
     
@@ -87,6 +86,7 @@ struct HomeView: View {
                     VStack {
                         if searchTerm == "" {
                             SearchResultsEmptyStateView()
+                                .resignKeyboardOnDragGesture()
                         }
                         else if selection == "places" {
                             // WARN! GSM modifies states during render
@@ -96,19 +96,13 @@ struct HomeView: View {
                             Spacer()
                         }
                         else if selection == "lists" {
-                            List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)){Text(placeList.name)}
-                                }
-                                Spacer()
-                            }.resignKeyboardOnDragGesture()
+                            SearchResultsPlaceLists(searchTerm: self.searchTerm).environmentObject(self.searchSpace)
+                                .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                         else if selection == "accounts" {
-                            List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (user: User) in NavigationLink(destination: ProfileView(profileUserId: user.id)){Text(user.username)}
-                                }
-                                Spacer()
-                            }.resignKeyboardOnDragGesture()
+                            SearchResultsAccounts(searchTerm: self.searchTerm).environmentObject(self.searchSpace)
+                                .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                     } .navigationBarTitle(Text("Search"))
