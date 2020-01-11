@@ -28,14 +28,14 @@ struct PlaceListView: View {
                 Text("")
             } else if (!self.isOwnedPlacelist && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
-                    followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                     
                 }) {
                     Text("Follow")
                 }
             } else if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
                 Button(action: {
-                    unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
                     Text("Unfollow")
                 }
@@ -67,8 +67,14 @@ struct PlaceListView: View {
         }
         .onAppear {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
+            print(self.placeListId)
+            print(self.placeListName)
+            dump(self.firestorePlaceList.places)
         }
         .onDisappear {
+            print(self.placeListId)
+            print(self.placeListName)
+            dump(self.firestorePlaceList.places)
             self.firestorePlaceList.removePlaceListListener()
         }
     }
