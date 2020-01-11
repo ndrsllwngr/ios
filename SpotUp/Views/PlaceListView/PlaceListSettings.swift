@@ -28,7 +28,7 @@ struct PlaceListSettings: View {
                     }
                     Spacer()
                     Button(action: {
-                        updatePlaceList(placeListId: self.firestorePlaceList.placeList!.id, newName: self.newListName)
+                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList!.id, newName: self.newListName)
                         self.showSheet.toggle()
                     }) {
                         Text("save")

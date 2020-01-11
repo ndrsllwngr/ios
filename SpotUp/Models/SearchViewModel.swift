@@ -1,10 +1,3 @@
-//
-//  SearchViewModel.swift
-//  SpotUp
-//
-//  Created by Andreas Ellwanger on 06.01.20.
-//
-
 import Foundation
 import Combine
 import GooglePlaces
@@ -40,7 +33,7 @@ class SearchViewModel: ObservableObject {
     
     private var isSearchTermEmptyPublisher: AnyPublisher<Bool, Never> {
         $searchTerm
-//            .debounce(for: 0.8, scheduler: RunLoop.main)
+            //            .debounce(for: 0.8, scheduler: RunLoop.main)
             .removeDuplicates()
             .map { searchTerm in
                 return searchTerm == ""
@@ -53,7 +46,7 @@ class SearchViewModel: ObservableObject {
             .map { googleIsSelected, searchIsEmpty in
                 if(googleIsSelected && !searchIsEmpty)
                 {
-                     self.runGMS(query: self.searchTerm) {
+                    self.runGMS(query: self.searchTerm) {
                         (results, error) in
                         if let error = error {
                             print("Autocomplete error: \(error)")
