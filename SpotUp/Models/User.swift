@@ -1,10 +1,3 @@
-//
-//  User.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 15.12.19.
-//
-
 import Foundation
 
 struct User: Identifiable, Decodable {

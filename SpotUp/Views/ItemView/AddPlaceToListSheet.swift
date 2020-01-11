@@ -17,7 +17,7 @@ struct AddPlaceToListSheet: View {
         VStack {
             ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
                 Button(action: {
-                    addPlaceToList(placeID: self.placeID, placeListId: placeList.id)
+                    FirestoreConnection.shared.addPlaceToList(placeID: self.placeID, placeListId: placeList.id)
                     self.showSheet.toggle()
                 }) {
                     PlacesListRow(placeList: placeList)
