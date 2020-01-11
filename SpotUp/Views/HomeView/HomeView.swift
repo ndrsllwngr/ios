@@ -10,23 +10,19 @@ import SwiftUI
 import GooglePlaces
 
 struct HomeView: View {
-    @State private var selection = "places"
-    @State private var searchTerm: String = ""
-    @State private var showCancelButton: Bool = false
+    @ObservedObject var searchViewModel = SearchViewModel()
     @ObservedObject var searchSpace = FirestoreSearch()
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
+    @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
-    @State private var googlePlaces: [GMSAutocompletePrediction] = []
-    
     
     /**
      * Create a new session token. Be sure to use the same token for calling
      * findAutocompletePredictions, as well as the subsequent place details request.
      * This ensures that the user's query and selection are billed as a single session.
      */
-    let token = GMSAutocompleteSessionToken.init()
+    //    let token = GMSAutocompleteSessionToken.init()
     // Create a type filter.
-    let filter = GMSAutocompleteFilter()
+    //    let filter = GMSAutocompleteFilter()
     
     var body: some View {
         
@@ -40,16 +36,16 @@ struct HomeView: View {
                                 Image(systemName: "magnifyingglass")
                                     .padding(.leading, 5.0)
                                 
-                                TextField("Search", text: $searchTerm, onEditingChanged: { isEditing in
+                                TextField("Search", text: $searchViewModel.searchTerm, onEditingChanged: { isEditing in
                                     self.showCancelButton = true
                                 }, onCommit: {
                                     print("onCommit")
                                 }).foregroundColor(.primary)
                                 
                                 Button(action: {
-                                    self.searchTerm = ""
+                                    self.resetSearchTerm()
                                 }) {
-                                    Image(systemName: "xmark.circle.fill").opacity(searchTerm == "" ? 0 : 1)
+                                    Image(systemName: "xmark.circle.fill").opacity(searchViewModel.searchTerm == "" ? 0.0 : 1.0)
                                 }
                             }
                             .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
@@ -59,8 +55,9 @@ struct HomeView: View {
                             
                             if showCancelButton  {
                                 Button("Cancel") {
-                                    UIApplication.shared.endEditing(true) // this must be placed before the other commands here
-                                    self.searchTerm = ""
+                                    // this must be placed before the other commands here
+                                    UIApplication.shared.endEditing(true)
+                                    self.resetSearchTerm()
                                     self.showCancelButton = false
                                 }
                                 .foregroundColor(Color(.systemBlue))
@@ -72,7 +69,7 @@ struct HomeView: View {
                         
                     }
                     // PICKER
-                    Picker(selection: $selection, label: Text("View")) {
+                    Picker(selection: $searchViewModel.searchSpaceSelection, label: Text("View")) {
                         Text("Places").tag("places")
                         Text("Lists").tag("lists")
                         Text("Accounts").tag("accounts")
@@ -85,68 +82,68 @@ struct HomeView: View {
                     
                     // RESULTS
                     VStack {
-                        if searchTerm == "" {
+                        if searchViewModel.searchTerm == "" {
                             SearchResultsEmptyStateView()
+                                .resignKeyboardOnDragGesture()
                         }
-                        else if selection == "places" {
+                        else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.googlePlaces.rawValue {
                             // WARN! GSM modifies states during render
-                            GSM(query: self.searchTerm)
-                            SearchResultsPlaces(googlePlaces: $googlePlaces)
+                            //                            GSM(query: self.searchViewModel.searchTerm)
+                            SearchResultsPlaces()
+                                .environmentObject(self.searchViewModel)
                                 .resignKeyboardOnDragGesture()
                             Spacer()
                         }
-                        else if selection == "lists" {
-                            List { ForEach(self.searchSpace.allPublicPlaceLists.filter{self.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (placeList: PlaceList) in NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)){Text(placeList.name)}
-                                }
-                                Spacer()
-                            }.resignKeyboardOnDragGesture()
+                        else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseLists.rawValue {
+                            SearchResultsPlaceLists(searchTerm: searchViewModel.searchTerm).environmentObject(self.searchSpace)
+                                .resignKeyboardOnDragGesture()
                             Spacer()
                         }
-                        else if selection == "accounts" {
-                            List { ForEach(self.searchSpace.allUsers.filter{self.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchTerm)}) {
-                                (user: User) in NavigationLink(destination: ProfileView(profileUserId: user.id)){Text(user.username)}
-                                }
-                                Spacer()
-                            }.resignKeyboardOnDragGesture()
+                        else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseAccounts.rawValue {
+                            SearchResultsAccounts(searchTerm: searchViewModel.searchTerm).environmentObject(self.searchSpace)
+                                .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                     } .navigationBarTitle(Text("Search"))
                 }
             }
         }.onAppear {
-            self.searchSpace.getAllPublicPlaceLists()
-            self.searchSpace.getAllUsers()
+            self.searchSpace.addAllPublicPlaceListsListener()
+            self.searchSpace.addAllUsersListener()
         }
         .onDisappear {
-            self.searchSpace.cleanAllPublicPlaceLists()
-            self.searchSpace.cleanAllUsers()
+            self.searchSpace.removeAllUsersListener()
+            self.searchSpace.removeAllPublicPlaceListsListener()
         }
     }
     
-    func GSM(query: String) -> Text {
-        self.filter.type = .establishment
-        
-        placesClient.findAutocompletePredictions(fromQuery: query,
-                                                 bounds: nil,
-                                                 boundsMode: GMSAutocompleteBoundsMode.bias,
-                                                 filter: self.filter,
-                                                 sessionToken: self.token,
-                                                 callback: { (results, error) in
-                                                    if let error = error {
-                                                        print("Autocomplete error: \(error)")
-                                                        return
-                                                    }
-                                                    if let results = results {
-                                                        for result in results {
-                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID)")
-                                                            //dump(result)
-                                                        }
-                                                        self.googlePlaces = results
-                                                    }
-        })
-        return Text("")
+    func resetSearchTerm() {
+        self.searchViewModel.searchTerm = ""
     }
+    
+    //    func GSM(query: String) -> Text {
+    //        self.filter.type = .establishment
+    //
+    //        placesClient.findAutocompletePredictions(fromQuery: query,
+    //                                                 bounds: nil,
+    //                                                 boundsMode: GMSAutocompleteBoundsMode.bias,
+    //                                                 filter: self.filter,
+    //                                                 sessionToken: self.token,
+    //                                                 callback: { (results, error) in
+    //                                                    if let error = error {
+    //                                                        print("Autocomplete error: \(error)")
+    //                                                        return
+    //                                                    }
+    //                                                    if let results = results {
+    //                                                        for result in results {
+    //                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID)")
+    //                                                            //dump(result)
+    //                                                        }
+    //                                                        self.googlePlaces = results
+    //                                                    }
+    //        })
+    //        return Text("")
+    //    }
 }
 
 
