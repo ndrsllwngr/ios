@@ -16,8 +16,8 @@ struct PlaceList: Identifiable {
     var isPublic: Bool = true
     var placeIds: [String] = []
     var isCollaborative: Bool = false // only possible if private
-    //var createdAt
-    //var modifiedAt
+    var modifiedAt: NSDate
+    var createdAt: NSDate
     //var titleImage: String
     //var location: String
     //var tags: [UUID]
