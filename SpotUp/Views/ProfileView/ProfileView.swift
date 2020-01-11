@@ -101,7 +101,7 @@ struct ProfileView: View {
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
             let placeListToDelete = profile.placeLists[index]
-            deletePlaceList(placeListToDelete: placeListToDelete)
+            FirestoreConnection.shared.deletePlaceList(placeListToDelete: placeListToDelete)
         }
     }
 }
@@ -191,13 +191,13 @@ struct ProfileInfoView: View {
                         Text("")
                     } else if (!self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                         Button(action: {
-                            followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                            FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
                         }) {
                             Text("Follow")
                         }
                     } else if (self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                         Button(action: {
-                            unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                            FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
                         }) {
                             Text("Unfollow")
                         }

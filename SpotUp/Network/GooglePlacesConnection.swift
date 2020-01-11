@@ -1,10 +1,3 @@
-//
-//  GoogleClient.swift
-//  SpotUp
-//
-//  Created by Havy Ha on 20.12.19.
-//
-
 import Foundation
 import GooglePlaces
 

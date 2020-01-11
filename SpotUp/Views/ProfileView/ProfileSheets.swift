@@ -25,7 +25,7 @@ struct EditProfileSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    updateUserName(userId: self.user.id, newUserName: self.newUserName)
+                    FirestoreConnection.shared.updateUserName(userId: self.user.id, newUserName: self.newUserName)
                     self.showSheet.toggle()
                 }) {
                     Text("save")
@@ -55,7 +55,7 @@ struct CreatePlacelistSheet: View {
                 Spacer()
                 Button(action: {
                     let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id])
-                    createPlaceList(placeList: newPlaceList)
+                    FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
                     Text("create")

@@ -1,10 +1,3 @@
-//
-//  SearchResultsEmptyStateView.swift
-//  SpotUp
-//
-//  Created by Andreas Ellwanger on 09.01.20.
-//
-
 import SwiftUI
 
 struct SearchResultsEmptyStateView: View {

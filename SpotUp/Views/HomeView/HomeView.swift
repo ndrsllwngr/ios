@@ -1,11 +1,3 @@
-//
-//  HomeView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import GooglePlaces
 
@@ -121,29 +113,7 @@ struct HomeView: View {
         self.searchViewModel.searchTerm = ""
     }
     
-    //    func GSM(query: String) -> Text {
-    //        self.filter.type = .establishment
-    //
-    //        placesClient.findAutocompletePredictions(fromQuery: query,
-    //                                                 bounds: nil,
-    //                                                 boundsMode: GMSAutocompleteBoundsMode.bias,
-    //                                                 filter: self.filter,
-    //                                                 sessionToken: self.token,
-    //                                                 callback: { (results, error) in
-    //                                                    if let error = error {
-    //                                                        print("Autocomplete error: \(error)")
-    //                                                        return
-    //                                                    }
-    //                                                    if let results = results {
-    //                                                        for result in results {
-    //                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID)")
-    //                                                            //dump(result)
-    //                                                        }
-    //                                                        self.googlePlaces = results
-    //                                                    }
-    //        })
-    //        return Text("")
-    //    }
+
 }
 
 
