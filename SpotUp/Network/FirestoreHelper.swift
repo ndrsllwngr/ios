@@ -7,7 +7,7 @@
 
 import Foundation
 import FirebaseFirestore
-
+import Firebase
 // Define conversions swift object -> firestore data & firestore data -> swift objects here
 
 // Object to firestore data
@@ -27,7 +27,9 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "follower_ids": placeList.followerIds,
         "is_public": placeList.isPublic,
         "place_ids": placeList.placeIds,
-        "is_collaborative": placeList.isCollaborative
+        "is_collaborative": placeList.isCollaborative,
+        "modified_at":placeList.modifiedAt,
+        "created_at":placeList.createdAt
     ]
 }
 
@@ -47,5 +49,8 @@ func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
                      followerIds: data["follower_ids"] as! [String],
                      isPublic: data["is_public"] as! Bool,
                      placeIds: data["place_ids"] as! [String],
-                     isCollaborative: data["is_collaborative"] as! Bool)
+                     isCollaborative: data["is_collaborative"] as! Bool,
+                     modifiedAt:data["modified_at"] as! NSDate,
+        createdAt:data["created_at"] as! NSDate)
 }
+

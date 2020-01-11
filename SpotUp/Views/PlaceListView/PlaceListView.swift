@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla"), followerIds: []), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla"), followerIds: [])]
+let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla"), followerIds: [],modifiedAt:NSDate.now as NSDate ,createdAt:NSDate.now as NSDate), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla"), followerIds: [],modifiedAt:NSDate.now as NSDate,createdAt:NSDate.now as NSDate)]
 
 struct PlaceListView: View {
     

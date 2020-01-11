@@ -54,7 +54,7 @@ struct CreatePlacelistSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id])
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id],modifiedAt:NSDate.now as NSDate, createdAt:NSDate.now as NSDate)
                     createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
