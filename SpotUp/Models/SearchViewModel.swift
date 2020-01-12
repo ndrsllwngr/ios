@@ -9,6 +9,7 @@ class SearchViewModel: ObservableObject {
     
     // output
     @Published var googlePlaces: [GMSAutocompletePrediction] = []
+    // TODO check if https://stackoverflow.com/a/58878219/7640933 needs to be implemented
     @Published var firestoreSearch: FirestoreSearch = FirestoreSearch()
     @Published var recentSearchPlaces: [GMSAutocompletePrediction] = []
     @Published var recentSearchFirebaseAccounts: [User] = []
