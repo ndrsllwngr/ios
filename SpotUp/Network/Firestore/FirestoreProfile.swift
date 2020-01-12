@@ -8,8 +8,7 @@ class FirestoreProfile: ObservableObject {
     @Published var placeListsListener: ListenerRegistration? = nil
     @Published var listOwnerListeners: [ListenerRegistration?] = []
     
-    
-    @Published var user: User? = nil
+    @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []
     
     
@@ -23,7 +22,11 @@ class FirestoreProfile: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ data in
-                self.user = dataToUser(data: data)
+                let newUser = dataToUser(data: data)
+                print("LISTENER TRIGGERED: \(currentUserId) \(isMyProfile)")
+                print(self.user)
+                print(newUser)
+                self.user = newUser
             })
         }
         
@@ -62,7 +65,7 @@ class FirestoreProfile: ObservableObject {
         self.listOwnerListeners.forEach{ listener in
             listener?.remove()
         }
-        print("Successfully removed listener")
+        print("Successfully removed profile listener")
     }
     
 }
