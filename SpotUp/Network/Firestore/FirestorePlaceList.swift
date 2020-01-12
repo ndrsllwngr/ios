@@ -5,7 +5,7 @@ import GooglePlaces
 class FirestorePlaceList: ObservableObject {
     
     @Published var placeListListener: ListenerRegistration? = nil
-    @Published var placeList: PlaceList? = nil
+    @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [])
     @Published var places: [GMSPlace] = []
     @Published var isOwnedPlaceList = false
     
@@ -42,6 +42,5 @@ class FirestorePlaceList: ObservableObject {
     func removePlaceListListener() {
         self.placeListListener?.remove()
         self.places = []
-        self.placeList = nil
     }
 }

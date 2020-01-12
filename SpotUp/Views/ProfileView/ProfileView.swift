@@ -21,44 +21,44 @@ struct ProfileView: View {
     @State var goToOtherProfile: Int? = nil
     
     var body: some View {
-            VStack {
-                if (self.profileUserIdToNavigateTo != nil) {
-                    NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
-                        Text("")
-                    }
+        VStack {
+            if (self.profileUserIdToNavigateTo != nil) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
+                    Text("")
                 }
-                InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
+            }
+            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
                 .onAppear {
                     self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
                     self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
-                }
-                .onDisappear {
-                    self.firestoreProfile.removeProfileListener()
-                }
-                
-                Spacer()
             }
-            .sheet(isPresented: $showSheet) {
-                if self.sheetSelection == "edit_profile" {
-                    EditProfileSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
-                } else if self.sheetSelection == "settings" {
-                    SettingsSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
-                } else if self.sheetSelection == "create_placelist"{
-                    CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
-                } else if self.sheetSelection == "follower" {
-                    UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
-                } else if self.sheetSelection == "following" {
-                    UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
-                }
+            .onDisappear {
+                self.firestoreProfile.removeProfileListener()
             }
-            .navigationBarTitle(Text("Profil"), displayMode: .inline)
-            .navigationBarItems(trailing: Button(action:  {
-                self.sheetSelection = "settings"
-                self.showSheet.toggle()
-            }) {
-                Image(systemName: "gear")
-            })
+            
+            Spacer()
         }
+        .sheet(isPresented: $showSheet) {
+            if self.sheetSelection == "edit_profile" {
+                EditProfileSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
+            } else if self.sheetSelection == "settings" {
+                SettingsSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
+            } else if self.sheetSelection == "create_placelist"{
+                CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
+            } else if self.sheetSelection == "follower" {
+                UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+            } else if self.sheetSelection == "following" {
+                UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+            }
+        }
+        .navigationBarTitle(Text("Profil"), displayMode: .inline)
+        .navigationBarItems(trailing: Button(action:  {
+            self.sheetSelection = "settings"
+            self.showSheet.toggle()
+        }) {
+            Image(systemName: "gear")
+        })
+    }
 }
 
 //struct ProfileView_Previews: PreviewProvider {
@@ -74,44 +74,44 @@ struct InnerProfileView: View {
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-
+    
     var body: some View {
-         VStack {
-             ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
-             List {
-                 if isMyProfile {
-                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                     Section(header: Text("Owned Placelists")) {
-                         ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
-                             NavigationLink(
-                                 destination: PlaceListView(placeListId: placeList.id)
-                             ) {
-                                 PlacesListRow(placeList: placeList)
-                             }
-                         }
-                         .onDelete(perform: delete)
-                     }
-                     Section(header: Text("Followed Placelists")) {
-                         ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
-                             NavigationLink(
-                                 destination: PlaceListView(placeListId: placeList.id)
-                             ) {
-                                 PlacesListRow(placeList: placeList)
-                             }
-                         }
-                     }
-                 } else {
-                     ForEach(profile.placeLists){ placeList in
-                         NavigationLink(
-                             destination: PlaceListView(placeListId: placeList.id)
-                         ) {
-                             PlacesListRow(placeList: placeList)
-                         }
-                     }
-                 }
-                 Spacer()
-             }
-         }
+        VStack {
+            ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
+            List {
+                if isMyProfile {
+                    CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                    Section(header: Text("Owned Placelists")) {
+                        ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
+                            NavigationLink(
+                                destination: PlaceListView(placeListId: placeList.id)
+                            ) {
+                                PlacesListRow(placeList: placeList)
+                            }
+                        }
+                        .onDelete(perform: delete)
+                    }
+                    Section(header: Text("Followed Placelists")) {
+                        ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
+                            NavigationLink(
+                                destination: PlaceListView(placeListId: placeList.id)
+                            ) {
+                                PlacesListRow(placeList: placeList)
+                            }
+                        }
+                    }
+                } else {
+                    ForEach(profile.placeLists){ placeList in
+                        NavigationLink(
+                            destination: PlaceListView(placeListId: placeList.id)
+                        ) {
+                            PlacesListRow(placeList: placeList)
+                        }
+                    }
+                }
+                Spacer()
+            }
+        }
     }
     
     func delete(at offsets: IndexSet) {
