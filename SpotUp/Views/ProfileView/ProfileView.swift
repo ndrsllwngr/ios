@@ -21,7 +21,6 @@ struct ProfileView: View {
     @State var goToOtherProfile: Int? = nil
     
     var body: some View {
-        NavigationView {
             VStack {
                 if (self.profileUserIdToNavigateTo != nil) {
                     NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
@@ -60,7 +59,6 @@ struct ProfileView: View {
                 Image(systemName: "gear")
             })
         }
-    }
 }
 
 //struct ProfileView_Previews: PreviewProvider {
@@ -73,7 +71,6 @@ struct InnerProfileView: View {
     var profileUserId: String
     @Binding var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -87,7 +84,7 @@ struct InnerProfileView: View {
                      Section(header: Text("Owned Placelists")) {
                          ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
                              NavigationLink(
-                                 destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: true).environmentObject(self.firestorePlaceList)
+                                 destination: PlaceListView(placeListId: placeList.id)
                              ) {
                                  PlacesListRow(placeList: placeList)
                              }
@@ -97,7 +94,7 @@ struct InnerProfileView: View {
                      Section(header: Text("Followed Placelists")) {
                          ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
                              NavigationLink(
-                                 destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
+                                 destination: PlaceListView(placeListId: placeList.id)
                              ) {
                                  PlacesListRow(placeList: placeList)
                              }
@@ -106,7 +103,7 @@ struct InnerProfileView: View {
                  } else {
                      ForEach(profile.placeLists){ placeList in
                          NavigationLink(
-                             destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
+                             destination: PlaceListView(placeListId: placeList.id)
                          ) {
                              PlacesListRow(placeList: placeList)
                          }
