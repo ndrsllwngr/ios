@@ -84,7 +84,8 @@ class FirestoreConnection: ObservableObject {
     func updatePlaceList(placeListId: String, newName: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
         listRef.updateData([
-            "name": newName
+            "name": newName,
+            "modified_at":Timestamp()
         ]) { err in
             if let err = err {
                 print("Error updating PlaceList: \(err)")
@@ -104,10 +105,12 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func addPlaceToList(placeID: String, placeListId: String) {
+    func addPlaceToList(placeIDtime:PlaceIDwithTimestamp, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
         listRef.updateData([
-            "place_ids": FieldValue.arrayUnion([placeID])
+            "place_ids": FieldValue.arrayUnion([placeIDtime.placeID]),
+            "places":FieldValue.arrayUnion([placeIDtime.placeID,placeIDtime.addedAt]),
+            "modified_at":Timestamp()
         ]) { err in
             if let err = err {
                 print("Error adding place to PlaceList: \(err)")
@@ -116,6 +119,8 @@ class FirestoreConnection: ObservableObject {
             }
         }
     }
+    
+
     
     func followPlaceList(userId: String, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)

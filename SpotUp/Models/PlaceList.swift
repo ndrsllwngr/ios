@@ -1,4 +1,5 @@
 import Foundation
+import FirebaseFirestore
 
 struct PlaceList: Identifiable {
     var id: String = UUID().uuidString
@@ -8,8 +9,8 @@ struct PlaceList: Identifiable {
     var isPublic: Bool = true
     var placeIds: [String] = []
     var isCollaborative: Bool = false // only possible if private
-    var modifiedAt: NSDate
-    var createdAt: NSDate
+    var modifiedAt: Timestamp
+    var createdAt: Timestamp
     //var titleImage: String
     //var location: String
     //var tags: [UUID]
