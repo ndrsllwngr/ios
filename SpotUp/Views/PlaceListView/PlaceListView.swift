@@ -8,32 +8,30 @@
 
 import SwiftUI
 
-let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner: ListOwner(id: "bla", username: "bla"), followerIds: []), PlaceList(id: "blub", name: "Munich Ramen", owner: ListOwner(id: "bla", username: "bla"), followerIds: [])]
 
 struct PlaceListView: View {
     
+    
     var placeListId: String
-    var placeListName: String
-    var isOwnedPlacelist: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
     @State private var selection = 0
     @State var showSheet = false
     
     var body: some View {
         VStack {
-            if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList == nil) {
+            if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList == nil) {
                 Text("")
-            } else if (!self.isOwnedPlacelist && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+            } else if (!self.firestorePlaceList.isOwnedPlaceList && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                     
                 }) {
                     Text("Follow")
                 }
-            } else if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
+            } else if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
                 Button(action: {
                     FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
@@ -56,27 +54,25 @@ struct PlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .navigationBarTitle(self.firestorePlaceList.placeList != nil ? self.firestorePlaceList.placeList!.name : self.placeListName)
+            .onAppear {
+                print("PlaceListView ON APPEAR")
+                self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
+            }
+            .onDisappear {
+                print("PlaceListView ON DISAPPEAR")
+                self.firestorePlaceList.removePlaceListListener()
+            }
+            .sheet(isPresented: $showSheet) {
+                    PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+            }
+        .navigationBarTitle(self.firestorePlaceList.placeList != nil ? self.firestorePlaceList.placeList!.name : "loading")
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {
             Image(systemName: "line.horizontal.3")
         })
-            .sheet(isPresented: $showSheet) {
-                PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
-        }
-        .onAppear {
-            self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
-            print(self.placeListId)
-            print(self.placeListName)
-            dump(self.firestorePlaceList.places)
-        }
-        .onDisappear {
-            print(self.placeListId)
-            print(self.placeListName)
-            dump(self.firestorePlaceList.places)
-            self.firestorePlaceList.removePlaceListListener()
-        }
+            
+        
     }
 }
 

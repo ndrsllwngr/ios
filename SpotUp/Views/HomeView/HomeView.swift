@@ -98,14 +98,17 @@ struct HomeView: View {
                         }
                     } .navigationBarTitle(Text("Search"))
                 }
+                .onAppear {
+                    print("HomeView ON APPEAR")
+                    self.searchSpace.addAllPublicPlaceListsListener()
+                    self.searchSpace.addAllUsersListener()
+                }
+                .onDisappear {
+                    print("HomeView ON DISAPPEAR")
+                    self.searchSpace.removeAllUsersListener()
+                    self.searchSpace.removeAllPublicPlaceListsListener()
+                }
             }
-        }.onAppear {
-            self.searchSpace.addAllPublicPlaceListsListener()
-            self.searchSpace.addAllUsersListener()
-        }
-        .onDisappear {
-            self.searchSpace.removeAllUsersListener()
-            self.searchSpace.removeAllPublicPlaceListsListener()
         }
     }
     
