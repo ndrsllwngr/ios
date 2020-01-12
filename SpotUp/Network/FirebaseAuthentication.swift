@@ -1,14 +1,19 @@
-//
-//  FirebaseAuthentication.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import Firebase
 import FirebaseAuth
+
+class FirebaseUser {
+    
+    var uid: String
+    var email: String
+    // var displayName: String?
+    
+    init(uid: String, email: String) {
+        self.uid = uid
+        self.email = email
+        // self.displayName = displayName
+    }
+}
 
 class FirebaseAuthentication: ObservableObject {
     
@@ -20,6 +25,7 @@ class FirebaseAuthentication: ObservableObject {
     private init(){}
     
     func listen() {
+        //try! Auth.auth().signOut()
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
                 self.currentUser = FirebaseUser(uid: user.uid, email: user.email!)
@@ -49,7 +55,7 @@ class FirebaseAuthentication: ObservableObject {
             }
             if let user = authResult?.user {
                 let user = User(id: user.uid, email: user.email!, username: username)
-                createUserInFirestore(user: user)
+                FirestoreConnection.shared.createUserInFirestore(user: user)
             }
         }
     }
@@ -65,7 +71,7 @@ class FirebaseAuthentication: ObservableObject {
                     if let error = error {
                         print("Error during email change: \(error)")
                     } else {
-                        updateUserEmail(userId: user.uid, newEmail: newEmail)
+                        FirestoreConnection.shared.updateUserEmail(userId: user.uid, newEmail: newEmail)
                         print("Email changed to: \(newEmail)")
                     }
                 }
@@ -100,7 +106,7 @@ class FirebaseAuthentication: ObservableObject {
             } else if let result = result {
                 let user = result.user
                 // delete user in firestore first, afterwards I am not authenticated anymore TODO think about this again
-                deleteUserInFirestore(userId: user.uid)
+                FirestoreConnection.shared.deleteUserInFirestore(userId: user.uid)
                 user.delete { error in
                     if let error = error {
                         print("Error during account deletion: \(error)")
@@ -110,19 +116,6 @@ class FirebaseAuthentication: ObservableObject {
                 }
             }
         }
-    }
-}
-
-class FirebaseUser {
-    
-    var uid: String
-    var email: String
-    // var displayName: String?
-    
-    init(uid: String, email: String) {
-        self.uid = uid
-        self.email = email
-        // self.displayName = displayName
     }
 }
 
