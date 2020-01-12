@@ -14,7 +14,7 @@ struct User: Identifiable, Decodable, Hashable {
     
 }
 
-struct ListOwner {
+struct ListOwner: Identifiable, Equatable {
     var id: String
     var username: String
 }

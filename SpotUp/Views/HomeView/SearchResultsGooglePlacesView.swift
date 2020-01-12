@@ -42,7 +42,7 @@ struct SearchResultsGooglePlacesView: View {
                     SearchResultsEmptyStateView()
                 }
             } else {
-                List { ForEach(searchViewModel.googlePlaces, id: \.self.placeID) {
+                List { ForEach(searchViewModel.googlePlaces, id: \.placeID) {
                     result in SingleRowPlace(result: result).environmentObject(self.searchViewModel)
                     }
                     Spacer()
@@ -67,6 +67,9 @@ struct SingleRowPlace: View {
                     self.searchViewModel.recentSearchPlaces.append(self.result)
                 } else if (!self.searchViewModel.recentSearchPlaces.contains(self.result)) {
                     self.searchViewModel.recentSearchPlaces.insert(self.result, at: 0)
+                    if(self.searchViewModel.recentSearchPlaces.count > 5) {
+                        self.searchViewModel.recentSearchPlaces = Array(self.searchViewModel.recentSearchPlaces.prefix(5))
+                    }
                 }
                 self.goToDestination = true
                 self.selection = 1
@@ -78,18 +81,18 @@ struct SingleRowPlace: View {
             }.padding(.leading)
             Spacer()
             // TODO not possible to add delete action, due to NavigationLink bug
-//            if showRecent == true {
-//                Group{
-//                    Button(action: {
-//                        print("delete invoked")
-//                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchPlaces.firstIndex(of: self.result)
-//                        if(indexOfToBeDeletedEntry != nil) {
-//                            self.searchViewModel.recentSearchPlaces.remove(at: indexOfToBeDeletedEntry!)
-//                        }
-//                    }) { Image(systemName: "xmark")}
-//                }
-//                .padding(.trailing)
-//            }
+            //            if showRecent == true {
+            //                Group{
+            //                    Button(action: {
+            //                        print("delete invoked")
+            //                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchPlaces.firstIndex(of: self.result)
+            //                        if(indexOfToBeDeletedEntry != nil) {
+            //                            self.searchViewModel.recentSearchPlaces.remove(at: indexOfToBeDeletedEntry!)
+            //                        }
+            //                    }) { Image(systemName: "xmark")}
+            //                }
+            //                .padding(.trailing)
+            //            }
             if (self.goToDestination != false) {
                 NavigationLink(destination:ItemView(placeID: result.placeID), tag: 1, selection: $selection) { EmptyView() }
             }

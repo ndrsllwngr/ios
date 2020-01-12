@@ -1,10 +1,22 @@
 import Foundation
 import FirebaseFirestore
 import GooglePlaces
+import Combine
 
 class FirestoreSearch: ObservableObject {
-    @Published var allUsers: [User] = []
-    @Published var allPublicPlaceLists: [PlaceList] = []
+    let objectWillChange = ObservableObjectPublisher()
+    @Published var allUsers: [User] = [] {
+        didSet {
+            print("object changed")
+            objectWillChange.send()
+        }
+    }
+    @Published var allPublicPlaceLists: [PlaceList] = [] {
+        didSet {
+            print("object changed")
+            objectWillChange.send()
+        }
+    }
     @Published var allAllUsersListener: ListenerRegistration? = nil
     @Published var allPublicPlaceListsListener: ListenerRegistration? = nil
     
@@ -35,6 +47,7 @@ class FirestoreSearch: ObservableObject {
                 let data = documentSnapshot.data()
                 return dataToPlaceList(data: data)
             }
+            print("SEARCh placelist listener")
         }
     }
     
