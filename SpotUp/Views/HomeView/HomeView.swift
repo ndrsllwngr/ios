@@ -3,7 +3,7 @@ import GooglePlaces
 
 struct HomeView: View {
     
-    @EnvironmentObject var searchViewModel: SearchViewModel
+    @ObservedObject var searchViewModel = SearchViewModel()
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
     

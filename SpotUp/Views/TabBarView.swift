@@ -11,7 +11,6 @@ import SwiftUI
 
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var searchViewModel = SearchViewModel()
     @State private var selection = 0
     
     init() {
@@ -22,7 +21,7 @@ struct TabBarView: View {
     var body: some View {
         TabView(selection: $selection) {
             NavigationView {
-                HomeView().environmentObject(self.searchViewModel)
+                HomeView()
             }
             .tabItem({
                 Image(systemName: selection == 0 ? "magnifyingglass" : "magnifyingglass")

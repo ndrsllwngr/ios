@@ -30,7 +30,7 @@ class FirestoreProfile: ObservableObject {
             })
         }
         
-        let ref = isMyProfile ? FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId) : FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId).whereField("is_public", isEqualTo: true)
+        let ref = isMyProfile ? FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId) : FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId)
         // Listener for my lists
         self.placeListsListener = ref.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
