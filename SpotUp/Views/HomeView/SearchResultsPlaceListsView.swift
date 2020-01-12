@@ -74,7 +74,7 @@ struct SingleRowPlaceList: View {
                     .padding(.trailing)
             }
             if (self.goToDestination != false) {
-                NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList), tag: 1, selection: $selection) { EmptyView() }
+                NavigationLink(destination: PlaceListView(placeListId: placeList.id), tag: 1, selection: $selection) { EmptyView() }
             }
         }
     }

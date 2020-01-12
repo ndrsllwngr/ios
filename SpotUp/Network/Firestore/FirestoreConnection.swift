@@ -144,47 +144,43 @@ class FirestoreConnection: ObservableObject {
     }
     
     func followUser(myUserId: String, userIdToFollow: String) {
-        let listRefMyUser = dbUsersRef.document(myUserId)
-        listRefMyUser.updateData([
+        dbUsersRef.document(myUserId).updateData([
             "is_following": FieldValue.arrayUnion([userIdToFollow])
         ]) { err in
             if let err = err {
                 print("Error following user: \(err)")
             } else {
-                print("User successfully followed")
+                print("User successfully followed is_following")
             }
         }
-        let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
-        listRefUserToFollow.updateData([
+        dbUsersRef.document(userIdToFollow).updateData([
             "is_followed_by": FieldValue.arrayUnion([myUserId])
         ]) { err in
             if let err = err {
                 print("Error following user: \(err)")
             } else {
-                print("User successfully followed")
+                print("User successfully followed is_followed_by")
             }
         }
     }
     
     func unfollowUser(myUserId: String, userIdToFollow: String) {
-        let listRefMyUser = dbUsersRef.document(myUserId)
-        listRefMyUser.updateData([
+        dbUsersRef.document(myUserId).updateData([
             "is_following": FieldValue.arrayRemove([userIdToFollow])
         ]) { err in
             if let err = err {
                 print("Error unfollowing user: \(err)")
             } else {
-                print("User successfully unfollowed")
+                print("User successfully unfollowed is_following")
             }
         }
-        let listRefUserToFollow = dbUsersRef.document(userIdToFollow)
-        listRefUserToFollow.updateData([
+        dbUsersRef.document(userIdToFollow).updateData([
             "is_followed_by": FieldValue.arrayRemove([myUserId])
         ]) { err in
             if let err = err {
                 print("Error following user: \(err)")
             } else {
-                print("User successfully unfollowed")
+                print("User successfully unfollowed is_followed_by")
             }
         }
     }
