@@ -2,7 +2,8 @@ import SwiftUI
 import GooglePlaces
 
 struct HomeView: View {
-    @ObservedObject var searchViewModel = SearchViewModel()
+    
+    @EnvironmentObject var searchViewModel: SearchViewModel
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
     
@@ -70,8 +71,7 @@ struct HomeView: View {
                         Spacer()
                     }
                     else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseLists.rawValue {
-                        SearchResultsPlaceListsView()
-                            .environmentObject(self.searchViewModel)
+                        SearchResultsPlaceListsView().environmentObject(self.searchViewModel)
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
