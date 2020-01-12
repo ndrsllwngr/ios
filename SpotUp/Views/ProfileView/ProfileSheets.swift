@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseFirestore
 
 struct EditProfileSheet: View {
     var user: User
@@ -54,7 +55,7 @@ struct CreatePlacelistSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id])
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id],modifiedAt:Timestamp(), createdAt:Timestamp())
                     FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
