@@ -12,7 +12,7 @@ import UIKit
 struct LoginView: View {
     
     @ObservedObject private var loginViewModel = LoginViewModel()
-        
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -31,15 +31,14 @@ struct LoginView: View {
                         }.disabled(!self.loginViewModel.isValid)
                     }
                     Section {
-                    NavigationLink(destination: SignUpView()) {
-                        Text("Sign Up")
-                    }
+                        NavigationLink(destination: SignUpView()) {
+                            Text("Sign Up")
+                        }
                     }
                 }
                 Spacer()
             }
         }
-        
     }
     
     func logIn() {
