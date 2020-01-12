@@ -8,7 +8,7 @@ class FirestoreProfile: ObservableObject {
     @Published var placeListsListener: ListenerRegistration? = nil
     @Published var listOwnerListeners: [ListenerRegistration?] = []
     
-    @Published var user: User = User(id: "init", email: "init", username: "init")
+    @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []
     
     
