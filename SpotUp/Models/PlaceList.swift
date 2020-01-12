@@ -1,9 +1,6 @@
 import Foundation
 
 struct PlaceList: Identifiable, Equatable {
-    static func == (lhs: PlaceList, rhs: PlaceList) -> Bool {
-        lhs.id == rhs.id
-    }
     var id: String = UUID().uuidString
     var name: String
     var owner: ListOwner
@@ -17,3 +14,4 @@ struct PlaceList: Identifiable, Equatable {
     //var location: String
     //var tags: [UUID]
 }
+
