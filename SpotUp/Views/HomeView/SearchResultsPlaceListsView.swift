@@ -9,7 +9,7 @@ struct SearchResultsPlaceListsView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseLists.count > 0) {
                     List { Section(header: Text("Recent")){
-                        ForEach(searchViewModel.recentSearchFirebaseLists, id: \.self.id) {
+                        ForEach(searchViewModel.recentSearchFirebaseLists) {
                             (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, showRecent: true).environmentObject(self.searchViewModel)
                         }
                         Spacer()
@@ -28,17 +28,12 @@ struct SearchResultsPlaceListsView: View {
             }
         }
     }
-    
-    func delete(at offsets: IndexSet) {
-        self.searchViewModel.recentSearchFirebaseLists.remove(atOffsets: offsets)
-    }
 }
 
 struct SingleRowPlaceList: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
-    @State var placeList: PlaceList
+    var placeList: PlaceList
     
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
@@ -54,7 +49,7 @@ struct SingleRowPlaceList: View {
                     if(self.searchViewModel.recentSearchFirebaseLists.count > 5) {
                         self.searchViewModel.recentSearchFirebaseLists = Array(self.searchViewModel.recentSearchFirebaseLists.prefix(5))
                     }
-                    
+
                 }
                 self.goToDestination = true
                 self.selection = 1

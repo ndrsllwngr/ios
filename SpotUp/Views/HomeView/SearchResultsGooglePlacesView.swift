@@ -42,7 +42,7 @@ struct SearchResultsGooglePlacesView: View {
                     SearchResultsEmptyStateView()
                 }
             } else {
-                List { ForEach(searchViewModel.googlePlaces, id: \.self.placeID) {
+                List { ForEach(searchViewModel.googlePlaces, id: \.placeID) {
                     result in SingleRowPlace(result: result).environmentObject(self.searchViewModel)
                     }
                     Spacer()

@@ -9,7 +9,7 @@ struct SearchResultsAccountsView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
                     List {
-                        Section(header: Text("Recent")){ForEach(searchViewModel.recentSearchFirebaseAccounts, id: \.id) {
+                        Section(header: Text("Recent")){ForEach(searchViewModel.recentSearchFirebaseAccounts) {
                             (user: User) in SingleRowAccount(user: user, showRecent: true).environmentObject(self.searchViewModel)
                             }
                             Spacer()
@@ -20,7 +20,7 @@ struct SearchResultsAccountsView: View {
                     SearchResultsEmptyStateView()
                 }
             } else {
-                List { ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}, id: \.id) {
+                List { ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) {
                     (user: User) in SingleRowAccount(user: user).environmentObject(self.searchViewModel)
                     }
                     Spacer()
@@ -33,7 +33,7 @@ struct SearchResultsAccountsView: View {
 struct SingleRowAccount: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
-    @State var user: User
+    var user: User
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
     @State var goToDestination: Bool = false
