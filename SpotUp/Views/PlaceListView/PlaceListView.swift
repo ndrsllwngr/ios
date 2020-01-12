@@ -10,8 +10,6 @@ import SwiftUI
 
 
 struct PlaceListView: View {
-    
-    
     var placeListId: String
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
@@ -22,16 +20,14 @@ struct PlaceListView: View {
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList == nil) {
-                Text("")
-            } else if (!self.firestorePlaceList.isOwnedPlaceList && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+            if (!self.firestorePlaceList.isOwnedPlaceList && !self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                     
                 }) {
                     Text("Follow")
                 }
-            } else if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
+            } else if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
                 Button(action: {
                     FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
@@ -65,7 +61,7 @@ struct PlaceListView: View {
             .sheet(isPresented: $showSheet) {
                     PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
             }
-        .navigationBarTitle(self.firestorePlaceList.placeList != nil ? self.firestorePlaceList.placeList!.name : "loading")
+        .navigationBarTitle(self.firestorePlaceList.placeList.name)
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {

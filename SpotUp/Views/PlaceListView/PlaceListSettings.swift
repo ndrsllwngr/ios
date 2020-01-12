@@ -16,23 +16,19 @@ struct PlaceListSettings: View {
         VStack {
             Text("Edit List")
             Spacer()
-            if self.firestorePlaceList.placeList == nil {
-                Text("Loading")
-            } else {
-                TextField(self.firestorePlaceList.placeList!.name, text: $newListName)
-                HStack {
-                    Button(action: {
-                        self.showSheet.toggle()
-                    }) {
-                        Text("cancel")
-                    }
-                    Spacer()
-                    Button(action: {
-                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList!.id, newName: self.newListName)
-                        self.showSheet.toggle()
-                    }) {
-                        Text("save")
-                    }
+            TextField(self.firestorePlaceList.placeList.name, text: $newListName)
+            HStack {
+                Button(action: {
+                    self.showSheet.toggle()
+                }) {
+                    Text("cancel")
+                }
+                Spacer()
+                Button(action: {
+                    FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, newName: self.newListName)
+                    self.showSheet.toggle()
+                }) {
+                    Text("save")
                 }
             }
             Spacer()

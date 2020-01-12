@@ -11,7 +11,7 @@ import SwiftUI
 
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-
+    
     @State private var selection = 0
     
     init() {
@@ -21,14 +21,20 @@ struct TabBarView: View {
     
     var body: some View {
         TabView(selection: $selection) {
-            HomeView().tabItem({
+            NavigationView {
+                HomeView()
+            }
+            .tabItem({
                 Image(systemName: selection == 0 ? "magnifyingglass" : "magnifyingglass")
                 Text("Search")
             }).tag(0)
-            ProfileView(profileUserId: firebaseAuthentication.currentUser!.uid).tabItem({
+            NavigationView {
+                ProfileView(profileUserId: firebaseAuthentication.currentUser!.uid)
+            }
+            .tabItem({
                 Image(systemName: selection == 1 ? "person.fill" : "person")
                 Text("Profil")
-                }).tag(1)
+            }).tag(1)
         }
         .accentColor(.black)
     }

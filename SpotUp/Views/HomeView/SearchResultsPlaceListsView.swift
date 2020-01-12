@@ -54,7 +54,7 @@ struct SingleRowPlaceList: View {
             }, label: {
                 Text(placeList.name)
             })
-            NavigationLink(destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList) , isActive: self.$presentMe){ EmptyView() }
+            NavigationLink(destination: PlaceListView(placeListId: placeList.id), isActive: self.$presentMe){ EmptyView() }
         }
     }
 }
