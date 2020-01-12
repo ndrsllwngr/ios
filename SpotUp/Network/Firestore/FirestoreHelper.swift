@@ -1,10 +1,3 @@
-//
-//  FirestoreHelper.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 17.12.19.
-//
-
 import Foundation
 import FirebaseFirestore
 import Firebase
@@ -15,7 +8,9 @@ func userToData(user: User) -> Dictionary<String, Any> {
     return [
         "id": user.id,
         "email": user.email,
-        "username": user.username
+        "username": user.username,
+        "is_following": user.isFollowing,
+        "is_followed_by": user.isFollowedBy
     ]
 }
 
@@ -38,7 +33,9 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
 func dataToUser(data: Dictionary<String, Any>) -> User {
     return User(id: data["id"] as! String,
                 email: data["email"] as! String,
-                username: data["username"] as! String)
+                username: data["username"] as! String,
+                isFollowing: data["is_following"] as! [String],
+                isFollowedBy: data["is_followed_by"] as! [String])
 }
 
 

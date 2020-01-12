@@ -13,15 +13,34 @@ let lists: [PlaceList] = [PlaceList(id: "blub", name: "Paris best Spots", owner:
 struct PlaceListView: View {
     
     var placeListId: String
+    var placeListName: String
     var isOwnedPlacelist: Bool
     
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
-
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    
     @State private var selection = 0
     @State var showSheet = false
     
     var body: some View {
         VStack {
+            if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList == nil) {
+                Text("")
+            } else if (!self.isOwnedPlacelist && !self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    
+                }) {
+                    Text("Follow")
+                }
+            } else if (!self.isOwnedPlacelist && self.firestorePlaceList.placeList!.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
+                Button(action: {
+                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                }) {
+                    Text("Unfollow")
+                }
+            }
+            
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
                 Text("Map").tag(1)
@@ -37,19 +56,25 @@ struct PlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .navigationBarTitle(firestorePlaceList.placeList != nil ? firestorePlaceList.placeList!.name : "")
+        .navigationBarTitle(self.firestorePlaceList.placeList != nil ? self.firestorePlaceList.placeList!.name : self.placeListName)
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {
             Image(systemName: "line.horizontal.3")
         })
-        .sheet(isPresented: $showSheet) {
-            PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+            .sheet(isPresented: $showSheet) {
+                PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
         }
         .onAppear {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
+            print(self.placeListId)
+            print(self.placeListName)
+            dump(self.firestorePlaceList.places)
         }
         .onDisappear {
+            print(self.placeListId)
+            print(self.placeListName)
+            dump(self.firestorePlaceList.places)
             self.firestorePlaceList.removePlaceListListener()
         }
     }

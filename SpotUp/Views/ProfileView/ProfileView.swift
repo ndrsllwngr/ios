@@ -14,13 +14,24 @@ struct ProfileView: View {
     @State var isMyProfile: Bool = false
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
+    
     @State private var showingChildView = false
     @State var showSheet = false
     @State var sheetSelection = "none"
+    @State var profileUserIdToNavigateTo: String? = nil
+    @State var goToOtherProfile: Int? = nil
+
     
     var body: some View {
         NavigationView {
             VStack {
+                if (self.profileUserIdToNavigateTo != nil) {
+                    NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
+                               Text("")
+                    }
+                }
+       
                 ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
                 List {
                     if isMyProfile {
@@ -28,7 +39,7 @@ struct ProfileView: View {
                         Section(header: Text("Owned Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: true)
+                                    destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: true).environmentObject(self.firestorePlaceList)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -38,7 +49,7 @@ struct ProfileView: View {
                         Section(header: Text("Followed Placelists")) {
                             ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
                                 NavigationLink(
-                                    destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
+                                    destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
                                 ) {
                                     PlacesListRow(placeList: placeList)
                                 }
@@ -47,7 +58,7 @@ struct ProfileView: View {
                     } else {
                         ForEach(profile.placeLists){ placeList in
                             NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id, isOwnedPlacelist: false)
+                                destination: PlaceListView(placeListId: placeList.id, placeListName: placeList.name, isOwnedPlacelist: false).environmentObject(self.firestorePlaceList)
                             ) {
                                 PlacesListRow(placeList: placeList)
                             }
@@ -64,6 +75,10 @@ struct ProfileView: View {
                     SettingsSheet(user: self.profile.user!, showSheet: self.$showSheet)
                 } else if self.sheetSelection == "create_placelist"{
                     CreatePlacelistSheet(user: self.profile.user!, showSheet: self.$showSheet)
+                } else if self.sheetSelection == "follower" {
+                    UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.profile.user!.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                } else if self.sheetSelection == "following" {
+                    UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.profile.user!.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
                 }
             }
             .navigationBarTitle(Text("Profil"), displayMode: .inline)
@@ -86,7 +101,7 @@ struct ProfileView: View {
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
             let placeListToDelete = profile.placeLists[index]
-            deletePlaceList(placeListToDelete: placeListToDelete)
+            FirestoreConnection.shared.deletePlaceList(placeListToDelete: placeListToDelete)
         }
     }
 }
@@ -100,6 +115,7 @@ struct ProfileView: View {
 struct ProfileInfoView: View {
     var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -124,21 +140,32 @@ struct ProfileInfoView: View {
                         
                     }
                     Spacer()
-                    VStack{
-                        Text("1")
-                            .font(.system(size: 14))
-                            .bold()
-                        Text("Follower")
-                            .font(.system(size: 12))
-                        
+                    
+                    Button(action: {
+                        self.sheetSelection = "follower"
+                        self.showSheet.toggle()
+                    }) {
+                        VStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.isFollowedBy.count)" : "")
+                                .font(.system(size: 14))
+                                .bold()
+                            Text("Follower")
+                                .font(.system(size: 12))
+                        }
                     }
+                    
                     Spacer()
-                    VStack{
-                        Text("1000")
-                            .font(.system(size: 14))
-                            .bold()
-                        Text("Following")
-                            .font(.system(size: 12))
+                    Button(action: {
+                        self.sheetSelection = "following"
+                        self.showSheet.toggle()
+                    }) {
+                        VStack {
+                            Text(self.profile.user != nil ? "\(self.profile.user!.isFollowing.count)" : "")
+                                .font(.system(size: 14))
+                                .bold()
+                            Text("I am following")
+                                .font(.system(size: 12))
+                        }
                     }
                 }
             }
@@ -160,10 +187,20 @@ struct ProfileInfoView: View {
             } else {
                 HStack {
                     Text(self.profile.user != nil ? "\(self.profile.user!.username)" : "")
-                    Button(action:  {
-                        print("follow")
-                    }) {
-                        Text("follow")
+                    if (self.profile.user == nil) {
+                        Text("")
+                    } else if (!self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                        }) {
+                            Text("Follow")
+                        }
+                    } else if (self.profile.user!.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user!.id)
+                        }) {
+                            Text("Unfollow")
+                        }
                     }
                     Spacer()
                 }

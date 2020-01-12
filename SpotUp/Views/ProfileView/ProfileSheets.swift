@@ -25,7 +25,7 @@ struct EditProfileSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    updateUserName(userId: self.user.id, newUserName: self.newUserName)
+                    FirestoreConnection.shared.updateUserName(userId: self.user.id, newUserName: self.newUserName)
                     self.showSheet.toggle()
                 }) {
                     Text("save")
@@ -54,8 +54,8 @@ struct CreatePlacelistSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id],modifiedAt:NSDate.now as NSDate, createdAt:NSDate.now as NSDate)
-                    createPlaceList(placeList: newPlaceList)
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id])
+                    FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
                     Text("create")
@@ -99,6 +99,7 @@ struct SettingsSheet: View {
                 }
             }
             Button(action: {
+                self.showSheet.toggle()
                 FirebaseAuthentication.shared.logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
@@ -116,3 +117,70 @@ struct SettingsSheet: View {
         }
     }
 }
+
+struct UsersThatAreFollowingMeSheet: View {
+    @Binding var showSheet: Bool
+    var userId: String
+    @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
+    @Binding var profileUserIdToNavigateTo: String?
+    @Binding var goToOtherProfile: Int?
+    
+    var body: some View {
+        VStack {
+            Text("Users that are following me")
+            List {
+                ForEach(self.firestoreFollowSheet.usersThatAreFollowingMe.sorted{$0.username.lowercased() < $1.username.lowercased()}) { (user: User) in
+                    Button(action: {
+                        self.profileUserIdToNavigateTo = user.id
+                        self.goToOtherProfile = 1
+                        self.showSheet.toggle()
+                    }) {
+                        Text(user.username)}
+                    
+                }
+                Spacer()
+            }
+            Spacer()
+        }
+        .onAppear {
+            self.firestoreFollowSheet.addUsersThatAreFollowingMeListener(userId: self.userId)
+        }
+        .onDisappear {
+            self.firestoreFollowSheet.removeUsersThatAreFollowingMeListener()
+        }
+    }
+}
+
+struct UsersThatIAmFollowingSheet: View {
+    @Binding var showSheet: Bool
+    var userId: String
+    @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
+    @Binding var profileUserIdToNavigateTo: String?
+    @Binding var goToOtherProfile: Int?
+    
+    var body: some View {
+        VStack {
+            Text("Users that I am following")
+            List {
+                ForEach(self.firestoreFollowSheet.usersThatIAmFollowing.sorted{$0.username.lowercased() < $1.username.lowercased()}) { (user: User) in
+                    Button(action: {
+                        self.profileUserIdToNavigateTo = user.id
+                        self.goToOtherProfile = 1
+                        self.showSheet.toggle()
+                    }) {
+                        Text(user.username)}
+                    
+                }
+                Spacer()
+            }
+            Spacer()
+        }
+        .onAppear {
+            self.firestoreFollowSheet.addUsersThatIAmFollowingListener(userId: self.userId)
+        }
+        .onDisappear {
+            self.firestoreFollowSheet.removeUsersThatIAmFollowingListener()
+        }
+    }
+}
+
