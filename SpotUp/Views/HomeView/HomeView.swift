@@ -3,18 +3,8 @@ import GooglePlaces
 
 struct HomeView: View {
     @ObservedObject var searchViewModel = SearchViewModel()
-    @ObservedObject var searchSpace = FirestoreSearch()
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
-    
-    /**
-     * Create a new session token. Be sure to use the same token for calling
-     * findAutocompletePredictions, as well as the subsequent place details request.
-     * This ensures that the user's query and selection are billed as a single session.
-     */
-    //    let token = GMSAutocompleteSessionToken.init()
-    // Create a type filter.
-    //    let filter = GMSAutocompleteFilter()
     
     var body: some View {
         
@@ -74,25 +64,21 @@ struct HomeView: View {
                     
                     // RESULTS
                     VStack {
-                        if searchViewModel.searchTerm == "" {
-                            SearchResultsEmptyStateView()
-                                .resignKeyboardOnDragGesture()
-                        }
-                        else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.googlePlaces.rawValue {
-                            // WARN! GSM modifies states during render
-                            //                            GSM(query: self.searchViewModel.searchTerm)
-                            SearchResultsPlaces()
+                        if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.googlePlaces.rawValue {
+                            SearchResultsGooglePlacesView()
                                 .environmentObject(self.searchViewModel)
                                 .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                         else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseLists.rawValue {
-                            SearchResultsPlaceLists(searchTerm: searchViewModel.searchTerm).environmentObject(self.searchSpace)
+                            SearchResultsPlaceListsView()
+                                .environmentObject(self.searchViewModel)
                                 .resignKeyboardOnDragGesture()
                             Spacer()
                         }
                         else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseAccounts.rawValue {
-                            SearchResultsAccounts(searchTerm: searchViewModel.searchTerm).environmentObject(self.searchSpace)
+                            SearchResultsAccountsView()
+                                .environmentObject(self.searchViewModel)
                                 .resignKeyboardOnDragGesture()
                             Spacer()
                         }
@@ -116,10 +102,7 @@ struct HomeView: View {
         self.searchViewModel.searchTerm = ""
     }
     
-
 }
-
-
 
 //struct HomeView_Previews: PreviewProvider {
 //    static var previews: some View {
