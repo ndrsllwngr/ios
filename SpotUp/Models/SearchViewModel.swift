@@ -9,8 +9,11 @@ class SearchViewModel: ObservableObject {
     
     // output
     @Published var googlePlaces: [GMSAutocompletePrediction] = []
-    @Published var firebaseAccounts = []
-    @Published var firebaseLists = []
+    // TODO check if https://stackoverflow.com/a/58878219/7640933 needs to be implemented
+    @Published var firestoreSearch: FirestoreSearch = FirestoreSearch()
+    @Published var recentSearchPlaces: [GMSAutocompletePrediction] = []
+    @Published var recentSearchFirebaseAccounts: [User] = []
+    @Published var recentSearchFirebaseLists: [PlaceList] = []
     
     private var cancellableSet: Set<AnyCancellable> = []
     

@@ -155,6 +155,7 @@ struct UsersThatIAmFollowingSheet: View {
     @Binding var showSheet: Bool
     var userId: String
     @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
     @Binding var profileUserIdToNavigateTo: String?
     @Binding var goToOtherProfile: Int?
     
