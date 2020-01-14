@@ -7,8 +7,14 @@
 
 import Foundation
 import FirebaseFirestore
+import GooglePlaces
 
-struct PlaceIDwithTimestamp {
-       var placeID: String
+struct PlaceIDWithTimestamp {
+       var placeId: String
        var addedAt: Timestamp
    }
+
+struct GMSPlaceWithTimestamp{
+    var gmsPlace: GMSPlace
+    var addedAt: Timestamp
+}

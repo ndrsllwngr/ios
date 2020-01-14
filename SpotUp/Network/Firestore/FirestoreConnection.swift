@@ -105,11 +105,11 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func addPlaceToList(placeIDtime:PlaceIDwithTimestamp, placeListId: String) {
+    func addPlaceToList(placeIDtime:PlaceIDWithTimestamp, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
         listRef.updateData([
-            "place_ids": FieldValue.arrayUnion([placeIDtime.placeID]),
-            "places":FieldValue.arrayUnion([placeIDtime.placeID,placeIDtime.addedAt]),
+            "place_ids": FieldValue.arrayUnion([placeIDtime.placeId]),
+            "places": FieldValue.arrayUnion([placeIDWithTimestampToData(place:placeIDtime)]),
             "modified_at":Timestamp()
         ]) { err in
             if let err = err {
