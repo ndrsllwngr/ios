@@ -79,19 +79,31 @@ struct PlaceListInfoView: View {
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.isOwnedPlaceList) {
-                if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                    Button(action: {
-                        FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                        
-                    }) {
-                        Text("Follow")
-                    }
-                } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                    Button(action: {
-                        FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                    }) {
-                        Text("Unfollow")
+            HStack {
+                VStack {
+                    Image("chincoteague")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                    .padding()
+                    Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                }
+                Spacer()
+                if (!self.firestorePlaceList.isOwnedPlaceList) {
+                    if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                            
+                        }) {
+                            Text("Follow")
+                        }
+                    } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                        Button(action: {
+                            FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                        }) {
+                            Text("Unfollow")
+                        }
                     }
                 }
             }
