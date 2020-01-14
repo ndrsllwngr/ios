@@ -35,6 +35,7 @@ struct CreatePlacelistSheet: View {
             .frame(width: 300, height: 100)
             Spacer()
         }
+        .padding()
     }
 }
 
@@ -137,6 +138,7 @@ struct UsersThatAreFollowingMeSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatAreFollowingMeListener()
         }
+        .padding()
     }
 }
 
@@ -171,6 +173,7 @@ struct UsersThatIAmFollowingSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatIAmFollowingListener()
         }
+        .padding()
     }
 }
 
