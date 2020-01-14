@@ -45,7 +45,7 @@ struct InnerItemView: View {
         VStack {
             ItemMapView(coordinate: place.coordinate)
                 .edgesIgnoringSafeArea(.top)
-                .frame(height:400)
+                .frame(height:300)
             
             HStack {
                 ItemImageView(image: image != nil ? image! : UIImage())
@@ -58,20 +58,22 @@ struct InnerItemView: View {
                     Text("Add to List")
                 }
             }
-            VStack(alignment: .leading) {
-                Text(place.name != nil ? place.name! : "")
-                    .font(.title)
-                Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
-                Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
-                Button(action: {
-                    if let website = self.place.website {
-                        UIApplication.shared.open(website)
+            ScrollView(showsIndicators: false){
+                VStack(alignment: .leading) {
+                    Text(place.name != nil ? place.name! : "")
+                        .font(.title)
+                    Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
+                    Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
+                    Button(action: {
+                        if let website = self.place.website {
+                            UIApplication.shared.open(website)
+                        }
+                    }){
+                        Text("Open Website")
                     }
-                }){
-                    Text("Open Website")
                 }
+                Spacer()
             }
-            Spacer()
         }
         .sheet(isPresented: $showSheet) {
             AddPlaceToListSheet(showSheet: self.$showSheet, placeID: self.place.placeID!)
