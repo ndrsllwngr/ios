@@ -35,6 +35,7 @@ struct CreatePlacelistSheet: View {
             .frame(width: 300, height: 100)
             Spacer()
         }
+        .padding()
     }
 }
 
@@ -58,15 +59,13 @@ struct SettingsSheet: View {
             Text(self.firestoreProfile.user.username)
             Spacer()
             HStack {
-                Text("Change username")
-                Spacer()
                 TextField(self.firestoreProfile.user.username, text: $newUserName)
                 Spacer()
                 Button(action: {
                     FirestoreConnection.shared.updateUserName(userId: self.firebaseAuthentication.currentUser!.uid, newUserName: self.newUserName)
                     UIApplication.shared.endEditing(true)
                 }) {
-                    Text("save")
+                    Text("Change Username")
                 }
             }
             HStack {
@@ -105,7 +104,7 @@ struct SettingsSheet: View {
         }.onAppear {
             self.newUserName = self.firestoreProfile.user.username
         }
-    .padding()
+        .padding()
     }
 }
 
@@ -139,6 +138,7 @@ struct UsersThatAreFollowingMeSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatAreFollowingMeListener()
         }
+        .padding()
     }
 }
 
@@ -173,6 +173,7 @@ struct UsersThatIAmFollowingSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatIAmFollowingListener()
         }
+        .padding()
     }
 }
 
