@@ -51,13 +51,6 @@ struct ProfileView: View {
                 UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
             }
         }
-        .navigationBarTitle(Text("Profil"), displayMode: .inline)
-        .navigationBarItems(trailing: Button(action:  {
-            self.sheetSelection = "settings"
-            self.showSheet.toggle()
-        }) {
-            Image(systemName: "gear")
-        })
     }
 }
 
@@ -70,19 +63,19 @@ struct ProfileView: View {
 struct InnerProfileView: View {
     var profileUserId: String
     @Binding var isMyProfile: Bool
-    @EnvironmentObject var profile: FirestoreProfile
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
     var body: some View {
         VStack {
-            ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.profile)
+            ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                     Section(header: Text("Owned Placelists")) {
-                        ForEach(profile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
+                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
                             NavigationLink(
                                 destination: PlaceListView(placeListId: placeList.id)
                             ) {
@@ -92,7 +85,7 @@ struct InnerProfileView: View {
                         .onDelete(perform: delete)
                     }
                     Section(header: Text("Followed Placelists")) {
-                        ForEach(profile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
+                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
                             NavigationLink(
                                 destination: PlaceListView(placeListId: placeList.id)
                             ) {
@@ -101,7 +94,7 @@ struct InnerProfileView: View {
                         }
                     }
                 } else {
-                    ForEach(profile.placeLists){ placeList in
+                    ForEach(firestoreProfile.placeLists){ placeList in
                         NavigationLink(
                             destination: PlaceListView(placeListId: placeList.id)
                         ) {
@@ -112,11 +105,19 @@ struct InnerProfileView: View {
                 Spacer()
             }
         }
+        .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
+        .navigationBarItems(trailing: HStack {
+            if (self.isMyProfile) {
+                ProfileSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
+            } else if (!self.isMyProfile) {
+                ProfileFollowButton(profileUserId: self.profileUserId).environmentObject(self.firestoreProfile)
+            }
+        })
     }
     
     func delete(at offsets: IndexSet) {
         offsets.forEach {index in
-            let placeListToDelete = profile.placeLists[index]
+            let placeListToDelete = firestoreProfile.placeLists[index]
             FirestoreConnection.shared.deletePlaceList(placeListToDelete: placeListToDelete)
         }
     }
@@ -131,17 +132,18 @@ struct ProfileInfoView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                VStack {
-                    Image("profile")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                        .padding()
-                }
+            VStack {
+                Image("profile")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                    .padding()
+            }
+            GeometryReader { metrics in
                 HStack {
-                    VStack{
+                    Spacer()
+                    VStack(alignment: .center) {
                         Text("\(self.profile.placeLists.count)")
                             .font(.system(size: 14))
                             .bold()
@@ -149,13 +151,12 @@ struct ProfileInfoView: View {
                             .font(.system(size: 12))
                         
                     }
-                    Spacer()
-                    
+                    .frame(width: metrics.size.width * 0.3)
                     Button(action: {
                         self.sheetSelection = "follower"
                         self.showSheet.toggle()
                     }) {
-                        VStack {
+                        VStack(alignment: .center) {
                             Text("\(self.profile.user.isFollowedBy.count)")
                                 .font(.system(size: 14))
                                 .bold()
@@ -163,13 +164,12 @@ struct ProfileInfoView: View {
                                 .font(.system(size: 12))
                         }
                     }
-                    
-                    Spacer()
+                    .frame(width: metrics.size.width * 0.3)
                     Button(action: {
                         self.sheetSelection = "following"
                         self.showSheet.toggle()
                     }) {
-                        VStack {
+                        VStack(alignment: .center) {
                             Text("\(self.profile.user.isFollowing.count)")
                                 .font(.system(size: 14))
                                 .bold()
@@ -177,27 +177,53 @@ struct ProfileInfoView: View {
                                 .font(.system(size: 12))
                         }
                     }
+                    .frame(width: metrics.size.width * 0.3)
+                    Spacer()
                 }
-            }
-            .padding(.horizontal)
-            HStack {
-                Text("\(self.profile.user.username)")
-                if (!self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                    Button(action: {
-                        FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
-                    }) {
-                        Image(systemName: "person.badge.plus.fill")
-                    }
-                } else if (self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                    Button(action: {
-                        FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
-                    }) {
-                        Image(systemName: "person.badge.minus.fill")
-                    }
-                }
-                Spacer()
-            }
-            .padding(.horizontal)
+            }.frame(height: 50)
+            
         }
+    }
+}
+
+struct ProfileFollowButton: View {
+    var profileUserId: String
+    
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    
+    var body: some View {
+        VStack {
+            if (!self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
+                }) {
+                    Image(systemName: "person.badge.plus.fill")
+                }
+            } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
+                }) {
+                    Image(systemName: "person.badge.minus.fill")
+                }
+            }
+        }
+    }
+}
+struct ProfileSettingsButton: View {
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    
+    var body: some View {
+        VStack {
+            Button(action:  {
+                self.sheetSelection = "settings"
+                self.showSheet.toggle()
+            }) {
+                Image(systemName: "gear")
+            }
+        }
+        
     }
 }
