@@ -67,12 +67,12 @@ struct PlaceListView: View {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId)
             print(self.placeListId)
             print(self.placeListName)
-            dump(self.firestorePlaceList.places)
+            dump(self.firestorePlaceList.gmsPlaces)
         }
         .onDisappear {
             print(self.placeListId)
             print(self.placeListName)
-            dump(self.firestorePlaceList.places)
+            dump(self.firestorePlaceList.gmsPlaces)
             self.firestorePlaceList.removePlaceListListener()
         }
     }

@@ -6,7 +6,7 @@ class FirestorePlaceList: ObservableObject {
     
     @Published var placeListListener: ListenerRegistration? = nil
     @Published var placeList: PlaceList? = nil
-    @Published var places: [GMSPlace] = []
+    @Published var gmsPlaces: [GMSPlaceWithTimestamp] = []
     
     func addPlaceListListener(placeListId: String) {
         FirestoreConnection.shared.getPlaceListsRef().document(placeListId).addSnapshotListener { documentSnapshot, error in
@@ -18,18 +18,18 @@ class FirestorePlaceList: ObservableObject {
                 print("addPlaceListListener triggered")
                 let fetchedPlaceList = dataToPlaceList(data: data)
                 self.placeList = fetchedPlaceList
-                self.places = []
+                self.gmsPlaces = []
                 
-                fetchedPlaceList.placeIds
-                    .forEach {placeId in
+                fetchedPlaceList.places
+                    .forEach {placeWithTimestamp in
                         //dispatchGroup.enter()
-                        getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
+                        getPlace(placeID: placeWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                             if let error = error {
                                 print("An error occurred : \(error.localizedDescription)")
                                 return
                             }
                             if let place = place {
-                                self.places.append(place)
+                                self.gmsPlaces.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeWithTimestamp.addedAt))
                             }
                         }
                 }
@@ -40,6 +40,6 @@ class FirestorePlaceList: ObservableObject {
     func removePlaceListListener() {
         self.placeListListener?.remove()
         self.placeList = nil
-        self.places = []
+        self.gmsPlaces = []
     }
 }

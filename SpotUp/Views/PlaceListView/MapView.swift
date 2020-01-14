@@ -17,7 +17,7 @@ struct MapView: View {
             VStack{
                 ZStack{
                     GoogMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
-                    if(!self.firestorePlaceList.places.isEmpty){
+                    if(!self.firestorePlaceList.gmsPlaces.isEmpty){
                         PlaceCard(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
                     }
                 }
@@ -43,7 +43,7 @@ struct GoogMapView : UIViewRepresentable {
     )
     func makeUIView(context: Context) -> GMSMapView {
        
-        let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].coordinate : self.defaultLocation
+        let initialCoords = !firestorePlaceList.gmsPlaces.isEmpty ? firestorePlaceList.gmsPlaces[currentIndex].gmsPlace.coordinate : self.defaultLocation
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,
@@ -58,17 +58,17 @@ struct GoogMapView : UIViewRepresentable {
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
-        if(firestorePlaceList.places.isEmpty) {return}
-        let currentPlace = firestorePlaceList.places[currentIndex].coordinate
+        if(firestorePlaceList.gmsPlaces.isEmpty) {return}
+        let currentPlace = firestorePlaceList.gmsPlaces[currentIndex].gmsPlace.coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
-        for (index,place) in self.firestorePlaceList.places.enumerated() {
+        for (index,place) in self.firestorePlaceList.gmsPlaces.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
-                latitude: place.coordinate.latitude,
-                longitude: place.coordinate.longitude
+                latitude: place.gmsPlace.coordinate.latitude,
+                longitude: place.gmsPlace.coordinate.longitude
             )
-            marker.title = place.name
+            marker.title = place.gmsPlace.name
             //marker.snippet = place.state
             if(index == currentIndex){
                 marker.icon = GMSMarker.markerImage(with: .black)
@@ -98,9 +98,9 @@ struct PlaceCard: View {
                     }
                 }
                 
-                Text(self.firestorePlaceList.places[self.currentIndex].name != nil ? self.firestorePlaceList.places[self.currentIndex].name! : "")
+                Text(self.firestorePlaceList.gmsPlaces[self.currentIndex].gmsPlace.name != nil ? self.firestorePlaceList.gmsPlaces[self.currentIndex].gmsPlace.name! : "")
                 
-                if(self.currentIndex < (self.firestorePlaceList.places.count - 1)){
+                if(self.currentIndex < (self.firestorePlaceList.gmsPlaces.count - 1)){
                     Button(action: {
                         self.currentIndex+=1
                     }) {
