@@ -43,6 +43,12 @@ struct PlacesListRow: View {
                     .bold()
                 Text("von \(placeList.owner.username)")
             }
+            if (!placeList.isPublic) {
+                Image(systemName: "lock.circle.fill")
+            }
+            if (placeList.isCollaborative) {
+                Image(systemName: "person.3.fill")
+            }
         }
     }
 }

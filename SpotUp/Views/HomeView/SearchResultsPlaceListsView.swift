@@ -8,11 +8,12 @@ struct SearchResultsPlaceListsView: View {
         Group {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseLists.count > 0) {
-                    List { Section(header: Text("Recent")){
-                        ForEach(searchViewModel.recentSearchFirebaseLists) {
-                            (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, showRecent: true).environmentObject(self.searchViewModel)
-                        }
-                        Spacer()
+                    List {
+                        Section(header: Text("Recent")) {
+                            ForEach(searchViewModel.recentSearchFirebaseLists) {
+                                (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, showRecent: true).environmentObject(self.searchViewModel)
+                            }
+                            Spacer()
                         }
                     }
                 }
@@ -20,8 +21,8 @@ struct SearchResultsPlaceListsView: View {
                     SearchResultsEmptyStateView()
                 }
             } else {
-                List { ForEach(searchViewModel.firestoreSearch.allPublicPlaceLists.filter{searchViewModel.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(searchViewModel.searchTerm)}) {
-                    (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList).environmentObject(self.searchViewModel)
+                List { ForEach(searchViewModel.firestoreSearch.allPublicPlaceLists.filter{searchViewModel.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(searchViewModel.searchTerm)}) { (placeList: PlaceList) in
+                    SingleRowPlaceList(placeList: placeList).environmentObject(self.searchViewModel)
                     }
                     Spacer()
                 }
@@ -49,7 +50,7 @@ struct SingleRowPlaceList: View {
                     if(self.searchViewModel.recentSearchFirebaseLists.count > 5) {
                         self.searchViewModel.recentSearchFirebaseLists = Array(self.searchViewModel.recentSearchFirebaseLists.prefix(5))
                     }
-
+                    
                 }
                 self.goToDestination = true
                 self.selection = 1
@@ -73,7 +74,10 @@ struct SingleRowPlaceList: View {
             //                .padding(.trailing)
             //            }
             if (self.goToDestination != false) {
-                NavigationLink(destination: PlaceListView(placeListId: placeList.id), tag: 1, selection: $selection) { EmptyView() }
+                NavigationLink(destination: PlaceListView(placeListId: placeList.id), tag: 1, selection: $selection) {
+                    EmptyView()
+                    
+                }
             }
         }
     }

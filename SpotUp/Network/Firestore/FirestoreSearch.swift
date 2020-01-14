@@ -7,13 +7,11 @@ class FirestoreSearch: ObservableObject {
     let objectWillChange = ObservableObjectPublisher()
     @Published var allUsers: [User] = [] {
         didSet {
-            print("object changed")
             objectWillChange.send()
         }
     }
     @Published var allPublicPlaceLists: [PlaceList] = [] {
         didSet {
-            print("object changed")
             objectWillChange.send()
         }
     }
@@ -47,7 +45,6 @@ class FirestoreSearch: ObservableObject {
                 let data = documentSnapshot.data()
                 return dataToPlaceList(data: data)
             }
-            print("SEARCh placelist listener")
         }
     }
     
@@ -58,6 +55,6 @@ class FirestoreSearch: ObservableObject {
     
     func removeAllPublicPlaceListsListener() {
         self.allPublicPlaceListsListener?.remove()
-        self.allPublicPlaceLists = []
+        print("Successfully removed allPublicPlaceListsListener")
     }
 }
