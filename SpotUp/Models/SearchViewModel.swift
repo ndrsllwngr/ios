@@ -9,8 +9,11 @@ class SearchViewModel: ObservableObject {
     
     // output
     @Published var googlePlaces: [GMSAutocompletePrediction] = []
-    @Published var firebaseAccounts = []
-    @Published var firebaseLists = []
+    //solution: https://stackoverflow.com/a/58440744
+    @Published var firestoreSearch: FirestoreSearch = FirestoreSearch()
+    @Published var recentSearchPlaces: [GMSAutocompletePrediction] = []
+    @Published var recentSearchFirebaseAccounts: [User] = []
+    @Published var recentSearchFirebaseLists: [PlaceList] = []
     
     private var cancellableSet: Set<AnyCancellable> = []
     
@@ -20,6 +23,8 @@ class SearchViewModel: ObservableObject {
         case firebaseLists = "lists"
     }
     
+    var firestoreSearchCancellable: AnyCancellable? = nil
+
     // GOOGLE SEARCH
     private var isSearchSpaceGoogle: AnyPublisher<Bool, Never> {
         $searchSpaceSelection
@@ -64,6 +69,9 @@ class SearchViewModel: ObservableObject {
     }
     
     init() {
+        firestoreSearchCancellable = Publishers.CombineLatest(firestoreSearch.$allPublicPlaceLists,firestoreSearch.$allUsers).sink(receiveValue: {_ in            self.objectWillChange.send()
+        })
+        
         isGoogleSearchValidPublisher
             .receive(on: RunLoop.main)
             .assign(to: \.googlePlaces, on: self)
