@@ -41,10 +41,8 @@ struct ProfileView: View {
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
-            if self.sheetSelection == "edit_profile" {
-                EditProfileSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
-            } else if self.sheetSelection == "settings" {
-                SettingsSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
+            if self.sheetSelection == "settings" {
+                SettingsSheet(showSheet: self.$showSheet).environmentObject(self.firestoreProfile)
             } else if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
@@ -182,40 +180,24 @@ struct ProfileInfoView: View {
                 }
             }
             .padding(.horizontal)
-            if isMyProfile {
-                HStack {
+            HStack {
+                Text("\(self.profile.user.username)")
+                if (!self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "edit_profile"
+                        FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
                     }) {
-                        HStack {
-                            Text("\(self.profile.user.username)")
-                            Image(systemName: "pencil")
-                        }
+                        Image(systemName: "person.badge.plus.fill")
                     }
-                    Spacer()
-                }
-                .padding(.horizontal)
-            } else {
-                HStack {
-                    Text("\(self.profile.user.username)")
-                    if (!self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                        Button(action: {
-                            FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
-                        }) {
-                            Text("Follow")
-                        }
-                    } else if (self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                        Button(action: {
-                            FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
-                        }) {
-                            Text("Unfollow")
-                        }
+                } else if (self.profile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profile.user.id)
+                    }) {
+                        Image(systemName: "person.badge.minus.fill")
                     }
-                    Spacer()
                 }
-                .padding(.horizontal)
+                Spacer()
             }
+            .padding(.horizontal)
         }
     }
 }

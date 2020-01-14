@@ -81,7 +81,7 @@ struct HomeView: View {
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
-                } .navigationBarTitle(Text("Search"))
+                } .navigationBarTitle(Text("Search"), displayMode: .inline)
             }
             .onAppear {
                 print("onAppear HomeView: About to add PlaceList firestoreSearch Listener")
