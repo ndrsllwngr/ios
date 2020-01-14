@@ -8,7 +8,7 @@ class FirebaseStorageImageLoader: ObservableObject {
     @Published var image: UIImage? = nil
     
     init(id: String) {
-        let ref = FirebaseStorage.shared.getImagesRef().child("\(id).png")
+        let ref = FirebaseStorage.shared.getImagesRef().child("\(id).jpg")
         
         ref.getData(maxSize: 1 * 1024 * 1024) { (data, error) in
             guard let data = data else {
