@@ -9,7 +9,8 @@ func userToData(user: User) -> Dictionary<String, Any> {
         "email": user.email,
         "username": user.username,
         "is_following": user.isFollowing,
-        "is_followed_by": user.isFollowedBy
+        "is_followed_by": user.isFollowedBy,
+        "profile_image_id": user.profileImageId // ToDo warning
     ]
 }
 
@@ -35,7 +36,8 @@ func dataToUser(data: Dictionary<String, Any>) -> User {
                 email: data["email"] as! String,
                 username: data["username"] as! String,
                 isFollowing: data["is_following"] as! [String],
-                isFollowedBy: data["is_followed_by"] as! [String])
+                isFollowedBy: data["is_followed_by"] as! [String],
+                profileImageId: data["profile_image_id"] as? String)
 }
 
 

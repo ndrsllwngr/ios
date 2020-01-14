@@ -133,7 +133,7 @@ struct ProfileInfoView: View {
     var body: some View {
         VStack {
             VStack {
-                FirebaseImage(id: "12345", placeholderImageString: "profile")
+                MyImage(someImageId: profile.user.profileImageId, placeHolderImageId: "profile")
             }
             GeometryReader { metrics in
                 HStack {
