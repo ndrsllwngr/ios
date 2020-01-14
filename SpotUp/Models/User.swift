@@ -1,6 +1,6 @@
 import Foundation
 
-struct User: Identifiable, Decodable {
+struct User: Identifiable, Decodable, Hashable {
     var id: String
     var email: String
     var username: String
@@ -14,7 +14,7 @@ struct User: Identifiable, Decodable {
     
 }
 
-struct ListOwner {
+struct ListOwner: Identifiable, Equatable {
     var id: String
     var username: String
 }

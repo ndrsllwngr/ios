@@ -1,7 +1,7 @@
 import Foundation
 import FirebaseFirestore
 
-struct PlaceList: Identifiable {
+struct PlaceList: Identifiable, Equatable {
     var id: String = UUID().uuidString
     var name: String
     var owner: ListOwner
@@ -16,3 +16,4 @@ struct PlaceList: Identifiable {
     //var location: String
     //var tags: [UUID]
 }
+

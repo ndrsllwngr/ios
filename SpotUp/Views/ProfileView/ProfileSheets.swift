@@ -8,35 +8,6 @@
 import SwiftUI
 import FirebaseFirestore
 
-struct EditProfileSheet: View {
-    var user: User
-    @Binding var showSheet: Bool
-    @State private var newUserName: String = ""
-    
-    var body: some View {
-        VStack {
-            Text("Edit profile")
-            Spacer()
-            TextField(self.user.username, text: $newUserName)
-            HStack {
-                Button(action: {
-                    self.showSheet.toggle()
-                }) {
-                    Text("cancel")
-                }
-                Spacer()
-                Button(action: {
-                    FirestoreConnection.shared.updateUserName(userId: self.user.id, newUserName: self.newUserName)
-                    self.showSheet.toggle()
-                }) {
-                    Text("save")
-                }
-            }
-            Spacer()
-        }
-    }
-}
-
 struct CreatePlacelistSheet: View {
     var user: User
     @Binding var showSheet: Bool
@@ -65,12 +36,18 @@ struct CreatePlacelistSheet: View {
             .frame(width: 300, height: 100)
             Spacer()
         }
+        .padding()
     }
 }
 
 struct SettingsSheet: View {
-    var user: User
+    
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    
     @Binding var showSheet: Bool
+    
+    @State private var newUserName: String = ""
     @State private var newEmail: String = ""
     @State private var currentPasswordChangeEmail: String = ""
     @State private var newPassword: String = ""
@@ -79,13 +56,24 @@ struct SettingsSheet: View {
     
     
     var body: some View {
-        VStack {
-            Text("Settings")
+        VStack (alignment: .leading) {
+            Text(self.firestoreProfile.user.username)
+            Spacer()
             HStack {
-                TextField("\(user.email)", text: $newEmail)
+                TextField(self.firestoreProfile.user.username, text: $newUserName)
+                Spacer()
+                Button(action: {
+                    FirestoreConnection.shared.updateUserName(userId: self.firebaseAuthentication.currentUser!.uid, newUserName: self.newUserName)
+                    UIApplication.shared.endEditing(true)
+                }) {
+                    Text("Change Username")
+                }
+            }
+            HStack {
+                TextField("\(self.firebaseAuthentication.currentUser!.email)", text: $newEmail)
                 SecureField("current password", text: $currentPasswordChangeEmail)
                 Button(action: {
-                    FirebaseAuthentication.shared.changeEmail(currentEmail: self.user.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
+                    FirebaseAuthentication.shared.changeEmail(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
                 }) {
                     Text("Change Email").foregroundColor(.blue)
                 }
@@ -94,28 +82,30 @@ struct SettingsSheet: View {
                 TextField("New password", text: $newPassword)
                 SecureField("current password", text: $currentPasswordChangePassword)
                 Button(action: {
-                    FirebaseAuthentication.shared.changePassword(currentEmail: self.user.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
+                    FirebaseAuthentication.shared.changePassword(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
                 }) {
                     Text("Change Password").foregroundColor(.blue)
                 }
             }
+            HStack {
+                SecureField("current password", text: $currentPasswordDeleteAccount)
+                Button(action: {
+                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordDeleteAccount)
+                }) {
+                    Text("Delete Account").foregroundColor(.red)
+                }
+            }
+            Spacer()
             Button(action: {
                 self.showSheet.toggle()
                 FirebaseAuthentication.shared.logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
             }
-            Spacer()
-            HStack {
-                SecureField("current password", text: $currentPasswordDeleteAccount)
-                Button(action: {
-                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.user.email, currentPassword: self.currentPasswordDeleteAccount)
-                }) {
-                    Text("Delete Account").foregroundColor(.red)
-                }
-            }
-            
+        }.onAppear {
+            self.newUserName = self.firestoreProfile.user.username
         }
+        .padding()
     }
 }
 
@@ -149,6 +139,7 @@ struct UsersThatAreFollowingMeSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatAreFollowingMeListener()
         }
+        .padding()
     }
 }
 
@@ -156,6 +147,7 @@ struct UsersThatIAmFollowingSheet: View {
     @Binding var showSheet: Bool
     var userId: String
     @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
     @Binding var profileUserIdToNavigateTo: String?
     @Binding var goToOtherProfile: Int?
     
@@ -182,6 +174,7 @@ struct UsersThatIAmFollowingSheet: View {
         .onDisappear {
             self.firestoreFollowSheet.removeUsersThatIAmFollowingListener()
         }
+        .padding()
     }
 }
 

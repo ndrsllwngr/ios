@@ -1,10 +1,20 @@
 import Foundation
 import FirebaseFirestore
 import GooglePlaces
+import Combine
 
 class FirestoreSearch: ObservableObject {
-    @Published var allUsers: [User] = []
-    @Published var allPublicPlaceLists: [PlaceList] = []
+    let objectWillChange = ObservableObjectPublisher()
+    @Published var allUsers: [User] = [] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published var allPublicPlaceLists: [PlaceList] = [] {
+        didSet {
+            objectWillChange.send()
+        }
+    }
     @Published var allAllUsersListener: ListenerRegistration? = nil
     @Published var allPublicPlaceListsListener: ListenerRegistration? = nil
     
@@ -45,6 +55,6 @@ class FirestoreSearch: ObservableObject {
     
     func removeAllPublicPlaceListsListener() {
         self.allPublicPlaceListsListener?.remove()
-        self.allPublicPlaceLists = []
+        print("Successfully removed allPublicPlaceListsListener")
     }
 }

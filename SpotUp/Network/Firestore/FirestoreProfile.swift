@@ -8,8 +8,7 @@ class FirestoreProfile: ObservableObject {
     @Published var placeListsListener: ListenerRegistration? = nil
     @Published var listOwnerListeners: [ListenerRegistration?] = []
     
-    
-    @Published var user: User? = nil
+    @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []
     
     
@@ -23,11 +22,13 @@ class FirestoreProfile: ObservableObject {
                 return
             }
             documentSnapshot.data().flatMap({ data in
-                self.user = dataToUser(data: data)
+                let newUser = dataToUser(data: data)
+                print("userProfileListener triggered: \(newUser.username)")
+                self.user = newUser
             })
         }
         
-        let ref = isMyProfile ? FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId) : FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId).whereField("is_public", isEqualTo: true)
+        let ref = isMyProfile ? FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId) : FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId)
         // Listener for my lists
         self.placeListsListener = ref.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
@@ -62,7 +63,7 @@ class FirestoreProfile: ObservableObject {
         self.listOwnerListeners.forEach{ listener in
             listener?.remove()
         }
-        print("Successfully removed listener")
+        print("Successfully removed profile listener")
     }
     
 }
