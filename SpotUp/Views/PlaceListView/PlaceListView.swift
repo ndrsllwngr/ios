@@ -97,7 +97,7 @@ struct PlaceListInfoView: View {
                         Text("by \(self.firestorePlaceList.placeList.owner.username)")
                         HStack {
                             Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.placeIds.count)")
+                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
                         }
                         HStack {
                             Image(systemName: "person.fill")
