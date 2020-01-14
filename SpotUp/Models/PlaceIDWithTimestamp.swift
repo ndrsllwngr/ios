@@ -14,7 +14,7 @@ struct PlaceIDWithTimestamp: Equatable {
        var addedAt: Timestamp
    }
 
-struct GMSPlaceWithTimestamp: Equatable {
+struct GMSPlaceWithTimestamp: Equatable, Hashable {
     var gmsPlace: GMSPlace
     var addedAt: Timestamp
 }

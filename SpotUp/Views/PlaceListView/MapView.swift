@@ -46,7 +46,6 @@ struct GoogleMapView : UIViewRepresentable {
        
         let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].gmsPlace.coordinate : self.defaultLocation
         
-        let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].coordinate : self.defaultLocation
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,

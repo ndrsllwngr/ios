@@ -24,7 +24,7 @@ struct SwipeView: View {
                 HStack(spacing: self.spacing) {
                     ForEach((self.firestorePlaceList.places), id: \.self) { place in
                         //GeometryReader { geo in
-                        CoverCard(place: place)
+                        CoverCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
 //                            .rotation3DEffect(.degrees(-Double(geo.frame(in: .global).midX - geometry.size.width / 2.0) / 10.0), axis: (x: CGFloat(0), y: CGFloat(1), z: CGFloat(0)))
                         //}
