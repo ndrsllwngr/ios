@@ -81,11 +81,19 @@ class FirestoreConnection: ObservableObject {
     }
     
     // ToDo update with more parameters
-    func updatePlaceList(placeListId: String, newName: String) {
+    func updatePlaceList(placeListId: String, newName: String? = nil, isPublic: Bool? = nil, isCollaborative: Bool? = nil) {
         let listRef = dbPlaceListsRef.document(placeListId)
-        listRef.updateData([
-            "name": newName
-        ]) { err in
+        var data: Dictionary<String, Any> = [:]
+        if let newName = newName {
+            data["name"] = newName
+        }
+        if let isPublic = isPublic {
+            data["is_public"] = isPublic
+        }
+        if let isCollaborative = isCollaborative {
+             data["is_collaborative"] = isCollaborative
+        }
+        listRef.updateData(data) { err in
             if let err = err {
                 print("Error updating PlaceList: \(err)")
             } else {

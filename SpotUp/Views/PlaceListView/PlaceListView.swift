@@ -48,7 +48,7 @@ struct InnerPlaceListView: View {
     var body: some View {
         VStack {
             // Follow button only on foreign user profiles
-            FollowButton(placeListId: placeListId).environmentObject(firestorePlaceList)
+            PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -66,15 +66,11 @@ struct InnerPlaceListView: View {
             }
         }
         .navigationBarTitle(Text(self.firestorePlaceList.placeList.name), displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
-            self.showSheet.toggle()
-        }) {
-            Image(systemName: "line.horizontal.3")
-        })
+        .navigationBarItems(trailing: PlaceListSettingsButton(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList))
     }
 }
 
-struct FollowButton: View {
+struct PlaceListInfoView: View {
     
     var placeListId: String
     
@@ -100,6 +96,24 @@ struct FollowButton: View {
                 }
             }
         }
+    }
+}
+
+struct PlaceListSettingsButton: View {
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack {
+            if (firestorePlaceList.isOwnedPlaceList) {
+                Button(action: {
+                    self.showSheet.toggle()
+                }) {
+                    Image(systemName: "line.horizontal.3")
+                }
+            }
+        }
+        
     }
 }
 
