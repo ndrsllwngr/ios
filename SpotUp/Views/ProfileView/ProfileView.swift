@@ -10,11 +10,13 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ProfileView: View {
+    
     var profileUserId: String
-    @State var isMyProfile: Bool = false
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile = FirestoreProfile()
     
+    @State var isMyProfile: Bool = false
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil

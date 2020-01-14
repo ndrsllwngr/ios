@@ -9,8 +9,9 @@ struct SearchResultsAccountsView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
                     List {
-                        Section(header: Text("Recent")){ForEach(searchViewModel.recentSearchFirebaseAccounts) {
-                            (user: User) in SingleRowAccount(user: user, showRecent: true).environmentObject(self.searchViewModel)
+                        Section(header: Text("Recent")) {
+                            ForEach(searchViewModel.recentSearchFirebaseAccounts) {
+                                (user: User) in SingleRowAccount(user: user, showRecent: true).environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -20,8 +21,9 @@ struct SearchResultsAccountsView: View {
                     SearchResultsEmptyStateView()
                 }
             } else {
-                List { ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) {
-                    (user: User) in SingleRowAccount(user: user).environmentObject(self.searchViewModel)
+                List {
+                    ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) { (user: User) in
+                        SingleRowAccount(user: user).environmentObject(self.searchViewModel)
                     }
                     Spacer()
                 }
@@ -71,7 +73,9 @@ struct SingleRowAccount: View {
             //                .padding(.trailing)
             //            }
             if (self.goToDestination != false) {
-                NavigationLink(destination: ProfileView(profileUserId: user.id), tag: 1, selection: $selection) { EmptyView() }
+                NavigationLink(destination: ProfileView(profileUserId: user.id), tag: 1, selection: $selection) {
+                    EmptyView()
+                }
             }
         }
     }
