@@ -1,6 +1,5 @@
 import Foundation
 import FirebaseFirestore
-
 // Define conversions swift object -> firestore data & firestore data -> swift objects here
 
 // Object to firestore data
@@ -22,13 +21,16 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "follower_ids": placeList.followerIds,
         "is_public": placeList.isPublic,
         "place_ids": placeList.placeIds,
-        "is_collaborative": placeList.isCollaborative
+        "places": placeIDsWithTimestampsToDatas(places: placeList.places),
+        "is_collaborative": placeList.isCollaborative,
+        "modified_at": placeList.modifiedAt,
+        "created_at": placeList.createdAt
     ]
 }
 
 
 // Object to firestore data
-func dataToUser(data: Dictionary<String, Any>) -> User {
+func dataToUser(data: Dictionary<String, Any>) -> User {  
     return User(id: data["id"] as! String,
                 email: data["email"] as! String,
                 username: data["username"] as! String,
@@ -44,5 +46,35 @@ func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
                      followerIds: data["follower_ids"] as! [String],
                      isPublic: data["is_public"] as! Bool,
                      placeIds: data["place_ids"] as! [String],
-                     isCollaborative: data["is_collaborative"] as! Bool)
+                     places: datasToPlaceIDwithTimestamps(datas: data["places"] as! [Dictionary<String, Any>]),
+                     //places:[data["place_id"] as! String && data["added_at"] as! Timestamp],
+        isCollaborative: data["is_collaborative"] as! Bool,
+        modifiedAt: data["modified_at"] as? Timestamp,
+        createdAt: data["created_at"] as! Timestamp)
 }
+
+
+func placeIDWithTimestampToData(place: PlaceIDWithTimestamp) -> Dictionary<String, Any> {
+    return [
+        "place_id": place.placeId,
+        "added_at": place.addedAt
+    ]
+}
+func dataToPlaceIDWithTimestamp(data: Dictionary<String, Any>) -> PlaceIDWithTimestamp {
+    return PlaceIDWithTimestamp(placeId: data["place_id"] as! String,
+                                addedAt: data["added_at"] as! Timestamp)
+}
+
+func placeIDsWithTimestampsToDatas(places: [PlaceIDWithTimestamp]) -> [Dictionary<String, Any>] {
+    return places.map{ place in
+        return placeIDWithTimestampToData(place: place)
+    }
+}
+
+func datasToPlaceIDwithTimestamps(datas: [Dictionary<String, Any>]) -> [PlaceIDWithTimestamp] {
+    return datas.map{ data in
+        return dataToPlaceIDWithTimestamp(data: data)
+    }
+}
+
+
