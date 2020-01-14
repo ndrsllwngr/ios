@@ -133,12 +133,7 @@ struct ProfileInfoView: View {
     var body: some View {
         VStack {
             VStack {
-                Image("profile")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                    .padding()
+                FirebaseImage(id: "12345", placeholderImageString: "profile")
             }
             GeometryReader { metrics in
                 HStack {
