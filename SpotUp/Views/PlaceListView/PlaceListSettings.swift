@@ -17,8 +17,6 @@ struct PlaceListSettings: View {
             Text(self.firestorePlaceList.placeList.name)
             Spacer()
             HStack {
-                Text("Change name")
-                Spacer()
                 TextField(self.firestorePlaceList.placeList.name, text: $newListName)
                 Spacer()
                 Button(action: {
@@ -26,7 +24,7 @@ struct PlaceListSettings: View {
                     // ToDo also close on background tap
                     UIApplication.shared.endEditing(true)
                 }) {
-                    Text("save")
+                    Text("Change Name")
                 }
             }
             if (self.firestorePlaceList.placeList.isPublic) {
@@ -39,14 +37,14 @@ struct PlaceListSettings: View {
                     }
                 }
             } else if (!self.firestorePlaceList.placeList.isPublic) {
-                    Button(action: {
-                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isPublic: true)
-                    }) {
-                        HStack {
-                            Image(systemName: "globe")
-                            Text("Make public PlaceList")
-                        }
+                Button(action: {
+                    FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isPublic: true)
+                }) {
+                    HStack {
+                        Image(systemName: "globe")
+                        Text("Make public PlaceList")
                     }
+                }
             }
             if (!self.firestorePlaceList.placeList.isCollaborative) {
                 Button(action: {
@@ -58,14 +56,14 @@ struct PlaceListSettings: View {
                     }
                 }
             } else if (self.firestorePlaceList.placeList.isCollaborative) {
-                    Button(action: {
-                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isCollaborative: false)
-                    }) {
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("Make non collaborative PlaceList")
-                        }
+                Button(action: {
+                    FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isCollaborative: false)
+                }) {
+                    HStack {
+                        Image(systemName: "person.fill")
+                        Text("Make non collaborative PlaceList")
                     }
+                }
             }
             Spacer()
             Button(action: {
@@ -76,7 +74,7 @@ struct PlaceListSettings: View {
         }.onAppear {
             self.newListName = self.firestorePlaceList.placeList.name
         }
-    .padding()
+        .padding()
     }
 }
 
