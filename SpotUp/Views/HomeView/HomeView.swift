@@ -84,14 +84,14 @@ struct HomeView: View {
                 } .navigationBarTitle(Text("Search"))
             }
             .onAppear {
-                print("HomeView ON APPEAR")
+                print("onAppear HomeView: About to add PlaceList firestoreSearch Listener")
                 self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.addAllUsersListener()
             }
             .onDisappear {
-                print("HomeView ON DISAPPEAR")
-                self.searchViewModel.firestoreSearch.removeAllUsersListener()
+                print("onDisappear HomeView: About to remove PlaceList firestoreSearch Listener")
                 self.searchViewModel.firestoreSearch.removeAllPublicPlaceListsListener()
+                self.searchViewModel.firestoreSearch.removeAllUsersListener()
             }
         }
     }
