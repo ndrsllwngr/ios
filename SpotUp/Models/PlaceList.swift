@@ -10,7 +10,7 @@ struct PlaceList: Identifiable, Equatable {
     var placeIds: [String] = []
     var places: [PlaceIDWithTimestamp] = []
     var isCollaborative: Bool = false // only possible if private
-    var modifiedAt: Timestamp
+    var modifiedAt: Timestamp? = nil
     var createdAt: Timestamp
     //var titleImage: String
     //var location: String

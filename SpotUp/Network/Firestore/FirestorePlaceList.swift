@@ -7,8 +7,8 @@ class FirestorePlaceList: ObservableObject {
     @Published var placeListListener: ListenerRegistration? = nil
     @Published var ownerListener: ListenerRegistration? = nil
     
-    @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [])
-    @Published var places: [GMSPlaceWithTimeStamp] = []
+    @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [], createdAt: Timestamp.init())
+    @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
     
     // Call when entering view (.onAppear()) to create listeners for all data needed
@@ -41,16 +41,16 @@ class FirestorePlaceList: ObservableObject {
                     
                     
                     self.places = []
-                    self.placeList.placeIds
-                        .forEach {placeId in
+                    self.placeList.places
+                        .forEach {placeIDWithTimestamp in
                             //dispatchGroup.enter()
-                            getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
+                            getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                                 if let error = error {
                                     print("An error occurred : \(error.localizedDescription)")
                                     return
                                 }
                                 if let place = place {
-                                    self.gmsPlaces.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeWithTimestamp.addedAt))
+                                    self.places.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeIDWithTimestamp.addedAt))
                                 }
                             }
                     }

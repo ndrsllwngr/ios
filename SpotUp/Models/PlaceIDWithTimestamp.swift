@@ -9,12 +9,12 @@ import Foundation
 import FirebaseFirestore
 import GooglePlaces
 
-struct PlaceIDWithTimestamp {
+struct PlaceIDWithTimestamp: Equatable {
        var placeId: String
        var addedAt: Timestamp
    }
 
-struct GMSPlaceWithTimestamp{
+struct GMSPlaceWithTimestamp: Equatable {
     var gmsPlace: GMSPlace
     var addedAt: Timestamp
 }
