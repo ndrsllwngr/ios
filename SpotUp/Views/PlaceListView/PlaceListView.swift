@@ -10,6 +10,7 @@ import SwiftUI
 
 
 struct PlaceListView: View {
+    
     var placeListId: String
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
@@ -20,54 +21,57 @@ struct PlaceListView: View {
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.isOwnedPlaceList && !self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                    
-                }) {
-                    Text("Follow")
+            VStack {
+                if (!self.firestorePlaceList.isOwnedPlaceList && !self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                        
+                    }) {
+                        Text("Follow")
+                    }
+                } else if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
+                    Button(action: {
+                        FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    }) {
+                        Text("Unfollow")
+                    }
                 }
-            } else if (!self.firestorePlaceList.isOwnedPlaceList && self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)){
-                Button(action: {
-                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                }) {
-                    Text("Unfollow")
+                
+                Picker(selection: $selection, label: Text("View")) {
+                    Text("List").tag(0)
+                    Text("Map").tag(1)
+                }
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
+                
+                Spacer()
+                
+                if selection == 0 {
+                    ListView().environmentObject(firestorePlaceList)
+                } else {
+                    MapView().environmentObject(firestorePlaceList)
                 }
             }
-            
-            Picker(selection: $selection, label: Text("View")) {
-                Text("List").tag(0)
-                Text("Map").tag(1)
-            }
-            .padding()
-            .pickerStyle(SegmentedPickerStyle())
-            
-            Spacer()
-            
-            if selection == 0 {
-                ListView().environmentObject(firestorePlaceList)
-            } else {
-                MapView().environmentObject(firestorePlaceList)
-            }
-        }
             .onAppear {
-                print("PlaceListView ON APPEAR")
+                print("onAppear PlaceListView: About to add firestorePlaceList Listener")
                 self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
             }
             .onDisappear {
-                print("PlaceListView ON DISAPPEAR")
+                print("onDisappear PlaceListView: About to remove firestorePlaceList Listener")
                 self.firestorePlaceList.removePlaceListListener()
             }
-            .sheet(isPresented: $showSheet) {
-                    PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
-            }
+            
+        }
+        .sheet(isPresented: $showSheet) {
+            PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+        }
         .navigationBarTitle(self.firestorePlaceList.placeList.name)
         .navigationBarItems(trailing: Button(action: {
             self.showSheet.toggle()
         }) {
             Image(systemName: "line.horizontal.3")
         })
-            
+        
         
     }
 }

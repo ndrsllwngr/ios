@@ -23,9 +23,7 @@ class FirestoreProfile: ObservableObject {
             }
             documentSnapshot.data().flatMap({ data in
                 let newUser = dataToUser(data: data)
-                print("LISTENER TRIGGERED: \(currentUserId) \(isMyProfile)")
-                print(self.user)
-                print(newUser)
+                print("userProfileListener triggered: \(newUser.username)")
                 self.user = newUser
             })
         }
