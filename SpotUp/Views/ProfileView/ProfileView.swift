@@ -75,7 +75,7 @@ struct InnerProfileView: View {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                     Section(header: Text("Owned Placelists")) {
-                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id == profileUserId}){ placeList in
+                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id == profileUserId}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                             NavigationLink(
                                 destination: PlaceListView(placeListId: placeList.id)
                             ) {
