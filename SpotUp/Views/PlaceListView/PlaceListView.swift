@@ -48,7 +48,7 @@ struct InnerPlaceListView: View {
     var body: some View {
         VStack {
             // Follow button only on foreign user profiles
-            FollowButton(placeListId: placeListId).environmentObject(firestorePlaceList)
+            PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -65,41 +65,94 @@ struct InnerPlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .navigationBarTitle(Text(self.firestorePlaceList.placeList.name), displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
-            self.showSheet.toggle()
-        }) {
-            Image(systemName: "line.horizontal.3")
+        .navigationBarTitle(Text(""), displayMode: .inline)
+        .navigationBarItems(trailing: HStack {
+            if (self.firestorePlaceList.isOwnedPlaceList) {
+                PlaceListSettingsButton(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+            } else if (!self.firestorePlaceList.isOwnedPlaceList) {
+                PlaceListFollowButton(placeListId: self.placeListId).environmentObject(self.firestorePlaceList)
+            }
         })
     }
 }
 
-struct FollowButton: View {
+struct PlaceListInfoView: View {
     
     var placeListId: String
     
-    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.isOwnedPlaceList) {
-                if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                    Button(action: {
-                        FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                        
-                    }) {
-                        Text("Follow")
+            HStack {
+                Image("chincoteague")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
+                    .padding()
+                VStack {
+                    Text(self.firestorePlaceList.placeList.name)
+                    HStack {
+                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                        HStack {
+                            Image(systemName: "map.fill")
+                            Text("\(self.firestorePlaceList.placeList.placeIds.count)")
+                        }
+                        HStack {
+                            Image(systemName: "person.fill")
+                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
+                        }
                     }
-                } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
-                        FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                        print("Explore")
                     }) {
-                        Text("Unfollow")
+                        Text("Explore")
                     }
                 }
             }
         }
+    }
+}
+
+struct PlaceListFollowButton: View {
+    var placeListId: String
+    
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    
+    var body: some View {
+        VStack {
+            if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    
+                }) {
+                    Image(systemName: "heart")
+                }
+            } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                Button(action: {
+                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                }) {
+                    Image(systemName: "heart.fill")
+                }
+            }
+        }
+    }
+}
+struct PlaceListSettingsButton: View {
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack {
+            Button(action: {
+                self.showSheet.toggle()
+            }) {
+                Image(systemName: "line.horizontal.3")
+            }
+        }
+        
     }
 }
 

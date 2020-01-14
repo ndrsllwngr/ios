@@ -5,6 +5,7 @@ import GooglePlaces
 class FirestorePlaceList: ObservableObject {
     
     @Published var placeListListener: ListenerRegistration? = nil
+    @Published var ownerListener: ListenerRegistration? = nil
     
     @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [])
     @Published var places: [GMSPlace] = []
@@ -25,8 +26,21 @@ class FirestorePlaceList: ObservableObject {
                     print("placeListListener triggered: \(fetchedPlaceList.name)")
                     self.placeList = fetchedPlaceList
                     self.isOwnedPlaceList = fetchedPlaceList.owner.id == ownUserId
-                    self.places = []
                     
+                    self.ownerListener =
+                        FirestoreConnection.shared.getUsersRef().document(fetchedPlaceList.owner.id).addSnapshotListener { documentSnapshot, error in
+                            guard let documentSnapshot = documentSnapshot else {
+                                print("Error retrieving user")
+                                return
+                            }
+                            documentSnapshot.data().flatMap({ data in
+                                let username = data["username"] as! String
+                                self.placeList.owner.username = username
+                            })
+                    }
+                    
+                    
+                    self.places = []
                     self.placeList.placeIds
                         .forEach {placeId in
                             //dispatchGroup.enter()
@@ -46,6 +60,7 @@ class FirestorePlaceList: ObservableObject {
     
     func removePlaceListListener() {
         self.placeListListener?.remove()
+        self.ownerListener?.remove()
         self.places = []
         print("Successfully removed placeListListener")
     }
