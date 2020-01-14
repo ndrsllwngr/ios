@@ -21,6 +21,7 @@ struct ProfileView: View {
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
+    @State var inputImage: UIImage?
     
     var body: some View {
         VStack {
@@ -49,6 +50,8 @@ struct ProfileView: View {
                 UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "following" {
                 UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+            } else if self.sheetSelection == "image_picker" {
+                ImagePicker(image: self.$inputImage)
             }
         }
     }
@@ -129,11 +132,20 @@ struct ProfileInfoView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
+    @State var showingImagePicker = false
     
     var body: some View {
         VStack {
             VStack {
-                MyImage(someImageId: profile.user.profileImageId, placeHolderImageId: "profile")
+                HStack {
+                    MyImage(someImageId: profile.user.profileImageId, placeHolderImageId: "profile")
+                    Button(action: {
+                        self.showSheet.toggle()
+                        self.sheetSelection = "image_picker"
+                    }) {
+                        Text("change image")
+                    }
+                }
             }
             GeometryReader { metrics in
                 HStack {

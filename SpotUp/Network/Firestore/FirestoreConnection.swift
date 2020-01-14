@@ -197,4 +197,16 @@ class FirestoreConnection: ObservableObject {
             }
         }
     }
+    
+    func addProfileImage(myUserId: String, profileImageId: String) {
+        dbUsersRef.document(myUserId).updateData([
+            "profile_image_id": profileImageId
+        ]) { err in
+            if let err = err {
+                print("Error adding profileImageId: \(err)")
+            } else {
+                print("profileImageId successfully added")
+            }
+        }
+    }
 }
