@@ -93,6 +93,7 @@ class FirestoreConnection: ObservableObject {
         if let isCollaborative = isCollaborative {
              data["is_collaborative"] = isCollaborative
         }
+        data["modified_at"] = Timestamp()
         listRef.updateData(data) { err in
             if let err = err {
                 print("Error updating PlaceList: \(err)")
@@ -112,10 +113,12 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func addPlaceToList(placeID: String, placeListId: String) {
+    func addPlaceToList(placeIDtime:PlaceIDWithTimestamp, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
         listRef.updateData([
-            "place_ids": FieldValue.arrayUnion([placeID])
+            "place_ids": FieldValue.arrayUnion([placeIDtime.placeId]),
+            "places": FieldValue.arrayUnion([placeIDWithTimestampToData(place:placeIDtime)]),
+            "modified_at":Timestamp()
         ]) { err in
             if let err = err {
                 print("Error adding place to PlaceList: \(err)")
@@ -124,6 +127,8 @@ class FirestoreConnection: ObservableObject {
             }
         }
     }
+    
+
     
     func followPlaceList(userId: String, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)

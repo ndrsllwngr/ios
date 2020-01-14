@@ -11,6 +11,8 @@ target 'SpotUp' do
   # Firebase Firestore
   pod 'Firebase/Core', '>= 6.13.0'
   pod 'Firebase/Firestore', '>= 6.13.0'
+  # Firebase Storage
+  pod 'Firebase/Storage', '>= 3.4.3'
   # Optionally, include the Swift extensions if you're using Swift.
   pod 'FirebaseFirestoreSwift', '>= 0.2'
   # Google Maps
@@ -18,6 +20,7 @@ target 'SpotUp' do
   pod 'GooglePlaces', '>= 3.7.0'
   # algolia search
   # pod 'InstantSearchClient', '>= 7.0'
+  
 
   # target 'SpotUpTests' do
   #   inherit! :search_paths
