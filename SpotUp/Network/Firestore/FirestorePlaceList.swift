@@ -15,32 +15,32 @@ class FirestorePlaceList: ObservableObject {
         
         // Listener for placeList
         self.placeListListener =
-        FirestoreConnection.shared.getPlaceListsRef().document(placeListId).addSnapshotListener { documentSnapshot, error in
-            guard let documentSnapshot = documentSnapshot else {
-                print("Error retrieving user")
-                return
-            }
-            documentSnapshot.data().flatMap({ data in
-                let fetchedPlaceList = dataToPlaceList(data: data)
-                print("placeListListener triggered: \(fetchedPlaceList.name)")
-                self.placeList = fetchedPlaceList
-                self.isOwnedPlaceList = fetchedPlaceList.owner.id == ownUserId
-                self.places = []
-                
-                self.placeList.placeIds
-                    .forEach {placeId in
-                        //dispatchGroup.enter()
-                        getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
-                            if let error = error {
-                                print("An error occurred : \(error.localizedDescription)")
-                                return
-                            }
-                            if let place = place {
-                                self.places.append(place)
-                            }
-                        }
+            FirestoreConnection.shared.getPlaceListsRef().document(placeListId).addSnapshotListener { documentSnapshot, error in
+                guard let documentSnapshot = documentSnapshot else {
+                    print("Error retrieving user")
+                    return
                 }
-            })
+                documentSnapshot.data().flatMap({ data in
+                    let fetchedPlaceList = dataToPlaceList(data: data)
+                    print("placeListListener triggered: \(fetchedPlaceList.name)")
+                    self.placeList = fetchedPlaceList
+                    self.isOwnedPlaceList = fetchedPlaceList.owner.id == ownUserId
+                    self.places = []
+                    
+                    self.placeList.placeIds
+                        .forEach {placeId in
+                            //dispatchGroup.enter()
+                            getPlace(placeID: placeId) { (place: GMSPlace?, error: Error?) in
+                                if let error = error {
+                                    print("An error occurred : \(error.localizedDescription)")
+                                    return
+                                }
+                                if let place = place {
+                                    self.places.append(place)
+                                }
+                            }
+                    }
+                })
         }
     }
     
