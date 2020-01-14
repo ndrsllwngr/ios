@@ -21,10 +21,10 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "follower_ids": placeList.followerIds,
         "is_public": placeList.isPublic,
         "place_ids": placeList.placeIds,
-        "places":placeIDsWithTimestampsToDatas(places: placeList.places),
+        "places": placeIDsWithTimestampsToDatas(places: placeList.places),
         "is_collaborative": placeList.isCollaborative,
-        "modified_at":(placeList.modifiedAt),
-        "created_at":(placeList.createdAt)
+        "modified_at": placeList.modifiedAt,
+        "created_at": placeList.createdAt
     ]
 }
 
@@ -49,8 +49,8 @@ func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
                      places: datasToPlaceIDwithTimestamps(datas: data["places"] as! [Dictionary<String, Any>]),
                      //places:[data["place_id"] as! String && data["added_at"] as! Timestamp],
         isCollaborative: data["is_collaborative"] as! Bool,
-        modifiedAt: data["modified_at"] as! Timestamp,
-        createdAt:data["created_at"] as! Timestamp)
+        modifiedAt: data["modified_at"] as? Timestamp,
+        createdAt: data["created_at"] as! Timestamp)
 }
 
 

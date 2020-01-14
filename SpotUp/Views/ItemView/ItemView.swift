@@ -37,24 +37,6 @@ struct ItemView: View {
     }
 }
 
-struct FirebaseImage : View {
-
-    init(id: String) {
-        self.imageLoader = FirestoreImageLoader(id)
-    }
-
-    @ObjectBinding private var imageLoader : Loader
-
-    var image: UIImage? {
-        imageLoader.data.flatMap(UIImage.init)
-    }
-
-    var body: some View {
-        Image(uiImage: image ?? placeholder)
-
-    }
-}
-
 struct InnerItemView: View {
     var place: GMSPlace
     @State var image: UIImage?

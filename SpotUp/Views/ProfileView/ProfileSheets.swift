@@ -26,7 +26,7 @@ struct CreatePlacelistSheet: View {
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id],modifiedAt:Timestamp(), createdAt:Timestamp())
+                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id], createdAt:Timestamp())
                     FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
