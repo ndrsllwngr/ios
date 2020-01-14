@@ -13,7 +13,7 @@ struct ListView: View {
     
     var body: some View {
         List {
-            ForEach(self.firestorePlaceList.places, id: \.self) { place in
+            ForEach(self.firestorePlaceList.places.sorted{ $0.addedAt.dateValue() <  $1.addedAt.dateValue()}.map{$0.gmsPlace}, id: \.self) { place in
                 NavigationLink(destination: ItemView(place:place)) {
                     ListRowPlace(place : place)
                 }
