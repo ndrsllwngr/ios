@@ -43,6 +43,8 @@ struct GoogleMapView : UIViewRepresentable {
         longitude: 135.503039
     )
     func makeUIView(context: Context) -> GMSMapView {
+       
+        let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].gmsPlace.coordinate : self.defaultLocation
         
         let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].coordinate : self.defaultLocation
         let camera = GMSCameraPosition.camera(
@@ -60,16 +62,16 @@ struct GoogleMapView : UIViewRepresentable {
     
     func updateUIView(_ view: GMSMapView, context: Context) {
         if(firestorePlaceList.places.isEmpty) {return}
-        let currentPlace = firestorePlaceList.places[currentIndex].coordinate
+        let currentPlace = firestorePlaceList.places[currentIndex].gmsPlace.coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
         for (index,place) in self.firestorePlaceList.places.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
-                latitude: place.coordinate.latitude,
-                longitude: place.coordinate.longitude
+                latitude: place.gmsPlace.coordinate.latitude,
+                longitude: place.gmsPlace.coordinate.longitude
             )
-            marker.title = place.name
+            marker.title = place.gmsPlace.name
             //marker.snippet = place.state
             if(index == currentIndex){
                 marker.icon = GMSMarker.markerImage(with: .red)

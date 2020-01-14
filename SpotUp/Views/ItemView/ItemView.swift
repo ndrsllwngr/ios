@@ -7,6 +7,7 @@
 
 import SwiftUI
 import GooglePlaces
+import FirebaseFirestore
 
 struct ItemView: View {
     var placeID: String?
