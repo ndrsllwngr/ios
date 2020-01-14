@@ -7,7 +7,6 @@ struct PlaceList: Identifiable, Equatable {
     var owner: ListOwner
     var followerIds: [String] // the owner is also always a follower
     var isPublic: Bool = true
-    var placeIds: [String] = []
     var places: [PlaceIDWithTimestamp] = []
     var isCollaborative: Bool = false // only possible if private
     var modifiedAt: Timestamp? = nil
