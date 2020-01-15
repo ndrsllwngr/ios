@@ -19,7 +19,7 @@ struct MapView: View {
         ZStack(alignment: .bottom){
             GoogleMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
             if(!self.firestorePlaceList.places.isEmpty){
-                SwipeView(index: $currentIndex, firestorePlaceList: firestorePlaceList)
+                SwipeView(index: self.$currentIndex).environmentObject(self.firestorePlaceList)
                  .frame(height: 180)
             }
             
@@ -52,15 +52,18 @@ struct GoogleMapView : UIViewRepresentable {
             zoom: 16.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        mapView.settings.myLocationButton = true
+        //mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
-        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:170, right: 0)
+        mapView.delegate = context.coordinator
+        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:160, right: 0)
+        context.coordinator.firestorePlaceList = self.firestorePlaceList
         return mapView
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
         if(firestorePlaceList.places.isEmpty) {return}
+        context.coordinator.firestorePlaceList = self.firestorePlaceList
         let currentPlace = firestorePlaceList.places[currentIndex].gmsPlace.coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
@@ -82,5 +85,33 @@ struct GoogleMapView : UIViewRepresentable {
         }
         
     }
+    func makeCoordinator() -> GoogleMapView.Coordinator {
+        return Coordinator(self)
+    }
+    
+    
+    class Coordinator: NSObject, GMSMapViewDelegate {
+        var firestorePlaceList: FirestorePlaceList?
+        let parent: GoogleMapView
+        
+        init(_ parent: GoogleMapView) {
+            self.parent = parent
+        }
+        
+        func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+            let index = firestorePlaceList?.places.firstIndex { (place) -> Bool in
+                return place.gmsPlace.name == marker.title ?? ""
+            }
+            if let index = index {
+                self.parent.currentIndex = Int(index)
+            }
+
+            return true
+        }
+    }
 }
+
+//class Index: ObservabledObject {
+//    @Published var index: Int = 0
+//}
 
