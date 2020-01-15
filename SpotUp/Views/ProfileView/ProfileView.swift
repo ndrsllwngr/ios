@@ -21,7 +21,6 @@ struct ProfileView: View {
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
-    @State var pickedImage: UIImage?
     
     var body: some View {
         VStack {
@@ -30,7 +29,7 @@ struct ProfileView: View {
                     Text("")
                 }
             }
-            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection, pickedImage: $pickedImage).environmentObject(firestoreProfile)
+            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
                 .onAppear {
                     self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
                     self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
@@ -51,7 +50,7 @@ struct ProfileView: View {
             } else if self.sheetSelection == "following" {
                 UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "image_picker" {
-                ImagePicker(imageType: .profile_image, image: self.$pickedImage)
+                ImagePicker(imageType: .PROFILE_IMAGE)
             }
         }
     }
@@ -70,11 +69,10 @@ struct InnerProfileView: View {
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    @Binding var pickedImage: UIImage?
     
     var body: some View {
         VStack {
-            ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection, pickedImage: $pickedImage).environmentObject(self.firestoreProfile)
+            ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
@@ -134,14 +132,13 @@ struct ProfileInfoView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    @Binding var pickedImage: UIImage?
     @State var showingImagePicker = false
     
     var body: some View {
         VStack {
             VStack {
                 HStack {
-                    FirebaseProfileImage(imageId: profileUserId, pickedImage: $pickedImage)
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl)
 
                     Button(action: {
                         self.showSheet.toggle()
