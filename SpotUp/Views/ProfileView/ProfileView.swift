@@ -49,6 +49,8 @@ struct ProfileView: View {
                 UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "following" {
                 UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+            } else if self.sheetSelection == "image_picker" {
+                ImagePicker(imageType: .PROFILE_IMAGE)
             }
         }
     }
@@ -70,7 +72,7 @@ struct InnerProfileView: View {
     
     var body: some View {
         VStack {
-            ProfileInfoView(isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
+            ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
@@ -124,21 +126,28 @@ struct InnerProfileView: View {
 }
 
 struct ProfileInfoView: View {
+    var profileUserId: String
     var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
+    @State var showingImagePicker = false
     
     var body: some View {
         VStack {
             VStack {
-                Image("profile")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                    .padding()
+                HStack {
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).padding(.top)
+                    if (self.isMyProfile) {
+                        Button(action: {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "image_picker"
+                        }) {
+                            Image(systemName: "square.and.pencil")
+                        }
+                    }
+                }
             }
             GeometryReader { metrics in
                 HStack {

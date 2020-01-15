@@ -91,7 +91,7 @@ class FirestoreConnection: ObservableObject {
             data["is_public"] = isPublic
         }
         if let isCollaborative = isCollaborative {
-             data["is_collaborative"] = isCollaborative
+            data["is_collaborative"] = isCollaborative
         }
         data["modified_at"] = Timestamp()
         listRef.updateData(data) { err in
@@ -128,7 +128,7 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-
+    
     
     func followPlaceList(userId: String, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
@@ -196,5 +196,32 @@ class FirestoreConnection: ObservableObject {
                 print("User successfully unfollowed is_followed_by")
             }
         }
+    }
+    
+    func addImageUrlToFirestore(id: String, imageType: ImageType, downloadURL: URL) {
+        switch imageType {
+        case .PROFILE_IMAGE:
+            dbUsersRef.document(id).updateData([
+                "image_url": downloadURL.absoluteString
+            ]) { err in
+                if let err = err {
+                    print("Error adding profile imageUrl: \(err)")
+                } else {
+                    print("profile imageUrl successfully added")
+                }
+            }
+        case .PLACELIST_IMAGE:
+            dbPlaceListsRef.document(id).updateData([
+                "image_url": downloadURL.absoluteString
+            ]) { err in
+                if let err = err {
+                    print("Error adding placeList imageUrl: \(err)")
+                } else {
+                    print("placeList imageUrl successfully added")
+                }
+            }
+        }
+        
+        
     }
 }
