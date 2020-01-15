@@ -91,7 +91,7 @@ class FirestoreConnection: ObservableObject {
             data["is_public"] = isPublic
         }
         if let isCollaborative = isCollaborative {
-             data["is_collaborative"] = isCollaborative
+            data["is_collaborative"] = isCollaborative
         }
         data["modified_at"] = Timestamp()
         listRef.updateData(data) { err in
@@ -113,12 +113,14 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func addPlaceToList(placeIDtime:PlaceIDWithTimestamp, placeListId: String) {
-        let listRef = dbPlaceListsRef.document(placeListId)
+    func addPlaceToList(placeList: PlaceList, placeId: String, placeImage: UIImage?) {
+        
+        let listRef = dbPlaceListsRef.document(placeList.id)
+            
         listRef.updateData([
-            "place_ids": FieldValue.arrayUnion([placeIDtime.placeId]),
-            "places": FieldValue.arrayUnion([placeIDWithTimestampToData(place:placeIDtime)]),
-            "modified_at":Timestamp()
+            "places":
+                FieldValue.arrayUnion([placeIDWithTimestampToData(place: PlaceIDWithTimestamp(placeId: placeId, addedAt: Timestamp()))]),
+            "modified_at": Timestamp()
         ]) { err in
             if let err = err {
                 print("Error adding place to PlaceList: \(err)")
@@ -126,9 +128,16 @@ class FirestoreConnection: ObservableObject {
                 print("Place successfully added")
             }
         }
+        
+        // If this is the first place of the placeList upload placeListImage to Storage
+        if let placeImage = placeImage {
+            if (placeList.imageUrl == nil || placeList.places.isEmpty) {
+                    FirebaseStorage.shared.uploadImageToStorage(id: placeList.id, imageType: .PLACELIST_IMAGE, uiImage: placeImage)
+            }
+        }
     }
     
-
+    
     
     func followPlaceList(userId: String, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)
@@ -196,5 +205,32 @@ class FirestoreConnection: ObservableObject {
                 print("User successfully unfollowed is_followed_by")
             }
         }
+    }
+    
+    func addImageUrlToFirestore(id: String, imageType: ImageType, downloadURL: URL) {
+        switch imageType {
+        case .PROFILE_IMAGE:
+            dbUsersRef.document(id).updateData([
+                "image_url": downloadURL.absoluteString
+            ]) { err in
+                if let err = err {
+                    print("Error adding profile imageUrl: \(err)")
+                } else {
+                    print("profile imageUrl successfully added")
+                }
+            }
+        case .PLACELIST_IMAGE:
+            dbPlaceListsRef.document(id).updateData([
+                "image_url": downloadURL.absoluteString
+            ]) { err in
+                if let err = err {
+                    print("Error adding placeList imageUrl: \(err)")
+                } else {
+                    print("placeList imageUrl successfully added")
+                }
+            }
+        }
+        
+        
     }
 }

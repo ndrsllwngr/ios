@@ -9,7 +9,8 @@ func userToData(user: User) -> Dictionary<String, Any> {
         "email": user.email,
         "username": user.username,
         "is_following": user.isFollowing,
-        "is_followed_by": user.isFollowedBy
+        "is_followed_by": user.isFollowedBy,
+        "image_url": user.imageUrl // ToDo warning
     ]
 }
 
@@ -23,7 +24,8 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "places": placeIDsWithTimestampsToDatas(places: placeList.places),
         "is_collaborative": placeList.isCollaborative,
         "modified_at": placeList.modifiedAt,
-        "created_at": placeList.createdAt
+        "created_at": placeList.createdAt,
+        "image_url": placeList.imageUrl // ToDo warning
     ]
 }
 
@@ -34,7 +36,8 @@ func dataToUser(data: Dictionary<String, Any>) -> User {
                 email: data["email"] as! String,
                 username: data["username"] as! String,
                 isFollowing: data["is_following"] as! [String],
-                isFollowedBy: data["is_followed_by"] as! [String])
+                isFollowedBy: data["is_followed_by"] as! [String],
+                imageUrl: data["image_url"] as? String)
 }
 
 
@@ -48,7 +51,8 @@ func dataToPlaceList(data: Dictionary<String, Any>) -> PlaceList {
                      //places:[data["place_id"] as! String && data["added_at"] as! Timestamp],
         isCollaborative: data["is_collaborative"] as! Bool,
         modifiedAt: data["modified_at"] as? Timestamp,
-        createdAt: data["created_at"] as! Timestamp)
+        createdAt: data["created_at"] as! Timestamp,
+        imageUrl: data["image_url"] as? String)
 }
 
 
