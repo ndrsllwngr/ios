@@ -149,7 +149,7 @@ struct PlaceListSettingsButton: View {
             Button(action: {
                 self.showSheet.toggle()
             }) {
-                Image(systemName: "line.horizontal.3")
+                Image(systemName: "slider.horizontal.3")
             }
         }
         
