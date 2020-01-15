@@ -9,22 +9,25 @@
 import SwiftUI
 
 struct ListView: View {
+    
+    var placeListId: String
+
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     var body: some View {
         List {
-            ForEach(self.firestorePlaceList.places.sorted{ $0.addedAt.dateValue() >  $1.addedAt.dateValue()}.map{$0.gmsPlace}, id: \.self) { place in
-                NavigationLink(destination: ItemView(place:place)) {
-                    ListRowPlace(place : place)
+            ForEach(self.firestorePlaceList.places, id: \.self) { (place: GMSPlaceWithTimestamp) in
+                    NavigationLink(destination: ItemView(place: place.gmsPlace)) {
+                        ListRowPlace(place : place.gmsPlace)
                 }
-            }
+            }.onDelete(perform: delete)
         }
     }
-}
-
-
-struct ListSpots_Previews: PreviewProvider {
-    static var previews: some View {
-        ListView()
+    
+    func delete(at offsets: IndexSet) {
+        offsets.forEach {index in
+            let placeToDelete = firestorePlaceList.places[index]
+            FirestoreConnection.shared.deletePlaceFromList(placeListId: placeListId, place: placeToDelete)
+        }
     }
 }

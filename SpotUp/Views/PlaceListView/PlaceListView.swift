@@ -60,7 +60,7 @@ struct InnerPlaceListView: View {
             Spacer()
             
             if selection == 0 {
-                ListView().environmentObject(firestorePlaceList)
+                ListView(placeListId: placeListId).environmentObject(firestorePlaceList)
             } else {
                 MapView().environmentObject(firestorePlaceList)
             }
