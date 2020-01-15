@@ -113,17 +113,26 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    func addPlaceToList(placeIDtime:PlaceIDWithTimestamp, placeListId: String) {
-        let listRef = dbPlaceListsRef.document(placeListId)
+    func addPlaceToList(placeList: PlaceList, placeId: String, placeImage: UIImage?) {
+        
+        let listRef = dbPlaceListsRef.document(placeList.id)
+            
         listRef.updateData([
-            "place_ids": FieldValue.arrayUnion([placeIDtime.placeId]),
-            "places": FieldValue.arrayUnion([placeIDWithTimestampToData(place:placeIDtime)]),
-            "modified_at":Timestamp()
+            "places":
+                FieldValue.arrayUnion([placeIDWithTimestampToData(place: PlaceIDWithTimestamp(placeId: placeId, addedAt: Timestamp()))]),
+            "modified_at": Timestamp()
         ]) { err in
             if let err = err {
                 print("Error adding place to PlaceList: \(err)")
             } else {
                 print("Place successfully added")
+            }
+        }
+        
+        // If this is the first place of the placeList upload placeListImage to Storage
+        if let placeImage = placeImage {
+            if (placeList.imageUrl == nil || placeList.places.isEmpty) {
+                    FirebaseStorage.shared.uploadImageToStorage(id: placeList.id, imageType: .PLACELIST_IMAGE, uiImage: placeImage)
             }
         }
     }
