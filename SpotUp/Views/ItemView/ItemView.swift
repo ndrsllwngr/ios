@@ -77,7 +77,7 @@ struct InnerItemView: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            AddPlaceToListSheet(placeId: self.place.placeID!, placeImage: self.$image, showSheet: self.$showSheet)
+            AddPlaceToListSheet(place: self.place, placeImage: self.$image, showSheet: self.$showSheet)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
         .onAppear {
