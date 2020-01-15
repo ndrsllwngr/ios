@@ -11,6 +11,7 @@ struct PlaceList: Identifiable, Equatable {
     var isCollaborative: Bool = false // only possible if private
     var modifiedAt: Timestamp? = nil
     var createdAt: Timestamp
+    var imageUrl: String? = nil
     //var titleImage: String
     //var location: String
     //var tags: [UUID]

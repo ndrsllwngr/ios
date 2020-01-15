@@ -7,24 +7,31 @@
 
 import SwiftUI
 import FirebaseFirestore
+import GooglePlaces
 
 struct AddPlaceToListSheet: View {
+    
+    var place: GMSPlace
+    
+    @Binding var placeImage: UIImage?
+    @Binding var showSheet: Bool
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
-    @Binding var showSheet: Bool
-    var placeID: String
     
     var body: some View {
         VStack {
-            ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
-                Button(action: {
-                    FirestoreConnection.shared.addPlaceToList(placeIDtime: PlaceIDWithTimestamp(placeId: self.placeID, addedAt:Timestamp()), placeListId: placeList.id)
-                    self.showSheet.toggle()
-                }) {
-                    PlacesListRow(placeList: placeList)
+            Text("Welcher Liste möchstest du \(place.name!) hinzufügen?")
+            List {
+                ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
+                    Button(action: {
+                        FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.place.placeID!, placeImage: self.placeImage)
+                        self.showSheet.toggle()
+                    }) {
+                        PlacesListRow(placeList: placeList)
+                    }
                 }
             }
-
         }
         .onAppear {
             self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid, isMyProfile: true)
@@ -32,6 +39,7 @@ struct AddPlaceToListSheet: View {
         .onDisappear {
             self.profile.removeProfileListener()
         }
+    .padding()
     }
 }
 //
