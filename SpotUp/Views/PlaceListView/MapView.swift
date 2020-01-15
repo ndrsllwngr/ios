@@ -19,7 +19,7 @@ struct MapView: View {
         ZStack(alignment: .bottom){
             GoogleMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
             if(!self.firestorePlaceList.places.isEmpty){
-                SwipeView(index: self.$currentIndex, firestorePlaceList: firestorePlaceList)
+                SwipeView(index: self.$currentIndex).environmentObject(self.firestorePlaceList)
                  .frame(height: 180)
             }
             
@@ -52,11 +52,11 @@ struct GoogleMapView : UIViewRepresentable {
             zoom: 16.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        mapView.settings.myLocationButton = true
+        //mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
         mapView.delegate = context.coordinator
-        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:170, right: 0)
+        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:160, right: 0)
         context.coordinator.firestorePlaceList = self.firestorePlaceList
         return mapView
     }
@@ -86,16 +86,16 @@ struct GoogleMapView : UIViewRepresentable {
         
     }
     func makeCoordinator() -> GoogleMapView.Coordinator {
-        return Coordinator(currentIndex: self.$currentIndex)
+        return Coordinator(self)
     }
     
     
     class Coordinator: NSObject, GMSMapViewDelegate {
         var firestorePlaceList: FirestorePlaceList?
-        @Binding var currentIndex: Int
+        let parent: GoogleMapView
         
-        init(currentIndex: Binding<Int>) {
-            self._currentIndex = currentIndex
+        init(_ parent: GoogleMapView) {
+            self.parent = parent
         }
         
         func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
@@ -103,8 +103,7 @@ struct GoogleMapView : UIViewRepresentable {
                 return place.gmsPlace.name == marker.title ?? ""
             }
             if let index = index {
-                self.currentIndex = Int(index)
-                print("Marker was tapped!", index)
+                self.parent.currentIndex = Int(index)
             }
 
             return true
