@@ -9,16 +9,22 @@ import SwiftUI
 import FirebaseFirestore
 
 struct AddPlaceToListSheet: View {
+    var placeId: String
+    @Binding var placeImage: UIImage?
+    @Binding var showSheet: Bool
+
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var profile = FirestoreProfile()
-    @Binding var showSheet: Bool
-    var placeID: String
+
+
+
     
     var body: some View {
         VStack {
             ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
                 Button(action: {
-                    FirestoreConnection.shared.addPlaceToList(placeIDtime: PlaceIDWithTimestamp(placeId: self.placeID, addedAt:Timestamp()), placeListId: placeList.id)
+                    FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.placeId, placeImage: self.placeImage)
                     self.showSheet.toggle()
                 }) {
                     PlacesListRow(placeList: placeList)
