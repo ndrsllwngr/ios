@@ -138,13 +138,14 @@ struct ProfileInfoView: View {
         VStack {
             VStack {
                 HStack {
-                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl)
-
-                    Button(action: {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "image_picker"
-                    }) {
-                        Text("change image")
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).padding(.top)
+                    if (self.isMyProfile) {
+                        Button(action: {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "image_picker"
+                        }) {
+                            Image(systemName: "square.and.pencil")
+                        }
                     }
                 }
             }
