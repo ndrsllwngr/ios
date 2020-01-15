@@ -85,12 +85,7 @@ struct PlaceListInfoView: View {
     var body: some View {
         VStack {
             HStack {
-                Image("chincoteague")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                    .padding(.top)
+                FirebasePlaceListImage(imageUrl: self.firestorePlaceList.placeList.imageUrl).padding(.top)
                 VStack {
                     Text(self.firestorePlaceList.placeList.name)
                     HStack {
@@ -149,7 +144,7 @@ struct PlaceListSettingsButton: View {
             Button(action: {
                 self.showSheet.toggle()
             }) {
-                Image(systemName: "line.horizontal.3")
+                Image(systemName: "slider.horizontal.3")
             }
         }
         

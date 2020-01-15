@@ -21,6 +21,8 @@ target 'SpotUp' do
   # algolia search
   # pod 'InstantSearchClient', '>= 7.0'
   
+  # SDWebImageSwiftUI
+  pod 'SDWebImageSwiftUI'
 
   # target 'SpotUpTests' do
   #   inherit! :search_paths
