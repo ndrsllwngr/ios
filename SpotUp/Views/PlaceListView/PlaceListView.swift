@@ -90,7 +90,7 @@ struct PlaceListInfoView: View {
                     .scaledToFit()
                     .frame(width: 100, height: 100)
                     .clipShape(/*@START_MENU_TOKEN@*/Circle()/*@END_MENU_TOKEN@*/)
-                    .padding()
+                    .padding(.top)
                 VStack {
                     Text(self.firestorePlaceList.placeList.name)
                     HStack {
