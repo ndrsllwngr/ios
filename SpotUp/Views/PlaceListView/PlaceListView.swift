@@ -25,6 +25,8 @@ struct PlaceListView: View {
     @State var goToPlace: Int? = nil
     
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
+    @State var imageForPlaceMenuSheet: UIImage? = nil
+
     
     var body: some View {
         VStack {
@@ -38,7 +40,8 @@ struct PlaceListView: View {
                                sheetSelection: $sheetSelection,
                                placeIdToNavigateTo: $placeIdToNavigateTo,
                                goToPlace: $goToPlace,
-                               placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet)
+                               placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                 .environmentObject(firestorePlaceList)
                 .onAppear {
                     print("OnAppear PlaceListView: About to add firestorePlaceList Listener")
@@ -56,7 +59,8 @@ struct PlaceListView: View {
                     .environmentObject(self.firestorePlaceList)
             } else if self.sheetSelection == "place_menu" {
                 PlaceMenuSheet(placeListId: self.placeListId,
-                               gmsPlaceWithTimeStamp: self.placeForPlaceMenuSheet!,
+                               gmsPlaceWithTimestamp: self.placeForPlaceMenuSheet!,
+                               image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
             }
         }
@@ -76,6 +80,7 @@ struct InnerPlaceListView: View {
     @Binding var goToPlace: Int?
     
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
+    @Binding var imageForPlaceMenuSheet: UIImage?
     
     @State private var selection = 0
     
@@ -101,7 +106,8 @@ struct InnerPlaceListView: View {
                                  sheetSelection: self.$sheetSelection,
                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                  goToPlace: self.$goToPlace,
-                                 placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet)
+                                 placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
                 }
             } else {
