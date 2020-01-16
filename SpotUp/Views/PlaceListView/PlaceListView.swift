@@ -95,7 +95,7 @@ struct InnerPlaceListView: View {
             
             if selection == 0 {
                 List {
-                    ForEach(self.firestorePlaceList.places.sorted{ $0.addedAt.dateValue() >  $1.addedAt.dateValue()}, id: \.self) { place in
+                    ForEach(self.firestorePlaceList.places, id: \.self) { place in
                         PlaceRow(gmsPlaceWithTimestamp: place,
                                  showSheet: self.$showSheet,
                                  sheetSelection: self.$sheetSelection,
