@@ -37,7 +37,6 @@ struct ProfileView: View {
             .onDisappear {
                 self.firestoreProfile.removeProfileListener()
             }
-            
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
@@ -76,28 +75,7 @@ struct InnerProfileView: View {
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                    Section(header: Text("Owned Placelists")) {
-                        ForEach(firestoreProfile.placeLists.filter{$0.owner.id == profileUserId}
-                            //.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}
-                        ){ placeList in
-                            NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id)
-                            ) {
-                                PlacesListRow(placeList: placeList)
-                            }
-                        }
-                    }
-                    Section(header: Text("Followed Placelists")) {
-                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
-                            NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id)
-                            ) {
-                                PlacesListRow(placeList: placeList)
-                            }
-                        }
-                    }
-                } else {
-                    ForEach(firestoreProfile.placeLists){ placeList in
+                    ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         NavigationLink(
                             destination: PlaceListView(placeListId: placeList.id)
                         ) {
