@@ -10,8 +10,8 @@ import GooglePlaces
 import FirebaseFirestore
 
 struct ItemView: View {
-    var placeID: String?
-    @State var place: GMSPlace?
+    var placeId: String
+    @State var place: GMSPlace? = nil
     
     var body: some View {
         VStack {
@@ -21,16 +21,14 @@ struct ItemView: View {
                 InnerItemView(place: place!)
             }
         }.onAppear {
-            if let placeID = self.placeID {
-                getPlace(placeID: placeID) { (place: GMSPlace?, error: Error?) in
-                    if let error = error {
-                        print("An error occurred: \(error.localizedDescription)")
-                        return
-                    }
-                    if let place = place {
-                        self.place = place
-                        print("The selected place is: \(String(describing: place.name))")
-                    }
+            getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
+                if let error = error {
+                    print("An error occurred: \(error.localizedDescription)")
+                    return
+                }
+                if let place = place {
+                    self.place = place
+                    print("The selected place is: \(String(describing: place.name))")
                 }
             }
         }

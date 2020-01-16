@@ -17,4 +17,9 @@ struct PlaceIDWithTimestamp: Equatable {
 struct GMSPlaceWithTimestamp: Equatable, Hashable {
     var gmsPlace: GMSPlace
     var addedAt: Timestamp
+    
+    func toPlaceIdWithTimeStamp() -> PlaceIDWithTimestamp {
+        return PlaceIDWithTimestamp(placeId: self.gmsPlace.placeID!, addedAt: self.addedAt)
+    }
 }
+

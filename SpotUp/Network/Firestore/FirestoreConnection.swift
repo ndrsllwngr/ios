@@ -137,6 +137,22 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
+    func deletePlaceFromList(placeListId: String, place: GMSPlaceWithTimestamp) {
+        
+        let listRef = dbPlaceListsRef.document(placeListId)
+        let data = placeIDWithTimestampToData(place: place.toPlaceIdWithTimeStamp())
+        listRef.updateData([
+            "places": FieldValue.arrayRemove([data]),
+            "modified_at": Timestamp()
+        ]) { err in
+            if let err = err {
+                print("Error removing place from PlaceList: \(err)")
+            } else {
+                print("Place successfully removed")
+            }
+        }
+    }
+    
     
     
     func followPlaceList(userId: String, placeListId: String) {
