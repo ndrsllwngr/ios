@@ -51,7 +51,7 @@ class FirestorePlaceList: ObservableObject {
                                 }
                                 if let place = place {
                                     self.places.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeIDWithTimestamp.addedAt))
-                                    self.places.sort{ $0.addedAt.dateValue() > $1.addedAt.dateValue()}
+                                    self.places.sort{ $0.addedAt.dateValue() < $1.addedAt.dateValue()}
                                 }
                             }
                     }

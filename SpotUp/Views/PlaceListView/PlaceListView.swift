@@ -187,9 +187,9 @@ struct PlaceListSettingsButton: View {
         VStack {
             Button(action: {
                 self.showSheet.toggle()
-                self.sheetSelection = "ellipsis"
+                self.sheetSelection = "settings"
             }) {
-                Image(systemName: "slider.horizontal.3")
+                Image(systemName: "ellipsis")
             }
         }
         
