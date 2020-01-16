@@ -19,6 +19,7 @@ struct PlaceRow: View {
     @Binding var goToPlace: Int?
     
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
+    @Binding var imageForPlaceMenuSheet: UIImage?
     
     @State var image: UIImage?
     
@@ -44,6 +45,7 @@ struct PlaceRow: View {
                         self.showSheet.toggle()
                         self.sheetSelection = "place_menu"
                         self.placeForPlaceMenuSheet = self.gmsPlaceWithTimestamp
+                        self.imageForPlaceMenuSheet = self.image
                 }
             }
         }
@@ -56,7 +58,8 @@ struct PlaceRow: View {
                         return
                     }
                     if let photo = photo {
-                        self.image = photo;
+                        self.image = photo
+                        self.imageForPlaceMenuSheet = photo
                     }
                 }
             }
