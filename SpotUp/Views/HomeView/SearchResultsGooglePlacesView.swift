@@ -94,7 +94,7 @@ struct SingleRowPlace: View {
             //                .padding(.trailing)
             //            }
             if (self.goToDestination != false) {
-                NavigationLink(destination:ItemView(placeID: result.placeID), tag: 1, selection: $selection) { EmptyView() }
+                NavigationLink(destination:ItemView(placeId: result.placeID), tag: 1, selection: $selection) { EmptyView() }
             }
         }
     }

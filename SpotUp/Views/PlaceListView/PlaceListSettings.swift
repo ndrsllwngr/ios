@@ -78,6 +78,14 @@ struct PlaceListSettings: View {
     }
 }
 
+struct PlaceMenuSheet: View {
+    
+    var body: some View {
+        VStack {
+            Text("PlaceMenuSheet")
+        }
+    }
+}
 //struct ListSettings_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ListSettings(placeList: placeList)
