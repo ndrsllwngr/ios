@@ -20,20 +20,12 @@ struct MapView: View {
             GoogleMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
             if(!self.firestorePlaceList.places.isEmpty){
                 SwipeView(index: self.$currentIndex).environmentObject(self.firestorePlaceList)
-                 .frame(height: 180)
+                    .frame(height: 180)
             }
             
         }
     }
 }
-
-struct MapView_Previews: PreviewProvider {
-    static var previews: some View {
-        MapView()
-    }
-}
-
-
 
 struct GoogleMapView : UIViewRepresentable {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
@@ -43,13 +35,13 @@ struct GoogleMapView : UIViewRepresentable {
         longitude: 135.503039
     )
     func makeUIView(context: Context) -> GMSMapView {
-       
+        
         let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].gmsPlace.coordinate : self.defaultLocation
         
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,
-            zoom: 16.0
+            zoom: 12.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         //mapView.settings.myLocationButton = true
@@ -110,8 +102,3 @@ struct GoogleMapView : UIViewRepresentable {
         }
     }
 }
-
-//class Index: ObservabledObject {
-//    @Published var index: Int = 0
-//}
-

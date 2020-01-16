@@ -12,7 +12,9 @@ let fields : GMSPlaceField = GMSPlaceField(rawValue:
         UInt(GMSPlaceField.website.rawValue) |
         UInt(GMSPlaceField.openingHours.rawValue) |
         UInt(GMSPlaceField.priceLevel.rawValue) |
-        UInt(GMSPlaceField.phoneNumber.rawValue)
+        UInt(GMSPlaceField.phoneNumber.rawValue) |
+        UInt(GMSPlaceField.rating.rawValue) |
+        UInt(GMSPlaceField.plusCode.rawValue)
     )!
 
 func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
