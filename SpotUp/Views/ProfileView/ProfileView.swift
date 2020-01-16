@@ -31,7 +31,7 @@ struct ProfileView: View {
             }
             InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
                 .onAppear {
-                    self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
+                    self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId)
                     self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
             }
             .onDisappear {
@@ -76,6 +76,14 @@ struct InnerProfileView: View {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
+                        NavigationLink(
+                            destination: PlaceListView(placeListId: placeList.id)
+                        ) {
+                            PlacesListRow(placeList: placeList)
+                        }
+                    }
+                } else {
+                    ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         NavigationLink(
                             destination: PlaceListView(placeListId: placeList.id)
                         ) {
