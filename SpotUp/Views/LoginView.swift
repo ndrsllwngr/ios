@@ -43,8 +43,8 @@ struct LoginView: View {
     
     func logIn() {
         FirebaseAuthentication.shared.logIn(email: loginViewModel.email, password: loginViewModel.password) { (result, error) in
-            if error != nil {
-                print("Error")
+            if let error = error {
+                print("Error during login \(error)")
             } else {
                 print("success")
                 self.loginViewModel.email = ""
