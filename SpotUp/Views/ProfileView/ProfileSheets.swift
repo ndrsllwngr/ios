@@ -40,7 +40,7 @@ struct CreatePlacelistSheet: View {
     }
 }
 
-struct SettingsSheet: View {
+struct ProfileSettingsSheet: View {
     
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared

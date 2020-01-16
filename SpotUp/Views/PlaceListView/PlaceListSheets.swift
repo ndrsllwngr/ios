@@ -7,8 +7,11 @@
 
 import SwiftUI
 
-struct PlaceListSettings: View {
+struct PlaceListSettingsSheet: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    
+    @Binding var presentationMode: PresentationMode
+
     @Binding var showSheet: Bool
     @State private var newListName: String = ""
     
@@ -65,6 +68,13 @@ struct PlaceListSettings: View {
                     }
                 }
             }
+            Button(action: {
+                self.showSheet.toggle()
+                self.$presentationMode.wrappedValue.dismiss()
+                FirestoreConnection.shared.deletePlaceList(placeListToDelete: self.firestorePlaceList.placeList)
+            }) {
+                Text("Delete PlaceList")
+            }
             Spacer()
             Button(action: {
                 self.showSheet.toggle()
@@ -78,6 +88,30 @@ struct PlaceListSettings: View {
     }
 }
 
+struct PlaceMenuSheet: View {
+    var placeListId: String
+    var gmsPlaceWithTimeStamp: GMSPlaceWithTimestamp
+    
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Place Menu")
+            Button(action: {
+                self.showSheet.toggle()
+                FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimeStamp)
+            }) {
+                Text("Delete Place")
+            }
+            Button(action: {
+                print("ToDo Add Place to PlaceList")
+            }) {
+                Text("Add to Placelist")
+            }
+        }
+    .padding()
+    }
+}
 //struct ListSettings_Previews: PreviewProvider {
 //    static var previews: some View {
 //        ListSettings(placeList: placeList)
