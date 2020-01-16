@@ -30,15 +30,62 @@ class FirestoreConnection: ObservableObject {
     }
     
     func deleteUserInFirestore(userId: String) {
+        let dispatchGroup = DispatchGroup()
         let userRef = dbUsersRef.document(userId)
-        userRef.delete() { err in
-            if let err = err {
-                print("Error removing user: \(err)")
-            } else {
-                print("User successfuly deleted from firestore")
+        userRef.getDocument{ documentSnapshot, error in
+            guard let documentSnapshot = documentSnapshot else {
+                print("Error retrieving user")
+                return
+            }
+            documentSnapshot.data().flatMap({ data in
+                let user = dataToUser(data: data)
+                //bei meinen Followers mich raus löschen
+                if(!user.isFollowedBy.isEmpty){
+                    for byOtherId in user.isFollowedBy {
+                        dispatchGroup.enter()
+                        self.dbUsersRef.document(byOtherId).updateData([
+                            "is_following": FieldValue.arrayUnion([userId])
+                        ]) { err in
+                            if let err = err {
+                                print("Error following user: \(err)")
+                            } else {
+                                dispatchGroup.leave()
+                                print("User successfully unfollowed is_following")
+                            }
+                        }
+                    }
+                }
+                //bei den Leuten, denen ich folge, MICH raus löschen
+                if(!user.isFollowing.isEmpty) {
+                    for isOtherId in user.isFollowing {
+                        dispatchGroup.enter()
+                        self.dbUsersRef.document(isOtherId).updateData([
+                            "is_followed_by": FieldValue.arrayUnion([userId])
+                        ]) { err in
+                            if let err = err {
+                                print("Error following user: \(err)")
+                            } else {
+                                dispatchGroup.leave()
+                                print("User successfully unfollowed is_followed_by")
+                            }
+                        }
+                    }
+                }
+            })
+
+        }
+            
+        dispatchGroup.notify(queue: .main) {
+            userRef.delete() { err in
+                if let err = err {
+                    print("Error removing user: \(err)")
+                } else {
+                    print("User successfuly deleted from firestore")
+                }
             }
         }
     }
+        
     
     func updateUserName(userId: String, newUserName: String) {
         let userRef = dbUsersRef.document(userId)
@@ -207,7 +254,7 @@ class FirestoreConnection: ObservableObject {
             "is_following": FieldValue.arrayRemove([userIdToFollow])
         ]) { err in
             if let err = err {
-                print("Error unfollowing user: \(err)")
+                print("Error unfollowing user is_following: \(err)")
             } else {
                 print("User successfully unfollowed is_following")
             }
@@ -216,7 +263,7 @@ class FirestoreConnection: ObservableObject {
             "is_followed_by": FieldValue.arrayRemove([myUserId])
         ]) { err in
             if let err = err {
-                print("Error following user: \(err)")
+                print("Error unfollowing user is_followed_by: \(err)")
             } else {
                 print("User successfully unfollowed is_followed_by")
             }
