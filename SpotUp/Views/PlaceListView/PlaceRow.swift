@@ -51,7 +51,7 @@ struct PlaceRow: View {
         }
         .frame(height: 60)
         .onAppear {
-            if let photos = self.placeForPlaceMenuSheet?.gmsPlace.photos {
+            if let photos = self.gmsPlaceWithTimestamp.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")
