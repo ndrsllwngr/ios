@@ -89,11 +89,27 @@ struct PlaceListSettingsSheet: View {
 }
 
 struct PlaceMenuSheet: View {
+    var placeListId: String
+    var gmsPlaceWithTimeStamp: GMSPlaceWithTimestamp
+    
+    @Binding var showSheet: Bool
     
     var body: some View {
         VStack {
-            Text("PlaceMenuSheet")
+            Text("Place Menu")
+            Button(action: {
+                self.showSheet.toggle()
+                FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimeStamp)
+            }) {
+                Text("Delete Place")
+            }
+            Button(action: {
+                print("ToDo Add Place to PlaceList")
+            }) {
+                Text("Add to Placelist")
+            }
         }
+    .padding()
     }
 }
 //struct ListSettings_Previews: PreviewProvider {
