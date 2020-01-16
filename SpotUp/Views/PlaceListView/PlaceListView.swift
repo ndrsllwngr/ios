@@ -16,11 +16,12 @@ struct PlaceListView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
-    
     
     var body: some View {
         VStack {
@@ -47,7 +48,9 @@ struct PlaceListView: View {
         .sheet(isPresented: $showSheet) {
             if self.sheetSelection == "settings" {
                 
-                PlaceListSettings(showSheet: self.$showSheet).environmentObject(self.firestorePlaceList)
+                PlaceListSettingsSheet(presentationMode: self.presentationMode,
+                                  showSheet: self.$showSheet)
+                    .environmentObject(self.firestorePlaceList)
             } else if self.sheetSelection == "place_menu" {
                 PlaceMenuSheet()
             }
