@@ -45,6 +45,8 @@ struct ProfileSettingsSheet: View {
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+
     @Binding var showSheet: Bool
     
     @State private var newUserName: String = ""
@@ -70,7 +72,7 @@ struct ProfileSettingsSheet: View {
                 }
             }
             HStack {
-                TextField("\(self.firebaseAuthentication.currentUser!.email)", text: $newEmail)
+                TextField(self.firebaseAuthentication.currentUser != nil ? "\(self.firebaseAuthentication.currentUser!.email)" : "", text: $newEmail)
                 SecureField("current password", text: $currentPasswordChangeEmail)
                 Button(action: {
                     FirebaseAuthentication.shared.changeEmail(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
@@ -97,7 +99,7 @@ struct ProfileSettingsSheet: View {
             }
             Spacer()
             Button(action: {
-                self.showSheet.toggle()
+                self.presentationMode.wrappedValue.dismiss()
                 FirebaseAuthentication.shared.logOut()
             }) {
                 Text("Log Out").foregroundColor(.red)
