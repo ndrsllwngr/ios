@@ -11,24 +11,37 @@ import GooglePlaces
 
 struct ListRowPlace: View {
     var place: GMSPlace
+    @State var image: UIImage?
     
     var body: some View{
         HStack {
-//            place.image
-//                .resizable()
-//                .frame(width:50, height:50)
+            PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
             Text(place.name != nil ? place.name! : "" )
+        }.onAppear {
+            if let photos = self.place.photos {
+                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                    if let error = error {
+                        print("Error loading photo metadata: \(error.localizedDescription)")
+                        return
+                    }
+                    if let photo = photo {
+                        self.image = photo;
+                    }
+                }
+            }
         }
     }
 }
 
-//struct ListComponent_Previews: PreviewProvider {
-//    static var previews:some View{
-//        Group {
-//            ListRowPlace(place: placeData[0])
-//            ListRowPlace(place: placeData[1])
-//
-//        }
-//          .previewLayout(.fixed(width: 300, height: 70))
-//    }
-//}
+struct PlaceRowImage: View {
+    var image: UIImage
+    var body: some View {
+        Image(uiImage: image)
+            .renderingMode(.original)
+            .resizable()
+            .clipShape(Rectangle())
+            .scaledToFill()
+            .frame(width: 80, height: 80)
+            .cornerRadius(15)
+    }
+}
