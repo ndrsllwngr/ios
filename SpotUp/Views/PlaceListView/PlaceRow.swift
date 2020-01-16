@@ -10,7 +10,7 @@ import SwiftUI
 import GooglePlaces
 
 struct PlaceRow: View {
-    var place: GMSPlace
+    var gmsPlaceWithTimestamp: GMSPlaceWithTimestamp
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -18,16 +18,18 @@ struct PlaceRow: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
+    @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
+    
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    Text(self.place.name != nil ? self.place.name! : "")
+                    Text(self.gmsPlaceWithTimestamp.gmsPlace.name != nil ? self.gmsPlaceWithTimestamp.gmsPlace.name! : "")
                     Spacer()
                 }
                     .frame(width: metrics.size.width * 0.7)
                     .onTapGesture {
-                        self.placeIdToNavigateTo = self.place.placeID!
+                        self.placeIdToNavigateTo = self.gmsPlaceWithTimestamp.gmsPlace.placeID!
                         self.goToPlace = 1
                 }
                 HStack {
@@ -38,6 +40,7 @@ struct PlaceRow: View {
                     .onTapGesture {
                         self.showSheet.toggle()
                         self.sheetSelection = "place_menu"
+                        self.placeForPlaceMenuSheet = self.gmsPlaceWithTimestamp
                 }
             }
         }

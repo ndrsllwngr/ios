@@ -17,11 +17,14 @@ struct PlaceListView: View {
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
+    
     @State var showSheet = false
     @State var sheetSelection = "none"
+    
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
+    
+    @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     
     var body: some View {
         VStack {
@@ -34,8 +37,9 @@ struct PlaceListView: View {
                                showSheet: $showSheet,
                                sheetSelection: $sheetSelection,
                                placeIdToNavigateTo: $placeIdToNavigateTo,
-                               goToPlace: $goToPlace
-            ).environmentObject(firestorePlaceList)
+                               goToPlace: $goToPlace,
+                               placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet)
+                .environmentObject(firestorePlaceList)
                 .onAppear {
                     print("OnAppear PlaceListView: About to add firestorePlaceList Listener")
                     self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
@@ -47,12 +51,13 @@ struct PlaceListView: View {
         }
         .sheet(isPresented: $showSheet) {
             if self.sheetSelection == "settings" {
-                
                 PlaceListSettingsSheet(presentationMode: self.presentationMode,
-                                  showSheet: self.$showSheet)
+                                       showSheet: self.$showSheet)
                     .environmentObject(self.firestorePlaceList)
             } else if self.sheetSelection == "place_menu" {
-                PlaceMenuSheet()
+                PlaceMenuSheet(placeListId: self.placeListId,
+                               gmsPlaceWithTimeStamp: self.placeForPlaceMenuSheet!,
+                               showSheet: self.$showSheet)
             }
         }
     }
@@ -66,8 +71,11 @@ struct InnerPlaceListView: View {
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
+    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
+    
+    @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
     
     @State private var selection = 0
     
@@ -87,12 +95,13 @@ struct InnerPlaceListView: View {
             
             if selection == 0 {
                 List {
-                    ForEach(self.firestorePlaceList.places.sorted{ $0.addedAt.dateValue() >  $1.addedAt.dateValue()}.map{$0.gmsPlace}, id: \.self) { place in
-                        PlaceRow(place: place,
+                    ForEach(self.firestorePlaceList.places.sorted{ $0.addedAt.dateValue() >  $1.addedAt.dateValue()}, id: \.self) { place in
+                        PlaceRow(gmsPlaceWithTimestamp: place,
                                  showSheet: self.$showSheet,
                                  sheetSelection: self.$sheetSelection,
                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                 goToPlace: self.$goToPlace)
+                                 goToPlace: self.$goToPlace,
+                                 placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet)
                     }
                 }
             } else {
@@ -178,7 +187,7 @@ struct PlaceListSettingsButton: View {
         VStack {
             Button(action: {
                 self.showSheet.toggle()
-                self.sheetSelection = "settings"
+                self.sheetSelection = "ellipsis"
             }) {
                 Image(systemName: "slider.horizontal.3")
             }
