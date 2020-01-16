@@ -34,7 +34,7 @@ struct AddPlaceToListSheet: View {
             }
         }
         .onAppear {
-            self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid, isMyProfile: true)
+            self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
         }
         .onDisappear {
             self.profile.removeProfileListener()
