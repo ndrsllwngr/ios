@@ -7,8 +7,11 @@
 
 import SwiftUI
 
-struct PlaceListSettings: View {
+struct PlaceListSettingsSheet: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    
+    @Binding var presentationMode: PresentationMode
+
     @Binding var showSheet: Bool
     @State private var newListName: String = ""
     
@@ -64,6 +67,13 @@ struct PlaceListSettings: View {
                         Text("Make non collaborative PlaceList")
                     }
                 }
+            }
+            Button(action: {
+                self.showSheet.toggle()
+                self.$presentationMode.wrappedValue.dismiss()
+                FirestoreConnection.shared.deletePlaceList(placeListToDelete: self.firestorePlaceList.placeList)
+            }) {
+                Text("Delete PlaceList")
             }
             Spacer()
             Button(action: {
