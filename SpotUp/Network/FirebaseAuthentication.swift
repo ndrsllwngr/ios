@@ -64,7 +64,7 @@ class FirebaseAuthentication: ObservableObject {
         // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
         self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
             if let error = error {
-                print("Error during authentication for email change \(error)")
+                print("Error during authentication for email change: \(error)")
             } else if let result = result {
                 let user = result.user
                 user.updateEmail(to: newEmail) { (error) in
@@ -84,7 +84,7 @@ class FirebaseAuthentication: ObservableObject {
         // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
         self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
             if let error = error {
-                print("Error during authentication for password change \(error)")
+                print("Error during authentication for password change: \(error)")
             } else if let result = result {
                 let user = result.user
                 user.updatePassword(to: newPassword) { (error) in
