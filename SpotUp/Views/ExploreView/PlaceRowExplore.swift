@@ -9,32 +9,29 @@
 import SwiftUI
 import GooglePlaces
 
-struct PlaceRow: View {
-    var gmsPlaceWithTimestamp: GMSPlaceWithTimestamp
+struct PlaceRowExplore: View {
+    var place: GMSPlaceWithTimestamp
+    
+    @ObservedObject var exploreModel = ExploreModel.shared
     
     @Binding var showSheet: Bool
-    @Binding var sheetSelection: String
-    
-    @Binding var placeIdToNavigateTo: String?
-    @Binding var goToPlace: Int?
-    
+
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
-    @State var image: UIImage?
+    @State var image: UIImage? = nil
     
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
-                    Text(self.gmsPlaceWithTimestamp.gmsPlace.name != nil ? self.gmsPlaceWithTimestamp.gmsPlace.name! : "")
+                    Text(self.place.gmsPlace.name != nil ? self.place.gmsPlace.name! : "")
                     Spacer()
                 }
                     .frame(width: metrics.size.width * 0.7)
                     .onTapGesture {
-                        self.placeIdToNavigateTo = self.gmsPlaceWithTimestamp.gmsPlace.placeID!
-                        self.goToPlace = 1
+                        self.exploreModel.changeCurrentTargetTo(self.place)
                 }
                 HStack {
                     Spacer()
@@ -43,15 +40,14 @@ struct PlaceRow: View {
                     .frame(width: metrics.size.width * 0.3)
                     .onTapGesture {
                         self.showSheet.toggle()
-                        self.sheetSelection = "place_menu"
-                        self.placeForPlaceMenuSheet = self.gmsPlaceWithTimestamp
+                        self.placeForPlaceMenuSheet = self.place
                         self.imageForPlaceMenuSheet = self.image
                 }
             }
         }
         .frame(height: 60)
         .onAppear {
-            if let photos = self.gmsPlaceWithTimestamp.gmsPlace.photos {
+            if let photos = self.place.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")
@@ -66,7 +62,7 @@ struct PlaceRow: View {
     }
 }
 
-struct PlaceRowImage: View {
+struct PlaceRowExploreImage: View {
     var image: UIImage
     var body: some View {
         Image(uiImage: image)
