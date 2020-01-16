@@ -160,8 +160,7 @@ struct PlaceListFollowButton: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
     var body: some View {
-        VStack {
-            if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+        VStack {            if(!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                     
