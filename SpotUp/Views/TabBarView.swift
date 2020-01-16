@@ -34,6 +34,13 @@ struct TabBarView: View {
                 Image(systemName: selection == 1 ? "person.fill" : "person")
                 Text("Profil")
             }).tag(1)
+            NavigationView {
+                ExploreView()
+            }
+            .tabItem({
+                Image(systemName: selection == 2 ? "map.fill" : "map")
+                Text("Explore")
+            }).tag(2)
         }
         .accentColor(.black)
     }
