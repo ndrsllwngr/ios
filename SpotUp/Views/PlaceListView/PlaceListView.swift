@@ -149,7 +149,7 @@ struct PlaceListInfoView: View {
                         }
                     }
                     Button(action: {
-                        ExploreModel.shared.startExploringPlaceList(placeList: self.firestorePlaceList.placeList, gmsPlaces: self.firestorePlaceList.places)
+                        ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
                     }) {
                         Text("Explore")
                     }

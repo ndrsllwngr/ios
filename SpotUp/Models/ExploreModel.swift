@@ -1,4 +1,5 @@
 import Foundation
+import GooglePlaces
 
 class ExploreModel: ObservableObject {
     
@@ -8,32 +9,55 @@ class ExploreModel: ObservableObject {
     
     private init(){}
     
-    func startWithEmptyExploreList() {
+    func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
     }
     
-    func startExploringPlaceList(placeList: PlaceList, gmsPlaces: [GMSPlaceWithTimestamp]) {
-        if (gmsPlaces.isEmpty) {
-            self.exploreList = ExploreList(places: gmsPlaces)
+    func startExploreWithPlaceList(placeList: PlaceList, places: [GMSPlace]) {
+        if (places.isEmpty) {
+            self.exploreList = ExploreList(places: places)
         } else {
-            let placesSortedByDistance = sortPlacesByDistanceToCurrentLocation(gmsPlaces)
-            self.exploreList = ExploreList(places: gmsPlaces, currentTarget: gmsPlaces[0])
+            let placesSortedByDistance = sortPlacesByDistanceToCurrentLocation(places)
+            self.exploreList = ExploreList(places: placesSortedByDistance, currentTarget: places[0])
         }
     }
     
-    func changeCurrentTargetTo(_ place: GMSPlaceWithTimestamp) {
+    func addPlaceToExplore(_ place: GMSPlace) {
+        if self.exploreList != nil {
+            self.exploreList?.places.append(place)
+            if (self.exploreList!.places.count == 1) {
+                self.exploreList?.currentTarget = place
+            }
+        } else {
+            self.exploreList = ExploreList(places: [place])
+        }
+    }
+    
+    func removePlaceFromExplore(_ place: GMSPlace) {
+        if self.exploreList != nil {
+            self.exploreList!.places = self.exploreList!.places.filter{$0 != place}
+        }
+    }
+    
+    func quitExplore() {
+        self.exploreList = nil
+    }
+    
+    
+    
+    func changeCurrentTargetTo(_ place: GMSPlace) {
         self.exploreList?.currentTarget = place
     }
 
     
 }
 
-func sortPlacesByDistanceToCurrentLocation(_ places: [GMSPlaceWithTimestamp]) -> [GMSPlaceWithTimestamp] {
+func sortPlacesByDistanceToCurrentLocation(_ places: [GMSPlace]) -> [GMSPlace] {
     // ToDo implement
     return places
 }
 
 struct ExploreList: Equatable {
-    var places: [GMSPlaceWithTimestamp]
-    var currentTarget: GMSPlaceWithTimestamp? = nil
+    var places: [GMSPlace]
+    var currentTarget: GMSPlace? = nil
 }
