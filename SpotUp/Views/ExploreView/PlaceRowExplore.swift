@@ -29,7 +29,7 @@ struct PlaceRowExplore: View {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
                     VStack {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
-                        Text(self.place.distance != nil ? "\(self.place.distance!)m" : "distance")
+                        Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
                     }
                     Spacer()
                 }
@@ -73,9 +73,9 @@ struct PlaceRowExploreImage: View {
         Image(uiImage: image)
             .renderingMode(.original)
             .resizable()
+            .frame(width: 50, height: 50)
             .clipShape(Rectangle())
             .scaledToFill()
-            .frame(width: 80, height: 80)
             .cornerRadius(15)
     }
 }
