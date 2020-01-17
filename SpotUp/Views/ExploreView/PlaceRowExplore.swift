@@ -27,7 +27,7 @@ struct PlaceRowExplore: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
-                    VStack {
+                    VStack (alignment: .leading) {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
                     }
@@ -64,18 +64,5 @@ struct PlaceRowExplore: View {
                 }
             }
         }
-    }
-}
-
-struct PlaceRowExploreImage: View {
-    var image: UIImage
-    var body: some View {
-        Image(uiImage: image)
-            .renderingMode(.original)
-            .resizable()
-            .frame(width: 50, height: 50)
-            .clipShape(Rectangle())
-            .scaledToFill()
-            .cornerRadius(15)
     }
 }

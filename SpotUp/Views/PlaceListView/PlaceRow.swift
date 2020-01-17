@@ -74,7 +74,7 @@ struct PlaceRowImage: View {
             .resizable()
             .clipShape(Rectangle())
             .scaledToFill()
-            .frame(width: 80, height: 80)
+            .frame(width: 50, height: 50)
             .cornerRadius(15)
     }
 }

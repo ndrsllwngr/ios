@@ -25,6 +25,7 @@ struct ExploreView: View {
                 HStack {
                     Image(systemName: "map")
                     Text("\(self.exploreModel.exploreList!.places.count) Places")
+                    Spacer()
                     Button(action: {
                         self.exploreModel.quitExplore()
                     }) {
@@ -43,7 +44,10 @@ struct ExploreView: View {
                     } else {
                         Text("Tap on a place to make it the current target")
                     }
-                    Text("Travel Queue")
+                    HStack {
+                        Text("Travel Queue")
+                        Spacer()
+                    }
                     List {
                         ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place}, id: \.self) { place in
                             PlaceRowExplore(place: place,
