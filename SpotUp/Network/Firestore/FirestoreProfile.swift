@@ -13,7 +13,7 @@ class FirestoreProfile: ObservableObject {
     
     
     // Call when entering view (.onAppear()) to create listeners for all data needed
-    func addProfileListener(currentUserId: String, isMyProfile: Bool) {
+    func addProfileListener(currentUserId: String) {
         
         // Listener for my user
         self.userProfileListener = FirestoreConnection.shared.getUsersRef().document(currentUserId).addSnapshotListener { documentSnapshot, error in
@@ -27,10 +27,11 @@ class FirestoreProfile: ObservableObject {
                 self.user = newUser
             })
         }
+        // It would be best to do sorting and only public lists on !isMyProfile here but its not possible with firebase
+        let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId)
         
-        let ref = isMyProfile ? FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId) : FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: currentUserId)
         // Listener for my lists
-        self.placeListsListener = ref.addSnapshotListener { querySnapshot, error in
+        self.placeListsListener = query.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving Lists")
                 return
