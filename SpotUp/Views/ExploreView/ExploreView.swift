@@ -34,14 +34,18 @@ struct ExploreView: View {
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
                     .frame(height: 180, alignment: .center)
                 if !exploreModel.exploreList!.places.isEmpty {
-                    PlaceRowExplore(place: exploreModel.exploreList!.currentTarget!,
-                                    showSheet: self.$showSheet,
-                                    sheetSelection: self.$sheetSelection,
-                                    placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                    imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                    if (exploreModel.exploreList!.currentTarget != nil) {
+                        PlaceRowExplore(place: exploreModel.exploreList!.currentTarget!,
+                        showSheet: self.$showSheet,
+                        sheetSelection: self.$sheetSelection,
+                        placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                        imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                    } else {
+                        Text("Tap on a place to make it the current target")
+                    }
                     Text("Travel Queue")
                     List {
-                        ForEach (exploreModel.exploreList!.places.filter{$0 != exploreModel.exploreList!.currentTarget!}, id: \.self) { place in
+                        ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place}, id: \.self) { place in
                             PlaceRowExplore(place: place,
                                             showSheet: self.$showSheet,
                                             sheetSelection: self.$sheetSelection,
@@ -80,6 +84,9 @@ struct ExploreView: View {
             .navigationBarItems(trailing: HStack {
                 ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             })
+            .onAppear{
+                self.exploreModel.updateDistancesInPlaces()
+        }
         .padding()
     }
 }
@@ -111,8 +118,8 @@ struct ExploreMapView : UIViewRepresentable {
     func makeUIView(context: Context) -> GMSMapView {
         
         var initialCoordinates = self.defaultLocation
-        if ( !self.exploreList.places.isEmpty) {
-            initialCoordinates = self.exploreList.currentTarget!.place.coordinate
+        if let currentTarget = self.exploreList.currentTarget {
+            initialCoordinates = currentTarget.place.coordinate
         }
         
         let camera = GMSCameraPosition.camera(
@@ -131,8 +138,11 @@ struct ExploreMapView : UIViewRepresentable {
         if (self.exploreList.places.isEmpty) {
             return
         }
-        let currentPlace = self.exploreList.currentTarget!.place
-        view.animate(toLocation: currentPlace.coordinate)
+        if let currentTarget = self.exploreList.currentTarget {
+            view.animate(toLocation: currentTarget.place.coordinate)
+        } else {
+            view.animate(toLocation: exploreList.places[0].place.coordinate)
+        }
         self.exploreList.places.forEach { place in
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
@@ -140,12 +150,12 @@ struct ExploreMapView : UIViewRepresentable {
                 longitude: place.place.coordinate.longitude
             )
             marker.title = place.place.name
-
-            if(place.place == currentPlace){
-                marker.icon = GMSMarker.markerImage(with: .red)
-            } else {
-                marker.icon = GMSMarker.markerImage(with: .black)
-            }
+//
+//            if(place.place == currentPlace){
+//                marker.icon = GMSMarker.markerImage(with: .red)
+//            } else {
+//                marker.icon = GMSMarker.markerImage(with: .black)
+//            }
             marker.map = view
             
         }

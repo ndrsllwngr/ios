@@ -2,38 +2,38 @@ import Foundation
 import GooglePlaces
 import Combine
 
-class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
-    private let manager: CLLocationManager
-    var didChange = PassthroughSubject<LocationManager, Never>()
+class LocationManager: NSObject, ObservableObject {
+    
+    private let locationManager = CLLocationManager()
+    let objectWillChange = PassthroughSubject<Void, Never>()
 
-    @Published var lastKnownLocation: CLLocation? {
-        didSet {
-            print("LastKnownLocation updated:", self.lastKnownLocation)
-            didChange.send(self)
-        }
+    @Published var status: CLAuthorizationStatus? {
+      willSet { objectWillChange.send() }
     }
 
-    init(manager: CLLocationManager = CLLocationManager()) {
-        self.manager = manager
-        super.init()
+    @Published var location: CLLocation? {
+      willSet { objectWillChange.send() }
     }
 
-    func startUpdating() {
-        self.manager.delegate = self
-        self.manager.requestWhenInUseAuthorization()
-        self.manager.startUpdatingLocation()
+    override init() {
+      super.init()
+      self.locationManager.delegate = self
+      self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+      self.locationManager.requestWhenInUseAuthorization()
+      self.locationManager.startUpdatingLocation()
+    }
+    
+}
+
+extension LocationManager: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        self.status = status
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(locations)
-        lastKnownLocation = locations.last
-    }
-
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse {
-            manager.startUpdatingLocation()
-        }
+        guard let location = locations.last else { return }
+        self.location = location
+        ExploreModel.shared.updateDistancesInPlaces()
     }
 }
-
 
