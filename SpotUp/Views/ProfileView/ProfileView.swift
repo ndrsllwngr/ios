@@ -92,6 +92,11 @@ struct InnerProfileView: View {
                     }
                 }
                 Spacer()
+            }.onAppear {
+                UITableView.appearance().separatorStyle = .none
+            }
+            .onDisappear {
+                UITableView.appearance().separatorStyle = .singleLine
             }
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)

@@ -45,7 +45,7 @@ struct FirebaseProfileImage: View {
     }
 }
 
-struct FirebasePlaceListImage: View {
+struct FirebasePlaceListInfoImage: View {
     
     var imageUrl: String?
     
@@ -68,18 +68,13 @@ struct FirebasePlaceListImage: View {
                     .indicator(.activity) // Activity Indicator
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
+                    
             } else {
                 Image(uiImage: UIImage(named: "placelist_image_placeholder")!)
                     .renderingMode(.original)
                     .resizable()
                     .animation(.easeInOut(duration: 0.5))
                     .transition(.fade)
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
             }
             
         }
@@ -87,7 +82,7 @@ struct FirebasePlaceListImage: View {
     }
 }
 
-struct FirebasePlaceListImageRow: View {
+struct FirebasePlaceListRowImage: View {
     
     var imageUrl: String?
     
@@ -110,16 +105,12 @@ struct FirebasePlaceListImageRow: View {
                     .indicator(.activity) // Activity Indicator
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
             } else {
                 Image(uiImage: UIImage(named: "placelist_image_placeholder")!)
                     .renderingMode(.original)
                     .resizable()
                     .animation(.easeInOut(duration: 0.5))
                     .transition(.fade)
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
             }
             
         }

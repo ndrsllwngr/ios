@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-
 struct PlaceListView: View {
     
     var placeListId: String
@@ -85,9 +84,10 @@ struct InnerPlaceListView: View {
     @State private var selection = 0
     
     var body: some View {
-        VStack {
+        VStack (alignment: .leading){
             // Follow button only on foreign user profiles
             PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+            .padding()
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -99,16 +99,24 @@ struct InnerPlaceListView: View {
             Spacer()
             
             if selection == 0 {
-                List {
-                    ForEach(self.firestorePlaceList.places, id: \.self) { place in
-                        PlaceRow(gmsPlaceWithTimestamp: place,
-                                 showSheet: self.$showSheet,
-                                 sheetSelection: self.$sheetSelection,
-                                 placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                 goToPlace: self.$goToPlace,
-                                 placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                List{
+                    ScrollView(.vertical, showsIndicators: false){
+                        ForEach(self.firestorePlaceList.places, id: \.self) { place in
+                            PlaceRow(gmsPlaceWithTimestamp: place,
+                                     showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace,
+                                     placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                     imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                        }
                     }
+                    
+                }.onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                }
+                .onDisappear {
+                    UITableView.appearance().separatorStyle = .singleLine
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
@@ -125,39 +133,6 @@ struct InnerPlaceListView: View {
     }
 }
 
-struct PlaceListInfoView: View {
-    
-    var placeListId: String
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    var body: some View {
-        VStack {
-            HStack {
-                FirebasePlaceListImage(imageUrl: self.firestorePlaceList.placeList.imageUrl).padding(.top)
-                VStack {
-                    Text(self.firestorePlaceList.placeList.name)
-                    HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                        HStack {
-                            Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
-                        }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
-                        }
-                    }
-                    Button(action: {
-                        print("Explore")
-                    }) {
-                        Text("Explore")
-                    }
-                }
-            }
-        }
-    }
-}
 
 struct PlaceListFollowButton: View {
     var placeListId: String
@@ -184,6 +159,7 @@ struct PlaceListFollowButton: View {
         }
     }
 }
+
 struct PlaceListSettingsButton: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var showSheet: Bool
