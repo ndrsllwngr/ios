@@ -31,7 +31,7 @@ struct PlaceListView: View {
     var body: some View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
-                NavigationLink(destination: ItemView(placeID: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
                     Text("")
                 }
             }
