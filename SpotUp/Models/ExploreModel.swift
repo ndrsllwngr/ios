@@ -61,7 +61,9 @@ class ExploreModel: ObservableObject {
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
         if self.exploreList != nil {
-            self.exploreList!.places = self.exploreList!.places.filter{$0 != place}
+            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+                self.exploreList!.places.remove(at: index)
+            }
         }
     }
     
@@ -74,29 +76,47 @@ class ExploreModel: ObservableObject {
         self.exploreList?.currentTarget = place
     }
     
-    func sortPlacesByDistanceToCurrentLocation(_ places: [GMSPlace]) -> [ExplorePlace] {
-        return places.map { place in
-            return ExplorePlace(place: place)
+    func markPlaceAsVisited(place: ExplorePlace) {
+        if self.exploreList != nil {
+            self.exploreList!.currentTarget = nil
+            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+                self.exploreList!.places[index].visited = true
+                print("marked \(self.exploreList!.places[index].place.name!) as true")
+            }
+            self.updateDistancesInPlaces()
         }
-        // ToDo implement
+    }
+    
+    func markPlaceAsUnVisited(place: ExplorePlace) {
+        if self.exploreList != nil {
+            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+                self.exploreList!.places[index].visited = false
+            }
+            self.updateDistancesInPlaces()
+            print("111")
+        }
     }
     
     func updateDistancesInPlaces() {
+        print("222")
         // if explore active and we already have a location
         if let exploreList = self.exploreList, let location = self.locationManager.location {
             // 1. calculate distance to my location for all places
-            let explorePlaces: [ExplorePlace] = exploreList.places.map { place in
+            let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
                 let distance = calculateDistance(coordinate: place.place.coordinate,
                                                  location: location)
                 return ExplorePlace(place: place.place,
-                                    distance: distance)
+                                    distance: distance,
+                                    visited: place.visited
+                )
             }
                 // 2. sort places based on distance
                 .sorted{(place1, place2) in place1.distance! < place2.distance!}
             self.exploreList!.places = explorePlaces
-            // If no currentTarget set by user yet set current target
-            if (exploreList.currentTarget == nil && !exploreList.places.isEmpty) {
-                self.exploreList?.currentTarget = explorePlaces[0]
+            // If no currentTarget set by user yet set current target (which is the next nearst not visited place)
+            if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
+                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited)")
+                self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
             }
         }
     }
@@ -124,6 +144,7 @@ struct ExploreList: Equatable {
 struct ExplorePlace: Equatable, Hashable {
     var place: GMSPlace
     var distance: CLLocationDistance? = nil
+    var visited: Bool = false
 }
 
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {

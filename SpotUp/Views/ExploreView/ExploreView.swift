@@ -15,7 +15,7 @@ struct ExploreView: View {
     
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
-
+    
     @State var placeForPlaceMenuSheet: ExplorePlace? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
@@ -40,19 +40,27 @@ struct ExploreView: View {
                     } else {
                         Text("Tap on a place to make it the current target")
                     }
-                    HStack {
-                        Text("Travel Queue")
-                        Spacer()
-                    }
+                    Text("Travel Queue")
                     List {
-                        ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place}, id: \.self) { place in
-                            PlaceRowExplore(place: place,
-                                            showSheet: self.$showSheet,
-                                            sheetSelection: self.$sheetSelection,
-                                            placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                            imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                                .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                            
+                        if (!exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
+                            ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
+                                PlaceRowExplore(place: place,
+                                                showSheet: self.$showSheet,
+                                                sheetSelection: self.$sheetSelection,
+                                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                            }
+                        } else {
+                            Text("You have visited all places in your list!")
+                        }
+                        if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
+                            Section(header: Text("Already visited")) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
+                                    PlaceRowExploreVisited(place: place)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
+                            }
                         }
                     }
                 } else {
@@ -86,15 +94,15 @@ struct ExploreView: View {
                 SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "place_menu") {
                 ExplorePlaceMenuSheet(place: self.placeForPlaceMenuSheet!,
-                image: self.$imageForPlaceMenuSheet,
-                showSheet: self.$showSheet)
+                                      image: self.$imageForPlaceMenuSheet,
+                                      showSheet: self.$showSheet)
             }
             
         }
-            .navigationBarTitle(Text("Explore"), displayMode: .inline)
-            .navigationBarItems(trailing: HStack {
-                ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-            })
+        .navigationBarTitle(Text("Explore"), displayMode: .inline)
+        .navigationBarItems(trailing: HStack {
+            ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+        })
             .onAppear{
                 self.exploreModel.updateDistancesInPlaces()
         }
@@ -141,7 +149,7 @@ struct ExploreMapView : UIViewRepresentable {
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         //mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
-
+        
         return mapView
     }
     
@@ -161,12 +169,12 @@ struct ExploreMapView : UIViewRepresentable {
                 longitude: place.place.coordinate.longitude
             )
             marker.title = place.place.name
-//
-//            if(place.place == currentPlace){
-//                marker.icon = GMSMarker.markerImage(with: .red)
-//            } else {
-//                marker.icon = GMSMarker.markerImage(with: .black)
-//            }
+            //
+            //            if(place.place == currentPlace){
+            //                marker.icon = GMSMarker.markerImage(with: .red)
+            //            } else {
+            //                marker.icon = GMSMarker.markerImage(with: .black)
+            //            }
             marker.map = view
             
         }
