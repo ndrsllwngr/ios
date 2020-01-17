@@ -51,7 +51,7 @@ struct ExploreView: View {
                                             sheetSelection: self.$sheetSelection,
                                             placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                             imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                                .listRowInsets(EdgeInsets()) // removes the left and right padding of the elements
+                                .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             
                         }
                     }
@@ -61,19 +61,29 @@ struct ExploreView: View {
                 }
                 Spacer()
             } else {
+                Spacer()
+                Text("Explore is currently not active.")
+                Text("Why dont you...")
+                Spacer()
+                Button(action: {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "select_placelist"
+                }) {
+                    Text("1. Select a placelist you want to explore")
+                }.padding()
                 Button(action: {
                     self.exploreModel.startExploreWithEmptyList()
                 }) {
-                    Text("Start Exploring now")
-                }
-                Spacer()
-                Text("Explore is currently not active.")
+                    Text("2. Create an empty explore queue and add places by yourself")
+                }.padding()
                 Spacer()
             }
             
         }.sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
                 ExploreSettingsSheet(showSheet: self.$showSheet)
+            } else if (self.sheetSelection == "select_placelist") {
+                SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "place_menu") {
                 ExplorePlaceMenuSheet(place: self.placeForPlaceMenuSheet!,
                 image: self.$imageForPlaceMenuSheet,
