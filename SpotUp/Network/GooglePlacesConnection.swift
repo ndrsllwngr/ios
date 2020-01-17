@@ -1,5 +1,6 @@
 import Foundation
 import GooglePlaces
+import SwiftUI
 
 let placesClient = GMSPlacesClient.shared()
 
@@ -12,7 +13,8 @@ let fields : GMSPlaceField = GMSPlaceField(rawValue:
         UInt(GMSPlaceField.website.rawValue) |
         UInt(GMSPlaceField.openingHours.rawValue) |
         UInt(GMSPlaceField.priceLevel.rawValue) |
-        UInt(GMSPlaceField.phoneNumber.rawValue)
+        UInt(GMSPlaceField.phoneNumber.rawValue) |
+    UInt(GMSPlaceField.types.rawValue)
     )!
 
 func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
@@ -22,3 +24,45 @@ func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
 func getPlaceFoto(photoMetadata: GMSPlacePhotoMetadata, handler: @escaping GMSPlacePhotoImageResultCallback) {
     placesClient.loadPlacePhoto(photoMetadata, callback: handler)
 }
+
+func getPlaceIsOpenNow(isOpen:GMSPlaceOpenStatus) -> String{
+    var a: String
+    switch isOpen {
+    case.closed:
+          print("It's closed")
+        a = ("It's closed")
+    case.open:
+         print("It's open")
+        a = ("It's open")
+    case.unknown:
+         a = ("It's unknown")
+    default:
+        a = ("default")
+    }
+    return a
+}
+
+func getPlacePricelevel(priceLevel:GMSPlacesPriceLevel){
+    switch priceLevel {
+    case.cheap:
+          print("It's cheap")
+    case.expensive:
+         print("It's expensive")
+    case.free:
+         print("It's free")
+    case.high:
+        print("It'high")
+    case.medium:
+        print("It's medium")
+    case.unknown:
+        print ("It's unknown")
+    default:
+        print("default")
+    }
+    
+}
+
+
+
+
+

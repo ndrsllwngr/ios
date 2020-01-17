@@ -18,7 +18,7 @@ struct ItemMapView: UIViewRepresentable {
         let camera = GMSCameraPosition.camera(
             withLatitude: coordinate.latitude,
             longitude: coordinate.longitude,
-            zoom: 16.0
+            zoom: 12.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         return mapView
@@ -33,10 +33,10 @@ struct ItemMapView: UIViewRepresentable {
     
 }
 
-//
-//struct ItemMapView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemMapView(coordinate: placeData[0].placeCoordinate)
-//    }
-//}
+
+struct ItemMapView_Previews: PreviewProvider {
+    static var previews: some View {
+        ItemMapView(coordinate: CLLocationCoordinate2D(latitude:59.987329384, longitude:-141.38749845) )
+    }
+}
 
