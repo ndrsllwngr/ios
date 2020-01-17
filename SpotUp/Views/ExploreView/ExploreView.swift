@@ -16,7 +16,7 @@ struct ExploreView: View {
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
 
-    @State var placeForPlaceMenuSheet: GMSPlace? = nil
+    @State var placeForPlaceMenuSheet: ExplorePlace? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
     var body: some View {
@@ -112,7 +112,7 @@ struct ExploreMapView : UIViewRepresentable {
         
         var initialCoordinates = self.defaultLocation
         if ( !self.exploreList.places.isEmpty) {
-            initialCoordinates = self.exploreList.currentTarget!.coordinate
+            initialCoordinates = self.exploreList.currentTarget!.place.coordinate
         }
         
         let camera = GMSCameraPosition.camera(
@@ -131,17 +131,17 @@ struct ExploreMapView : UIViewRepresentable {
         if (self.exploreList.places.isEmpty) {
             return
         }
-        let currentPlace = self.exploreList.currentTarget!
+        let currentPlace = self.exploreList.currentTarget!.place
         view.animate(toLocation: currentPlace.coordinate)
         self.exploreList.places.forEach { place in
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
-                latitude: place.coordinate.latitude,
-                longitude: place.coordinate.longitude
+                latitude: place.place.coordinate.latitude,
+                longitude: place.place.coordinate.longitude
             )
-            marker.title = place.name
+            marker.title = place.place.name
 
-            if(place == currentPlace){
+            if(place.place == currentPlace){
                 marker.icon = GMSMarker.markerImage(with: .red)
             } else {
                 marker.icon = GMSMarker.markerImage(with: .black)

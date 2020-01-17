@@ -10,14 +10,14 @@ import SwiftUI
 import GooglePlaces
 
 struct PlaceRowExplore: View {
-    var place: GMSPlace
+    var place: ExplorePlace
     
     @ObservedObject var exploreModel = ExploreModel.shared
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
 
-    @Binding var placeForPlaceMenuSheet: GMSPlace?
+    @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
     @State var image: UIImage? = nil
@@ -27,7 +27,10 @@ struct PlaceRowExplore: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
-                    Text(self.place.name != nil ? self.place.name! : "")
+                    VStack {
+                        Text(self.place.place.name != nil ? self.place.place.name! : "")
+                        Text(self.place.distance != nil ? "\(self.place.distance!)m" : "distance")
+                    }
                     Spacer()
                 }
                     .frame(width: metrics.size.width * 0.7)
@@ -49,7 +52,7 @@ struct PlaceRowExplore: View {
         }
         .frame(height: 60)
         .onAppear {
-            if let photos = self.place.photos {
+            if let photos = self.place.place.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")

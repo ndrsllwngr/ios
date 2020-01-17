@@ -2,7 +2,7 @@ import SwiftUI
 import GooglePlaces
 
 struct ExplorePlaceMenuSheet: View {
-    var place: GMSPlace
+    var place: ExplorePlace
     
     @Binding var image: UIImage?
     @Binding var showSheet: Bool
@@ -29,7 +29,7 @@ struct ExplorePlaceMenuSheet: View {
             Spacer()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
-            AddPlaceToListSheet(place: self.place, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+            AddPlaceToListSheet(place: self.place.place, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
         }
     .padding()
     }
