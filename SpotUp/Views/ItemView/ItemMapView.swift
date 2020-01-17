@@ -18,10 +18,13 @@ struct ItemMapView: UIViewRepresentable {
         let camera = GMSCameraPosition.camera(
             withLatitude: coordinate.latitude,
             longitude: coordinate.longitude,
-            zoom: 16.0
+            zoom: 14.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        mapView.isMyLocationEnabled = true
+//        let myLocation = mapView.myLocation?.coordinate
         return mapView
+
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
@@ -33,10 +36,6 @@ struct ItemMapView: UIViewRepresentable {
     
 }
 
-//
-//struct ItemMapView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemMapView(coordinate: placeData[0].placeCoordinate)
-//    }
-//}
+
+
 
