@@ -85,18 +85,20 @@ struct InnerPlaceListView: View {
     
     var body: some View {
         VStack (alignment: .leading){
-            // Follow button only on foreign user profiles
-            PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
-            .padding()
-            
-            Picker(selection: $selection, label: Text("View")) {
-                Text("List").tag(0)
-                Text("Map").tag(1)
+            VStack {
+                // Follow button only on foreign user profiles
+                PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+                .padding()
+                
+                Picker(selection: $selection, label: Text("View")) {
+                    Text("List").tag(0)
+                    Text("Map").tag(1)
+                }
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
             }
-            .padding()
-            .pickerStyle(SegmentedPickerStyle())
-            
-            Spacer()
+                .padding(0)
+            .background(Color("background"))
             
             if selection == 0 {
                 List{
@@ -177,9 +179,3 @@ struct PlaceListSettingsButton: View {
         
     }
 }
-
-//struct ListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
-//    }
-//}

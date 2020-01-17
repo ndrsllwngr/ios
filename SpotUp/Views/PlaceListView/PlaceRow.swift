@@ -28,10 +28,11 @@ struct PlaceRow: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                        .padding(.trailing)
                     Text(self.gmsPlaceWithTimestamp.gmsPlace.name != nil ? self.gmsPlaceWithTimestamp.gmsPlace.name! : "")
                     Spacer()
                 }
-                    .frame(width: metrics.size.width * 0.7)
+                    .frame(width: metrics.size.width * 0.8)
                     .onTapGesture {
                         self.placeIdToNavigateTo = self.gmsPlaceWithTimestamp.gmsPlace.placeID!
                         self.goToPlace = 1
@@ -40,7 +41,7 @@ struct PlaceRow: View {
                     Spacer()
                     Image(systemName: "ellipsis")
                 }
-                    .frame(width: metrics.size.width * 0.3)
+                    .frame(width: metrics.size.width * 0.2)
                     .onTapGesture {
                         self.showSheet.toggle()
                         self.sheetSelection = "place_menu"
