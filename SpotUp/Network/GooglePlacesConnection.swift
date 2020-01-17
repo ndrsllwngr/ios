@@ -13,7 +13,7 @@ let fields : GMSPlaceField = GMSPlaceField(rawValue:
         UInt(GMSPlaceField.website.rawValue) |
         UInt(GMSPlaceField.openingHours.rawValue) |
         UInt(GMSPlaceField.priceLevel.rawValue) |
-    UInt(GMSPlaceField.types.rawValue)
+        UInt(GMSPlaceField.types.rawValue) |
         UInt(GMSPlaceField.rating.rawValue) |
         UInt(GMSPlaceField.plusCode.rawValue)
     )!
@@ -43,25 +43,28 @@ func getPlaceIsOpenNow(isOpen:GMSPlaceOpenStatus) -> String{
     return a
 }
 
-func getPlacePricelevel(priceLevel:GMSPlacesPriceLevel){
+func getPlacePricelevel(priceLevel:GMSPlacesPriceLevel)->Int{
+    var temp:Int
     switch priceLevel {
     case.cheap:
-          print("It's cheap")
+          temp = 1
     case.expensive:
-         print("It's expensive")
+         temp = 4
     case.free:
-         print("It's free")
+         temp = 0
     case.high:
-        print("It'high")
+        temp = 3
     case.medium:
-        print("It's medium")
+        temp = 2
     case.unknown:
-        print ("It's unknown")
+        temp = -1
     default:
-        print("default")
+        temp = -1
     }
-    
+    return temp
 }
+
+
 
 
 
