@@ -8,12 +8,15 @@
 import SwiftUI
 import GooglePlaces
 import FirebaseFirestore
+import GoogleMaps
 
 struct ItemView: View {
     var placeID: String?
     @State var place: GMSPlace?
-    var priceLevel: Int?
-   
+    @State var myLocation: CLLocationCoordinate2D?
+    @State var isOpen: String?
+    @State var priceLevel: Int?
+    @State var types: [String]
     
     var body: some View {
         VStack {
@@ -23,7 +26,6 @@ struct ItemView: View {
                 InnerItemView(place: place!)
             }
         }.onAppear {
-            
             if let placeID = self.placeID {
                 getPlace(placeID: placeID) { (place: GMSPlace?, error: Error?) in
                     if let error = error {
@@ -33,19 +35,19 @@ struct ItemView: View {
                     if let place = place {
                         self.place = place
                         print("The selected place is: \(String(describing: place.name))")
-                        let isOpen = getPlaceIsOpenNow(isOpen: place.isOpen())
-                        print(isOpen)
-                        let priceLevel = getPlacePricelevel(priceLevel: place.priceLevel)
-                        let types = (place.types != nil ? place.types! : [] )
-                        print(priceLevel)
+                        self.isOpen = getPlaceIsOpenNow(isOpen: place.isOpen())
+                        self.priceLevel = getPlacePricelevel(priceLevel: place.priceLevel)
+                        self.types = (place.types != nil ? place.types! : [] )
                         print(place.phoneNumber)
-                        print(types)
-                        print (types[0])
+                        let distance = round(GMSGeometryDistance(place.coordinate, CLLocationCoordinate2D(latitude:48.137154, longitude:11.576124))/1000)
+                        print (distance)
+                        print (place.rating)
+                        
                         
                     }
                     
                 }
-               
+                
             }
         }
     }
@@ -53,7 +55,7 @@ struct ItemView: View {
 
 struct InnerItemView: View {
     var place: GMSPlace
-
+    
     @State var image: UIImage?
     @State var showSheet = false
     
@@ -62,9 +64,9 @@ struct InnerItemView: View {
             VStack {
                 VStack (alignment: .leading){
                     ItemImageView(image: image != nil ? image! : UIImage())
-                    .scaledToFill()
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 280, maxHeight: 280)
-
+                        .scaledToFill()
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 280, maxHeight: 280)
+                    
                     //                    .offset(y: -90)
                     //                    .padding(.bottom, -90)
                     VStack{
@@ -86,8 +88,8 @@ struct InnerItemView: View {
                             Text("Restaurant (Test)")
                                 .font(.custom("Europa Bold", size: 16))
                             Image(systemName: "mappin")
-                            Text("3.67km (Test)")
-                                .font(.custom("Europa Bold", size: 16))                        }
+//                            drawSigns(signs: place.priceLevel, name: "eurosign.circle")
+                        }
                     }.padding()
                     
                     VStack(alignment: .leading) {
@@ -95,7 +97,7 @@ struct InnerItemView: View {
                             .font(.custom("Bodoni 72", size: 35))
                             .padding()
                         Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
-                         .font(.custom("Europa", size: 16))
+                            .font(.custom("Europa", size: 16))
                             .fontWeight(.bold)
                             .padding()
                         Button(action:
@@ -103,24 +105,26 @@ struct InnerItemView: View {
                                 if let phoneNumber = self.place.phoneNumber {
                                     let tel = URL(string:("tel://" + phoneNumber))
                                     UIApplication.shared.open(tel!)
-                                    
+        
                                 }
                         }){Text(self.place.phoneNumber != nil ? self.place.phoneNumber! : "")}
                             .padding()
+                            .foregroundColor(.black)
                         VStack{
-                        Button(action: {
-                            if let website = self.place.website {
-                                UIApplication.shared.open(website)
-                                
+                            Button(action: {
+                                if let website = self.place.website {
+                                    UIApplication.shared.open(website)
+                                    
+                                }
+                            }){ Text("open website")
+                                //                            Text(self.website != nil ? self.website : "")
+                                .font(.custom("Europa Bold", size: 16))
+                                .foregroundColor(.black)
                             }
-                        }){ Text("open website")
-//                            Text(self.website != nil ? self.website : "")
-                             .font(.custom("Europa Bold", size: 16))
+                            .padding()
                         }
-                        .padding()
-                        }
-                    
-                }
+                        
+                    }
                     .frame(minWidth: 0,maxWidth: .infinity, minHeight: 360, maxHeight: 360)
                     .padding()
                     
@@ -153,33 +157,14 @@ struct InnerItemView: View {
 }
 
 func drawSigns(signs: Int, name:String){
-    if signs == -1{
+    if signs > 0{
+        for _ in 1..<signs {
+            Image(systemName: name)
+        }
+    }else {
         return
     }
-    if signs == 0{
-        return
-    }
-    if signs == 1{
-        Image(systemName:name)
-    }
-    if signs == 2{
-        Image(systemName:name)
-        Image(systemName:name)
-    }
-    if signs == 3 {
-        Image(systemName:name)
-        Image(systemName:name)
-        Image(systemName:name)
-    }
-    if signs == 4{
-        Image(systemName:name)
-        Image(systemName:name)
-        Image(systemName:name)
-        Image(systemName:name)
-    }
-    else {
-        return
-    }
+    
 }
 
 
