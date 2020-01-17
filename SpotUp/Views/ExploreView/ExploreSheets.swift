@@ -1,7 +1,8 @@
 import SwiftUI
+import GooglePlaces
 
 struct ExplorePlaceMenuSheet: View {
-    var gmsPlaceWithTimestamp: GMSPlaceWithTimestamp
+    var place: GMSPlace
     
     @Binding var image: UIImage?
     @Binding var showSheet: Bool
@@ -11,9 +12,10 @@ struct ExplorePlaceMenuSheet: View {
     var body: some View {
         VStack {
             Text("Place Menu")
+            Spacer()
             Button(action: {
                 self.showSheet.toggle()
-                print("delete place from explore")
+                ExploreModel.shared.removePlaceFromExplore(self.place)
             }) {
                 Text("Delete place from Explore")
             }
@@ -24,9 +26,31 @@ struct ExplorePlaceMenuSheet: View {
                 Text("Add to Placelist")
             }
         .padding()
+            Spacer()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
-            AddPlaceToListSheet(place: self.gmsPlaceWithTimestamp.gmsPlace, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+            AddPlaceToListSheet(place: self.place, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+        }
+    .padding()
+    }
+}
+
+struct ExploreSettingsSheet: View {
+
+    @Binding var showSheet: Bool
+    
+    var body: some View {
+        VStack {
+            Text("Explore Settings")
+            Spacer()
+            .padding()
+            Button(action: {
+                print("Pause Exploring")
+            }) {
+                Text("Pause Exploring")
+            }
+        .padding()
+            Spacer()
         }
     .padding()
     }
