@@ -34,7 +34,16 @@ struct PlacesListRow: View {
     
     var body: some View {
         HStack {
-            FirebasePlaceListImageRow(imageUrl: placeList.imageUrl)
+            
+            FirebasePlaceListRowImage(imageUrl: placeList.imageUrl)
+            .scaledToFill()
+            .frame(width: 100, height: 100)
+            .mask(
+                Rectangle()
+                .frame(width: 120, height: 100)
+                .cornerRadius(15)
+            )
+            
             VStack(alignment: .leading) {
                 Text(placeList.name)
                     .bold()
