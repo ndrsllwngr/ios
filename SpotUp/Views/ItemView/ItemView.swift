@@ -39,6 +39,10 @@ struct ItemView: View {
                     }
                     
                 }
+                if let place = place {
+                    self.place = place
+                    print("The selected place is: \(String(describing: place.name))")
+                }
             }
         }
     }

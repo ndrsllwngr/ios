@@ -63,8 +63,8 @@ class FirebaseAuthentication: ObservableObject {
     func changeEmail(currentEmail: String, currentPassword: String, newEmail: String) {
         // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
         self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
-            if error != nil {
-                print("Error during authentication for email change")
+            if let error = error {
+                print("Error during authentication for email change: \(error)")
             } else if let result = result {
                 let user = result.user
                 user.updateEmail(to: newEmail) { (error) in
@@ -83,8 +83,8 @@ class FirebaseAuthentication: ObservableObject {
     func changePassword(currentEmail: String, currentPassword: String, newPassword: String) {
         // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
         self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
-            if error != nil {
-                print("Error during authentication for password change")
+            if let error = error {
+                print("Error during authentication for password change: \(error)")
             } else if let result = result {
                 let user = result.user
                 user.updatePassword(to: newPassword) { (error) in
@@ -101,8 +101,8 @@ class FirebaseAuthentication: ObservableObject {
     func deleteAccount(currentEmail: String, currentPassword: String) {
         // If we don't authorize again here we might get "This operation is sensitive and requires recent authentication" error from Firebase
         self.logIn(email: currentEmail, password: currentPassword) { (result, error) in
-            if error != nil {
-                print("Error during authentication for account deletion")
+            if let error = error {
+                print("Error during authentication for account deletion: \(error)")
             } else if let result = result {
                 let user = result.user
                 // delete user in firestore first, afterwards I am not authenticated anymore TODO think about this again

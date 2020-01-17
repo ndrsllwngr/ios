@@ -31,18 +31,17 @@ struct ProfileView: View {
             }
             InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
                 .onAppear {
-                    self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId, isMyProfile: self.isMyProfile)
+                    self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId)
                     self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
             }
             .onDisappear {
                 self.firestoreProfile.removeProfileListener()
             }
-            
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
             if self.sheetSelection == "settings" {
-                SettingsSheet(showSheet: self.$showSheet).environmentObject(self.firestoreProfile)
+                ProfileSettingsSheet(showSheet: self.$showSheet).environmentObject(self.firestoreProfile)
             } else if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
@@ -76,27 +75,15 @@ struct InnerProfileView: View {
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                    Section(header: Text("Owned Placelists")) {
-                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id == profileUserId}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
-                            NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id)
-                            ) {
-                                PlacesListRow(placeList: placeList)
-                            }
-                        }
-                        .onDelete(perform: delete)
-                    }
-                    Section(header: Text("Followed Placelists")) {
-                        ForEach(firestoreProfile.placeLists.filter{ $0.owner.id != profileUserId}){ placeList in
-                            NavigationLink(
-                                destination: PlaceListView(placeListId: placeList.id)
-                            ) {
-                                PlacesListRow(placeList: placeList)
-                            }
+                    ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
+                        NavigationLink(
+                            destination: PlaceListView(placeListId: placeList.id)
+                        ) {
+                            PlacesListRow(placeList: placeList)
                         }
                     }
                 } else {
-                    ForEach(firestoreProfile.placeLists){ placeList in
+                    ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         NavigationLink(
                             destination: PlaceListView(placeListId: placeList.id)
                         ) {
@@ -115,13 +102,6 @@ struct InnerProfileView: View {
                 ProfileFollowButton(profileUserId: self.profileUserId).environmentObject(self.firestoreProfile)
             }
         })
-    }
-    
-    func delete(at offsets: IndexSet) {
-        offsets.forEach {index in
-            let placeListToDelete = firestoreProfile.placeLists[index]
-            FirestoreConnection.shared.deletePlaceList(placeListToDelete: placeListToDelete)
-        }
     }
 }
 
