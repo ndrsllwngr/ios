@@ -16,7 +16,7 @@ struct PlaceRowExplore: View {
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-
+    
     @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
@@ -33,20 +33,20 @@ struct PlaceRowExplore: View {
                     }
                     Spacer()
                 }
-                    .frame(width: metrics.size.width * 0.7)
-                    .onTapGesture {
-                        self.exploreModel.changeCurrentTargetTo(self.place)
+                .frame(width: metrics.size.width * 0.7)
+                .onTapGesture {
+                    self.exploreModel.changeCurrentTargetTo(self.place)
                 }
                 HStack {
                     Spacer()
                     Image(systemName: "ellipsis")
                 }
-                    .frame(width: metrics.size.width * 0.3)
-                    .onTapGesture {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "place_menu"
-                        self.placeForPlaceMenuSheet = self.place
-                        self.imageForPlaceMenuSheet = self.image
+                .frame(width: metrics.size.width * 0.3)
+                .onTapGesture {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "place_menu"
+                    self.placeForPlaceMenuSheet = self.place
+                    self.imageForPlaceMenuSheet = self.image
                 }
             }
         }
@@ -67,6 +67,51 @@ struct PlaceRowExplore: View {
     }
 }
 
+
+struct PlaceRowExploreVisited: View {
+    var place: ExplorePlace
+    
+    @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @State var image: UIImage? = nil
+    
+    var body: some View {
+        GeometryReader { metrics in
+            HStack(alignment: .center) {
+                HStack {
+                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                    Text(self.place.place.name != nil ? self.place.place.name! : "")
+                    Spacer()
+                }
+                .frame(width: metrics.size.width * 0.7)
+                HStack {
+                    Button(action: {
+                        self.exploreModel.markPlaceAsUnVisited(place: self.place)
+                    }) {
+                        HStack {
+                            Image(systemName: "mappin.slash")
+                            Text("Mark unvisited")
+                        }
+                    }
+                }.frame(width: metrics.size.width * 0.3)
+            }
+        }
+        .frame(height: 60)
+        .onAppear {
+            if let photos = self.place.place.photos {
+                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                    if let error = error {
+                        print("Error loading photo metadata: \(error.localizedDescription)")
+                        return
+                    }
+                    if let photo = photo {
+                        self.image = photo
+                    }
+                }
+            }
+        }
+    }
+}
 
 struct CurrentTargetRow: View {
     var place: ExplorePlace
@@ -92,7 +137,7 @@ struct CurrentTargetRow: View {
                 }
                 HStack {
                     Button(action: {
-                        print("mark visited")
+                        self.exploreModel.markPlaceAsVisited(place: self.place)
                     }) {
                         HStack {
                             Image(systemName: "mappin.and.ellipse")
