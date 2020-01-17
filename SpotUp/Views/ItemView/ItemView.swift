@@ -12,7 +12,8 @@ import FirebaseFirestore
 struct ItemView: View {
     var placeID: String?
     @State var place: GMSPlace?
-    var isOpen:String?
+    var priceLevel: Int?
+   
     
     var body: some View {
         VStack {
@@ -33,16 +34,18 @@ struct ItemView: View {
                         self.place = place
                         print("The selected place is: \(String(describing: place.name))")
                         let isOpen = getPlaceIsOpenNow(isOpen: place.isOpen())
-                        print("here")
                         print(isOpen)
+                        let priceLevel = getPlacePricelevel(priceLevel: place.priceLevel)
+                        let types = (place.types != nil ? place.types! : [] )
+                        print(priceLevel)
+                        print(place.phoneNumber)
+                        print(types)
+                        print (types[0])
                         
                     }
                     
                 }
-                if let place = place {
-                    self.place = place
-                    print("The selected place is: \(String(describing: place.name))")
-                }
+               
             }
         }
     }
@@ -50,6 +53,7 @@ struct ItemView: View {
 
 struct InnerItemView: View {
     var place: GMSPlace
+
     @State var image: UIImage?
     @State var showSheet = false
     
@@ -58,8 +62,8 @@ struct InnerItemView: View {
             VStack {
                 VStack (alignment: .leading){
                     ItemImageView(image: image != nil ? image! : UIImage())
-                        .scaledToFill()
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 250)
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 280, maxHeight: 280)
 
                     //                    .offset(y: -90)
                     //                    .padding(.bottom, -90)
@@ -83,9 +87,7 @@ struct InnerItemView: View {
                                 .font(.custom("Europa Bold", size: 16))
                             Image(systemName: "mappin")
                             Text("3.67km (Test)")
-                                .font(.custom("Europa Bold", size: 16))
-                            Image(systemName:"eurosign.circle")
-                        }
+                                .font(.custom("Europa Bold", size: 16))                        }
                     }.padding()
                     
                     VStack(alignment: .leading) {
@@ -93,20 +95,32 @@ struct InnerItemView: View {
                             .font(.custom("Bodoni 72", size: 35))
                             .padding()
                         Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
-                         .font(.custom("Europa Bold", size: 16))
+                         .font(.custom("Europa", size: 16))
+                            .fontWeight(.bold)
                             .padding()
-                        Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
-                         .font(.custom("Europa Bold", size: 16))
+                        Button(action:
+                            {
+                                if let phoneNumber = self.place.phoneNumber {
+                                    let tel = URL(string:("tel://" + phoneNumber))
+                                    UIApplication.shared.open(tel!)
+                                    
+                                }
+                        }){Text(self.place.phoneNumber != nil ? self.place.phoneNumber! : "")}
                             .padding()
+                        VStack{
                         Button(action: {
                             if let website = self.place.website {
                                 UIApplication.shared.open(website)
+                                
                             }
-                        }){
-                            Text("Open Website")
+                        }){ Text("open website")
+//                            Text(self.website != nil ? self.website : "")
                              .font(.custom("Europa Bold", size: 16))
-                        }.padding()
-                    }
+                        }
+                        .padding()
+                        }
+                    
+                }
                     .frame(minWidth: 0,maxWidth: .infinity, minHeight: 360, maxHeight: 360)
                     .padding()
                     
@@ -135,6 +149,36 @@ struct InnerItemView: View {
                 }
             }
         }
+    }
+}
+
+func drawSigns(signs: Int, name:String){
+    if signs == -1{
+        return
+    }
+    if signs == 0{
+        return
+    }
+    if signs == 1{
+        Image(systemName:name)
+    }
+    if signs == 2{
+        Image(systemName:name)
+        Image(systemName:name)
+    }
+    if signs == 3 {
+        Image(systemName:name)
+        Image(systemName:name)
+        Image(systemName:name)
+    }
+    if signs == 4{
+        Image(systemName:name)
+        Image(systemName:name)
+        Image(systemName:name)
+        Image(systemName:name)
+    }
+    else {
+        return
     }
 }
 
