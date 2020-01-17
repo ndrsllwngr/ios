@@ -16,34 +16,53 @@ struct PlaceListInfoView: View {
     
     var body: some View {
         VStack {
-            HStack {
+            HStack (alignment: .top){
                 FirebasePlaceListInfoImage(imageUrl: self.firestorePlaceList.placeList.imageUrl)
                     .clipShape(Rectangle())
                     .scaledToFill()
-                    .frame(width: 80, height: 80)
+                    .frame(width: 100, height: 100)
                     .cornerRadius(15)
-                    .padding(.top)
                 
-                VStack (alignment: .leading){
-                    Text(self.firestorePlaceList.placeList.name)
-                    HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                HStack (alignment: .top){
+                    VStack (alignment: .leading){
+                        Text(self.firestorePlaceList.placeList.name)
+                            .font(Font.custom("Europa-Bold", size: 20))
                         HStack {
-                            Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
+                            Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                                .font(Font.custom("Europa-Regular", size: 12))
+                            Spacer()
+                            HStack {
+                                Image(systemName: "map")
+                                    .frame(height: 16)
+                                Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
+                                    .font(Font.custom("Europa-Regular", size: 12))
+                            }
+                            Spacer()
+                            HStack {
+                                Image(systemName: "person")
+                                    .frame(height: 16)
+                                Text("\(self.firestorePlaceList.placeList.followerIds.count)")
+                                    .font(Font.custom("Europa-Regular", size: 12))
+                            }
                         }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
+                        Spacer()
+                        Button(action: {
+                            print("Explore")
+                        }) {
+                            VStack{
+                                Text("Explore")
+                                    .accentColor(Color.white)
+                                    .padding([.vertical], 5)
+                                .padding([.horizontal], 32)
+                            }.background(Color("primary"))
+                            .cornerRadius(15)
                         }
+                        Spacer()
                     }
-                    Button(action: {
-                        print("Explore")
-                    }) {
-                        Text("Explore")
-                    }
+                    .frame(height: 100)
+                    .padding(.leading, 10)
                 }
-            }
+            }.padding(.horizontal, 22)
         }
     }
 }

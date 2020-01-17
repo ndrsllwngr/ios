@@ -69,6 +69,8 @@ struct GoogleMapView : UIViewRepresentable {
         }
         
     }
+    
+    
     func makeCoordinator() -> GoogleMapView.Coordinator {
         return Coordinator(self)
     }
