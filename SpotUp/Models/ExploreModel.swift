@@ -7,7 +7,7 @@ class ExploreModel: ObservableObject {
     
     @Published var locationManager = LocationManager()
     @Published var exploreList: ExploreList? = nil
-
+    
     
     func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
@@ -18,9 +18,31 @@ class ExploreModel: ObservableObject {
             self.exploreList = ExploreList()
         } else {
             let explorePlaces =  places.map { place in
-                    return ExplorePlace(place: place)
+                return ExplorePlace(place: place)
             }
             self.exploreList = ExploreList(places: explorePlaces)
+        }
+    }
+    
+    func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
+        self.exploreList = ExploreList()
+        let dispatchGroup = DispatchGroup()
+        placeList.places.forEach {placeIDWithTimestamp in
+            dispatchGroup.enter()
+            getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
+                if let error = error {
+                    print("An error occurred : \(error.localizedDescription)")
+                    return
+                }
+                if let place = place {
+                    self.exploreList?.places.append(ExplorePlace(place: place))
+                    dispatchGroup.leave()
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.updateDistancesInPlaces()
         }
     }
     
@@ -54,7 +76,7 @@ class ExploreModel: ObservableObject {
     
     func sortPlacesByDistanceToCurrentLocation(_ places: [GMSPlace]) -> [ExplorePlace] {
         return places.map { place in
-                return ExplorePlace(place: place)
+            return ExplorePlace(place: place)
         }
         // ToDo implement
     }
@@ -65,15 +87,15 @@ class ExploreModel: ObservableObject {
             // 1. calculate distance to my location for all places
             let explorePlaces: [ExplorePlace] = exploreList.places.map { place in
                 let distance = calculateDistance(coordinate: place.place.coordinate,
-                location: location)
+                                                 location: location)
                 return ExplorePlace(place: place.place,
                                     distance: distance)
             }
-            // 2. sort places based on distance
-            .sorted{(place1, place2) in place1.distance! < place2.distance!}
+                // 2. sort places based on distance
+                .sorted{(place1, place2) in place1.distance! < place2.distance!}
             self.exploreList!.places = explorePlaces
             // If no currentTarget set by user yet set current target
-            if (self.exploreList!.currentTarget == nil) {
+            if (exploreList.currentTarget == nil && !exploreList.places.isEmpty) {
                 self.exploreList?.currentTarget = explorePlaces[0]
             }
         }
