@@ -49,7 +49,7 @@ struct PlaceRow: View {
                 }
             }
         }
-        .frame(height: 60)
+        .frame(height: 90)
         .onAppear {
             if let photos = self.gmsPlaceWithTimestamp.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in

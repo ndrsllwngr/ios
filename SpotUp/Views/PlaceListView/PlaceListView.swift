@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-
 struct PlaceListView: View {
     
     var placeListId: String
@@ -82,9 +81,10 @@ struct InnerPlaceListView: View {
     @State private var selection = 0
     
     var body: some View {
-        VStack {
+        VStack (alignment: .leading){
             // Follow button only on foreign user profiles
             PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+            .padding()
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -106,6 +106,12 @@ struct InnerPlaceListView: View {
                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
+                    
+                }.onAppear {
+                    UITableView.appearance().separatorStyle = .none
+                }
+                .onDisappear {
+                    UITableView.appearance().separatorStyle = .singleLine
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
@@ -180,6 +186,7 @@ struct PlaceListFollowButton: View {
         }
     }
 }
+
 struct PlaceListSettingsButton: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var showSheet: Bool
