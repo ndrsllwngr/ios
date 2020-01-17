@@ -33,14 +33,10 @@ struct ExploreView: View {
                     }
                 }
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                    .frame(height: 180, alignment: .center)
+                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
                 if !exploreModel.exploreList!.places.isEmpty {
                     if (exploreModel.exploreList!.currentTarget != nil) {
-                        PlaceRowExplore(place: exploreModel.exploreList!.currentTarget!,
-                        showSheet: self.$showSheet,
-                        sheetSelection: self.$sheetSelection,
-                        placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                        imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                        CurrentTargetRow(place: exploreModel.exploreList!.currentTarget!)
                     } else {
                         Text("Tap on a place to make it the current target")
                     }
@@ -55,6 +51,7 @@ struct ExploreView: View {
                                             sheetSelection: self.$sheetSelection,
                                             placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                             imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                .listRowInsets(EdgeInsets()) // removes the left and right padding of the elements
                             
                         }
                     }

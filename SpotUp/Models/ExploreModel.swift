@@ -104,3 +104,6 @@ struct ExplorePlace: Equatable, Hashable {
     var distance: CLLocationDistance? = nil
 }
 
+func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
+    return URL(string: "https://www.google.com/maps/search/?api=1&query=\(place.coordinate.latitude),\(place.coordinate.longitude)&query_place_id=\(place.placeID!)")!
+}
