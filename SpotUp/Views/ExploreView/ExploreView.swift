@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import UIKit
+import GoogleMaps
 import GooglePlaces
 
 struct ExploreView: View {
@@ -16,6 +18,7 @@ struct ExploreView: View {
 
     @State var placeForPlaceMenuSheet: GMSPlace? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
+    
     var body: some View {
         VStack {
             if (self.exploreModel.exploreList != nil) {
@@ -28,6 +31,8 @@ struct ExploreView: View {
                         Text("Quit")
                     }
                 }
+                ExploreMapView(exploreList: self.exploreModel.exploreList!)
+                    .frame(height: 180, alignment: .center)
                 if !exploreModel.exploreList!.places.isEmpty {
                     PlaceRowExplore(place: exploreModel.exploreList!.currentTarget!,
                                     showSheet: self.$showSheet,
@@ -96,3 +101,55 @@ struct ExploreSettingsButton: View {
         
     }
 }
+
+struct ExploreMapView : UIViewRepresentable {
+    var exploreList: ExploreList
+    var defaultLocation = CLLocationCoordinate2D(
+        latitude: 48.149552,
+        longitude: 11.594079
+    )
+    func makeUIView(context: Context) -> GMSMapView {
+        
+        var initialCoordinates = self.defaultLocation
+        if ( !self.exploreList.places.isEmpty) {
+            initialCoordinates = self.exploreList.currentTarget!.coordinate
+        }
+        
+        let camera = GMSCameraPosition.camera(
+            withLatitude: initialCoordinates.latitude,
+            longitude: initialCoordinates.longitude,
+            zoom: 12.0
+        )
+        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        //mapView.settings.myLocationButton = true
+        mapView.isMyLocationEnabled = true
+
+        return mapView
+    }
+    
+    func updateUIView(_ view: GMSMapView, context: Context) {
+        if (self.exploreList.places.isEmpty) {
+            return
+        }
+        let currentPlace = self.exploreList.currentTarget!
+        view.animate(toLocation: currentPlace.coordinate)
+        self.exploreList.places.forEach { place in
+            let marker = GMSMarker()
+            marker.position = CLLocationCoordinate2D(
+                latitude: place.coordinate.latitude,
+                longitude: place.coordinate.longitude
+            )
+            marker.title = place.name
+
+            if(place == currentPlace){
+                marker.icon = GMSMarker.markerImage(with: .red)
+            } else {
+                marker.icon = GMSMarker.markerImage(with: .black)
+            }
+            marker.map = view
+            
+        }
+        
+    }
+}
+
