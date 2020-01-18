@@ -23,6 +23,7 @@ class ExploreModel: ObservableObject {
     @Published var locationManager = LocationManager()
     @Published var exploreList: ExploreList? = nil
     
+    private init(){}
     
     func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
@@ -32,7 +33,7 @@ class ExploreModel: ObservableObject {
         // Explore already active: Append places
         if (self.exploreList != nil) {
             exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
-        // Explore not active yet. Create new ExploreList
+            // Explore not active yet. Create new ExploreList
         } else {
             if (places.isEmpty) {
                 self.exploreList = ExploreList()
@@ -53,7 +54,7 @@ class ExploreModel: ObservableObject {
             getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
                     print("An error occurred : \(error.localizedDescription)")
-                    // ToDo maybe also leave dispatch group here
+                    dispatchGroup.leave()
                     return
                 }
                 if let place = place {
@@ -105,13 +106,12 @@ class ExploreModel: ObservableObject {
             if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
                 self.exploreList!.places[index].visited = true
                 self.exploreList!.places[index].visited_at = Date.init()
-                print("marked \(self.exploreList!.places[index].place.name!) as true")
             }
             self.updateDistancesInPlaces()
         }
     }
     
-    func markPlaceAsUnVisited(place: ExplorePlace) {
+    func markPlaceAsUnvisited(place: ExplorePlace) {
         if self.exploreList != nil {
             if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
                 self.exploreList!.places[index].visited = false
@@ -138,7 +138,6 @@ class ExploreModel: ObservableObject {
             self.exploreList!.places = explorePlaces
             // If no currentTarget set by user yet set current target (which is the next nearst not visited place)
             if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
-//                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited), \(explorePlaces.filter{!$0.visited}[0].image)")
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
                 // Else also update distance currentTarget
             } else if (exploreList.currentTarget != nil) {
@@ -199,7 +198,6 @@ class ExploreModel: ObservableObject {
             return false
         }
     }
-    
 }
 
 func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation) -> CLLocationDistance {
@@ -207,8 +205,9 @@ func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation)
 }
 
 func getDistanceStringToDisplay(_ distance: CLLocationDistance) -> String {
-    
+    // Round distance (which is in m) to zero decimals
     let roundedDistance = (distance * 1).rounded(.toNearestOrEven) / 1
+    // If distance bigger than 1 km write as km and round two 1 decimal
     if (roundedDistance > 1000) {
         return String(format: "%.1f", (roundedDistance/1000 * 10).rounded(.toNearestOrEven) / 10) + " km"
     } else {

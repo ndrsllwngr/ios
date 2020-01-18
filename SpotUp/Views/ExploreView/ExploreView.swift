@@ -41,7 +41,7 @@ struct ExploreView: View {
                             Section (header: Text("Travel Queue")) {
                                 if (!exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
                                     ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
-                                        PlaceRowExplore(place: place,
+                                        ExplorePlaceRow(place: place,
                                                         showSheet: self.$showSheet,
                                                         sheetSelection: self.$sheetSelection,
                                                         placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
@@ -57,7 +57,7 @@ struct ExploreView: View {
                             if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                                 Section(header: Text("Already visited")) {
                                     ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
-                                        PlaceRowExploreVisited(place: place)
+                                        ExplorePlaceVisitedRow(place: place)
                                             .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                                     }
                                 }
@@ -192,4 +192,3 @@ struct ExploreMapView : UIViewRepresentable {
         
     }
 }
-

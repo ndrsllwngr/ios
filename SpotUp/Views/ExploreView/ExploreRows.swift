@@ -9,7 +9,7 @@
 import SwiftUI
 import GooglePlaces
 
-struct PlaceRowExplore: View {
+struct ExplorePlaceRow: View {
     @State var place: ExplorePlace
     
     @ObservedObject var exploreModel = ExploreModel.shared
@@ -61,7 +61,7 @@ struct PlaceRowExplore: View {
 }
 
 
-struct PlaceRowExploreVisited: View {
+struct ExplorePlaceVisitedRow: View {
     @State var place: ExplorePlace
     
     @ObservedObject var exploreModel = ExploreModel.shared
@@ -77,14 +77,14 @@ struct PlaceRowExploreVisited: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.7)
+                .frame(width: metrics.size.width * 0.8)
                 HStack {
                     Image(systemName: "mappin.slash")
                     Text("Mark unvisited")
                 }.onTapGesture {
-                    self.exploreModel.markPlaceAsUnVisited(place: self.place)
+                    self.exploreModel.markPlaceAsUnvisited(place: self.place)
                 }
-                .frame(width: metrics.size.width * 0.3)
+                .frame(width: metrics.size.width * 0.2)
             }
         }
         .frame(height: 60)
@@ -132,7 +132,6 @@ struct CurrentTargetRow: View {
                 }
             } else {
                 Text("Tap on a place to make it the current target")
-                
             }
         }
         .frame(height: 60)
