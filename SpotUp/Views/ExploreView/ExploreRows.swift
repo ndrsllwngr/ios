@@ -17,6 +17,9 @@ struct ExplorePlaceRow: View {
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
+    
     @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
@@ -31,7 +34,19 @@ struct ExplorePlaceRow: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.8)
+                .frame(width: metrics.size.width * 0.65)
+                .onTapGesture {
+                    self.placeIdToNavigateTo = self.place.place.placeID!
+                    self.goToPlace = 1
+                }
+                VStack {
+                    Image(systemName: "location.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                    Text("Go")
+                }
+                .frame(width: metrics.size.width * 0.15)
                 .onTapGesture {
                     self.exploreModel.changeCurrentTargetTo(self.place)
                 }
@@ -66,6 +81,9 @@ struct ExplorePlaceVisitedRow: View {
     
     @ObservedObject var exploreModel = ExploreModel.shared
     
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
+    
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
@@ -78,16 +96,21 @@ struct ExplorePlaceVisitedRow: View {
                     Spacer()
                 }
                 .frame(width: metrics.size.width * 0.8)
+                .onTapGesture {
+                    self.placeIdToNavigateTo = self.place.place.placeID!
+                    self.goToPlace = 1
+                }
                 VStack {
                     Image(systemName: "mappin.slash")
-                    .resizable()
+                        .resizable()
                         .scaledToFit()
                         .frame(width: 20, height: 20)
                     Text("Unvisit")
-                }.onTapGesture {
-                    self.exploreModel.markPlaceAsUnvisited(place: self.place)
                 }
                 .frame(width: metrics.size.width * 0.2)
+                .onTapGesture {
+                    self.exploreModel.markPlaceAsUnvisited(place: self.place)
+                }
             }
         }
         .frame(height: 60)
@@ -96,6 +119,9 @@ struct ExplorePlaceVisitedRow: View {
 
 struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
     
     var body: some View {
         VStack {
@@ -112,15 +138,19 @@ struct CurrentTargetRow: View {
                                 Spacer()
                             }
                             .frame(width: metrics.size.width * 0.65)
+                            .onTapGesture {
+                                self.placeIdToNavigateTo = self.exploreModel.exploreList!.currentTarget!.place.placeID!
+                                self.goToPlace = 1
+                            }
                             HStack {
                                 Button(action: {
                                     self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
                                 }) {
                                     VStack {
                                         Image(systemName: "mappin.and.ellipse")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 20, height: 20)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
                                         Text("Visit")
                                     }
                                 }
@@ -131,9 +161,9 @@ struct CurrentTargetRow: View {
                                 }) {
                                     VStack {
                                         Image(systemName: "arrow.up.right.diamond")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 20, height: 20)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
                                         Text("Navigate")
                                     }
                                 }
