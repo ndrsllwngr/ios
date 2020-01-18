@@ -100,7 +100,7 @@ struct ExploreActiveView: View {
                                 }
                             } else {
                                 VStack {
-                                    Text("Your travel queue is empty. Why don't you add more places?").listRowInsets(EdgeInsets())
+                                    Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
                                 }
                             }
                         }
