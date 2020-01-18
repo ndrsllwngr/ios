@@ -77,14 +77,17 @@ struct ExplorePlaceVisitedRow: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.7)
-                HStack {
+                .frame(width: metrics.size.width * 0.8)
+                VStack {
                     Image(systemName: "mappin.slash")
-                    Text("Mark unvisited")
+                    .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                    Text("Unvisit")
                 }.onTapGesture {
                     self.exploreModel.markPlaceAsUnvisited(place: self.place)
                 }
-                .frame(width: metrics.size.width * 0.3)
+                .frame(width: metrics.size.width * 0.2)
             }
         }
         .frame(height: 60)
@@ -108,27 +111,33 @@ struct CurrentTargetRow: View {
                                 }
                                 Spacer()
                             }
-                            .frame(width: metrics.size.width * 0.4)
+                            .frame(width: metrics.size.width * 0.65)
                             HStack {
                                 Button(action: {
                                     self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
                                 }) {
-                                    HStack {
+                                    VStack {
                                         Image(systemName: "mappin.and.ellipse")
-                                        Text("Mark visited")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
+                                        Text("Visit")
                                     }
                                 }
-                            }.frame(width: metrics.size.width * 0.3)
+                            }.frame(width: metrics.size.width * 0.15)
                             HStack {
                                 Button(action: {
                                     UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
                                 }) {
-                                    HStack {
+                                    VStack {
                                         Image(systemName: "arrow.up.right.diamond")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 20, height: 20)
                                         Text("Navigate")
                                     }
                                 }
-                            }.frame(width: metrics.size.width * 0.3)
+                            }.frame(width: metrics.size.width * 0.20)
                         }
                     }
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
