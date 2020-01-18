@@ -63,7 +63,10 @@ struct PlaceRowExploreVisited: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
-                    Text(self.place.place.name != nil ? self.place.place.name! : "")
+                    VStack (alignment: .leading){
+                        Text(self.place.place.name != nil ? self.place.place.name! : "")
+                        Text(self.place.visited_at != nil ? getVisitedAtStringToDisplay(self.place.visited_at!) : "")
+                    }
                     Spacer()
                 }
                 .frame(width: metrics.size.width * 0.7)
