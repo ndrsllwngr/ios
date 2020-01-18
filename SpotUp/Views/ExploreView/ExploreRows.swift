@@ -31,15 +31,23 @@ struct PlaceRowExplore: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.7)
+                .frame(width: metrics.size.width * 0.8)
                 .onTapGesture {
                     self.exploreModel.changeCurrentTargetTo(self.place)
                 }
                 HStack {
                     Spacer()
+                    if (self.exploreModel.calculateIsNewPlace(explorePlace: self.place)) {
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundColor(Color.gray)
+                            .frame(width: 10, height: 10)
+                            .padding(.trailing)
+                    }
                     Image(systemName: "ellipsis")
                 }
-                .frame(width: metrics.size.width * 0.3)
+                .frame(width: metrics.size.width * 0.2)
                 .onTapGesture {
                     self.showSheet.toggle()
                     self.sheetSelection = "place_menu"
