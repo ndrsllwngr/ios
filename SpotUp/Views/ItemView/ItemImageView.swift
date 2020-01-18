@@ -13,10 +13,7 @@ struct ItemImageView: View {
     var body: some View {
         Image(uiImage: image)
             .resizable()
-            .clipShape(Circle())
-            .overlay(
-                Circle().stroke(Color.white, lineWidth: 4))
-            .shadow(radius: 10)
+        .clipShape(Rectangle())
     }
 }
 

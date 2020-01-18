@@ -12,13 +12,16 @@ import FirebaseFirestore
 struct ItemView: View {
     var placeId: String
     @State var place: GMSPlace? = nil
+    @State var isOpen: String? = nil
+    @State var priceLevel: Int? = nil
+    @State var types: [String]? = nil
     
     var body: some View {
         VStack {
             if (place == nil) {
                 Text("")
             } else {
-                InnerItemView(place: place!)
+                InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, types: types!)
             }
         }.onAppear {
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
@@ -28,6 +31,9 @@ struct ItemView: View {
                 }
                 if let place = place {
                     self.place = place
+                    self.isOpen = getPlaceIsOpenNow(isOpen: place.isOpen(at:NSDate.now))
+                    self.priceLevel = getPlacePriceLevel(priceLevel: place.priceLevel)
+                    self.types = place.types
                     print("The selected place is: \(String(describing: place.name))")
                 }
             }
@@ -37,6 +43,10 @@ struct ItemView: View {
 
 struct InnerItemView: View {
     var place: GMSPlace
+    var isOpen: String
+    var priceLevel:Int
+    var types:[String]
+    
     @State var image: UIImage?
     @State var showSheet = false
     
@@ -58,10 +68,23 @@ struct InnerItemView: View {
                 }
             }
             ScrollView(showsIndicators: false){
+                HStack{
+                    ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "eurosign.circle"), id: \.self) { sign in
+                        Image(systemName:sign)
+                    }
+                }
                 VStack(alignment: .leading) {
                     Text(place.name != nil ? place.name! : "")
                         .font(.title)
                     Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
+                    Button(action:{
+                        if let phoneNumber = self.place.phoneNumber{
+                            let prefix = "tel://"
+                            let trimmed = phoneNumber.replacingOccurrences(of: " ", with: "")
+                            let tel = URL(string:(prefix + trimmed))
+                            UIApplication.shared.open(tel!)
+                        }
+                    }){Text("Call Now")}
                     Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
                     Button(action: {
                         if let website = self.place.website {
@@ -70,7 +93,8 @@ struct InnerItemView: View {
                     }){
                         Text("Open Website")
                     }
-                }
+                Text(isOpen)
+                        }
                 Spacer()
             }
         }
@@ -94,8 +118,14 @@ struct InnerItemView: View {
     }
 }
 
-//struct ItemView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemView()
-//    }
-//}
+func drawSigns(signs:Int, name:String)->[String]{
+    var temp:[String]=[]
+    if signs>0{
+        for _ in 0..<signs{
+            temp.append(name)
+        }
+    }else{
+        return []
+    }
+    return temp
+}
