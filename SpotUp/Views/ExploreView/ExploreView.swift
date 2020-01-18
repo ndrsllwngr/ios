@@ -88,7 +88,7 @@ struct ExploreActiveView: View {
                 CurrentTargetRow()
                 List {
                     Section (header: Text("Travel Queue")) {
-                        if (!exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
+                        if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
                             ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
                                 ExplorePlaceRow(place: place,
                                                 showSheet: self.$showSheet,
@@ -99,7 +99,7 @@ struct ExploreActiveView: View {
                             }
                         } else {
                             VStack {
-                                Text("You have visited all places in your list!").listRowInsets(EdgeInsets())
+                                Text("Your travel queue is empty. Why don't you add more places?").listRowInsets(EdgeInsets())
                             }
                         }
                     }
