@@ -77,14 +77,14 @@ struct ExplorePlaceVisitedRow: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.8)
+                .frame(width: metrics.size.width * 0.7)
                 HStack {
                     Image(systemName: "mappin.slash")
                     Text("Mark unvisited")
                 }.onTapGesture {
                     self.exploreModel.markPlaceAsUnvisited(place: self.place)
                 }
-                .frame(width: metrics.size.width * 0.2)
+                .frame(width: metrics.size.width * 0.3)
             }
         }
         .frame(height: 60)
@@ -96,42 +96,46 @@ struct CurrentTargetRow: View {
     
     var body: some View {
         VStack {
-            if (exploreModel.exploreList != nil && exploreModel.exploreList!.currentTarget != nil) {
-                GeometryReader { metrics in
-                    HStack(alignment: .center) {
-                        HStack {
-                            PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
-                            VStack (alignment: .leading) {
-                                Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
-                                Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
+            if (exploreModel.exploreList != nil) {
+                if (exploreModel.exploreList!.currentTarget != nil) {
+                    GeometryReader { metrics in
+                        HStack(alignment: .center) {
+                            HStack {
+                                PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
+                                VStack (alignment: .leading) {
+                                    Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
+                                    Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
+                                }
+                                Spacer()
                             }
-                            Spacer()
+                            .frame(width: metrics.size.width * 0.4)
+                            HStack {
+                                Button(action: {
+                                    self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
+                                }) {
+                                    HStack {
+                                        Image(systemName: "mappin.and.ellipse")
+                                        Text("Mark visited")
+                                    }
+                                }
+                            }.frame(width: metrics.size.width * 0.3)
+                            HStack {
+                                Button(action: {
+                                    UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
+                                }) {
+                                    HStack {
+                                        Image(systemName: "arrow.up.right.diamond")
+                                        Text("Navigate")
+                                    }
+                                }
+                            }.frame(width: metrics.size.width * 0.3)
                         }
-                        .frame(width: metrics.size.width * 0.4)
-                        HStack {
-                            Button(action: {
-                                self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
-                            }) {
-                                HStack {
-                                    Image(systemName: "mappin.and.ellipse")
-                                    Text("Mark visited")
-                                }
-                            }
-                        }.frame(width: metrics.size.width * 0.3)
-                        HStack {
-                            Button(action: {
-                                UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
-                            }) {
-                                HStack {
-                                    Image(systemName: "arrow.up.right.diamond")
-                                    Text("Navigate")
-                                }
-                            }
-                        }.frame(width: metrics.size.width * 0.3)
                     }
+                } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
+                    Text("Tap on a place to make it the current target")
+                } else {
+                    Text("Great! You have visited all places in your travel queue.")
                 }
-            } else {
-                Text("Tap on a place to make it the current target")
             }
         }
         .frame(height: 60)
