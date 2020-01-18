@@ -135,7 +135,7 @@ func getDistanceStringToDisplay(_ distance: CLLocationDistance) -> String {
     
     let roundedDistance = (distance * 1).rounded(.toNearestOrEven) / 1
     if (roundedDistance > 1000) {
-        return String(format: "%.1f", (roundedDistance/1000 * 1).rounded(.toNearestOrEven) / 1) + " km"
+        return String(format: "%.1f", (roundedDistance/1000 * 10).rounded(.toNearestOrEven) / 10) + " km"
     } else {
         return String(format: "%.0f", roundedDistance) + " m"
     }
