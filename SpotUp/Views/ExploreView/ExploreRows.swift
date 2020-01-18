@@ -88,7 +88,7 @@ struct CurrentTargetRow: View {
     
     var body: some View {
         VStack {
-            if (exploreModel.exploreList!.currentTarget != nil) {
+            if (exploreModel.exploreList != nil && exploreModel.exploreList!.currentTarget != nil) {
                 GeometryReader { metrics in
                     HStack(alignment: .center) {
                         HStack {

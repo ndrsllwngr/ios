@@ -11,7 +11,8 @@ import SwiftUI
 
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @State private var selection = 0
+    @ObservedObject var exploreModel = ExploreModel.shared
+    @State var selection = 0
     
     init() {
         UITabBar.appearance().tintColor = UIColor.red
@@ -19,30 +20,43 @@ struct TabBarView: View {
     }
     
     var body: some View {
-        TabView(selection: $selection) {
-            NavigationView {
-                HomeView()
+        GeometryReader { metrics in
+            ZStack(alignment: .bottom) {
+                TabView(selection: self.$selection) {
+                    NavigationView {
+                        HomeView()
+                    }
+                    .tabItem({
+                        Image(systemName: self.selection == 0 ? "magnifyingglass" : "magnifyingglass")
+                        Text("Search")
+                    }).tag(0)
+                    NavigationView {
+                        ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid)
+                    }
+                    .tabItem({
+                        Image(systemName: self.selection == 1 ? "person.fill" : "person")
+                        Text("Profil")
+                    }).tag(1)
+                    NavigationView {
+                        ExploreView()
+                    }
+                    .tabItem({
+                        Image(systemName: self.selection == 2 ? "map.fill" : "map")
+                        Text("Explore")
+                    }).tag(2)
+                }
+                .accentColor(.black)
+                if (self.exploreModel.exploreList != nil && self.selection != 2) {
+                    ExploreIsActiveBar()
+                        .frame(width: metrics.size.width, height: 49)
+                        .background(Color.gray)
+                        .offset(y: -49) // 49 is the exact height of the TabBar
+                        .onTapGesture {
+                            self.selection = 2
+                    }
+                }
             }
-            .tabItem({
-                Image(systemName: selection == 0 ? "magnifyingglass" : "magnifyingglass")
-                Text("Search")
-            }).tag(0)
-            NavigationView {
-                ProfileView(profileUserId: firebaseAuthentication.currentUser!.uid)
-            }
-            .tabItem({
-                Image(systemName: selection == 1 ? "person.fill" : "person")
-                Text("Profil")
-            }).tag(1)
-            NavigationView {
-                ExploreView()
-            }
-            .tabItem({
-                Image(systemName: selection == 2 ? "map.fill" : "map")
-                Text("Explore")
-            }).tag(2)
         }
-        .accentColor(.black)
     }
 }
 
