@@ -4,6 +4,7 @@ import GooglePlaces
 struct ExploreList: Equatable {
     var places: [ExplorePlace] = []
     var currentTarget: ExplorePlace? = nil
+    var lastOpenedAt: Date? = nil
 }
 
 struct ExplorePlace: Equatable, Hashable {
@@ -12,6 +13,7 @@ struct ExplorePlace: Equatable, Hashable {
     var distance: CLLocationDistance? = nil
     var visited: Bool = false
     var visited_at: Date? = nil
+    var added_at: Date = Date.init()
 }
 
 class ExploreModel: ObservableObject {
@@ -179,6 +181,25 @@ class ExploreModel: ObservableObject {
             }
         }
     }
+    
+    func updateLastOpenedAt() {
+        if self.exploreList != nil {
+            self.exploreList!.lastOpenedAt = Date.init()
+        }
+    }
+    
+    func calculateIsNewPlace(explorePlace: ExplorePlace) -> Bool {
+        if let exploreList = self.exploreList {
+            if let lastOpenedAt = exploreList.lastOpenedAt {
+                return lastOpenedAt < explorePlace.added_at
+            } else {
+                return true
+            }
+        } else {
+            return false
+        }
+    }
+    
 }
 
 func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation) -> CLLocationDistance {

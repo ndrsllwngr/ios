@@ -106,8 +106,13 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
-            .onAppear{
+            .onAppear {
                 self.exploreModel.updateDistancesInPlaces()
+        }
+        .onDisappear {
+            if (self.exploreModel.exploreList != nil) {
+                self.exploreModel.updateLastOpenedAt()
+            }
         }
         .padding()
     }
