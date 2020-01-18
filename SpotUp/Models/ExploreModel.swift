@@ -94,12 +94,11 @@ class ExploreModel: ObservableObject {
                 self.exploreList!.places[index].visited = false
             }
             self.updateDistancesInPlaces()
-            print("111")
         }
     }
     
     func updateDistancesInPlaces() {
-        print("222")
+        print("Begin updating distances in explore places")
         // if explore active and we already have a location
         if let exploreList = self.exploreList, let location = self.locationManager.location {
             // 1. calculate distance to my location for all places
@@ -116,7 +115,7 @@ class ExploreModel: ObservableObject {
             self.exploreList!.places = explorePlaces
             // If no currentTarget set by user yet set current target (which is the next nearst not visited place)
             if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
-                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited)")
+//                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited)")
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
             }
         }
