@@ -16,14 +16,24 @@ struct ExploreView: View {
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
     
+    @State var placeIdToNavigateTo: String? = nil
+    @State var goToPlace: Int? = nil
+    
     @State var placeForPlaceMenuSheet: ExplorePlace? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
     var body: some View {
         VStack {
+            if (self.placeIdToNavigateTo != nil) {
+                NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    Text("")
+                }
+            }
             if (self.exploreModel.exploreList != nil) {
                 ExploreActiveView(showSheet: self.$showSheet,
                                   sheetSelection: self.$sheetSelection,
+                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                  goToPlace: self.$goToPlace,
                                   placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                   imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     .onAppear{
@@ -65,6 +75,9 @@ struct ExploreActiveView: View {
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
+    
     @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
@@ -86,7 +99,8 @@ struct ExploreActiveView: View {
                     .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
                 
                 if !exploreModel.exploreList!.places.isEmpty {
-                    CurrentTargetRow()
+                    CurrentTargetRow(placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace)
                     List {
                         Section (header: Text("Travel Queue")) {
                             if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
@@ -94,6 +108,8 @@ struct ExploreActiveView: View {
                                     ExplorePlaceRow(place: place,
                                                     showSheet: self.$showSheet,
                                                     sheetSelection: self.$sheetSelection,
+                                                    placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                    goToPlace: self.$goToPlace,
                                                     placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                                     imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                                         .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
@@ -107,7 +123,9 @@ struct ExploreActiveView: View {
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             Section(header: Text("Already visited")) {
                                 ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
-                                    ExplorePlaceVisitedRow(place: place)
+                                    ExplorePlaceVisitedRow(place: place,
+                                                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                           goToPlace: self.$goToPlace)
                                         .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                                 }
                             }
