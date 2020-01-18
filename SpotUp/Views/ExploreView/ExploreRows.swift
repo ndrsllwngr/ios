@@ -85,15 +85,12 @@ struct PlaceRowExploreVisited: View {
                 }
                 .frame(width: metrics.size.width * 0.7)
                 HStack {
-                    Button(action: {
-                        self.exploreModel.markPlaceAsUnVisited(place: self.place)
-                    }) {
-                        HStack {
-                            Image(systemName: "mappin.slash")
-                            Text("Mark unvisited")
-                        }
-                    }
-                }.frame(width: metrics.size.width * 0.3)
+                    Image(systemName: "mappin.slash")
+                    Text("Mark unvisited")
+                }.onTapGesture {
+                    self.exploreModel.markPlaceAsUnVisited(place: self.place)
+                }
+                .frame(width: metrics.size.width * 0.3)
             }
         }
         .frame(height: 60)
@@ -131,9 +128,9 @@ struct CurrentTargetRow: View {
                     }
                     Spacer()
                 }
-                    .frame(width: metrics.size.width * 0.4)
-                    .onTapGesture {
-                        self.exploreModel.changeCurrentTargetTo(self.place)
+                .frame(width: metrics.size.width * 0.4)
+                .onTapGesture {
+                    self.exploreModel.changeCurrentTargetTo(self.place)
                 }
                 HStack {
                     Button(action: {

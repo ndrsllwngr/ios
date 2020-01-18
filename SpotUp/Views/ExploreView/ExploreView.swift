@@ -162,6 +162,7 @@ struct ExploreMapView : UIViewRepresentable {
         } else {
             view.animate(toLocation: exploreList.places[0].place.coordinate)
         }
+        view.clear()
         self.exploreList.places.forEach { place in
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
@@ -169,12 +170,14 @@ struct ExploreMapView : UIViewRepresentable {
                 longitude: place.place.coordinate.longitude
             )
             marker.title = place.place.name
-            //
-            //            if(place.place == currentPlace){
-            //                marker.icon = GMSMarker.markerImage(with: .red)
-            //            } else {
-            //                marker.icon = GMSMarker.markerImage(with: .black)
-            //            }
+            
+            if(place.visited){
+                marker.icon = GMSMarker.markerImage(with: .gray)
+            } else if (place.place == self.exploreList.currentTarget?.place) {
+                marker.icon = GMSMarker.markerImage(with: .green)
+            } else {
+                marker.icon = GMSMarker.markerImage(with: .red)
+            }
             marker.map = view
             
         }
