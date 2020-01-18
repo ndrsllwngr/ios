@@ -44,6 +44,7 @@ class ExploreModel: ObservableObject {
         
         dispatchGroup.notify(queue: .main) {
             self.updateDistancesInPlaces()
+            self.loadPlaceImages()
         }
     }
     
