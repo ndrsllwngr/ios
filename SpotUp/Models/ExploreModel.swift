@@ -32,6 +32,7 @@ class ExploreModel: ObservableObject {
             getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
                     print("An error occurred : \(error.localizedDescription)")
+                    // ToDo maybe also leave dispatch group here
                     return
                 }
                 if let place = place {
