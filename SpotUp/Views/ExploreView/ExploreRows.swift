@@ -10,7 +10,7 @@ import SwiftUI
 import GooglePlaces
 
 struct PlaceRowExplore: View {
-    var place: ExplorePlace
+    @State var place: ExplorePlace
     
     @ObservedObject var exploreModel = ExploreModel.shared
     
@@ -20,13 +20,11 @@ struct PlaceRowExplore: View {
     @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
-    @State var image: UIImage? = nil
-    
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
                     VStack (alignment: .leading) {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
@@ -46,40 +44,25 @@ struct PlaceRowExplore: View {
                     self.showSheet.toggle()
                     self.sheetSelection = "place_menu"
                     self.placeForPlaceMenuSheet = self.place
-                    self.imageForPlaceMenuSheet = self.image
+                    self.imageForPlaceMenuSheet = self.place.image
                 }
             }
         }
         .frame(height: 60)
-        .onAppear {
-            if let photos = self.place.place.photos {
-                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
-                    if let error = error {
-                        print("Error loading photo metadata: \(error.localizedDescription)")
-                        return
-                    }
-                    if let photo = photo {
-                        self.image = photo
-                    }
-                }
-            }
-        }
     }
 }
 
 
 struct PlaceRowExploreVisited: View {
-    var place: ExplorePlace
+    @State var place: ExplorePlace
     
     @ObservedObject var exploreModel = ExploreModel.shared
-    
-    @State var image: UIImage? = nil
     
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
                     Text(self.place.place.name != nil ? self.place.place.name! : "")
                     Spacer()
                 }
@@ -94,79 +77,53 @@ struct PlaceRowExploreVisited: View {
             }
         }
         .frame(height: 60)
-        .onAppear {
-            if let photos = self.place.place.photos {
-                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
-                    if let error = error {
-                        print("Error loading photo metadata: \(error.localizedDescription)")
-                        return
-                    }
-                    if let photo = photo {
-                        self.image = photo
-                    }
-                }
-            }
-        }
     }
 }
 
 struct CurrentTargetRow: View {
-    var place: ExplorePlace
-    
     @ObservedObject var exploreModel = ExploreModel.shared
     
-    @State var image: UIImage? = nil
-    
     var body: some View {
-        GeometryReader { metrics in
-            HStack(alignment: .center) {
-                HStack {
-                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
-                    VStack (alignment: .leading) {
-                        Text(self.place.place.name != nil ? self.place.place.name! : "")
-                        Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
-                    }
-                    Spacer()
-                }
-                .frame(width: metrics.size.width * 0.4)
-                .onTapGesture {
-                    self.exploreModel.changeCurrentTargetTo(self.place)
-                }
-                HStack {
-                    Button(action: {
-                        self.exploreModel.markPlaceAsVisited(place: self.place)
-                    }) {
+        VStack {
+            if (exploreModel.exploreList!.currentTarget != nil) {
+                GeometryReader { metrics in
+                    HStack(alignment: .center) {
                         HStack {
-                            Image(systemName: "mappin.and.ellipse")
-                            Text("Mark visited")
+                            PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
+                            VStack (alignment: .leading) {
+                                Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
+                                Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
+                            }
+                            Spacer()
                         }
-                    }
-                }.frame(width: metrics.size.width * 0.3)
-                HStack {
-                    Button(action: {
-                        UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place.place))
-                    }) {
+                        .frame(width: metrics.size.width * 0.4)
                         HStack {
-                            Image(systemName: "arrow.up.right.diamond")
-                            Text("Navigate")
-                        }
+                            Button(action: {
+                                self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
+                            }) {
+                                HStack {
+                                    Image(systemName: "mappin.and.ellipse")
+                                    Text("Mark visited")
+                                }
+                            }
+                        }.frame(width: metrics.size.width * 0.3)
+                        HStack {
+                            Button(action: {
+                                UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
+                            }) {
+                                HStack {
+                                    Image(systemName: "arrow.up.right.diamond")
+                                    Text("Navigate")
+                                }
+                            }
+                        }.frame(width: metrics.size.width * 0.3)
                     }
-                }.frame(width: metrics.size.width * 0.3)
+                }
+            } else {
+                Text("Tap on a place to make it the current target")
+                
             }
         }
         .frame(height: 60)
-        .onAppear {
-            if let photos = self.place.place.photos {
-                getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
-                    if let error = error {
-                        print("Error loading photo metadata: \(error.localizedDescription)")
-                        return
-                    }
-                    if let photo = photo {
-                        self.image = photo
-                    }
-                }
-            }
-        }
     }
 }

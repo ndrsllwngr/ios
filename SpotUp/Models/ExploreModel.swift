@@ -103,25 +103,57 @@ class ExploreModel: ObservableObject {
         if let exploreList = self.exploreList, let location = self.locationManager.location {
             // 1. calculate distance to my location for all places
             let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
+                var mutablePlace = place
                 let distance = calculateDistance(coordinate: place.place.coordinate,
                                                  location: location)
-                return ExplorePlace(place: place.place,
-                                    distance: distance,
-                                    visited: place.visited
-                )
+                mutablePlace.distance = distance
+                return mutablePlace
             }
                 // 2. sort places based on distance
                 .sorted{(place1, place2) in place1.distance! < place2.distance!}
             self.exploreList!.places = explorePlaces
             // If no currentTarget set by user yet set current target (which is the next nearst not visited place)
             if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
-//                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited)")
+//                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited), \(explorePlaces.filter{!$0.visited}[0].image)")
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
-            // Else also update distance currentTarget
+                // Else also update distance currentTarget
             } else if (exploreList.currentTarget != nil) {
                 // also update currentTarget
                 self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
-                location: location)
+                                                                              location: location)
+            }
+        }
+    }
+    
+    func loadPlaceImages() {
+        if let exploreList = self.exploreList {
+            for (i, place) in exploreList.places.enumerated() {
+                if let photos = place.place.photos {
+                    getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                        if let error = error {
+                            print("Error loading photo metadata: \(error.localizedDescription)")
+                            return
+                        }
+                        if let photo = photo {
+                            if self.exploreList?.places[i] != nil {
+                                self.exploreList?.places[i].image = photo
+                            }
+                        }
+                    }
+                }
+            }
+            if (exploreList.currentTarget != nil && exploreList.currentTarget!.image == nil) {
+                if let photos = exploreList.currentTarget!.place.photos {
+                    getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                        if let error = error {
+                            print("Error loading photo metadata: \(error.localizedDescription)")
+                            return
+                        }
+                        if let photo = photo {
+                            self.exploreList?.currentTarget?.image = photo
+                        }
+                    }
+                }
             }
         }
     }
@@ -150,6 +182,7 @@ struct ExplorePlace: Equatable, Hashable {
     var place: GMSPlace
     var distance: CLLocationDistance? = nil
     var visited: Bool = false
+    var image: UIImage? = nil
 }
 
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
