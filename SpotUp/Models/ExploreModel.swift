@@ -14,14 +14,19 @@ class ExploreModel: ObservableObject {
     }
     
     func startExploreWithPlaceList(placeList: PlaceList, places: [GMSPlace]) {
-        if (places.isEmpty) {
-            self.exploreList = ExploreList()
+        // Explore already active: Append places
+        if (self.exploreList != nil) {
+            exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
+        // Explore not active yet. Create new ExploreList
         } else {
-            let explorePlaces =  places.map { place in
-                return ExplorePlace(place: place)
+            if (places.isEmpty) {
+                self.exploreList = ExploreList()
+            } else {
+                let explorePlaces =  places.map{return ExplorePlace(place: $0)}
+                self.exploreList = ExploreList(places: explorePlaces)
             }
-            self.exploreList = ExploreList(places: explorePlaces)
         }
+        
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
