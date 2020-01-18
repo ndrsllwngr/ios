@@ -39,7 +39,8 @@ class ExploreModel: ObservableObject {
                 self.exploreList = ExploreList(places: explorePlaces)
             }
         }
-        
+        self.updateDistancesInPlaces()
+        self.loadPlaceImages()
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
