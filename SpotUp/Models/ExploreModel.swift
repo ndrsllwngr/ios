@@ -1,6 +1,19 @@
 import Foundation
 import GooglePlaces
 
+struct ExploreList: Equatable {
+    var places: [ExplorePlace] = []
+    var currentTarget: ExplorePlace? = nil
+}
+
+struct ExplorePlace: Equatable, Hashable {
+    var place: GMSPlace
+    var image: UIImage? = nil
+    var distance: CLLocationDistance? = nil
+    var visited: Bool = false
+    var visited_at: Date? = nil
+}
+
 class ExploreModel: ObservableObject {
     
     static let shared = ExploreModel()
@@ -88,6 +101,7 @@ class ExploreModel: ObservableObject {
             self.exploreList!.currentTarget = nil
             if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
                 self.exploreList!.places[index].visited = true
+                self.exploreList!.places[index].visited_at = Date.init()
                 print("marked \(self.exploreList!.places[index].place.name!) as true")
             }
             self.updateDistancesInPlaces()
@@ -98,6 +112,7 @@ class ExploreModel: ObservableObject {
         if self.exploreList != nil {
             if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
                 self.exploreList!.places[index].visited = false
+                self.exploreList!.places[index].visited_at = nil
             }
             self.updateDistancesInPlaces()
         }
@@ -179,16 +194,17 @@ func getDistanceStringToDisplay(_ distance: CLLocationDistance) -> String {
     }
 }
 
-struct ExploreList: Equatable {
-    var places: [ExplorePlace] = []
-    var currentTarget: ExplorePlace? = nil
-}
-
-struct ExplorePlace: Equatable, Hashable {
-    var place: GMSPlace
-    var distance: CLLocationDistance? = nil
-    var visited: Bool = false
-    var image: UIImage? = nil
+func getVisitedAtStringToDisplay(_ visited_at: Date) -> String {
+    let calendar = Calendar.current
+    let dateFormatter = DateFormatter()
+    
+    if (calendar.isDateInToday(visited_at)) {
+        dateFormatter.dateFormat = "HH:mm"
+        return "today at \(dateFormatter.string(from: visited_at))"
+    } else {
+        dateFormatter.dateFormat = "E, d MMM"
+        return "at \(dateFormatter.string(from: visited_at))"
+    }
 }
 
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
