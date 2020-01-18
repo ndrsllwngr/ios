@@ -26,9 +26,9 @@ struct ExploreView: View {
                                   sheetSelection: self.$sheetSelection,
                                   placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                   imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                .onAppear{
-                    self.exploreModel.loadPlaceImages()
-                    self.exploreModel.updateDistancesInPlaces()
+                    .onAppear{
+                        self.exploreModel.loadPlaceImages()
+                        self.exploreModel.updateDistancesInPlaces()
                 }
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
@@ -50,10 +50,10 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
-        .onDisappear {
-            if (self.exploreModel.exploreList != nil) {
-                self.exploreModel.updateLastOpenedAt()
-            }
+            .onDisappear {
+                if (self.exploreModel.exploreList != nil) {
+                    self.exploreModel.updateLastOpenedAt()
+                }
         }
         .padding()
     }
@@ -67,56 +67,59 @@ struct ExploreActiveView: View {
     
     @Binding var placeForPlaceMenuSheet: ExplorePlace?
     @Binding var imageForPlaceMenuSheet: UIImage?
-
+    
     var body: some View {
         VStack {
-            HStack {
-                Image(systemName: "map")
-                Text("\(self.exploreModel.exploreList!.places.count) Places")
-                Spacer()
-                Button(action: {
-                    self.exploreModel.quitExplore()
-                }) {
-                    Text("Quit")
+            if (self.exploreModel.exploreList != nil) {
+                HStack {
+                    Image(systemName: "map")
+                    Text("\(self.exploreModel.exploreList!.places.count) Places")
+                    Spacer()
+                    Button(action: {
+                        self.exploreModel.quitExplore()
+                    }) {
+                        Text("Quit")
+                    }
                 }
-            }
-            
-            ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
-            
-            if !exploreModel.exploreList!.places.isEmpty {
-                CurrentTargetRow()
-                List {
-                    Section (header: Text("Travel Queue")) {
-                        if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
-                            ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
-                                ExplorePlaceRow(place: place,
-                                                showSheet: self.$showSheet,
-                                                sheetSelection: self.$sheetSelection,
-                                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                
+                ExploreMapView(exploreList: self.exploreModel.exploreList!)
+                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
+                
+                if !exploreModel.exploreList!.places.isEmpty {
+                    CurrentTargetRow()
+                    List {
+                        Section (header: Text("Travel Queue")) {
+                            if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
+                                    ExplorePlaceRow(place: place,
+                                                    showSheet: self.$showSheet,
+                                                    sheetSelection: self.$sheetSelection,
+                                                    placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                                    imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
+                            } else {
+                                VStack {
+                                    Text("Your travel queue is empty. Why don't you add more places?").listRowInsets(EdgeInsets())
+                                }
                             }
-                        } else {
-                            VStack {
-                                Text("Your travel queue is empty. Why don't you add more places?").listRowInsets(EdgeInsets())
+                        }
+                        if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
+                            Section(header: Text("Already visited")) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
+                                    ExplorePlaceVisitedRow(place: place)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
                             }
                         }
                     }
-                    if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                        Section(header: Text("Already visited")) {
-                            ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
-                                ExplorePlaceVisitedRow(place: place)
-                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                            }
-                        }
-                    }
+                } else {
+                    Spacer()
+                    Text("There are currently no places in your Explore Queue. Feel free to add some!")
                 }
-            } else {
                 Spacer()
-                Text("There are currently no places in your Explore Queue. Feel free to add some!")
+                
             }
-            Spacer()
         }
     }
 }
