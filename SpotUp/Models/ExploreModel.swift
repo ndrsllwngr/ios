@@ -117,6 +117,11 @@ class ExploreModel: ObservableObject {
             if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
 //                print("Place to set: \(explorePlaces.filter{!$0.visited}[0].place.name!),  \(explorePlaces.filter{!$0.visited}[0].visited)")
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
+            // Else also update distance currentTarget
+            } else if (exploreList.currentTarget != nil) {
+                // also update currentTarget
+                self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
+                location: location)
             }
         }
     }
