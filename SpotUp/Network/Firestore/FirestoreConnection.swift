@@ -30,14 +30,109 @@ class FirestoreConnection: ObservableObject {
     }
     
     func deleteUserInFirestore(userId: String) {
+        
+        // When a user deletes his account it is not enough to just delete his reference from firestore
+        // To delete a user thoroughly we have to
+        let dispatchGroup = DispatchGroup()
         let userRef = dbUsersRef.document(userId)
-        userRef.delete() { err in
-            if let err = err {
-                print("Error removing user: \(err)")
-            } else {
-                print("User successfuly deleted from firestore")
+        userRef.getDocument { documentSnapshot, error in
+            guard let documentSnapshot = documentSnapshot else {
+                print("Userdeletion: Error retrieving user")
+                return
             }
+            documentSnapshot.data().flatMap({ data in
+                let user = dataToUser(data: data)
+                
+                // 1. Remove him from all users that were following him
+                if(!user.isFollowedBy.isEmpty) {
+                    dispatchGroup.enter()
+                    user.isFollowedBy.forEach { isFollowedById in                      self.dbUsersRef.document(isFollowedById).updateData([
+                        "is_following": FieldValue.arrayRemove([userId])
+                    ]) { err in
+                        if let err = err {
+                            print("Userdeletion: Error removing user from is_following: \(err)")
+                        } else {
+                            print("Userdeletion: successfully removed user from is_following")
+                        }
+                        dispatchGroup.leave()
+                        }
+                    }
+                }
+                // 2. Remove him from all users that were followed by him
+                if(!user.isFollowing.isEmpty) {
+                    dispatchGroup.enter()
+                    user.isFollowing.forEach { isFollowingId in                            self.dbUsersRef.document(isFollowingId).updateData([
+                        "is_followed_by": FieldValue.arrayRemove([userId])
+                    ]) { err in
+                        if let err = err {
+                            print("Userdeletion: Error removing user from is_followed_by: \(err)")
+                        } else {
+                            print("Userdeletion: successfully removed user from is_followed_by")
+                        }
+                        dispatchGroup.enter()
+                        }
+                    }
+                }
+                //3. Remove him from all placelists that he was following
+                dispatchGroup.enter()
+                self.dbPlaceListsRef.whereField("follower_ids", arrayContains: userId).getDocuments { querySnapshot, error in
+                    guard let querySnapshot = querySnapshot else {
+                        print("Userdeletion Error retrieving followed PlaceLists")
+                        return
+                    }
+                    dispatchGroup.leave()
+                    querySnapshot.documents.forEach { documentSnapshot in
+                        dispatchGroup.enter()
+                        let placeList = dataToPlaceList(data: documentSnapshot.data())
+                        self.dbPlaceListsRef.document(placeList.id).updateData([
+                            "follower_ids": FieldValue.arrayRemove([userId])
+                        ]) { err in
+                            if let err = err {
+                                print("Userdeletion: Error removing user from followed PlaceList: \(err)")
+                            } else {
+                                print("Userdeletion: User successfully removed from followed PlaceList")
+                            }
+                            dispatchGroup.leave()
+                        }
+                        
+                    }
+                }
+                //4. Remove all placelists created by that user
+                dispatchGroup.enter()
+                self.dbPlaceListsRef.whereField("owner_id", isEqualTo: userId).getDocuments { querySnapshot, error in
+                    guard let querySnapshot = querySnapshot else {
+                        print("Userdeletion: Error retrieving owned PlaceLists")
+                        return
+                    }
+                    dispatchGroup.leave()
+                    querySnapshot.documents.forEach { documentSnapshot in
+                        dispatchGroup.enter()
+                        let placeList = dataToPlaceList(data: documentSnapshot.data())
+                        self.dbPlaceListsRef.document(placeList.id).delete() { err in
+                            if let err = err {
+                                print("Userdeletion: Error deleting owned PlaceList: \(err)")
+                            } else {
+                                print("Userdeletion: Owned PlaceList successfully deleted")
+                            }
+                            dispatchGroup.leave()
+                        }
+                    }
+                }
+                // 5. Delete user fitself
+                dispatchGroup.enter()
+                userRef.delete() { err in
+                    if let err = err {
+                        print("Userdeletion: Error removing user: \(err)")
+                    } else {
+                        print("Userdeletion: User successfuly deleted")
+                    }
+                    dispatchGroup.leave()
+                }
+            })
         }
+        // Wait till all tasks finished
+        dispatchGroup.wait()
+        print("Finished deleteUserInFirestore: User thoroughly removed from firestore")
     }
     
     func updateUserName(userId: String, newUserName: String) {
@@ -116,7 +211,7 @@ class FirestoreConnection: ObservableObject {
     func addPlaceToList(placeList: PlaceList, placeId: String, placeImage: UIImage?) {
         
         let listRef = dbPlaceListsRef.document(placeList.id)
-            
+        
         listRef.updateData([
             "places":
                 FieldValue.arrayUnion([placeIDWithTimestampToData(place: PlaceIDWithTimestamp(placeId: placeId, addedAt: Timestamp()))]),
@@ -132,7 +227,7 @@ class FirestoreConnection: ObservableObject {
         // If this is the first place of the placeList upload placeListImage to Storage
         if let placeImage = placeImage {
             if (placeList.imageUrl == nil || placeList.places.isEmpty) {
-                    FirebaseStorage.shared.uploadImageToStorage(id: placeList.id, imageType: .PLACELIST_IMAGE, uiImage: placeImage)
+                FirebaseStorage.shared.uploadImageToStorage(id: placeList.id, imageType: .PLACELIST_IMAGE, uiImage: placeImage)
             }
         }
     }
@@ -207,7 +302,7 @@ class FirestoreConnection: ObservableObject {
             "is_following": FieldValue.arrayRemove([userIdToFollow])
         ]) { err in
             if let err = err {
-                print("Error unfollowing user: \(err)")
+                print("Error unfollowing user is_following: \(err)")
             } else {
                 print("User successfully unfollowed is_following")
             }
@@ -216,7 +311,7 @@ class FirestoreConnection: ObservableObject {
             "is_followed_by": FieldValue.arrayRemove([myUserId])
         ]) { err in
             if let err = err {
-                print("Error following user: \(err)")
+                print("Error unfollowing user is_followed_by: \(err)")
             } else {
                 print("User successfully unfollowed is_followed_by")
             }
