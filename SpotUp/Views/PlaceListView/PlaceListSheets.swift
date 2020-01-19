@@ -101,6 +101,15 @@ struct PlaceMenuSheet: View {
         VStack {
             Text("Place Menu")
             Button(action: {
+                if let image = self.image {
+                    FirebaseStorage.shared.uploadImageToStorage(id: self.placeListId, imageType: .PLACELIST_IMAGE, uiImage: image)
+                } else {
+                    print("Place has no image")
+                }
+            }) {
+                Text("Make photo of place to current place list image")
+            }.padding()
+            Button(action: {
                 self.showSheet.toggle()
                 FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimestamp)
             }) {
