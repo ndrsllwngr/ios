@@ -60,7 +60,11 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
+            .onAppear {
+                self.exploreModel.locationManager.startUpdatingLocation()
+        }
             .onDisappear {
+                self.exploreModel.locationManager.stopUpdatingLocation()
                 if (self.exploreModel.exploreList != nil) {
                     self.exploreModel.updateLastOpenedAt()
                 }
