@@ -49,7 +49,9 @@ class FirestoreProfile: ObservableObject {
                     }
                     documentSnapshot.data().flatMap({ data in
                         let username = data["username"] as! String
-                        self.placeLists[i].owner.username = username
+                        if self.placeLists.count > i {
+                            self.placeLists[i].owner.username = username
+                        }
                     })
                 })
             }

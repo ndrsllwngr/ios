@@ -170,7 +170,6 @@ struct PlaceListFollowButton: View {
             if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                    
                 }) {
                     Image(systemName: "heart")
                 }

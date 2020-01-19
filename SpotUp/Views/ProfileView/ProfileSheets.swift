@@ -92,7 +92,9 @@ struct ProfileSettingsSheet: View {
             HStack {
                 SecureField("current password", text: $currentPasswordDeleteAccount)
                 Button(action: {
-                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordDeleteAccount)
+                    self.presentationMode.wrappedValue.dismiss()
+                    self.firestoreProfile.removeProfileListener()
+                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordDeleteAccount)
                 }) {
                     Text("Delete Account").foregroundColor(.red)
                 }
