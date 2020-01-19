@@ -26,7 +26,7 @@ struct PlaceListView: View {
     
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
-
+    
     
     var body: some View {
         VStack {
@@ -107,7 +107,7 @@ struct InnerPlaceListView: View {
                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                  goToPlace: self.$goToPlace,
                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                 imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
                 }
             } else {
@@ -149,7 +149,7 @@ struct PlaceListInfoView: View {
                         }
                     }
                     Button(action: {
-                        print("Explore")
+                        ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
                     }) {
                         Text("Explore")
                     }

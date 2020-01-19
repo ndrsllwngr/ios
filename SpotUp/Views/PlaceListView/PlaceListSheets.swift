@@ -11,7 +11,7 @@ struct PlaceListSettingsSheet: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     @Binding var presentationMode: PresentationMode
-
+    
     @Binding var showSheet: Bool
     @State private var newListName: String = ""
     
@@ -105,19 +105,24 @@ struct PlaceMenuSheet: View {
                 FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimestamp)
             }) {
                 Text("Delete Place from List")
-            }
-            .padding()
+            }.padding()
             Button(action: {
                 self.showAddPlaceToListSheet.toggle()
             }) {
                 Text("Add to Placelist")
-            }
-        .padding()
+            }.padding()
+            Button(action: {
+                ExploreModel.shared.addPlaceToExplore(self.gmsPlaceWithTimestamp.gmsPlace)
+                self.showSheet.toggle()
+                
+            }) {
+                Text("Add to Explore")
+            }.padding()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
             AddPlaceToListSheet(place: self.gmsPlaceWithTimestamp.gmsPlace, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
         }
-    .padding()
+        .padding()
     }
 }
 //struct ListSettings_Previews: PreviewProvider {
