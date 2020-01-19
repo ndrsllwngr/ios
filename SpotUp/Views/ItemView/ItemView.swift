@@ -54,7 +54,10 @@ struct InnerItemView: View {
                 Button(action: {
                     self.showSheet.toggle()
                 }){
-                    Text("Add to List")
+                    Image(systemName: "plus.circle.fill")
+                    .resizable()
+                    .scaledToFit()
+                        .frame(width: 30, height: 30)
                 }
             }
             ScrollView(showsIndicators: false){
@@ -75,7 +78,7 @@ struct InnerItemView: View {
             }
         }
         .sheet(isPresented: $showSheet) {
-            AddPlaceToListSheet(place: self.place, placeImage: self.$image, showSheet: self.$showSheet)
+            ItemAddSheet(place: self.place, placeImage: self.$image, showSheet: self.$showSheet)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
         .onAppear {
