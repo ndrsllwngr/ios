@@ -88,7 +88,7 @@ struct ExplorePlaceVisitedRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
+                    PlaceRowImage(image: self.place.image != nil ? makeUiImageBlackAndWhite(self.place.image!) : UIImage())
                     VStack (alignment: .leading){
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.visited_at != nil ? getVisitedAtStringToDisplay(self.place.visited_at!) : "")
