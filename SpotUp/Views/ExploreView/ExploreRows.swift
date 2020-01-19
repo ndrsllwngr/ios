@@ -9,6 +9,71 @@
 import SwiftUI
 import GooglePlaces
 
+struct CurrentTargetRow: View {
+    @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
+    
+    var body: some View {
+        VStack {
+            if (exploreModel.exploreList != nil) {
+                if (exploreModel.exploreList!.currentTarget != nil) {
+                    GeometryReader { metrics in
+                        HStack(alignment: .center) {
+                            HStack {
+                                PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
+                                VStack (alignment: .leading) {
+                                    Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
+                                    Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
+                                }
+                                Spacer()
+                            }
+                            .frame(width: metrics.size.width * 0.65)
+                            .onTapGesture {
+                                self.placeIdToNavigateTo = self.exploreModel.exploreList!.currentTarget!.place.placeID!
+                                self.goToPlace = 1
+                            }
+                            HStack {
+                                Button(action: {
+                                    self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
+                                }) {
+                                    VStack {
+                                        Image(systemName: "mappin.and.ellipse")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
+                                        Text("Visit")
+                                    }
+                                }
+                            }.frame(width: metrics.size.width * 0.15)
+                            HStack {
+                                Button(action: {
+                                    UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
+                                }) {
+                                    VStack {
+                                        Image(systemName: "arrow.up.right.diamond")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 20, height: 20)
+                                        Text("Navigate")
+                                    }
+                                }
+                            }.frame(width: metrics.size.width * 0.20)
+                        }
+                    }
+                } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
+                    Text("Tap on a place to make it the current target")
+                } else {
+                    Text("Great! You have visited all places in your travel queue.")
+                }
+            }
+        }
+        .frame(height: 60)
+    }
+}
+
+
 struct ExplorePlaceRow: View {
     @State var place: ExplorePlace
     
@@ -88,7 +153,8 @@ struct ExplorePlaceVisitedRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.place.image != nil ? makeUiImageBlackAndWhite(self.place.image!) : UIImage())
+                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
+                        .opacity(0.5)
                     VStack (alignment: .leading){
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.visited_at != nil ? getVisitedAtStringToDisplay(self.place.visited_at!) : "")
@@ -111,71 +177,7 @@ struct ExplorePlaceVisitedRow: View {
                 .onTapGesture {
                     self.exploreModel.markPlaceAsUnvisited(place: self.place)
                 }
-            }
-        }
-        .frame(height: 60)
-    }
-}
-
-struct CurrentTargetRow: View {
-    @ObservedObject var exploreModel = ExploreModel.shared
-    
-    @Binding var placeIdToNavigateTo: String?
-    @Binding var goToPlace: Int?
-    
-    var body: some View {
-        VStack {
-            if (exploreModel.exploreList != nil) {
-                if (exploreModel.exploreList!.currentTarget != nil) {
-                    GeometryReader { metrics in
-                        HStack(alignment: .center) {
-                            HStack {
-                                PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
-                                VStack (alignment: .leading) {
-                                    Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
-                                    Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
-                                }
-                                Spacer()
-                            }
-                            .frame(width: metrics.size.width * 0.65)
-                            .onTapGesture {
-                                self.placeIdToNavigateTo = self.exploreModel.exploreList!.currentTarget!.place.placeID!
-                                self.goToPlace = 1
-                            }
-                            HStack {
-                                Button(action: {
-                                    self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
-                                }) {
-                                    VStack {
-                                        Image(systemName: "mappin.and.ellipse")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                        Text("Visit")
-                                    }
-                                }
-                            }.frame(width: metrics.size.width * 0.15)
-                            HStack {
-                                Button(action: {
-                                    UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
-                                }) {
-                                    VStack {
-                                        Image(systemName: "arrow.up.right.diamond")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 20, height: 20)
-                                        Text("Navigate")
-                                    }
-                                }
-                            }.frame(width: metrics.size.width * 0.20)
-                        }
-                    }
-                } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
-                    Text("Tap on a place to make it the current target")
-                } else {
-                    Text("Great! You have visited all places in your travel queue.")
-                }
-            }
+            }.foregroundColor(Color.gray)
         }
         .frame(height: 60)
     }
