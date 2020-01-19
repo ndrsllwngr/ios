@@ -20,41 +20,48 @@ class FirestoreSearch: ObservableObject {
     
     
     func addAllUsersListener() {
-        let ref = FirestoreConnection.shared.getUsersRef()
-        self.allAllUsersListener = ref.addSnapshotListener{ querySnapshot, error in
-            guard let querySnapshot = querySnapshot else {
-                print("Error retrieving all users")
-                return
-            }
-            self.allUsers = querySnapshot.documents.map{(documentSnapshot) in
-                let data = documentSnapshot.data()
-                return dataToUser(data: data)
+        if(self.allAllUsersListener == nil){
+            let ref = FirestoreConnection.shared.getUsersRef()
+            self.allAllUsersListener = ref.addSnapshotListener{ querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    print("Error retrieving all users")
+                    return
+                }
+                self.allUsers = querySnapshot.documents.map{(documentSnapshot) in
+                    let data = documentSnapshot.data()
+                    return dataToUser(data: data)
+                }
             }
         }
     }
     
     func addAllPublicPlaceListsListener() {
-        let ref =
-            FirestoreConnection.shared.getPlaceListsRef().whereField("is_public", isEqualTo: true)
-        self.allPublicPlaceListsListener = ref.addSnapshotListener { querySnapshot, error in
-            guard let querySnapshot = querySnapshot else {
-                print("Error retrieving all public place lists")
-                return
-            }
-            self.allPublicPlaceLists = querySnapshot.documents.map{(documentSnapshot) in
-                let data = documentSnapshot.data()
-                return dataToPlaceList(data: data)
+        if(self.allPublicPlaceListsListener == nil){
+            let ref =
+                FirestoreConnection.shared.getPlaceListsRef().whereField("is_public", isEqualTo: true)
+            self.allPublicPlaceListsListener = ref.addSnapshotListener { querySnapshot, error in
+                guard let querySnapshot = querySnapshot else {
+                    print("Error retrieving all public place lists")
+                    return
+                }
+                self.allPublicPlaceLists = querySnapshot.documents.map{(documentSnapshot) in
+                    let data = documentSnapshot.data()
+                    return dataToPlaceList(data: data)
+                }
             }
         }
     }
     
     func removeAllUsersListener() {
+        print("removeAllUsersListener()")
         self.allAllUsersListener?.remove()
+        self.allAllUsersListener = nil
         self.allUsers = []
     }
     
     func removeAllPublicPlaceListsListener() {
+        print("removeAllPublicPlaceListsListener()")
         self.allPublicPlaceListsListener?.remove()
-        print("Successfully removed allPublicPlaceListsListener")
+        self.allPublicPlaceListsListener = nil
     }
 }
