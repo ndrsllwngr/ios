@@ -11,7 +11,7 @@ struct PlaceListSettingsSheet: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
     @Binding var presentationMode: PresentationMode
-
+    
     @Binding var showSheet: Bool
     @State private var newListName: String = ""
     
@@ -90,26 +90,48 @@ struct PlaceListSettingsSheet: View {
 
 struct PlaceMenuSheet: View {
     var placeListId: String
-    var gmsPlaceWithTimeStamp: GMSPlaceWithTimestamp
+    var gmsPlaceWithTimestamp: GMSPlaceWithTimestamp
+    @Binding var image: UIImage?
     
     @Binding var showSheet: Bool
+    
+    @State var showAddPlaceToListSheet: Bool = false
     
     var body: some View {
         VStack {
             Text("Place Menu")
             Button(action: {
-                self.showSheet.toggle()
-                FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimeStamp)
+                if let image = self.image {
+                    FirebaseStorage.shared.uploadImageToStorage(id: self.placeListId, imageType: .PLACELIST_IMAGE, uiImage: image)
+                } else {
+                    print("Place has no image")
+                }
             }) {
-                Text("Delete Place")
-            }
+                Text("Make photo of place to current place list image")
+            }.padding()
             Button(action: {
-                print("ToDo Add Place to PlaceList")
+                self.showSheet.toggle()
+                FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.gmsPlaceWithTimestamp)
+            }) {
+                Text("Delete Place from List")
+            }.padding()
+            Button(action: {
+                self.showAddPlaceToListSheet.toggle()
             }) {
                 Text("Add to Placelist")
-            }
+            }.padding()
+            Button(action: {
+                ExploreModel.shared.addPlaceToExplore(self.gmsPlaceWithTimestamp.gmsPlace)
+                self.showSheet.toggle()
+                
+            }) {
+                Text("Add to Explore")
+            }.padding()
         }
-    .padding()
+        .sheet(isPresented: $showAddPlaceToListSheet) {
+            AddPlaceToListSheet(place: self.gmsPlaceWithTimestamp.gmsPlace, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+        }
+        .padding()
     }
 }
 //struct ListSettings_Previews: PreviewProvider {
