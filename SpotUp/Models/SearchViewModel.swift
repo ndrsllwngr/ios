@@ -3,6 +3,7 @@ import Combine
 import GooglePlaces
 
 class SearchViewModel: ObservableObject {
+    static let shared = SearchViewModel()
     // input
     @Published var searchTerm: String = ""
     @Published var searchSpaceSelection: String = SearchSpace.googlePlaces.rawValue
@@ -68,7 +69,7 @@ class SearchViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    init() {
+    private init() {
         firestoreSearchCancellable = Publishers.CombineLatest(firestoreSearch.$allPublicPlaceLists,firestoreSearch.$allUsers).sink(receiveValue: {_ in            self.objectWillChange.send()
         })
         
