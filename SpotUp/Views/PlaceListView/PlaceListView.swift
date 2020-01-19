@@ -13,6 +13,8 @@ struct PlaceListView: View {
     
     var placeListId: String
     
+    @Binding var tabSelection: Int
+
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList: FirestorePlaceList
     
@@ -27,8 +29,9 @@ struct PlaceListView: View {
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
-    init(placeListId: String) {
+    init(placeListId: String, tabSelection: Binding<Int>) {
         self.placeListId = placeListId
+        self._tabSelection = tabSelection
         self.firestorePlaceList = FirestorePlaceList(placeListId: placeListId,
                                                      ownUserId: FirebaseAuthentication.shared.currentUser!.uid)
     }
@@ -46,7 +49,8 @@ struct PlaceListView: View {
                                placeIdToNavigateTo: $placeIdToNavigateTo,
                                goToPlace: $goToPlace,
                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet,
+                               tabSelection: self.$tabSelection)
                 .environmentObject(firestorePlaceList)
         }
         .sheet(isPresented: $showSheet) {
@@ -79,12 +83,14 @@ struct InnerPlaceListView: View {
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
     @Binding var imageForPlaceMenuSheet: UIImage?
     
+    @Binding var tabSelection: Int
+    
     @State private var selection = 0
     
     var body: some View {
         VStack {
             // Follow button only on foreign user profiles
-            PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+            PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -128,6 +134,8 @@ struct PlaceListInfoView: View {
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
+    @Binding var tabSelection: Int
+    
     var body: some View {
         VStack {
             HStack {
@@ -147,6 +155,7 @@ struct PlaceListInfoView: View {
                     }
                     Button(action: {
                         ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
+                        self.tabSelection = 2
                     }) {
                         Text("Explore")
                     }

@@ -13,6 +13,8 @@ struct ProfileView: View {
     
     var profileUserId: String
     
+    @Binding var tabSelection: Int
+
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile: FirestoreProfile
     
@@ -22,19 +24,20 @@ struct ProfileView: View {
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
     
-    init(profileUserId: String) {
+    init(profileUserId: String, tabSelection: Binding<Int>) {
         self.profileUserId = profileUserId
+        self._tabSelection = tabSelection
         self.firestoreProfile = FirestoreProfile(profileUserId: profileUserId)
     }
     
     var body: some View {
         VStack {
             if (self.profileUserIdToNavigateTo != nil) {
-                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!), tag: 1, selection: self.$goToOtherProfile) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
                     Text("")
                 }
             }
-            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
+            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, tabSelection: $tabSelection, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
@@ -64,7 +67,10 @@ struct ProfileView: View {
 
 struct InnerProfileView: View {
     var profileUserId: String
+    
     @Binding var isMyProfile: Bool
+    @Binding var tabSelection: Int
+
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     
     @Binding var showSheet: Bool
@@ -78,7 +84,7 @@ struct InnerProfileView: View {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         NavigationLink(
-                            destination: PlaceListView(placeListId: placeList.id)
+                            destination: PlaceListView(placeListId: placeList.id, tabSelection: self.$tabSelection)
                         ) {
                             PlacesListRow(placeList: placeList)
                         }
@@ -86,7 +92,7 @@ struct InnerProfileView: View {
                 } else {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         NavigationLink(
-                            destination: PlaceListView(placeListId: placeList.id)
+                            destination: PlaceListView(placeListId: placeList.id, tabSelection: self.$tabSelection)
                         ) {
                             PlacesListRow(placeList: placeList)
                         }

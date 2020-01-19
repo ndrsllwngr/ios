@@ -24,14 +24,14 @@ struct TabBarView: View {
             ZStack(alignment: .bottom) {
                 TabView(selection: self.$selection) {
                     NavigationView {
-                        HomeView()
+                        HomeView(tabSelection: self.$selection)
                     }
                     .tabItem({
                         Image(systemName: self.selection == 0 ? "magnifyingglass" : "magnifyingglass")
                         Text("Search")
                     }).tag(0)
                     NavigationView {
-                        ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid)
+                        ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid, tabSelection: self.$selection)
                     }
                     .tabItem({
                         Image(systemName: self.selection == 1 ? "person.fill" : "person")
