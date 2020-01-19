@@ -3,9 +3,16 @@ import GooglePlaces
 
 struct HomeView: View {
     
-    @ObservedObject var searchViewModel = SearchViewModel()
+    @ObservedObject var searchViewModel = SearchViewModel.shared
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
+    
+    // WARNING! init() gets triggered everytime TabBarView is routing
+//    init() {
+//        print("HomeView()  - init(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
+//        self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
+//        self.searchViewModel.firestoreSearch.addAllUsersListener()
+//    }
     
     var body: some View {
         
@@ -84,12 +91,12 @@ struct HomeView: View {
                 } .navigationBarTitle(Text("Search"), displayMode: .inline)
             }
             .onAppear {
-                print("onAppear HomeView: About to add PlaceList firestoreSearch Listener")
+                print("HomeView()  - onAppear(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.addAllUsersListener()
             }
             .onDisappear {
-                print("onDisappear HomeView: About to remove PlaceList firestoreSearch Listener")
+                print("HomeView()  - onDisappear(): REMOVE firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.removeAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.removeAllUsersListener()
             }
