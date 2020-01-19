@@ -27,6 +27,7 @@ class LocationManager: NSObject, ObservableObject {
     }
     
     func stopUpdatingLocation() {
+        print("stop updating loaction")
         self.locationManager.stopUpdatingLocation()
     }
     

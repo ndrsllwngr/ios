@@ -37,8 +37,15 @@ struct ExploreView: View {
                                   placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                   imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     .onAppear{
+                        self.exploreModel.locationManager.startUpdatingLocation()
                         self.exploreModel.loadPlaceImages()
                         self.exploreModel.updateDistancesInPlaces()
+                }
+                .onDisappear {
+                self.exploreModel.locationManager.stopUpdatingLocation()
+                if (self.exploreModel.exploreList != nil) {
+                    self.exploreModel.updateLastOpenedAt()
+                }
                 }
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
@@ -60,15 +67,6 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
-            .onAppear {
-                self.exploreModel.locationManager.startUpdatingLocation()
-        }
-            .onDisappear {
-                self.exploreModel.locationManager.stopUpdatingLocation()
-                if (self.exploreModel.exploreList != nil) {
-                    self.exploreModel.updateLastOpenedAt()
-                }
-        }
         .padding()
     }
 }
