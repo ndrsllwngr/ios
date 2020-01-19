@@ -32,7 +32,7 @@ class FirestoreConnection: ObservableObject {
     func deleteUserInFirestore(userId: String) {
         
         // When a user deletes his account it is not enough to just delete his reference from firestore
-        // To delete a user troughoutly we have to
+        // To delete a user thoroughly we have to
         let dispatchGroup = DispatchGroup()
         let userRef = dbUsersRef.document(userId)
         userRef.getDocument { documentSnapshot, error in
@@ -73,7 +73,6 @@ class FirestoreConnection: ObservableObject {
                         }
                     }
                 }
-                
                 //3. Remove him from all placelists that he was following
                 dispatchGroup.enter()
                 self.dbPlaceListsRef.whereField("follower_ids", arrayContains: userId).getDocuments { querySnapshot, error in
@@ -98,8 +97,7 @@ class FirestoreConnection: ObservableObject {
                         
                     }
                 }
-                
-                //4. remove all placelists created by that user
+                //4. Remove all placelists created by that user
                 dispatchGroup.enter()
                 self.dbPlaceListsRef.whereField("owner_id", isEqualTo: userId).getDocuments { querySnapshot, error in
                     guard let querySnapshot = querySnapshot else {
@@ -120,6 +118,7 @@ class FirestoreConnection: ObservableObject {
                         }
                     }
                 }
+                // 5. Delete user fitself
                 dispatchGroup.enter()
                 userRef.delete() { err in
                     if let err = err {
@@ -131,7 +130,7 @@ class FirestoreConnection: ObservableObject {
                 }
             })
         }
-        
+        // Wait till all tasks finished
         dispatchGroup.wait()
         print("Finished deleteUserInFirestore: User thoroughly removed from firestore")
     }
