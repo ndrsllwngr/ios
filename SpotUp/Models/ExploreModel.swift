@@ -231,28 +231,3 @@ func getVisitedAtStringToDisplay(_ visited_at: Date) -> String {
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
     return URL(string: "https://www.google.com/maps/search/?api=1&query=\(place.coordinate.latitude),\(place.coordinate.longitude)&query_place_id=\(place.placeID!)")!
 }
-
-func makeUiImageBlackAndWhite(_ image: UIImage) -> UIImage {
-    // Slows down app by a lot. ToDo evauate if we 
-//    guard let currentCGImage = image.cgImage else { return image}
-//    let currentCIImage = CIImage(cgImage: currentCGImage)
-//
-//    let filter = CIFilter(name: "CIColorMonochrome")
-//    filter?.setValue(currentCIImage, forKey: "inputImage")
-//
-//    // set a gray value for the tint color
-//    filter?.setValue(CIColor(red: 0.7, green: 0.7, blue: 0.7), forKey: "inputColor")
-//
-//    filter?.setValue(1.0, forKey: "inputIntensity")
-//    guard let outputImage = filter?.outputImage else { return image }
-//
-//    let context = CIContext()
-//
-//    if let cgimg = context.createCGImage(outputImage, from: outputImage.extent) {
-//        let processedImage = UIImage(cgImage: cgimg)
-//        return processedImage
-//    } else {
-//        return image
-//    }
-    return image
-}
