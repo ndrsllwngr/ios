@@ -126,9 +126,10 @@ class ExploreModel: ObservableObject {
     }
     
     func updateDistancesInPlaces() {
-        print("Begin updating distances in explore places")
         // if explore active and we already have a location
-        if let exploreList = self.exploreList, let location = self.locationManager.location {
+        if let exploreList = self.exploreList, let location =
+            self.locationManager.location {
+            print("Begin updating distances in explore places")
             // 1. calculate distance to my location for all places
             let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
                 var mutablePlace = place

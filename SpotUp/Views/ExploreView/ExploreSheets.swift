@@ -60,7 +60,12 @@ struct SelectPlaceListToExploreSheet: View {
     @Binding var showSheet: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var profile = FirestoreProfile()
+    @ObservedObject var profile: FirestoreProfile
+    
+    init(showSheet: Binding<Bool>) {
+        self._showSheet = showSheet
+        self.profile = FirestoreProfile(profileUserId: FirebaseAuthentication.shared.currentUser!.uid)
+    }
     
     var body: some View {
         VStack {
