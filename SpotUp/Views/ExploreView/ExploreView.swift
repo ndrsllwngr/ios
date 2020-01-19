@@ -99,8 +99,12 @@ struct ExploreActiveView: View {
                     .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
                 
                 if !exploreModel.exploreList!.places.isEmpty {
-                    CurrentTargetRow(placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                     goToPlace: self.$goToPlace)
+                    CurrentTargetRow( showSheet: self.$showSheet,
+                                      sheetSelection: self.$sheetSelection,
+                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                      goToPlace: self.$goToPlace,
+                                      placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                      imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     List {
                         Section (header: Text("Travel Queue")) {
                             if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {

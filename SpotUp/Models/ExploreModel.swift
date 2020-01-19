@@ -84,9 +84,13 @@ class ExploreModel: ObservableObject {
     }
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
-        if self.exploreList != nil {
-            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+        if let exploreList = self.exploreList {
+            if let index = exploreList.places.firstIndex(where: {$0.place == place.place}) {
                 self.exploreList!.places.remove(at: index)
+            }
+            if (place.place == exploreList.currentTarget?.place) {
+                self.exploreList?.currentTarget = nil
+                updateDistancesInPlaces()
             }
         }
     }

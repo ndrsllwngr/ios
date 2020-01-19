@@ -12,8 +12,14 @@ import GooglePlaces
 struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
+    
+    @Binding var placeForPlaceMenuSheet: ExplorePlace?
+    @Binding var imageForPlaceMenuSheet: UIImage?
     
     var body: some View {
         VStack {
@@ -56,10 +62,20 @@ struct CurrentTargetRow: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 20, height: 20)
-                                        Text("Navigate")
+                                        Text("Nav")
                                     }
                                 }
-                            }.frame(width: metrics.size.width * 0.20)
+                            }.frame(width: metrics.size.width * 0.10)
+                            HStack {
+                                Button(action: {
+                                    self.showSheet.toggle()
+                                    self.sheetSelection = "place_menu"
+                                    self.placeForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!
+                                    self.imageForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!.image
+                                }) {
+                                        Image(systemName: "ellipsis")
+                                }
+                            }.frame(width: metrics.size.width * 0.10)
                         }
                     }
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
