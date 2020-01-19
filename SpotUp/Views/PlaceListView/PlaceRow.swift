@@ -19,6 +19,7 @@ struct PlaceRow: View {
     @Binding var goToPlace: Int?
     
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
+    @Binding var imageForPlaceMenuSheet: UIImage?
     
     @State var image: UIImage?
     
@@ -44,19 +45,20 @@ struct PlaceRow: View {
                         self.showSheet.toggle()
                         self.sheetSelection = "place_menu"
                         self.placeForPlaceMenuSheet = self.gmsPlaceWithTimestamp
+                        self.imageForPlaceMenuSheet = self.image
                 }
             }
         }
         .frame(height: 60)
         .onAppear {
-            if let photos = self.placeForPlaceMenuSheet?.gmsPlace.photos {
+            if let photos = self.gmsPlaceWithTimestamp.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")
                         return
                     }
                     if let photo = photo {
-                        self.image = photo;
+                        self.image = photo
                     }
                 }
             }
@@ -72,7 +74,7 @@ struct PlaceRowImage: View {
             .resizable()
             .clipShape(Rectangle())
             .scaledToFill()
-            .frame(width: 80, height: 80)
+            .frame(width: 50, height: 50)
             .cornerRadius(15)
     }
 }
