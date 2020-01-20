@@ -16,75 +16,32 @@ struct ExploreView: View {
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
     
+    @State var placeIdToNavigateTo: String? = nil
+    @State var goToPlace: Int? = nil
+    
     @State var placeForPlaceMenuSheet: ExplorePlace? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
     var body: some View {
         VStack {
+            if (self.placeIdToNavigateTo != nil) {
+                NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    Text("")
+                }
+            }
             if (self.exploreModel.exploreList != nil) {
-                HStack {
-                    Image(systemName: "map")
-                    Text("\(self.exploreModel.exploreList!.places.count) Places")
-                    Spacer()
-                    Button(action: {
-                        self.exploreModel.quitExplore()
-                    }) {
-                        Text("Quit")
-                    }
+                ExploreActiveView(showSheet: self.$showSheet,
+                                  sheetSelection: self.$sheetSelection,
+                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                  goToPlace: self.$goToPlace,
+                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                    .onAppear{
+                        self.exploreModel.loadPlaceImages()
+                        self.exploreModel.updateDistancesInPlaces()
                 }
-                ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
-                if !exploreModel.exploreList!.places.isEmpty {
-                    if (exploreModel.exploreList!.currentTarget != nil) {
-                        CurrentTargetRow(place: exploreModel.exploreList!.currentTarget!)
-                    } else {
-                        Text("Tap on a place to make it the current target")
-                    }
-                    Text("Travel Queue")
-                    List {
-                        if (!exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
-                            ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
-                                PlaceRowExplore(place: place,
-                                                showSheet: self.$showSheet,
-                                                sheetSelection: self.$sheetSelection,
-                                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                            }
-                        } else {
-                            Text("You have visited all places in your list!")
-                        }
-                        if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                            Section(header: Text("Already visited")) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
-                                    PlaceRowExploreVisited(place: place)
-                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    Spacer()
-                    Text("There are currently no places in your Explore Queue. Feel free to add some!")
-                }
-                Spacer()
             } else {
-                Spacer()
-                Text("Explore is currently not active.")
-                Text("Why dont you...")
-                Spacer()
-                Button(action: {
-                    self.showSheet.toggle()
-                    self.sheetSelection = "select_placelist"
-                }) {
-                    Text("1. Select a placelist you want to explore")
-                }.padding()
-                Button(action: {
-                    self.exploreModel.startExploreWithEmptyList()
-                }) {
-                    Text("2. Create an empty explore queue and add places by yourself")
-                }.padding()
-                Spacer()
+                ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             }
             
         }.sheet(isPresented: $showSheet) {
@@ -103,13 +60,119 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
-            .onAppear{
-                self.exploreModel.updateDistancesInPlaces()
+            .onDisappear {
+                if (self.exploreModel.exploreList != nil) {
+                    self.exploreModel.updateLastOpenedAt()
+                }
         }
         .padding()
     }
 }
 
+struct ExploreActiveView: View {
+    @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
+    
+    @Binding var placeForPlaceMenuSheet: ExplorePlace?
+    @Binding var imageForPlaceMenuSheet: UIImage?
+    
+    var body: some View {
+        VStack {
+            if (self.exploreModel.exploreList != nil) {
+                HStack {
+                    Image(systemName: "map")
+                    Text("\(self.exploreModel.exploreList!.places.count) Places")
+                    Spacer()
+                    Button(action: {
+                        self.exploreModel.quitExplore()
+                    }) {
+                        Text("Quit")
+                    }
+                }
+                
+                ExploreMapView(exploreList: self.exploreModel.exploreList!)
+                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
+                
+                if !exploreModel.exploreList!.places.isEmpty {
+                    CurrentTargetRow( showSheet: self.$showSheet,
+                                      sheetSelection: self.$sheetSelection,
+                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                      goToPlace: self.$goToPlace,
+                                      placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                      imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                    List {
+                        Section (header: Text("Travel Queue")) {
+                            if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
+                                    ExplorePlaceRow(place: place,
+                                                    showSheet: self.$showSheet,
+                                                    sheetSelection: self.$sheetSelection,
+                                                    placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                    goToPlace: self.$goToPlace,
+                                                    placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
+                                                    imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
+                            } else {
+                                VStack {
+                                    Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
+                                }
+                            }
+                        }
+                        if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
+                            Section(header: Text("Already visited")) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
+                                    ExplorePlaceVisitedRow(place: place,
+                                                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                           goToPlace: self.$goToPlace)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    Spacer()
+                    Text("There are currently no places in your Explore Queue. Feel free to add some!")
+                }
+                Spacer()
+                
+            }
+        }
+    }
+}
+
+struct ExploreInactiveView: View {
+    @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("Explore is currently not active.")
+            Text("Why dont you...")
+            Spacer()
+            Button(action: {
+                self.showSheet.toggle()
+                self.sheetSelection = "select_placelist"
+            }) {
+                Text("1. Select a placelist you want to explore")
+            }.padding()
+            Button(action: {
+                self.exploreModel.startExploreWithEmptyList()
+            }) {
+                Text("2. Create an empty explore queue and add places by yourself")
+            }.padding()
+            Spacer()
+        }
+    }
+}
 
 struct ExploreSettingsButton: View {
     @Binding var showSheet: Bool
@@ -184,4 +247,3 @@ struct ExploreMapView : UIViewRepresentable {
         
     }
 }
-

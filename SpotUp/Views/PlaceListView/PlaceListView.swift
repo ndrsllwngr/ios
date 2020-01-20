@@ -14,7 +14,7 @@ struct PlaceListView: View {
     var placeListId: String
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestorePlaceList = FirestorePlaceList()
+    @ObservedObject var firestorePlaceList: FirestorePlaceList
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -27,6 +27,11 @@ struct PlaceListView: View {
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
+    init(placeListId: String) {
+        self.placeListId = placeListId
+        self.firestorePlaceList = FirestorePlaceList(placeListId: placeListId,
+                                                     ownUserId: FirebaseAuthentication.shared.currentUser!.uid)
+    }
     
     var body: some View {
         VStack {
@@ -43,14 +48,6 @@ struct PlaceListView: View {
                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                 .environmentObject(firestorePlaceList)
-                .onAppear {
-                    print("OnAppear PlaceListView: About to add firestorePlaceList Listener")
-                    self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
-            }
-            .onDisappear {
-                print("onDisappear PlaceListView: About to remove firestorePlaceList Listener")
-                self.firestorePlaceList.removePlaceListListener()
-            }
         }
         .sheet(isPresented: $showSheet) {
             if self.sheetSelection == "settings" {
@@ -170,7 +167,6 @@ struct PlaceListFollowButton: View {
             if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                    
                 }) {
                     Image(systemName: "heart")
                 }
@@ -196,6 +192,10 @@ struct PlaceListSettingsButton: View {
                 self.sheetSelection = "settings"
             }) {
                 Image(systemName: "ellipsis")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                
             }
         }
         
