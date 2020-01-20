@@ -11,7 +11,11 @@ class FirestorePlaceList: ObservableObject {
     @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
     
-    // Call when entering view (.onAppear()) to create listeners for all data needed
+    init(placeListId: String, ownUserId: String) {
+        self.addPlaceListListener(placeListId: placeListId, ownUserId: ownUserId)
+    }
+    
+    
     func addPlaceListListener(placeListId: String, ownUserId: String) {
         
         // Listener for placeList
@@ -23,7 +27,7 @@ class FirestorePlaceList: ObservableObject {
                 }
                 documentSnapshot.data().flatMap({ data in
                     let fetchedPlaceList = dataToPlaceList(data: data)
-                    print("placeListListener triggered: \(fetchedPlaceList.name)")
+                    //print("placeListListener triggered: \(fetchedPlaceList.name)")
                     self.placeList = fetchedPlaceList
                     self.isOwnedPlaceList = fetchedPlaceList.owner.id == ownUserId
                     
@@ -38,7 +42,6 @@ class FirestorePlaceList: ObservableObject {
                                 self.placeList.owner.username = username
                             })
                     }
-                    
                     
                     self.places = []
                     self.placeList.places
@@ -59,6 +62,7 @@ class FirestorePlaceList: ObservableObject {
         }
     }
     
+    // ToDo not needed?
     func removePlaceListListener() {
         self.placeListListener?.remove()
         self.ownerListener?.remove()

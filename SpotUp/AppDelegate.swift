@@ -1,5 +1,6 @@
 import UIKit
 import Firebase
+import FirebaseAuth
 import GoogleMaps
 import GooglePlaces
 
@@ -13,6 +14,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         GMSServices.provideAPIKey("AIzaSyBJgMwNKkk8i8Ue5TmmLHDrwoNyO5iYMMQ")
         GMSPlacesClient.provideAPIKey("AIzaSyBJgMwNKkk8i8Ue5TmmLHDrwoNyO5iYMMQ")
+        
+        // Firebase auth gets stored in the keychain and therefore will remain even if the app gets uninstalled. This fixes it by signing out on first open of app:
+        let userDefaults = UserDefaults.standard
+        if userDefaults.value(forKey: "appFirstTimeOpened") == nil {
+            //if app is first time opened then it will be nil
+            userDefaults.setValue(true, forKey: "appFirstTimeOpened")
+            // signOut from Firebase
+            try! Auth.auth().signOut()
+        }
         return true
     }
     

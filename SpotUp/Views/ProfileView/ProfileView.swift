@@ -14,13 +14,18 @@ struct ProfileView: View {
     var profileUserId: String
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestoreProfile = FirestoreProfile()
+    @ObservedObject var firestoreProfile: FirestoreProfile
     
     @State var isMyProfile: Bool = false
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
+    
+    init(profileUserId: String) {
+        self.profileUserId = profileUserId
+        self.firestoreProfile = FirestoreProfile(profileUserId: profileUserId)
+    }
     
     var body: some View {
         VStack {
@@ -30,13 +35,6 @@ struct ProfileView: View {
                 }
             }
             InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
-                .onAppear {
-                    self.firestoreProfile.addProfileListener(currentUserId: self.profileUserId)
-                    self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
-            }
-            .onDisappear {
-                self.firestoreProfile.removeProfileListener()
-            }
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
@@ -51,6 +49,9 @@ struct ProfileView: View {
             } else if self.sheetSelection == "image_picker" {
                 ImagePicker(imageType: .PROFILE_IMAGE)
             }
+        }
+        .onAppear {
+            self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
         }
     }
 }
