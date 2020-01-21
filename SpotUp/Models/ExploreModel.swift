@@ -173,7 +173,7 @@ class ExploreModel: ObservableObject {
     
     func loadPlaceImages() {
         if let exploreList = self.exploreList {
-            for (index, place) in exploreList.places.enumerated() {
+            exploreList.places.forEach { place in
                 if place.image == nil {
                     if let photos = place.place.photos {
                         getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
@@ -182,7 +182,7 @@ class ExploreModel: ObservableObject {
                                 return
                             }
                             if let photo = photo {
-                                if self.exploreList?.places.in != nil {
+                                if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                                     self.exploreList?.places[index].image = photo
                                 }
                             }
