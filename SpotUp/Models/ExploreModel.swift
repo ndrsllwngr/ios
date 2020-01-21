@@ -80,9 +80,10 @@ class ExploreModel: ObservableObject {
                 self.exploreList!.currentTarget = explorePlace
             }
         } else {
-            self.exploreList = ExploreList(places: [explorePlace])
+            self.exploreList = ExploreList(places: [explorePlace], currentTarget: explorePlace)
         }
         self.updateDistancesInPlaces()
+        self.loadPlaceImages()
     }
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
