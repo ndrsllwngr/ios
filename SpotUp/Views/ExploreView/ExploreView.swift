@@ -124,7 +124,7 @@ struct ExploreActiveView: View {
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             Section(header: Text("Already visited")) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                                 { place in
                                     ExplorePlaceVisitedRow(place: place,
                                                            placeIdToNavigateTo: self.$placeIdToNavigateTo,

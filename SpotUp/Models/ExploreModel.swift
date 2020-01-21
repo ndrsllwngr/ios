@@ -29,7 +29,7 @@ class ExploreModel: ObservableObject {
     
     func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
-        self.locationManager.stopUpdatingLocation()
+        self.locationManager.startUpdatingLocation()
     }
     
     func startExploreWithPlaceList(placeList: PlaceList, places: [GMSPlace]) {
@@ -38,7 +38,7 @@ class ExploreModel: ObservableObject {
             exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
             // Explore not active yet. Create new ExploreList
         } else {
-            self.locationManager.startUpdatingLocation()
+            self.locationManager.startUpdatingLocationAndNotifyExplore()
             if (places.isEmpty) {
                 self.exploreList = ExploreList()
             } else {
@@ -51,7 +51,7 @@ class ExploreModel: ObservableObject {
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
-        self.locationManager.startUpdatingLocation()
+        self.locationManager.startUpdatingLocationAndNotifyExplore()
         self.exploreList = ExploreList()
         let dispatchGroup = DispatchGroup()
         placeList.places.forEach {placeIDWithTimestamp in
