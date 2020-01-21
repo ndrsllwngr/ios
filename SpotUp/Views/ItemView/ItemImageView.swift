@@ -16,7 +16,7 @@ struct ItemImageView: View {
         .resizable()
         .clipShape(Rectangle())
         .scaledToFill()
-        .frame(minWidth:300, maxWidth: .infinity, minHeight: 300, maxHeight: 300)
+//        .frame(minWidth:300, maxWidth: .infinity, minHeight: 300, maxHeight: 300)
            
     }
 }

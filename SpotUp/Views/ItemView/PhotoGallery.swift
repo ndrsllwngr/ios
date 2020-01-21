@@ -24,7 +24,10 @@ class Gallery:ObservableObject{
                     }
                     if let photo = photo {
                         self.gallery.append(photo)
-                        count+=1                    }
+                        count+=1
+                        print(count)
+                        
+                                           }
                 }
             }
             else {
