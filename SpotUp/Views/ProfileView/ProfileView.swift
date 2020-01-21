@@ -16,19 +16,13 @@ struct ProfileView: View {
     @Binding var tabSelection: Int
 
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestoreProfile: FirestoreProfile
+    @ObservedObject var firestoreProfile = FirestoreProfile()
     
     @State var isMyProfile: Bool = false
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
-    
-    init(profileUserId: String, tabSelection: Binding<Int>) {
-        self.profileUserId = profileUserId
-        self._tabSelection = tabSelection
-        self.firestoreProfile = FirestoreProfile(profileUserId: profileUserId)
-    }
     
     var body: some View {
         VStack {
@@ -54,7 +48,12 @@ struct ProfileView: View {
             }
         }
         .onAppear {
+            print("On Appear profile")
             self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
+            self.firestoreProfile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
+        }
+        .onDisappear {
+            self.firestoreProfile.removeProfileListener()
         }
     }
 }

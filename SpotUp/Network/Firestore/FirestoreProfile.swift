@@ -11,10 +11,6 @@ class FirestoreProfile: ObservableObject {
     @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []
     
-    init(profileUserId: String) {
-        self.addProfileListener(currentUserId: profileUserId)
-    }
-    
     // Call when entering view (.onAppear()) to create listeners for all data needed
     func addProfileListener(currentUserId: String) {
         // Listener for my user
@@ -44,7 +40,6 @@ class FirestoreProfile: ObservableObject {
             }
             for (i, placeList) in self.placeLists.enumerated() {
                 // Listener for owners of these lists (basically myself)
-                self.listOwnerListeners = []
                 self.listOwnerListeners.append(FirestoreConnection.shared.getUsersRef().document(placeList.owner.id).addSnapshotListener { documentSnapshot, error in
                     guard let documentSnapshot = documentSnapshot else {
                         print("Error retrieving user")

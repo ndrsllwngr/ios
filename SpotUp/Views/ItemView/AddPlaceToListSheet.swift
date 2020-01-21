@@ -17,14 +17,7 @@ struct AddPlaceToListSheet: View {
     @Binding var showSheet: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var profile: FirestoreProfile
-    
-    init(place: GMSPlace, placeImage: Binding<UIImage?>, showSheet: Binding<Bool>) {
-        self.place = place
-        self._placeImage = placeImage
-        self._showSheet = showSheet
-        self.profile = FirestoreProfile(profileUserId: FirebaseAuthentication.shared.currentUser!.uid)
-    }
+    @ObservedObject var profile = FirestoreProfile()
     
     var body: some View {
         VStack {

@@ -11,11 +11,6 @@ class FirestorePlaceList: ObservableObject {
     @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
     
-    init(placeListId: String, ownUserId: String) {
-        self.addPlaceListListener(placeListId: placeListId, ownUserId: ownUserId)
-    }
-    
-    
     func addPlaceListListener(placeListId: String, ownUserId: String) {
         
         // Listener for placeList
