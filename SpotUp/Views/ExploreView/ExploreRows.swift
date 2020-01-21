@@ -42,7 +42,7 @@ struct CurrentTargetRow: View {
                             }
                             HStack {
                                 Button(action: {
-                                    self.exploreModel.markPlaceAsVisited(place: self.exploreModel.exploreList!.currentTarget!)
+                                    self.exploreModel.markPlaceAsVisited(self.exploreModel.exploreList!.currentTarget!)
                                 }) {
                                     VStack {
                                         Image(systemName: "mappin.and.ellipse")
@@ -191,7 +191,7 @@ struct ExplorePlaceVisitedRow: View {
                 }
                 .frame(width: metrics.size.width * 0.2)
                 .onTapGesture {
-                    self.exploreModel.markPlaceAsUnvisited(place: self.place)
+                    self.exploreModel.markPlaceAsUnvisited(self.place)
                 }
             }.foregroundColor(Color.gray)
         }
