@@ -14,38 +14,53 @@ struct TabBarView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     @State var selection = 0
     
-    init() {
-        UITabBar.appearance().tintColor = UIColor.red
-        UITabBar.appearance().backgroundColor = UIColor.red
-    }
-    
     var body: some View {
         GeometryReader { metrics in
             ZStack(alignment: .bottom) {
-                TabView(selection: self.$selection) {
-                    NavigationView {
-                        HomeView()
+                VStack {
+                    if (self.selection == 0) {
+                        NavigationView {
+                            HomeView(tabSelection: self.$selection)
+                        }
+                        
+                    } else if (self.selection == 1) {
+                        NavigationView {
+                            ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid, tabSelection: self.$selection)
+                        }
+                    } else if (self.selection == 2) {
+                        NavigationView {
+                            ExploreView()
+                        }
                     }
-                    .tabItem({
-                        Image(systemName: self.selection == 0 ? "magnifyingglass" : "magnifyingglass")
+                    Spacer()
+
+                }
+                HStack {
+                    Spacer()
+                    VStack {
+                        Image(systemName: self.selection == 0 ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
                         Text("Search")
-                    }).tag(0)
-                    NavigationView {
-                        ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid)
+                    }.onTapGesture {
+                        self.selection = 0
                     }
-                    .tabItem({
+                    Spacer()
+                    VStack {
                         Image(systemName: self.selection == 1 ? "person.fill" : "person")
                         Text("Profil")
-                    }).tag(1)
-                    NavigationView {
-                        ExploreView()
+                    }.onTapGesture {
+                        self.selection = 1
                     }
-                    .tabItem({
+                    Spacer()
+                    VStack {
                         Image(systemName: self.selection == 2 ? "map.fill" : "map")
                         Text("Explore")
-                    }).tag(2)
+                    }.onTapGesture {
+                        self.selection = 2
+                    }
+                    Spacer()
                 }
-                .accentColor(.black)
+                .frame(width: metrics.size.width, height: 49)
+                .background(Color.red)
                 if (self.exploreModel.exploreList != nil && self.selection != 2) {
                     ExploreIsActiveBar()
                         .frame(width: metrics.size.width, height: 49)
