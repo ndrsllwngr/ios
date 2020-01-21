@@ -60,7 +60,11 @@ struct PlaceListView: View {
             }
         }
         .onAppear {
+            print("PlaceListView() - onAppear()")
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
+        }
+        .onDisappear {
+            self.firestorePlaceList.removePlaceListListener()
         }
     }
 }
