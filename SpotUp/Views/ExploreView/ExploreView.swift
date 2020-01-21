@@ -42,6 +42,7 @@ struct ExploreView: View {
             
         }
         .onAppear{
+            self.exploreModel.locationManagerBeginNotifyingExplore()
             self.exploreModel.updateLastOpenedAt()
             self.exploreModel.updateDistancesInPlacesAndSetCurrentTarget()
             self.exploreModel.loadPlaceImages()
