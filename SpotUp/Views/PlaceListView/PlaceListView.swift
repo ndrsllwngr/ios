@@ -16,7 +16,7 @@ struct PlaceListView: View {
     @Binding var tabSelection: Int
 
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestorePlaceList: FirestorePlaceList
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -29,12 +29,6 @@ struct PlaceListView: View {
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
-    init(placeListId: String, tabSelection: Binding<Int>) {
-        self.placeListId = placeListId
-        self._tabSelection = tabSelection
-        self.firestorePlaceList = FirestorePlaceList(placeListId: placeListId,
-                                                     ownUserId: FirebaseAuthentication.shared.currentUser!.uid)
-    }
     
     var body: some View {
         VStack {
@@ -64,6 +58,9 @@ struct PlaceListView: View {
                                image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
             }
+        }
+        .onAppear {
+            self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
         }
     }
 }
