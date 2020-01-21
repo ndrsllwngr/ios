@@ -38,6 +38,8 @@ class ExploreModel: ObservableObject {
         // Explore already active: Append places
         if (self.exploreList != nil) {
             exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
+            self.updateDistancesInPlacesAndSetCurrentTarget()
+            self.loadPlaceImages()
             // Explore not active yet. Create new ExploreList
         } else {
             self.locationManager.startUpdatingLocation()
@@ -49,8 +51,6 @@ class ExploreModel: ObservableObject {
                 self.exploreList = ExploreList(places: explorePlaces)
             }
         }
-        self.updateDistancesInPlacesAndSetCurrentTarget()
-        self.loadPlaceImages()
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
