@@ -47,6 +47,10 @@ struct ExploreView: View {
             self.exploreModel.updateDistancesInPlacesAndSetCurrentTarget()
             self.exploreModel.loadPlaceImages()
         }
+        .onDisappear() {
+            self.exploreModel.locationManagerStopNotifyingExplore()
+        }
+
         .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
                 ExploreSettingsSheet(showSheet: self.$showSheet)

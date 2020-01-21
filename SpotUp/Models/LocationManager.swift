@@ -32,6 +32,10 @@ class LocationManager: NSObject, ObservableObject {
         self.notifyExplore = true
     }
     
+    func stopNotifyingExplore() {
+        self.notifyExplore = false
+    }
+    
     func stopUpdatingLocation() {
         print("stop updating location")
         self.locationManager.stopUpdatingLocation()

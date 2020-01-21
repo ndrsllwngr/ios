@@ -25,7 +25,7 @@ class ExploreModel: ObservableObject {
     var locationManager = LocationManager()
     @Published var exploreList: ExploreList? = nil
     
-    @Published var initializingExplore: Bool = false
+    @Published var fetchingPlacesForExplore: Bool = false
     
     private init(){}
     
@@ -56,9 +56,9 @@ class ExploreModel: ObservableObject {
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
         self.locationManager.startUpdatingLocation()
         self.locationManager.beginNotifyingExplore()
-        self.initializingExplore = true
         self.exploreList = ExploreList()
         let dispatchGroup = DispatchGroup()
+        self.fetchingPlacesForExplore = true
         placeList.places.forEach {placeIDWithTimestamp in
             dispatchGroup.enter()
             getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
@@ -75,7 +75,7 @@ class ExploreModel: ObservableObject {
         }
         
         dispatchGroup.notify(queue: .main) {
-            self.initializingExplore = false
+            self.fetchingPlacesForExplore = false
             self.updateDistancesInPlacesAndSetCurrentTarget()
             self.loadPlaceImages()
             self.updateLastOpenedAt()
@@ -159,7 +159,7 @@ class ExploreModel: ObservableObject {
             // 4. Handle current target
             
             // a.) If no currentTarget pushed manually by user set current target (which is the next nearst not visited place)
-            if (!self.initializingExplore && exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
+            if (!self.fetchingPlacesForExplore && exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
                 // Else also update distance currentTarget
                 // b.) Update distance in current target
@@ -168,6 +168,7 @@ class ExploreModel: ObservableObject {
                                                                                   location: location)
                 }
             }
+            self.fetchingPlacesForExplore = false
         }
     }
     
@@ -182,7 +183,7 @@ class ExploreModel: ObservableObject {
                                 return
                             }
                             if let photo = photo {
-                                if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
+                                if let index = exploreList.places.firstIndex(where: {$0.id == place.id}) {
                                     self.exploreList?.places[index].image = photo
                                 }
                             }
@@ -225,6 +226,13 @@ class ExploreModel: ObservableObject {
             self.locationManager.beginNotifyingExplore()
         }
     }
+    
+    func locationManagerStopNotifyingExplore() {
+        if self.exploreList != nil {
+            self.locationManager.stopNotifyingExplore()
+        }
+    }
+    
 }
 
 func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation) -> CLLocationDistance {
