@@ -8,6 +8,7 @@ struct ExploreList: Equatable {
 }
 
 struct ExplorePlace: Equatable, Hashable {
+    var id: String = UUID().uuidString
     var place: GMSPlace
     var image: UIImage? = nil
     var distance: CLLocationDistance? = nil
@@ -39,7 +40,7 @@ class ExploreModel: ObservableObject {
             if (places.isEmpty) {
                 self.exploreList = ExploreList()
             } else {
-                let explorePlaces =  places.map{return ExplorePlace(place: $0)}
+                let explorePlaces = places.map{return ExplorePlace(place: $0)}
                 self.exploreList = ExploreList(places: explorePlaces)
             }
         }
@@ -88,10 +89,10 @@ class ExploreModel: ObservableObject {
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
         if let exploreList = self.exploreList {
-            if let index = exploreList.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = exploreList.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places.remove(at: index)
             }
-            if (place.place == exploreList.currentTarget?.place) {
+            if (place.id == exploreList.currentTarget?.id) {
                 self.exploreList?.currentTarget = nil
                 updateDistancesInPlaces()
             }
@@ -107,10 +108,10 @@ class ExploreModel: ObservableObject {
         self.exploreList?.currentTarget = place
     }
     
-    func markPlaceAsVisited(place: ExplorePlace) {
+    func markPlaceAsVisited(_ place: ExplorePlace) {
         if self.exploreList != nil {
             self.exploreList!.currentTarget = nil
-            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places[index].visited = true
                 self.exploreList!.places[index].visited_at = Date.init()
             }
@@ -118,9 +119,9 @@ class ExploreModel: ObservableObject {
         }
     }
     
-    func markPlaceAsUnvisited(place: ExplorePlace) {
+    func markPlaceAsUnvisited(_ place: ExplorePlace) {
         if self.exploreList != nil {
-            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places[index].visited = false
                 self.exploreList!.places[index].visited_at = nil
             }
@@ -158,7 +159,7 @@ class ExploreModel: ObservableObject {
     
     func loadPlaceImages() {
         if let exploreList = self.exploreList {
-            for (i, place) in exploreList.places.enumerated() {
+            for (index, place) in exploreList.places.enumerated() {
                 if let photos = place.place.photos {
                     getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                         if let error = error {
@@ -166,8 +167,8 @@ class ExploreModel: ObservableObject {
                             return
                         }
                         if let photo = photo {
-                            if self.exploreList?.places[i] != nil {
-                                self.exploreList?.places[i].image = photo
+                            if self.exploreList?.places[index] != nil {
+                                self.exploreList?.places[index].image = photo
                             }
                         }
                     }

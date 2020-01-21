@@ -109,8 +109,9 @@ struct ExploreActiveView: View {
                                       imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     List {
                         Section (header: Text("Travel Queue")) {
-                            if (!exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}.isEmpty) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.place != exploreModel.exploreList!.currentTarget?.place && !$0.visited}, id: \.self) { place in
+                            if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
+                                ForEach (exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                                { place in
                                     ExplorePlaceRow(place: place,
                                                     showSheet: self.$showSheet,
                                                     sheetSelection: self.$sheetSelection,
@@ -128,7 +129,8 @@ struct ExploreActiveView: View {
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             Section(header: Text("Already visited")) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) { place in
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                                { place in
                                     ExplorePlaceVisitedRow(place: place,
                                                            placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                                            goToPlace: self.$goToPlace)
@@ -238,7 +240,7 @@ struct ExploreMapView : UIViewRepresentable {
             
             if(place.visited){
                 marker.icon = GMSMarker.markerImage(with: .gray)
-            } else if (place.place == self.exploreList.currentTarget?.place) {
+            } else if (place.id == self.exploreList.currentTarget?.id) {
                 marker.icon = GMSMarker.markerImage(with: .green)
             } else {
                 marker.icon = GMSMarker.markerImage(with: .red)
