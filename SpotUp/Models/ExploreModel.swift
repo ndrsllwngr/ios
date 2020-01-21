@@ -22,13 +22,14 @@ class ExploreModel: ObservableObject {
     
     static let shared = ExploreModel()
     
-    @Published var locationManager = LocationManager()
+    var locationManager = LocationManager()
     @Published var exploreList: ExploreList? = nil
     
     private init(){}
     
     func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
+        self.locationManager.stopUpdatingLocation()
     }
     
     func startExploreWithPlaceList(placeList: PlaceList, places: [GMSPlace]) {
@@ -37,6 +38,7 @@ class ExploreModel: ObservableObject {
             exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
             // Explore not active yet. Create new ExploreList
         } else {
+            self.locationManager.startUpdatingLocation()
             if (places.isEmpty) {
                 self.exploreList = ExploreList()
             } else {
@@ -49,6 +51,7 @@ class ExploreModel: ObservableObject {
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
+        self.locationManager.startUpdatingLocation()
         self.exploreList = ExploreList()
         let dispatchGroup = DispatchGroup()
         placeList.places.forEach {placeIDWithTimestamp in
@@ -81,6 +84,7 @@ class ExploreModel: ObservableObject {
                 self.exploreList!.currentTarget = explorePlace
             }
         } else {
+            self.locationManager.startUpdatingLocation()
             self.exploreList = ExploreList(places: [explorePlace], currentTarget: explorePlace)
         }
         self.updateDistancesInPlaces()
@@ -100,6 +104,7 @@ class ExploreModel: ObservableObject {
     }
     
     func quitExplore() {
+        self.locationManager.stopUpdatingLocation()
         self.exploreList = nil
     }
     

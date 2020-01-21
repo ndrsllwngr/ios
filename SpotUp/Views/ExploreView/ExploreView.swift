@@ -42,14 +42,9 @@ struct ExploreView: View {
             
         }
         .onAppear{
-                self.exploreModel.locationManager.startUpdatingLocation()
-                self.exploreModel.updateLastOpenedAt()
-                self.exploreModel.loadPlaceImages()
-                self.exploreModel.updateDistancesInPlaces()
-        }
-        .onDisappear {
-            self.exploreModel.locationManager.stopUpdatingLocation()
-            
+            self.exploreModel.updateLastOpenedAt()
+            self.exploreModel.loadPlaceImages()
+            self.exploreModel.updateDistancesInPlaces()
         }
         .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
