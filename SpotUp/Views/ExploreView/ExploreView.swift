@@ -43,8 +43,8 @@ struct ExploreView: View {
         }
         .onAppear{
             self.exploreModel.updateLastOpenedAt()
+            self.exploreModel.updateDistancesInPlacesAndSetCurrentTarget()
             self.exploreModel.loadPlaceImages()
-            self.exploreModel.updateDistancesInPlaces()
         }
         .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
