@@ -6,6 +6,7 @@ class LocationManager: NSObject, ObservableObject {
     
     private let locationManager = CLLocationManager()
     let objectWillChange = PassthroughSubject<Void, Never>()
+    var notifyExplore: Bool = false
     
     @Published var status: CLAuthorizationStatus? {
         willSet { objectWillChange.send() }
@@ -26,6 +27,11 @@ class LocationManager: NSObject, ObservableObject {
         self.locationManager.startUpdatingLocation()
     }
     
+    func startUpdatingLocationAndNotifyExplore() {
+        self.locationManager.startUpdatingLocation()
+        self.notifyExplore = true
+    }
+    
     func stopUpdatingLocation() {
         print("stop updating location")
         self.locationManager.stopUpdatingLocation()
@@ -41,7 +47,10 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         self.location = location
-        //ExploreModel.shared.updateDistancesInPlaces()
+        if (self.notifyExplore) {
+            ExploreModel.shared.updateDistancesInPlaces()
+            self.notifyExplore = false
+        }
     }
 }
 
