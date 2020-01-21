@@ -27,7 +27,7 @@ struct PlaceRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                    PlaceRowImage(image: self.image)
                     Text(self.gmsPlaceWithTimestamp.gmsPlace.name != nil ? self.gmsPlaceWithTimestamp.gmsPlace.name! : "")
                     Spacer()
                 }
@@ -67,11 +67,12 @@ struct PlaceRow: View {
 }
 
 struct PlaceRowImage: View {
-    var image: UIImage
+    var image: UIImage?
     var body: some View {
-        Image(uiImage: image)
+        Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
             .renderingMode(.original)
             .resizable()
+            .animation(.default)
             .clipShape(Rectangle())
             .scaledToFill()
             .frame(width: 50, height: 50)

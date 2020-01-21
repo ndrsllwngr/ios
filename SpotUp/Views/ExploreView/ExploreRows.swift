@@ -28,7 +28,7 @@ struct CurrentTargetRow: View {
                     GeometryReader { metrics in
                         HStack(alignment: .center) {
                             HStack {
-                                PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
+                                PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
                                 VStack (alignment: .leading) {
                                     Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
                                     Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
@@ -108,7 +108,7 @@ struct ExplorePlaceRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
+                    PlaceRowImage(image: self.place.image)
                     VStack (alignment: .leading) {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
@@ -169,7 +169,7 @@ struct ExplorePlaceVisitedRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.place.image != nil ? self.place.image! : UIImage())
+                    PlaceRowImage(image: self.place.image)
                         .opacity(0.5)
                     VStack (alignment: .leading){
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
