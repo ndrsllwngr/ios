@@ -20,11 +20,12 @@ class LocationManager: NSObject, ObservableObject {
     override init() {
         super.init()
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         self.locationManager.requestWhenInUseAuthorization()
     }
     
     func startUpdatingLocation() {
+        self.locationManager.pausesLocationUpdatesAutomatically = true
         self.locationManager.startUpdatingLocation()
     }
     
