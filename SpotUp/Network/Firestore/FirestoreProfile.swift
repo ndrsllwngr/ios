@@ -4,9 +4,9 @@ import GooglePlaces
 
 class FirestoreProfile: ObservableObject {
     
-    @Published var userProfileListener: ListenerRegistration? = nil
-    @Published var placeListsListener: ListenerRegistration? = nil
-    @Published var listOwnerListeners: [ListenerRegistration?] = []
+    var userProfileListener: ListenerRegistration? = nil
+    var placeListsListener: ListenerRegistration? = nil
+    var listOwnerListeners: [ListenerRegistration?] = []
     
     @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []

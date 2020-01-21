@@ -4,6 +4,9 @@ import GooglePlaces
 import Combine
 
 class FirestoreSearch: ObservableObject {
+    var allAllUsersListener: ListenerRegistration? = nil
+    var allPublicPlaceListsListener: ListenerRegistration? = nil
+    
     let objectWillChange = ObservableObjectPublisher()
     @Published var allUsers: [User] = [] {
         didSet {
@@ -15,12 +18,9 @@ class FirestoreSearch: ObservableObject {
             objectWillChange.send()
         }
     }
-    @Published var allAllUsersListener: ListenerRegistration? = nil
-    @Published var allPublicPlaceListsListener: ListenerRegistration? = nil
     
     
     func addAllUsersListener() {
-        if(self.allAllUsersListener == nil){
             let ref = FirestoreConnection.shared.getUsersRef()
             self.allAllUsersListener = ref.addSnapshotListener{ querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
@@ -32,11 +32,10 @@ class FirestoreSearch: ObservableObject {
                     return dataToUser(data: data)
                 }
             }
-        }
+        
     }
     
     func addAllPublicPlaceListsListener() {
-        if(self.allPublicPlaceListsListener == nil){
             let ref =
                 FirestoreConnection.shared.getPlaceListsRef().whereField("is_public", isEqualTo: true)
             self.allPublicPlaceListsListener = ref.addSnapshotListener { querySnapshot, error in
@@ -49,19 +48,17 @@ class FirestoreSearch: ObservableObject {
                     return dataToPlaceList(data: data)
                 }
             }
-        }
+        
     }
     
     func removeAllUsersListener() {
         print("removeAllUsersListener()")
         self.allAllUsersListener?.remove()
-        self.allAllUsersListener = nil
-        self.allUsers = []
+        //self.allUsers = []
     }
     
     func removeAllPublicPlaceListsListener() {
         print("removeAllPublicPlaceListsListener()")
         self.allPublicPlaceListsListener?.remove()
-        self.allPublicPlaceListsListener = nil
     }
 }
