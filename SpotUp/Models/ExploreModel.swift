@@ -4,51 +4,61 @@ import GooglePlaces
 struct ExploreList: Equatable {
     var places: [ExplorePlace] = []
     var currentTarget: ExplorePlace? = nil
-    var lastOpenedAt: Date? = nil
+    var lastOpenedAt: Date = Date.init()
 }
 
 struct ExplorePlace: Equatable, Hashable {
+    var id: String = UUID().uuidString
     var place: GMSPlace
     var image: UIImage? = nil
     var distance: CLLocationDistance? = nil
     var visited: Bool = false
     var visited_at: Date? = nil
     var added_at: Date = Date.init()
+    var isNewPlace: Bool = true
 }
 
 class ExploreModel: ObservableObject {
     
     static let shared = ExploreModel()
     
-    @Published var locationManager = LocationManager()
+    var locationManager = LocationManager()
     @Published var exploreList: ExploreList? = nil
+    
+    @Published var fetchingPlacesForExplore: Bool = false
     
     private init(){}
     
     func startExploreWithEmptyList() {
         self.exploreList = ExploreList(places: [])
+        self.locationManager.startUpdatingLocation()
     }
     
     func startExploreWithPlaceList(placeList: PlaceList, places: [GMSPlace]) {
         // Explore already active: Append places
         if (self.exploreList != nil) {
             exploreList?.places.append(contentsOf: places.map{return ExplorePlace(place: $0)})
+            self.updateDistancesInPlacesAndSetCurrentTarget()
+            self.loadPlaceImages()
             // Explore not active yet. Create new ExploreList
         } else {
+            self.locationManager.startUpdatingLocation()
+            self.locationManager.beginNotifyingExplore()
             if (places.isEmpty) {
                 self.exploreList = ExploreList()
             } else {
-                let explorePlaces =  places.map{return ExplorePlace(place: $0)}
+                let explorePlaces = places.map{return ExplorePlace(place: $0)}
                 self.exploreList = ExploreList(places: explorePlaces)
             }
         }
-        self.updateDistancesInPlaces()
-        self.loadPlaceImages()
     }
     
     func startExploreWithPlaceListAndFetchPlaces(placeList: PlaceList) {
+        self.locationManager.startUpdatingLocation()
+        self.locationManager.beginNotifyingExplore()
         self.exploreList = ExploreList()
         let dispatchGroup = DispatchGroup()
+        self.fetchingPlacesForExplore = true
         placeList.places.forEach {placeIDWithTimestamp in
             dispatchGroup.enter()
             getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
@@ -65,8 +75,10 @@ class ExploreModel: ObservableObject {
         }
         
         dispatchGroup.notify(queue: .main) {
-            self.updateDistancesInPlaces()
+            self.fetchingPlacesForExplore = false
+            self.updateDistancesInPlacesAndSetCurrentTarget()
             self.loadPlaceImages()
+            self.updateLastOpenedAt()
         }
     }
     
@@ -78,24 +90,26 @@ class ExploreModel: ObservableObject {
                 self.exploreList!.currentTarget = explorePlace
             }
         } else {
-            self.exploreList = ExploreList(places: [explorePlace])
+            self.locationManager.startUpdatingLocation()
+            self.exploreList = ExploreList(places: [explorePlace], currentTarget: explorePlace)
         }
-        self.updateDistancesInPlaces()
-    }
+        self.updateDistancesInPlacesAndSetCurrentTarget()
+        self.loadPlaceImages()    }
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
         if let exploreList = self.exploreList {
-            if let index = exploreList.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = exploreList.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places.remove(at: index)
             }
-            if (place.place == exploreList.currentTarget?.place) {
+            if (place.id == exploreList.currentTarget?.id) {
                 self.exploreList?.currentTarget = nil
-                updateDistancesInPlaces()
+                updateDistancesInPlacesAndSetCurrentTarget()
             }
         }
     }
     
     func quitExplore() {
+        self.locationManager.stopUpdatingLocation()
         self.exploreList = nil
     }
     
@@ -104,33 +118,33 @@ class ExploreModel: ObservableObject {
         self.exploreList?.currentTarget = place
     }
     
-    func markPlaceAsVisited(place: ExplorePlace) {
+    func markPlaceAsVisited(_ place: ExplorePlace) {
         if self.exploreList != nil {
             self.exploreList!.currentTarget = nil
-            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places[index].visited = true
                 self.exploreList!.places[index].visited_at = Date.init()
             }
-            self.updateDistancesInPlaces()
+            self.updateDistancesInPlacesAndSetCurrentTarget()
         }
     }
     
-    func markPlaceAsUnvisited(place: ExplorePlace) {
+    func markPlaceAsUnvisited(_ place: ExplorePlace) {
         if self.exploreList != nil {
-            if let index = self.exploreList!.places.firstIndex(where: {$0.place == place.place}) {
+            if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places[index].visited = false
                 self.exploreList!.places[index].visited_at = nil
             }
-            self.updateDistancesInPlaces()
+            self.updateDistancesInPlacesAndSetCurrentTarget()
         }
     }
     
-    func updateDistancesInPlaces() {
+    func updateDistancesInPlacesAndSetCurrentTarget() {
         // if explore active and we already have a location
         if let exploreList = self.exploreList, let location =
             self.locationManager.location {
             print("Begin updating distances in explore places")
-            // 1. calculate distance to my location for all places
+            // 1. Calculate distance to my location for all places
             let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
                 var mutablePlace = place
                 let distance = calculateDistance(coordinate: place.place.coordinate,
@@ -138,33 +152,40 @@ class ExploreModel: ObservableObject {
                 mutablePlace.distance = distance
                 return mutablePlace
             }
-                // 2. sort places based on distance
+                // 2. Sort places based on distance
                 .sorted{(place1, place2) in place1.distance! < place2.distance!}
+            // 3. Set places sorted by distance
             self.exploreList!.places = explorePlaces
-            // If no currentTarget set by user yet set current target (which is the next nearst not visited place)
-            if (exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
+            // 4. Handle current target
+            
+            // a.) If no currentTarget pushed manually by user set current target (which is the next nearst not visited place)
+            if (!self.fetchingPlacesForExplore && exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
                 // Else also update distance currentTarget
-            } else if (exploreList.currentTarget != nil) {
-                // also update currentTarget
-                self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
-                                                                              location: location)
+                // b.) Update distance in current target
+                if (exploreList.currentTarget != nil) {
+                    self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
+                                                                                  location: location)
+                }
             }
+            self.fetchingPlacesForExplore = false
         }
     }
     
     func loadPlaceImages() {
         if let exploreList = self.exploreList {
-            for (i, place) in exploreList.places.enumerated() {
-                if let photos = place.place.photos {
-                    getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
-                        if let error = error {
-                            print("Error loading photo metadata: \(error.localizedDescription)")
-                            return
-                        }
-                        if let photo = photo {
-                            if self.exploreList?.places[i] != nil {
-                                self.exploreList?.places[i].image = photo
+            exploreList.places.forEach { place in
+                if place.image == nil {
+                    if let photos = place.place.photos {
+                        getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
+                            if let error = error {
+                                print("Error loading photo metadata: \(error.localizedDescription)")
+                                return
+                            }
+                            if let photo = photo {
+                                if let index = exploreList.places.firstIndex(where: {$0.id == place.id}) {
+                                    self.exploreList?.places[index].image = photo
+                                }
                             }
                         }
                     }
@@ -187,22 +208,31 @@ class ExploreModel: ObservableObject {
     }
     
     func updateLastOpenedAt() {
-        if self.exploreList != nil {
+        if let exploreList = self.exploreList {
+            for (index, place) in exploreList.places.enumerated() {
+                if (place.added_at > exploreList.lastOpenedAt) {
+                    self.exploreList!.places[index].isNewPlace = true
+                } else {
+                    self.exploreList!.places[index].isNewPlace = false
+                }
+                
+            }
             self.exploreList!.lastOpenedAt = Date.init()
         }
     }
     
-    func calculateIsNewPlace(explorePlace: ExplorePlace) -> Bool {
-        if let exploreList = self.exploreList {
-            if let lastOpenedAt = exploreList.lastOpenedAt {
-                return lastOpenedAt < explorePlace.added_at
-            } else {
-                return true
-            }
-        } else {
-            return false
+    func locationManagerBeginNotifyingExplore() {
+        if self.exploreList != nil {
+            self.locationManager.beginNotifyingExplore()
         }
     }
+    
+    func locationManagerStopNotifyingExplore() {
+        if self.exploreList != nil {
+            self.locationManager.stopNotifyingExplore()
+        }
+    }
+    
 }
 
 func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation) -> CLLocationDistance {
