@@ -66,7 +66,7 @@ struct SelectPlaceListToExploreSheet: View {
         VStack {
             Text("Which of your Lists do you want to explore?")
             List {
-                ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
+                ForEach(profile.placeLists){ placeList in
                     Button(action: {
                         ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
                         self.showSheet.toggle()

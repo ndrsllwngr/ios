@@ -16,7 +16,7 @@ struct TabBarView: View {
     
     var body: some View {
         GeometryReader { metrics in
-            ZStack(alignment: .bottom) {
+            VStack {
                 VStack {
                     if (self.selection == 0) {
                         NavigationView {
@@ -33,7 +33,15 @@ struct TabBarView: View {
                         }
                     }
                     Spacer()
-
+                }
+                if (self.exploreModel.exploreList != nil && self.selection != 2) {
+                    ExploreIsActiveBar()
+                        .frame(width: metrics.size.width, height: 49)
+                        .background(Color.gray)
+                        //.offset(y: -49) // 49 is the exact height of the TabBar
+                        .onTapGesture {
+                            self.selection = 2
+                    }
                 }
                 HStack {
                     Spacer()
@@ -59,17 +67,8 @@ struct TabBarView: View {
                     }
                     Spacer()
                 }
-                .frame(width: metrics.size.width, height: 49)
+                .frame(width: metrics.size.width, height: 50)
                 .background(Color.red)
-                if (self.exploreModel.exploreList != nil && self.selection != 2) {
-                    ExploreIsActiveBar()
-                        .frame(width: metrics.size.width, height: 49)
-                        .background(Color.gray)
-                        .offset(y: -49) // 49 is the exact height of the TabBar
-                        .onTapGesture {
-                            self.selection = 2
-                    }
-                }
             }
         }
     }
