@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SearchResultsAccountsView: View {
     
+    @Binding var tabSelection: Int
     @EnvironmentObject var searchViewModel: SearchViewModel
     
     var body: some View {
@@ -11,7 +12,7 @@ struct SearchResultsAccountsView: View {
                     List {
                         Section(header: Text("Recent")) {
                             ForEach(searchViewModel.recentSearchFirebaseAccounts) {
-                                (user: User) in SingleRowAccount(user: user, showRecent: true).environmentObject(self.searchViewModel)
+                                (user: User) in SingleRowAccount(user: user, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -23,7 +24,7 @@ struct SearchResultsAccountsView: View {
             } else {
                 List {
                     ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) { (user: User) in
-                        SingleRowAccount(user: user).environmentObject(self.searchViewModel)
+                        SingleRowAccount(user: user, tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
                     }
                     Spacer()
                 }
@@ -36,6 +37,8 @@ struct SingleRowAccount: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
     var user: User
+    @Binding var tabSelection: Int
+
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
     @State var goToDestination: Bool = false
@@ -73,7 +76,7 @@ struct SingleRowAccount: View {
             //                .padding(.trailing)
             //            }
             if (self.goToDestination != false) {
-                NavigationLink(destination: ProfileView(profileUserId: user.id), tag: 1, selection: $selection) {
+                NavigationLink(destination: ProfileView(profileUserId: user.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
                     EmptyView()
                 }
             }
