@@ -42,6 +42,7 @@ func getPlaceIsOpenNow(isOpen:GMSPlaceOpenStatus)->String{
     return temp
 }
 
+
 func getPlacePriceLevel(priceLevel:GMSPlacesPriceLevel)->Int{
     var temp:Int
     switch priceLevel{
