@@ -3,8 +3,9 @@ import FirebaseFirestore
 import GooglePlaces
 
 class FirestoreFollowSheet: ObservableObject {
-    @Published var usersThatIAmFollowingListener: ListenerRegistration?
-    @Published var usersThatAreFollowingMeListener: ListenerRegistration?
+    var usersThatIAmFollowingListener: ListenerRegistration?
+    var usersThatAreFollowingMeListener: ListenerRegistration?
+    
     @Published var usersThatIAmFollowing: [User] = []
     @Published var usersThatAreFollowingMe: [User] = []
     

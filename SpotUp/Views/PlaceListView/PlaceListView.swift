@@ -12,8 +12,10 @@ struct PlaceListView: View {
     
     var placeListId: String
     
+    @Binding var tabSelection: Int
+
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var firestorePlaceList: FirestorePlaceList
+    @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
@@ -26,11 +28,6 @@ struct PlaceListView: View {
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
-    init(placeListId: String) {
-        self.placeListId = placeListId
-        self.firestorePlaceList = FirestorePlaceList(placeListId: placeListId,
-                                                     ownUserId: FirebaseAuthentication.shared.currentUser!.uid)
-    }
     
     var body: some View {
         VStack {
@@ -45,7 +42,8 @@ struct PlaceListView: View {
                                placeIdToNavigateTo: $placeIdToNavigateTo,
                                goToPlace: $goToPlace,
                                placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet,
+                               tabSelection: self.$tabSelection)
                 .environmentObject(firestorePlaceList)
         }
         .sheet(isPresented: $showSheet) {
@@ -59,6 +57,14 @@ struct PlaceListView: View {
                                image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
             }
+        }
+        .onAppear {
+            print("PlaceListView() - onAppear()")
+            self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
+        }
+        .onDisappear {
+            // ToDo: If don't remove the listener, the places in the list wouldn't reload on navigate back from itemView
+            //self.firestorePlaceList.removePlaceListListener()
         }
     }
 }
@@ -77,6 +83,8 @@ struct InnerPlaceListView: View {
     
     @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
     @Binding var imageForPlaceMenuSheet: UIImage?
+    
+    @Binding var tabSelection: Int
     
     @State private var selection = 0
     

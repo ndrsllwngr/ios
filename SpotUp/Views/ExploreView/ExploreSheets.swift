@@ -60,18 +60,13 @@ struct SelectPlaceListToExploreSheet: View {
     @Binding var showSheet: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var profile: FirestoreProfile
-    
-    init(showSheet: Binding<Bool>) {
-        self._showSheet = showSheet
-        self.profile = FirestoreProfile(profileUserId: FirebaseAuthentication.shared.currentUser!.uid)
-    }
+    @ObservedObject var profile = FirestoreProfile()
     
     var body: some View {
         VStack {
             Text("Which of your Lists do you want to explore?")
             List {
-                ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
+                ForEach(profile.placeLists){ placeList in
                     Button(action: {
                         ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
                         self.showSheet.toggle()
@@ -82,7 +77,7 @@ struct SelectPlaceListToExploreSheet: View {
             }
         }
         .onAppear {
-            self.profile.addProfileListener(currentUserId: self.firebaseAuthentication.currentUser!.uid)
+            self.profile.addProfileListener(profileUserId: self.firebaseAuthentication.currentUser!.uid)
         }
         .onDisappear {
             self.profile.removeProfileListener()

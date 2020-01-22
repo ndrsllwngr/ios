@@ -68,11 +68,12 @@ struct PlaceRow: View {
 }
 
 struct PlaceRowImage: View {
-    var image: UIImage
+    var image: UIImage?
     var body: some View {
-        Image(uiImage: image)
+        Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
             .renderingMode(.original)
             .resizable()
+            .animation(.default)
             .clipShape(Rectangle())
             .scaledToFill()
             .frame(width: 50, height: 50)
