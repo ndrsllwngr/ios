@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct SearchResultsPlaceListsView: View {
-    
+    @Binding var tabSelection: Int
+
     @EnvironmentObject var searchViewModel: SearchViewModel
     
     var body: some View {
@@ -11,7 +12,7 @@ struct SearchResultsPlaceListsView: View {
                     List {
                         Section(header: Text("Recent")) {
                             ForEach(searchViewModel.recentSearchFirebaseLists) {
-                                (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, showRecent: true).environmentObject(self.searchViewModel)
+                                (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -22,7 +23,7 @@ struct SearchResultsPlaceListsView: View {
                 }
             } else {
                 List { ForEach(searchViewModel.firestoreSearch.allPublicPlaceLists.filter{searchViewModel.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(searchViewModel.searchTerm)}) { (placeList: PlaceList) in
-                    SingleRowPlaceList(placeList: placeList).environmentObject(self.searchViewModel)
+                    SingleRowPlaceList(placeList: placeList, tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
                     }
                     Spacer()
                 }
@@ -35,6 +36,9 @@ struct SingleRowPlaceList: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
     var placeList: PlaceList
+    
+    @Binding var tabSelection: Int
+
     
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
@@ -74,7 +78,7 @@ struct SingleRowPlaceList: View {
             //                .padding(.trailing)
             //            }
             if (self.goToDestination != false) {
-                NavigationLink(destination: PlaceListView(placeListId: placeList.id), tag: 1, selection: $selection) {
+                NavigationLink(destination: PlaceListView(placeListId: placeList.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
                     EmptyView()
                     
                 }

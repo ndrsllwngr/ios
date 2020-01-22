@@ -4,7 +4,7 @@ import GooglePlaces
 struct ExploreList: Equatable {
     var places: [ExplorePlace] = []
     var currentTarget: ExplorePlace? = nil
-    var lastOpenedAt: Date? = nil
+    var lastOpenedAt: Date = Date.init()
 }
 
 struct ExplorePlace: Equatable, Hashable {
@@ -14,6 +14,7 @@ struct ExplorePlace: Equatable, Hashable {
     var visited: Bool = false
     var visited_at: Date? = nil
     var added_at: Date = Date.init()
+    var isNewPlace: Bool = true
 }
 
 class ExploreModel: ObservableObject {
@@ -67,6 +68,7 @@ class ExploreModel: ObservableObject {
         dispatchGroup.notify(queue: .main) {
             self.updateDistancesInPlaces()
             self.loadPlaceImages()
+            self.updateLastOpenedAt()
         }
     }
     
@@ -187,20 +189,16 @@ class ExploreModel: ObservableObject {
     }
     
     func updateLastOpenedAt() {
-        if self.exploreList != nil {
-            self.exploreList!.lastOpenedAt = Date.init()
-        }
-    }
-    
-    func calculateIsNewPlace(explorePlace: ExplorePlace) -> Bool {
         if let exploreList = self.exploreList {
-            if let lastOpenedAt = exploreList.lastOpenedAt {
-                return lastOpenedAt < explorePlace.added_at
-            } else {
-                return true
+            for (index, place) in exploreList.places.enumerated() {
+                if (place.added_at > exploreList.lastOpenedAt) {
+                    self.exploreList!.places[index].isNewPlace = true
+                } else {
+                    self.exploreList!.places[index].isNewPlace = false
+                }
+                
             }
-        } else {
-            return false
+            self.exploreList!.lastOpenedAt = Date.init()
         }
     }
 }
