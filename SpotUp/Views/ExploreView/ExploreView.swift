@@ -36,15 +36,22 @@ struct ExploreView: View {
                                   goToPlace: self.$goToPlace,
                                   placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                   imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
-                    .onAppear{
-                        self.exploreModel.loadPlaceImages()
-                        self.exploreModel.updateDistancesInPlaces()
-                }
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             }
             
-        }.sheet(isPresented: $showSheet) {
+        }
+        .onAppear{
+                self.exploreModel.locationManager.startUpdatingLocation()
+                self.exploreModel.updateLastOpenedAt()
+                self.exploreModel.loadPlaceImages()
+                self.exploreModel.updateDistancesInPlaces()
+        }
+        .onDisappear {
+            self.exploreModel.locationManager.stopUpdatingLocation()
+            
+        }
+        .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
                 ExploreSettingsSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "select_placelist") {
@@ -60,12 +67,7 @@ struct ExploreView: View {
         .navigationBarItems(trailing: HStack {
             ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
         })
-            .onDisappear {
-                if (self.exploreModel.exploreList != nil) {
-                    self.exploreModel.updateLastOpenedAt()
-                }
-        }
-        .padding()
+            .padding()
     }
 }
 

@@ -4,17 +4,12 @@ import GooglePlaces
 
 class FirestorePlaceList: ObservableObject {
     
-    @Published var placeListListener: ListenerRegistration? = nil
-    @Published var ownerListener: ListenerRegistration? = nil
+    var placeListListener: ListenerRegistration? = nil
+    var ownerListener: ListenerRegistration? = nil
     
     @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [], createdAt: Timestamp.init())
     @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
-    
-    init(placeListId: String, ownUserId: String) {
-        self.addPlaceListListener(placeListId: placeListId, ownUserId: ownUserId)
-    }
-    
     
     func addPlaceListListener(placeListId: String, ownUserId: String) {
         

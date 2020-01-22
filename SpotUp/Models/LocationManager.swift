@@ -20,7 +20,15 @@ class LocationManager: NSObject, ObservableObject {
       self.locationManager.delegate = self
       self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
       self.locationManager.requestWhenInUseAuthorization()
-      self.locationManager.startUpdatingLocation()
+    }
+    
+    func startUpdatingLocation() {
+        self.locationManager.startUpdatingLocation()
+    }
+    
+    func stopUpdatingLocation() {
+        print("stop updating loaction")
+        self.locationManager.stopUpdatingLocation()
     }
     
 }
@@ -33,7 +41,7 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         self.location = location
-        ExploreModel.shared.updateDistancesInPlaces()
+        //ExploreModel.shared.updateDistancesInPlaces()
     }
 }
 
