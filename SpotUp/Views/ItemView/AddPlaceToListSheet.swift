@@ -13,7 +13,7 @@ struct AddPlaceToListSheet: View {
     
     var place: GMSPlace
     
-    @Binding var placeImage: UIImage?
+    var placeImage: UIImage?
     @Binding var showSheet: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
