@@ -2,30 +2,35 @@ import Foundation
 import Combine
 
 class ProfileSettingsViewModel: ObservableObject {
-    // input
+    // INPUT
+    // 1)
     @Published var newUserName: String = ""
-    
+    //2)
     @Published var newEmail: String = ""
     @Published var currentPasswordChangeEmail: String = ""
-    
+    // 3)
     @Published var newPassword: String = ""
     @Published var currentPasswordChangePassword: String = ""
-    
+    // 4)
     @Published var currentPasswordDeleteAccount: String = ""
     
-    // output
+    // OUTPUT
+    // 1)
     @Published var usernameMessage = ""
     @Published var isValidUsername = false
-    
+    // 2)
     @Published var emailMessage = ""
     @Published var isValidEmail = false
-    
+    // 3)
     @Published var passwordMessage = ""
     @Published var isValidPassword = false
+    // 4)
+    @Published var deleteAccMessage = ""
+    @Published var isValidDeleteAcc = false
     
     private var cancellableSet: Set<AnyCancellable> = []
     
-    // USERNAME
+    // 1) USERNAME
     private var isUsernameEmptyPublisher: AnyPublisher<Bool, Never> {
         $newUserName
             .debounce(for: 0.8, scheduler: RunLoop.main)
@@ -68,7 +73,7 @@ class ProfileSettingsViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    // EMAIL
+    // 2) EMAIL
     private var isEmailEmptyPublisher: AnyPublisher<Bool, Never> {
         $newEmail
             .debounce(for: 0.8, scheduler: RunLoop.main)
@@ -118,7 +123,7 @@ class ProfileSettingsViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    // PASSWORD of EMAIL CHANGE
+    // 2) PASSWORD of EMAIL CHANGE
     private var isPasswordOfEmailEmptyPublisher: AnyPublisher<Bool, Never> {
         $currentPasswordChangeEmail
             .debounce(for: 0.8, scheduler: RunLoop.main)
@@ -161,7 +166,15 @@ class ProfileSettingsViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    // PASSWORD
+    private var totalValidityCheckChangeEmail: AnyPublisher<Bool, Never> {
+        Publishers.CombineLatest(isEmailValidPublisher, isPasswordOfEmailValidPublisher)
+            .map { emailIsValid, pwdIsValid in
+                return emailIsValid == .valid && pwdIsValid == .valid
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    // 3) PASSWORD CHANGE
     private var isPasswordEmptyPublisher: AnyPublisher<Bool, Never> {
         $newPassword
             .debounce(for: 0.8, scheduler: RunLoop.main)
@@ -217,7 +230,52 @@ class ProfileSettingsViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
+    // 4) DELETE ACCOUNT
+    private var isPasswordOfDeleteAccountEmptyPublisher: AnyPublisher<Bool, Never> {
+        $currentPasswordDeleteAccount
+            .debounce(for: 0.8, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .map { password in
+                return password == ""
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    private var isPasswordOfDeleteAccountMinLengthPublisher: AnyPublisher<Bool, Never> {
+        $currentPasswordDeleteAccount
+            .debounce(for: 0.8, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .map { password in
+                return password.count >= 6
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    enum PasswordOfDeleteAccountCheck {
+        case valid
+        case notLongEnough
+        case empty
+    }
+    
+    private var isPasswordOfDeleteAccountValidPublisher: AnyPublisher<PasswordOfDeleteAccountCheck, Never> {
+        Publishers.CombineLatest(isPasswordOfDeleteAccountEmptyPublisher, isPasswordOfDeleteAccountMinLengthPublisher)
+            .map { passwordIsEmpty, passwordIsMinLength in
+                if (passwordIsEmpty) {
+                    return .empty
+                }
+                else if (!passwordIsMinLength) {
+                    return .notLongEnough
+                }
+                else {
+                    return .valid
+                }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    
     init() {
+        // 1)
         isUsernameValidPublisher
             .receive(on: RunLoop.main)
             .map { usernameCheck in
@@ -246,6 +304,7 @@ class ProfileSettingsViewModel: ObservableObject {
         .assign(to: \.isValidUsername, on: self)
         .store(in: &cancellableSet)
         
+        // 2)
         isEmailValidPublisher
             .receive(on: RunLoop.main)
             .map { emailCheck in
@@ -261,6 +320,15 @@ class ProfileSettingsViewModel: ObservableObject {
         .assign(to: \.emailMessage, on: self)
         .store(in: &cancellableSet)
         
+        totalValidityCheckChangeEmail
+            .receive(on: RunLoop.main)
+            .map { emailAndPwdCheck in
+                return emailAndPwdCheck
+        }
+        .assign(to: \.isValidEmail, on: self)
+        .store(in: &cancellableSet)
+        
+        // 3)
         isPasswordValidPublisher
             .receive(on: RunLoop.main)
             .map { passwordCheck in
@@ -290,6 +358,36 @@ class ProfileSettingsViewModel: ObservableObject {
                 }
         }
         .assign(to: \.isValidPassword, on: self)
+        .store(in: &cancellableSet)
+        
+        // 4)
+        isPasswordOfDeleteAccountValidPublisher
+            .receive(on: RunLoop.main)
+            .map { passwordCheck in
+                switch passwordCheck {
+                case .empty:
+                    return ""
+                //                    return "Password must not be empty"
+                case .notLongEnough:
+                    return "Password must be at least 6 characters long"
+                default:
+                    return ""
+                }
+        }
+        .assign(to: \.deleteAccMessage, on: self)
+        .store(in: &cancellableSet)
+        
+        isPasswordOfDeleteAccountValidPublisher
+            .receive(on: RunLoop.main)
+            .map { pwdCheck in
+                switch pwdCheck {
+                case .valid:
+                    return true
+                default:
+                    return false
+                }
+        }
+        .assign(to: \.isValidDeleteAcc, on: self)
         .store(in: &cancellableSet)
     }
 }

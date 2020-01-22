@@ -11,27 +11,31 @@ import FirebaseFirestore
 struct CreatePlacelistSheet: View {
     var user: User
     @Binding var showSheet: Bool
-    @State private var placeListName: String = ""
+    
+    @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
+    
+//    @State private var placeListName: String = ""
     
     var body: some View {
         VStack(alignment: .center) {
             Text("Enter a name for your placelist")
             Spacer()
-            TextField("place list name", text: $placeListName)
+            TextField("Name", text: $createPlacelistViewModel.placelistName).autocapitalization(.none)
+            Text(createPlacelistViewModel.placelistNameMessage).foregroundColor(.red)
             HStack {
                 Button(action: {
                     self.showSheet.toggle()
                 }) {
-                    Text("cancel")
+                    Text("Cancel")
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id], createdAt:Timestamp())
+                    let newPlaceList = PlaceList(name: self.createPlacelistViewModel.placelistName, owner: self.user.toListOwner(), followerIds: [self.user.id], createdAt:Timestamp())
                     FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
-                    Text("create")
-                }
+                    Text("Create")
+                }.disabled(!self.createPlacelistViewModel.isValidplacelist)
             }
             .frame(width: 300, height: 100)
             Spacer()
@@ -51,19 +55,12 @@ struct ProfileSettingsSheet: View {
     
     @Binding var showSheet: Bool
     
-    @State private var newUserName: String = ""
-    @State private var newEmail: String = ""
-    @State private var currentPasswordChangeEmail: String = ""
-    @State private var newPassword: String = ""
-    @State private var currentPasswordChangePassword: String = ""
-    @State private var currentPasswordDeleteAccount: String = ""
-    
-    
     var body: some View {
         VStack (alignment: .leading) {
             Text(self.firestoreProfile.user.username)
             Spacer()
             Form {
+                // 1)
                 Section(footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
                     TextField("Username", text: $profileSettingsViewModel.newUserName)
                         .autocapitalization(.none)
@@ -74,6 +71,7 @@ struct ProfileSettingsSheet: View {
                         Text("Change username")
                     }.disabled(!self.profileSettingsViewModel.isValidUsername)
                 }
+                // 2)
                 Section(footer: Text(profileSettingsViewModel.emailMessage).foregroundColor(.red)) {
                     TextField("Email", text: $profileSettingsViewModel.newEmail)
                         .autocapitalization(.none)
@@ -83,6 +81,7 @@ struct ProfileSettingsSheet: View {
                         Text("Change email")
                     }.disabled(!self.profileSettingsViewModel.isValidEmail)
                 }
+                // 3)
                 Section(footer: Text(profileSettingsViewModel.passwordMessage).foregroundColor(.red)) {
                     SecureField("Password", text: $profileSettingsViewModel.newPassword)
                     SecureField("Password again", text: $profileSettingsViewModel.currentPasswordChangePassword)
@@ -91,7 +90,8 @@ struct ProfileSettingsSheet: View {
                         Text("Change password")
                     }.disabled(!self.profileSettingsViewModel.isValidPassword)
                 }
-                Section {
+                // 4)
+                Section(footer: Text(profileSettingsViewModel.deleteAccMessage).foregroundColor(.red)) {
                     SecureField("Password", text: $profileSettingsViewModel.currentPasswordDeleteAccount)
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -99,8 +99,9 @@ struct ProfileSettingsSheet: View {
                         FirebaseAuthentication.shared.deleteAccount(currentEmail: self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordDeleteAccount)
                     }) {
                         Text("Delete account").foregroundColor(.red)
-                    }
+                    }.disabled(!self.profileSettingsViewModel.isValidDeleteAcc)
                 }
+                // 5)
                 Section {
                     Button(action: {
                         self.presentationMode.wrappedValue.dismiss()
@@ -113,7 +114,6 @@ struct ProfileSettingsSheet: View {
         }.onAppear {
             self.profileSettingsViewModel.newUserName = self.firestoreProfile.user.username
             self.profileSettingsViewModel.newEmail = self.firebaseAuthentication.currentUser != nil ? "\(self.firebaseAuthentication.currentUser!.email)" : ""
-            self.newUserName = self.firestoreProfile.user.username
         }
 //        .padding()
     }
