@@ -20,13 +20,17 @@ class LocationManager: NSObject, ObservableObject {
     override init() {
         super.init()
         self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
     }
     
     func startUpdatingLocation() {
         self.locationManager.pausesLocationUpdatesAutomatically = true
-        self.locationManager.startUpdatingLocation()
+        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            self.locationManager.startMonitoringSignificantLocationChanges()
+        } else {
+            self.locationManager.startUpdatingLocation()
+        }
     }
     
     func beginNotifyingExplore() {
@@ -39,7 +43,11 @@ class LocationManager: NSObject, ObservableObject {
     
     func stopUpdatingLocation() {
         print("stop updating location")
-        self.locationManager.stopUpdatingLocation()
+        if CLLocationManager.significantLocationChangeMonitoringAvailable() {
+            self.locationManager.stopMonitoringSignificantLocationChanges()
+        } else {
+            self.locationManager.stopUpdatingLocation()
+        }
         self.notifyExplore = false
     }
     
