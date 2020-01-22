@@ -133,7 +133,7 @@ struct ExplorePlaceRow: View {
                 }
                 HStack {
                     Spacer()
-                    if (self.exploreModel.calculateIsNewPlace(explorePlace: self.place)) {
+                    if (self.place.isNewPlace) {
                         Image(systemName: "circle.fill")
                             .resizable()
                             .scaledToFit()
