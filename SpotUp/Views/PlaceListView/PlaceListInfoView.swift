@@ -47,7 +47,7 @@ struct PlaceListInfoView: View {
                         }
                         Spacer()
                         Button(action: {
-                            print("Explore")
+                            ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
                         }) {
                             VStack{
                                 Text("Explore")

@@ -85,7 +85,7 @@ struct InnerPlaceListView: View {
             VStack {
                 // Follow button only on foreign user profiles
                 PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
-                .padding()
+                    .padding()
                 
                 Picker(selection: $selection, label: Text("View")) {
                     Text("List").tag(0)
@@ -94,7 +94,7 @@ struct InnerPlaceListView: View {
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
             }
-                .padding(0)
+            .padding(0)
             .background(Color("background"))
             
             if selection == 0 {
@@ -109,16 +109,12 @@ struct InnerPlaceListView: View {
                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
                     
-                }.onAppear {
-                    UITableView.appearance().separatorStyle = .none
-                }
-                .onDisappear {
-                    UITableView.appearance().separatorStyle = .singleLine
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
+        .background(Color("background"))
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
             if (self.firestorePlaceList.isOwnedPlaceList) {
@@ -130,39 +126,7 @@ struct InnerPlaceListView: View {
     }
 }
 
-struct PlaceListInfoView: View {
-    
-    var placeListId: String
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    var body: some View {
-        VStack {
-            HStack {
-                FirebasePlaceListImage(imageUrl: self.firestorePlaceList.placeList.imageUrl).padding(.top)
-                VStack {
-                    Text(self.firestorePlaceList.placeList.name)
-                    HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                        HStack {
-                            Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
-                        }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
-                        }
-                    }
-                    Button(action: {
-                        ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
-                    }) {
-                        Text("Explore")
-                    }
-                }
-            }
-        }
-    }
-}
+
 
 struct PlaceListFollowButton: View {
     var placeListId: String
