@@ -64,7 +64,8 @@ struct PlaceListView: View {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
         }
         .onDisappear {
-            self.firestorePlaceList.removePlaceListListener()
+            // ToDo: If don't remove the listener, the places in the list wouldn't reload on navigate back from itemView
+            //self.firestorePlaceList.removePlaceListListener()
         }
     }
 }
