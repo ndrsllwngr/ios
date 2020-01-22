@@ -40,7 +40,6 @@ struct ItemView: View {
                     self.priceLevel = getPlacePriceLevel(priceLevel: place.priceLevel)
                     if let types = place.types{
                         self.type = parseType(types:types)}
-                    dump(place.openingHours)
                     print("The selected place is: \(String(describing: place.name))")
                 }
             }
@@ -51,13 +50,12 @@ struct ItemView: View {
 struct InnerItemView: View {
     var place: GMSPlace
     var isOpen: String
-    var priceLevel:Int
-    var type:String
-    var openingHoursText:[String]
-    @ObservedObject var photoGallery = Gallery()
-    @State var image: UIImage?
-    @State var image2: UIImage?
+    var priceLevel: Int
+    var type: String
+    var openingHoursText: [String]
+    @State var gallery: [UIImage] = []
     @State var showSheet = false
+
     
     
     var body: some View {
@@ -65,8 +63,8 @@ struct InnerItemView: View {
             VStack{
                 ZStack {
                     //---------------------------------------------
-                    GalleryView(gallery:photoGallery.gallery)
-                    .frame(width:UIScreen.main.bounds.width, height:300)
+                    GalleryView(photos: place.photos, gallery: self.$gallery)
+                        .frame(width:UIScreen.main.bounds.width, height:300)
                     //---------------------------------------------
                     //topbar info
                     HStack(){
@@ -76,8 +74,8 @@ struct InnerItemView: View {
                         //priceLevel
                         Spacer()
                         HStack{
-                        ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "eurosign.circle"), id: \.self) { sign in
-                            Image(systemName:sign)}
+                            ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "eurosign.circle"), id: \.self) { sign in
+                                Image(systemName:sign)}
                             
                         }
                         Spacer()
@@ -111,82 +109,91 @@ struct InnerItemView: View {
                 
                 //---------------------------------------------
                 //main info
-                    VStack(alignment:.leading, spacing: 10){
-                        Text(place.name != nil ? place.name! : "")
-                            .font(.title)
-                        Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
-                        Button(action:{
-                            if let phoneNumber = self.place.phoneNumber{
-                                let prefix = "tel://"
-                                let trimmed = phoneNumber.replacingOccurrences(of: " ", with: "")
-                                let tel = URL(string:(prefix + trimmed))
-                                UIApplication.shared.open(tel!)
-                            }
-                        }){Text("Call Now").foregroundColor(.red)}
-                        Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
-                        Button(action: {
-                            if let website = self.place.website {
-                                UIApplication.shared.open(website)
-                            }
-                        }){
-                            Text("Open Website").foregroundColor(.red)
+                VStack(alignment:.leading, spacing: 10){
+                    Text(place.name != nil ? place.name! : "")
+                        .font(.title)
+                    Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
+                    Button(action:{
+                        if let phoneNumber = self.place.phoneNumber{
+                            let prefix = "tel://"
+                            let trimmed = phoneNumber.replacingOccurrences(of: " ", with: "")
+                            let tel = URL(string:(prefix + trimmed))
+                            UIApplication.shared.open(tel!)
                         }
-                        Text(isOpen)}
-                        .frame(width:UIScreen.main.bounds.width-10, height:300)
-                    //---------------------------------------------
-                    //map
-                    VStack(alignment: .center){
-                            ItemMapView(coordinate: place.coordinate)}.cornerRadius(15)
-                                           .frame(width:UIScreen.main.bounds.width-10, height:220)
-                    //end
-                    //---------------------------------------------
+                    }){Text("Call Now").foregroundColor(.red)}
+                    Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
+                    Button(action: {
+                        if let website = self.place.website {
+                            UIApplication.shared.open(website)
+                        }
+                    }){
+                        Text("Open Website").foregroundColor(.red)
+                    }
+                    Text(isOpen)}
+                    .frame(width:UIScreen.main.bounds.width-10, height:300)
+                //---------------------------------------------
+                //map
+                VStack(alignment: .center){
+                    ItemMapView(coordinate: place.coordinate)}.cornerRadius(15)
+                    .frame(width:UIScreen.main.bounds.width-10, height:220)
+                //end
+                //---------------------------------------------
                 VStack{
                     ScrollWeekView(data: createDateCardData(openingHoursText: openingHoursText))
-                        }.frame(width:UIScreen.main.bounds.width-10, height:250)
+                }.frame(width:UIScreen.main.bounds.width-10, height:250)
                 
                 
             }// end Vstack
         }// end ScrollView
             .sheet(isPresented: $showSheet) {
-                ItemAddSheet(place: self.place, placeImage: self.$image, showSheet: self.$showSheet)
+                ItemAddSheet(place: self.place, placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil, showSheet: self.$showSheet)
                 
         }
-            .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
-            .onAppear {
-                
-                self.photoGallery.getGallery(images: self.place.photos)
-                if let photos = self.place.photos {
-                    getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
-                        if let error = error {
-                            print("Error loading photo metadata: \(error.localizedDescription)")
-                            return
-                        }
-                        if let photo = photo {
-                            self.image = photo;
-                        }
-                        
-                    }
-                    
-                }
-        }
+        .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
+//        .onAppear {
+//            self.photoGallery.getGallery(images: self.place.photos)
+//        }
     }//end body
 }//end wholew View
 
 
 struct GalleryView:View{
-    var gallery : [UIImage]
+    var photos: [GMSPlacePhotoMetadata]?
+    @Binding var gallery: [UIImage]
+    @ObservedObject var photoGallery : Gallery = Gallery()
+    
     var body : some View {
-        ScrollView(.horizontal,showsIndicators: false){
-        HStack (spacing:5) {
-            ForEach(gallery, id:\.self){
-                photo in
-                return HStack{ ItemImageView(image:photo)}
+        VStack {
+            ScrollView(.horizontal,showsIndicators: false){
+                HStack (spacing:5) {
+                    ForEach(self.gallery, id:\.self){
+                        photo in
+                        return HStack{ ItemImageView(image:photo)}
+                    }
+                }
             }
-            //                ItemImageView(image: image != nil ? image! : UIImage())
-            //
-            //                    .offset(y: -90)
-            //                    .padding(.bottom, -90)
-        }}
+        }.onAppear {
+            if let photos = self.photos {
+                    for (index, image) in photos.enumerated(){
+                        guard index <= 5 else {
+                            break}
+                        getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
+                            if let error = error {
+                                print("Error loading photo metadata: \(error.localizedDescription)")
+                                return
+                            }
+                            if let photo = photo {
+                                self.gallery.append(photo)
+                            }
+                        }
+                        //            else {
+                        //                return
+                        //            }
+                    }
+                self.photoGallery.getGallery(images: photos)} else {
+                self.gallery.append(UIImage(named: "place_image_placeholder")!)
+            }
+        }
     }
 }
 
@@ -199,7 +206,7 @@ struct DateCardView: View {
         VStack {
             HStack {
                 Text(self.day)
-                 .foregroundColor(Color.white)
+                    .foregroundColor(Color.white)
                     .fontWeight(.bold)
             }.padding(5)
                 .frame(width:160, height:30)
@@ -209,7 +216,7 @@ struct DateCardView: View {
             HStack() {
                 Text(self.hours)
                     .font(.system(size:12))
-                   
+                
                 //                    .frame(width:210, alignment:.leading)
                 
             }.padding(.horizontal, 5)

@@ -3,7 +3,7 @@ import GooglePlaces
 
 struct ItemAddSheet: View {
     var place: GMSPlace
-    @Binding var placeImage: UIImage?
+    var placeImage: UIImage?
     
     @Binding var showSheet: Bool
     
@@ -28,7 +28,7 @@ struct ItemAddSheet: View {
             Spacer()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
-            AddPlaceToListSheet(place: self.place, placeImage: self.$placeImage, showSheet: self.$showAddPlaceToListSheet)
+            AddPlaceToListSheet(place: self.place, placeImage: self.placeImage, showSheet: self.$showAddPlaceToListSheet)
         }
         .padding()
     }
