@@ -13,22 +13,23 @@ struct PlaceListSettingsSheet: View {
     @Binding var presentationMode: PresentationMode
     
     @Binding var showSheet: Bool
-    @State private var newListName: String = ""
+    @ObservedObject private var placeListSettingsViewModel = PlaceListSettingsViewModel()
     
     var body: some View {
         VStack (alignment: .leading) {
             Text(self.firestorePlaceList.placeList.name)
             Spacer()
             HStack {
-                TextField(self.firestorePlaceList.placeList.name, text: $newListName)
+                TextField("Name", text: $placeListSettingsViewModel.placelistName).autocapitalization(.none)
+                Text(placeListSettingsViewModel.placelistNameMessage).foregroundColor(.red)
                 Spacer()
                 Button(action: {
-                    FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, newName: self.newListName)
+                    FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, newName: self.placeListSettingsViewModel.placelistName)
                     // ToDo also close on background tap
                     UIApplication.shared.endEditing(true)
                 }) {
                     Text("Change Name")
-                }
+                }.disabled(!self.placeListSettingsViewModel.isValidplacelist)
             }
             if (self.firestorePlaceList.placeList.isPublic) {
                 Button(action: {
@@ -82,7 +83,7 @@ struct PlaceListSettingsSheet: View {
                 Text("Close Sheet")
             }
         }.onAppear {
-            self.newListName = self.firestorePlaceList.placeList.name
+            self.placeListSettingsViewModel.placelistName = self.firestorePlaceList.placeList.name
         }
         .padding()
     }
