@@ -6,7 +6,6 @@ struct PlaceListInfoView: View {
     var placeListId: String
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    @Binding var tabSelection: Int
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
