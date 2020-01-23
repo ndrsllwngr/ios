@@ -159,7 +159,8 @@ struct ProfileInfoView: View {
         VStack {
             VStack {
                 HStack {
-                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).padding(.top)
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
+                    .clipShape(Circle()).padding(.top)
                     if (self.isMyProfile) {
                         Button(action: {
                             self.showSheet.toggle()
