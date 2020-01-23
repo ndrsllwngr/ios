@@ -61,7 +61,7 @@ class ExploreModel: ObservableObject {
         self.fetchingPlacesForExplore = true
         placeList.places.forEach {placeIDWithTimestamp in
             dispatchGroup.enter()
-            getPlace(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
+            getPlaceSimple(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
                     print("An error occurred : \(error.localizedDescription)")
                     dispatchGroup.leave()
