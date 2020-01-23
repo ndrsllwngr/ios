@@ -24,6 +24,9 @@ struct ProfileView: View {
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
     
+    @State var placeListIdToNavigateTo: String? = nil
+    @State var goToPlaceList: Int? = nil
+    
     var body: some View {
         VStack {
             if (self.profileUserIdToNavigateTo != nil) {
@@ -31,7 +34,20 @@ struct ProfileView: View {
                     Text("")
                 }
             }
-            InnerProfileView(profileUserId: profileUserId, isMyProfile: $isMyProfile, tabSelection: $tabSelection, showSheet: $showSheet, sheetSelection: $sheetSelection).environmentObject(firestoreProfile)
+            
+            if (self.placeListIdToNavigateTo != nil) {
+                NavigationLink(destination: PlaceListView(placeListId: self.placeListIdToNavigateTo!, tabSelection:self.$tabSelection), tag: 1, selection: self.$goToPlaceList) {
+                    Text("")
+                }
+            }
+            
+            InnerProfileView(profileUserId: profileUserId,
+                             isMyProfile: $isMyProfile,
+                             tabSelection: $tabSelection,
+                             showSheet: $showSheet,
+                             sheetSelection: $sheetSelection,
+                             placeListIdToNavigateTo: self.$placeListIdToNavigateTo,
+                             goToPlaceList: self.$goToPlaceList).environmentObject(firestoreProfile)
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
@@ -40,9 +56,17 @@ struct ProfileView: View {
             } else if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
-                UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                FollowSheet(userIds: self.firestoreProfile.user.isFollowedBy,
+                            sheetTitle: "Users that are following me",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "following" {
-                UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                FollowSheet(userIds: self.firestoreProfile.user.isFollowing,
+                            sheetTitle: "Users that I am following:",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "image_picker" {
                 ImagePicker(imageType: .PROFILE_IMAGE)
             }
@@ -75,30 +99,41 @@ struct InnerProfileView: View {
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
+    @Binding var placeListIdToNavigateTo: String?
+    @Binding var goToPlaceList: Int?
+    
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
+           
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                    
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
-                        NavigationLink(
-                            destination: PlaceListView(placeListId: placeList.id, tabSelection: self.$tabSelection)
-                        ) {
+                        
                             PlacesListRow(placeList: placeList)
-                        }
+                            .onTapGesture {
+                                self.placeListIdToNavigateTo = placeList.id
+                                self.goToPlaceList = 1
+                            }
                     }
+
                 } else {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
-                        NavigationLink(
-                            destination: PlaceListView(placeListId: placeList.id, tabSelection: self.$tabSelection)
-                        ) {
+                        
                             PlacesListRow(placeList: placeList)
-                        }
+                            .onTapGesture {
+                                self.placeListIdToNavigateTo = placeList.id
+                                self.goToPlaceList = 1
+                            }
+                            .frame(height: 120)
                     }
+
                 }
                 Spacer()
             }
+            .padding(.top)
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack {

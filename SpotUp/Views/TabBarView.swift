@@ -12,7 +12,7 @@ import SwiftUI
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var exploreModel = ExploreModel.shared
-    @State var selection = 0
+    @State var selection = 1
     
     var body: some View {
         GeometryReader { metrics in
@@ -37,7 +37,7 @@ struct TabBarView: View {
                 if (self.exploreModel.exploreList != nil && self.selection != 2) {
                     ExploreIsActiveBar()
                         .frame(width: metrics.size.width, height: 49)
-                        .background(Color.gray)
+                        .background(Color("bg-explore-bar"))
                         //.offset(y: -49) // 49 is the exact height of the TabBar
                         .onTapGesture {
                             self.selection = 2
@@ -54,7 +54,7 @@ struct TabBarView: View {
                     Spacer()
                     VStack {
                         Image(systemName: self.selection == 1 ? "person.fill" : "person")
-                        Text("Profil")
+                        Text("Profile")
                     }.onTapGesture {
                         self.selection = 1
                     }
@@ -68,7 +68,7 @@ struct TabBarView: View {
                     Spacer()
                 }
                 .frame(width: metrics.size.width, height: 50)
-                .background(Color.red)
+                .background(Color("bg-tab-bar"))
             }
         }
     }
