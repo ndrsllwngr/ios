@@ -1,10 +1,3 @@
-//
-//  PlaceListInfoView.swift
-//  SpotUp
-//
-//  Created by Fangli Lu on 17.01.20.
-//
-
 import Foundation
 import SwiftUI
 
@@ -13,6 +6,7 @@ struct PlaceListInfoView: View {
     var placeListId: String
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @Binding var tabSelection: Int
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String

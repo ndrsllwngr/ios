@@ -33,6 +33,7 @@ struct CreateNewPlaceListRow: View {
                 .background(Color("elevation-1"))
                 .mask(Rectangle().cornerRadius(15))
             }.frame(height: 120)
+            
         }
     }
 }
