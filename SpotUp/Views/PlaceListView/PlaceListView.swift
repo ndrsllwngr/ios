@@ -13,7 +13,7 @@ struct PlaceListView: View {
     var placeListId: String
     
     @Binding var tabSelection: Int
-
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
@@ -92,7 +92,7 @@ struct InnerPlaceListView: View {
         VStack (alignment: .leading){
             VStack {
                 // Follow button only on foreign user profiles
-                PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+                PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
                     .padding()
                 
                 Picker(selection: $selection, label: Text("View")) {
@@ -117,9 +117,6 @@ struct InnerPlaceListView: View {
                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
                     
-                }
-                .onDisappear {
-                    UITableView.appearance().separatorStyle = .singleLine
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
