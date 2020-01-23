@@ -23,6 +23,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // signOut from Firebase
             try! Auth.auth().signOut()
         }
+        
+        let navigationBar = UINavigationBar.appearance()
+        navigationBar.barTintColor = UIColor.white
+        navigationBar.setBackgroundImage(UIImage(), for:.default)
+        navigationBar.shadowImage = UIImage()
+        
         return true
     }
     
