@@ -19,7 +19,7 @@ struct SearchResultsAccountsView: View {
                     }
                 }
                 else {
-                    SearchResultsEmptyStateView()
+                    SearchResultsProfilesEmptyStateView()
                 }
             } else {
                 List {
