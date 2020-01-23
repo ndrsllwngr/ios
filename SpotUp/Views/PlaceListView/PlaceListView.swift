@@ -14,7 +14,7 @@ struct PlaceListView: View {
     var placeListId: String
     
     @Binding var tabSelection: Int
-
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
@@ -26,6 +26,9 @@ struct PlaceListView: View {
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
     
+    @State var profileUserIdToNavigateTo: String? = nil
+    @State var goToOtherProfile: Int? = nil
+    
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
@@ -34,6 +37,11 @@ struct PlaceListView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    Text("")
+                }
+            }
+            if (self.profileUserIdToNavigateTo != nil) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
                     Text("")
                 }
             }
@@ -57,6 +65,12 @@ struct PlaceListView: View {
                                gmsPlaceWithTimestamp: self.placeForPlaceMenuSheet!,
                                image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
+            } else if self.sheetSelection == "follower" {
+                FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
+                            sheetTitle: "Users that are following this PlaceList",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             }
         }
         .onAppear {
@@ -92,7 +106,11 @@ struct InnerPlaceListView: View {
     var body: some View {
         VStack {
             // Follow button only on foreign user profiles
-            PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
+            PlaceListInfoView(placeListId: placeListId,
+                              showSheet: $showSheet,
+                              sheetSelection: $sheetSelection,
+                              tabSelection: $tabSelection)
+                .environmentObject(firestorePlaceList)
             
             Picker(selection: $selection, label: Text("View")) {
                 Text("List").tag(0)
@@ -136,6 +154,8 @@ struct PlaceListInfoView: View {
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
     @Binding var tabSelection: Int
     
     var body: some View {
@@ -145,14 +165,21 @@ struct PlaceListInfoView: View {
                 VStack {
                     Text(self.firestorePlaceList.placeList.name)
                     HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                        NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
+                            Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                        }
                         HStack {
                             Image(systemName: "map.fill")
                             Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
                         }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
+                        Button(action: {
+                            self.sheetSelection = "follower"
+                            self.showSheet.toggle()
+                        }) {
+                            HStack {
+                                Image(systemName: "person.fill")
+                                Text("\(self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id}.count)")
+                            }
                         }
                     }
                     Button(action: {
