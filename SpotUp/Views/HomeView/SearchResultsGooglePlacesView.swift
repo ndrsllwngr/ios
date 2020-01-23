@@ -39,7 +39,7 @@ struct SearchResultsGooglePlacesView: View {
                     }
                 }
                 else {
-                    SearchResultsEmptyStateView()
+                    SearchResultsPlacesEmptyStateView()
                 }
             } else {
                 List { ForEach(searchViewModel.googlePlaces, id: \.placeID) {
