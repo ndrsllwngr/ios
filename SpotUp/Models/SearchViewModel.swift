@@ -109,30 +109,4 @@ class SearchViewModel: ObservableObject {
                                                  callback: callback
         )
     }
-    
-    func GSM(query: String) -> [GMSAutocompletePrediction] {
-        self.filter.type = .establishment
-        print("run GSM")
-        var searchResult: [GMSAutocompletePrediction] = [];
-        placesClient.findAutocompletePredictions(fromQuery: query,
-                                                 bounds: nil,
-                                                 boundsMode: GMSAutocompleteBoundsMode.bias,
-                                                 filter: self.filter,
-                                                 sessionToken: self.token,
-                                                 callback: { (results, error) in
-                                                    if let error = error {
-                                                        print("Autocomplete error: \(error)")
-                                                        return
-                                                    }
-                                                    if let results = results {
-                                                        for result in results {
-                                                            print("Result \(result.attributedFullText) with placeID \(result.placeID)")
-                                                            //dump(result)
-                                                        }
-                                                        searchResult = results
-                                                    }
-        })
-        return searchResult
-    }
-    
 }

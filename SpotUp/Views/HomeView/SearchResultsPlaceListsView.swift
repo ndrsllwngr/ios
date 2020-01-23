@@ -10,7 +10,8 @@ struct SearchResultsPlaceListsView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseLists.count > 0) {
                     List {
-                        Section(header: Text("Recent")) {
+                        Section() {
+                            Text("Recent").font(.subheadline).fontWeight(.semibold)
                             ForEach(searchViewModel.recentSearchFirebaseLists) {
                                 (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
@@ -60,7 +61,10 @@ struct SingleRowPlaceList: View {
                 self.selection = 1
             }){
                 HStack {
-                    Text(placeList.name)
+                    VStack(alignment: .leading) {
+                    Text(placeList.name).font(.headline)
+                    Text("by \(placeList.owner.username)").font(.body)
+                    }
                     Spacer()
                 }
             }.padding(.leading)
