@@ -18,9 +18,10 @@ struct ItemMapView: UIViewRepresentable {
         let camera = GMSCameraPosition.camera(
             withLatitude: coordinate.latitude,
             longitude: coordinate.longitude,
-            zoom: 16.0
+            zoom: 14.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        mapView.isMyLocationEnabled = true
         return mapView
     }
     

@@ -29,7 +29,7 @@ struct ExplorePlaceMenuSheet: View {
             Spacer()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
-            AddPlaceToListSheet(place: self.place.place, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+            AddPlaceToListSheet(place: self.place.place, placeImage: self.image, showSheet: self.$showAddPlaceToListSheet)
         }
         .padding()
     }
