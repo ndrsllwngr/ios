@@ -18,13 +18,25 @@ struct CreateNewPlaceListRow: View {
             self.sheetSelection = "create_placelist"
             self.showSheet.toggle()
         }) {
-            HStack {
-                Image(systemName: "plus")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                Text("Create new place list")
-            }
+            GeometryReader { geo in
+                HStack {
+                    HStack {
+                        Image(systemName: "plus.rectangle.on.rectangle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 32)
+                    }
+                    .frame(width: 120, height: 100)
+                    .background(Color("dark-background"))
+                    
+                    Text("Create new place list")
+                }
+                .frame(width: geo.size.width, alignment: .leading)
+                .background(Color.white)
+                .mask(Rectangle().cornerRadius(15))
+            }.frame(height: 120)
+            .background(Color("background"))
+            
         }
     }
 }
@@ -33,19 +45,49 @@ struct PlacesListRow: View {
     var placeList: PlaceList
     
     var body: some View {
-        HStack {
-            FirebasePlaceListImageRow(imageUrl: placeList.imageUrl)
-            VStack(alignment: .leading) {
-                Text(placeList.name)
-                    .bold()
-                Text("von \(placeList.owner.username)")
+        GeometryReader { geo in
+            HStack {
+                
+                FirebasePlaceListRowImage(imageUrl: self.placeList.imageUrl)
+                    .scaledToFill()
+                    .frame(width: 120, height: 100)
+                
+                VStack(alignment: .leading) {
+                    Text(self.placeList.name)
+                        .bold()
+                    
+                    HStack {
+                        Text("von \(self.placeList.owner.username)")
+                        Spacer()
+                        if (!self.placeList.isPublic) {
+                            HStack {
+                                Image(systemName: "lock.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 12)
+                            }
+                            .frame(width: 20, height: 20)
+                            .background(Color("dark-background"))
+                            .mask(Rectangle().cornerRadius(100))
+                        }
+                        if (self.placeList.isCollaborative) {
+                            HStack {
+                                Image(systemName: "person.2.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 12)
+                            }
+                            .frame(width: 20, height: 20)
+                            .background(Color("dark-background"))
+                            .mask(Rectangle().cornerRadius(100))
+                        }
+                    }
+                }.padding(.trailing)
             }
-            if (!placeList.isPublic) {
-                Image(systemName: "lock.circle.fill")
-            }
-            if (placeList.isCollaborative) {
-                Image(systemName: "person.3.fill")
-            }
-        }
+            .frame(width: geo.size.width, alignment: .leading)
+            .background(Color.white)
+            .mask(Rectangle().cornerRadius(15))
+        }.frame(height: 120)
     }
+    
 }
