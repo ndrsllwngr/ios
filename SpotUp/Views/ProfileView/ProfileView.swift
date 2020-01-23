@@ -40,9 +40,17 @@ struct ProfileView: View {
             } else if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
-                UsersThatAreFollowingMeSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                FollowSheet(userIds: self.firestoreProfile.user.isFollowedBy,
+                            sheetTitle: "Users that are following me",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "following" {
-                UsersThatIAmFollowingSheet(showSheet: self.$showSheet, userId: self.firestoreProfile.user.id, profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo, goToOtherProfile: self.$goToOtherProfile)
+                FollowSheet(userIds: self.firestoreProfile.user.isFollowing,
+                            sheetTitle: "Users that I am following:",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "image_picker" {
                 ImagePicker(imageType: .PROFILE_IMAGE)
             }
