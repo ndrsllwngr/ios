@@ -239,11 +239,11 @@ struct ExploreMapView : UIViewRepresentable {
             marker.title = place.place.name
             
             if(place.visited){
-                marker.icon = GMSMarker.markerImage(with: .gray)
+                marker.icon = GMSMarker.markerImage(with: UIColor.systemGray)
             } else if (place.id == self.exploreList.currentTarget?.id) {
-                marker.icon = GMSMarker.markerImage(with: .green)
+                marker.icon = GMSMarker.markerImage(with: UIColor.systemBlue)
             } else {
-                marker.icon = GMSMarker.markerImage(with: .red)
+                marker.icon = GMSMarker.markerImage(with: UIColor.systemRed )
             }
             marker.map = view
             
