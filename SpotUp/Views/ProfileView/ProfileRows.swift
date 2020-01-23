@@ -54,7 +54,7 @@ struct PlacesListRow: View {
                         .bold()
                     
                     HStack {
-                        Text("von \(self.placeList.owner.username)")
+                        Text("by \(self.placeList.owner.username)")
                         Spacer()
                         if (!self.placeList.isPublic) {
                             HStack {

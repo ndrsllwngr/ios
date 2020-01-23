@@ -12,7 +12,7 @@ import SwiftUI
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var exploreModel = ExploreModel.shared
-    @State var selection = 0
+    @State var selection = 1
     
     var body: some View {
         GeometryReader { metrics in
@@ -54,7 +54,7 @@ struct TabBarView: View {
                     Spacer()
                     VStack {
                         Image(systemName: self.selection == 1 ? "person.fill" : "person")
-                        Text("Profil")
+                        Text("Profile")
                     }.onTapGesture {
                         self.selection = 1
                     }
