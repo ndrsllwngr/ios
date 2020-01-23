@@ -19,7 +19,7 @@ struct SearchResultsPlaceListsView: View {
                     }
                 }
                 else {
-                    SearchResultsEmptyStateView()
+                    SearchResultsListsEmptyStateView()
                 }
             } else {
                 List { ForEach(searchViewModel.firestoreSearch.allPublicPlaceLists.filter{searchViewModel.searchTerm.isEmpty ? false : $0.name.localizedCaseInsensitiveContains(searchViewModel.searchTerm)}) { (placeList: PlaceList) in

@@ -61,7 +61,7 @@ struct HomeView: View {
                 // PICKER
                 Picker(selection: $searchViewModel.searchSpaceSelection, label: Text("View")) {
                     Text("Places").tag("places")
-                    Text("Lists").tag("lists")
+                    Text("Collections").tag("lists")
                     Text("Accounts").tag("accounts")
                     
                 }

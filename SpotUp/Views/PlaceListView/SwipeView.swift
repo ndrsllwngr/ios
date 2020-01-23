@@ -15,20 +15,15 @@ struct SwipeView: View {
     @Binding var index: Int
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    let spacing: CGFloat = 10 //10
-    //geometry.size.width
-    let width: CGFloat = 200
+    let spacing: CGFloat = 10
     
     var body: some View {
         GeometryReader { geometry in
             return ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: self.spacing) {
                     ForEach((self.firestorePlaceList.places), id: \.self) { place in
-                        //                        GeometryReader { geo in
                         PlaceCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
-                        //                                .rotation3DEffect(.degrees(-Double(geo.frame(in: .global).midX - geometry.size.width / 2.0) / 10.0), axis: (x: CGFloat(0), y: CGFloat(1), z: CGFloat(0)))
-                        //                        }
                     }
                 }
             }
@@ -38,7 +33,9 @@ struct SwipeView: View {
             .gesture(
                 DragGesture()
                     .onChanged({ value in
-                        self.offset = value.translation.width - geometry.size.width * CGFloat(self.index)
+                        let offsetConst = geometry.size.width + self.spacing
+                        self.offset = value.translation.width - offsetConst * CGFloat(self.index)
+                        
                         self.isDragging = true
                     })
                     .onEnded({ value in
@@ -48,8 +45,10 @@ struct SwipeView: View {
                         if value.predictedEndTranslation.width > geometry.size.width / 2, self.index > 0 {
                             self.index -= 1
                         }
+
                         withAnimation { self.offset = -(geometry.size.width + self.spacing) * CGFloat(self.index) }
                         self.isDragging = false
+                        
                     })
         )
         }.frame(width: 260)

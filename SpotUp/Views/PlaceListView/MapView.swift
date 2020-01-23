@@ -1,11 +1,3 @@
-//
-//  MapView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import UIKit
 import GoogleMaps
@@ -35,13 +27,12 @@ struct GoogleMapView : UIViewRepresentable {
         longitude: 135.503039
     )
     func makeUIView(context: Context) -> GMSMapView {
-        
         let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].gmsPlace.coordinate : self.defaultLocation
         
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
             longitude: initialCoords.longitude,
-            zoom: 12.0
+            zoom: 10.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         //mapView.settings.myLocationButton = true
@@ -69,6 +60,7 @@ struct GoogleMapView : UIViewRepresentable {
             //marker.snippet = place.state
             if(index == currentIndex){
                 marker.icon = GMSMarker.markerImage(with: .red)
+                marker.appearAnimation = GMSMarkerAnimation.pop
             } else {
                 marker.icon = GMSMarker.markerImage(with: .black)
             }
@@ -77,6 +69,8 @@ struct GoogleMapView : UIViewRepresentable {
         }
         
     }
+    
+    
     func makeCoordinator() -> GoogleMapView.Coordinator {
         return Coordinator(self)
     }

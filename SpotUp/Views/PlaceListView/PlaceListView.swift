@@ -8,13 +8,12 @@
 
 import SwiftUI
 
-
 struct PlaceListView: View {
     
     var placeListId: String
     
     @Binding var tabSelection: Int
-
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
     
@@ -26,6 +25,9 @@ struct PlaceListView: View {
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
     
+    @State var profileUserIdToNavigateTo: String? = nil
+    @State var goToOtherProfile: Int? = nil
+    
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
@@ -34,6 +36,11 @@ struct PlaceListView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    Text("")
+                }
+            }
+            if (self.profileUserIdToNavigateTo != nil) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
                     Text("")
                 }
             }
@@ -57,6 +64,12 @@ struct PlaceListView: View {
                                gmsPlaceWithTimestamp: self.placeForPlaceMenuSheet!,
                                image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
+            } else if self.sheetSelection == "follower" {
+                FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
+                            sheetTitle: "Users that are following this PlaceList",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             }
         }
         .onAppear {
@@ -90,18 +103,27 @@ struct InnerPlaceListView: View {
     @State private var selection = 0
     
     var body: some View {
-        VStack {
-            // Follow button only on foreign user profiles
-            PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
-            
-            Picker(selection: $selection, label: Text("View")) {
-                Text("List").tag(0)
-                Text("Map").tag(1)
+        VStack (alignment: .leading){
+            VStack {
+                if (selection == 0) {
+                    // Follow button only on foreign user profiles
+                    PlaceListInfoView(placeListId: placeListId,
+                                  showSheet: $showSheet,
+                                  sheetSelection: $sheetSelection,
+                                  tabSelection: $tabSelection)
+                    .environmentObject(firestorePlaceList)
+                        .padding()
+                }
+                Picker(selection: $selection, label: Text("View")) {
+                    Text("List").tag(0)
+                    Text("Map").tag(1)
+                }
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
+                .animation(.default)
             }
-            .padding()
-            .pickerStyle(SegmentedPickerStyle())
-            
-            Spacer()
+            .padding(0)
+            .background(Color("elevation-1"))
             
             if selection == 0 {
                 List {
@@ -114,6 +136,7 @@ struct InnerPlaceListView: View {
                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
+                    
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
@@ -127,43 +150,6 @@ struct InnerPlaceListView: View {
                 PlaceListFollowButton(placeListId: self.placeListId).environmentObject(self.firestorePlaceList)
             }
         })
-    }
-}
-
-struct PlaceListInfoView: View {
-    
-    var placeListId: String
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    @Binding var tabSelection: Int
-    
-    var body: some View {
-        VStack {
-            HStack {
-                FirebasePlaceListImage(imageUrl: self.firestorePlaceList.placeList.imageUrl).padding(.top)
-                VStack {
-                    Text(self.firestorePlaceList.placeList.name)
-                    HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                        HStack {
-                            Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
-                        }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
-                        }
-                    }
-                    Button(action: {
-                        ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
-                        self.tabSelection = 2
-                    }) {
-                        Text("Explore")
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -191,6 +177,7 @@ struct PlaceListFollowButton: View {
         }
     }
 }
+
 struct PlaceListSettingsButton: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var showSheet: Bool
@@ -212,9 +199,3 @@ struct PlaceListSettingsButton: View {
         
     }
 }
-
-//struct ListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
-//    }
-//}
