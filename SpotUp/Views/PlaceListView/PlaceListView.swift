@@ -138,9 +138,6 @@ struct InnerPlaceListView: View {
                     }
                     
                 }
-                .onDisappear {
-                    UITableView.appearance().separatorStyle = .singleLine
-                }
             } else {
                 MapView().environmentObject(firestorePlaceList)
             }
