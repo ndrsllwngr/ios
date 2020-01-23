@@ -31,7 +31,7 @@ struct ItemView: View {
                     VStack{
                         GalleryView(gallery: self.$gallery)
                             }
-                        InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: gallery)
+                        InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: self.$gallery)
                             .offset(y:-30)
                     }}}
         }.onAppear {
@@ -82,7 +82,7 @@ struct InnerItemView: View {
     var priceLevel: Int
     var type: String
     var openingHoursText: [String]
-    @State var gallery: [UIImage] = []
+    @Binding var gallery: [UIImage]
     @State var showSheet = false
 
     
