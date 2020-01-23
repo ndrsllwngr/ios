@@ -96,7 +96,6 @@ struct InnerProfileView: View {
                         ) {
                             PlacesListRow(placeList: placeList)
                         }
-                        .background(Color("background"))
                     }
                 } else {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
@@ -106,11 +105,10 @@ struct InnerProfileView: View {
                             PlacesListRow(placeList: placeList)
                             .frame(height: 120)
                         }
-                        .background(Color("background"))
                     }
                 }
                 Spacer()
-            }.background(Color("background"))
+            }
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
@@ -190,7 +188,6 @@ struct ProfileInfoView: View {
             }.frame(height: 50)
             
         }
-        .background(Color("background"))
     }
 }
 

@@ -65,7 +65,7 @@ struct PlaceListInfoView: View {
                                     .accentColor(Color.white)
                                     .padding([.vertical], 5)
                                     .padding([.horizontal], 32)
-                            }.background(Color("primary"))
+                            }.background(Color("brand-color-primary"))
                                 .cornerRadius(15)
                         }
                         Spacer()
