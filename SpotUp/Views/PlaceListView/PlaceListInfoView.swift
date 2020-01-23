@@ -8,6 +8,10 @@ struct PlaceListInfoView: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var tabSelection: Int
     
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    @Binding var tabSelection: Int
+    
     var body: some View {
         VStack {
             HStack (alignment: .top){
@@ -22,8 +26,10 @@ struct PlaceListInfoView: View {
                         Text(self.firestorePlaceList.placeList.name)
                             .font(Font.custom("Europa-Bold", size: 20))
                         HStack {
-                            Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                                .font(Font.custom("Europa-Regular", size: 12))
+                            NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
+                                Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                                    .font(Font.custom("Europa-Regular", size: 12))
+                            }
                             Spacer()
                             HStack {
                                 Image(systemName: "map")
@@ -32,11 +38,15 @@ struct PlaceListInfoView: View {
                                     .font(Font.custom("Europa-Regular", size: 12))
                             }
                             Spacer()
-                            HStack {
-                                Image(systemName: "person")
-                                    .frame(height: 16)
-                                Text("\(self.firestorePlaceList.placeList.followerIds.count)")
-                                    .font(Font.custom("Europa-Regular", size: 12))
+                            Button(action: {
+                                self.sheetSelection = "follower"
+                                self.showSheet.toggle()
+                            }) {
+                                HStack {
+                                    Image(systemName: "person")
+                                        .frame(height: 16)
+                                    Text("\(self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id}.count)")                                .font(Font.custom("Europa-Regular", size: 12))
+                                }
                             }
                         }
                         Spacer()
@@ -48,9 +58,9 @@ struct PlaceListInfoView: View {
                                 Text("Explore")
                                     .accentColor(Color.white)
                                     .padding([.vertical], 5)
-                                .padding([.horizontal], 32)
-                            }.background(Color("primary"))
-                            .cornerRadius(15)
+                                    .padding([.horizontal], 32)
+                            }.background(Color("brand-color-primary"))
+                                .cornerRadius(15)
                         }
                         Spacer()
                     }

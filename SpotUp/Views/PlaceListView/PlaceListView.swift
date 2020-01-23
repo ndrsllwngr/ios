@@ -25,6 +25,9 @@ struct PlaceListView: View {
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
     
+    @State var profileUserIdToNavigateTo: String? = nil
+    @State var goToOtherProfile: Int? = nil
+    
     @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForPlaceMenuSheet: UIImage? = nil
     
@@ -33,6 +36,11 @@ struct PlaceListView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    Text("")
+                }
+            }
+            if (self.profileUserIdToNavigateTo != nil) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
                     Text("")
                 }
             }
@@ -56,6 +64,12 @@ struct PlaceListView: View {
                                gmsPlaceWithTimestamp: self.placeForPlaceMenuSheet!,
                                image: self.$imageForPlaceMenuSheet,
                                showSheet: self.$showSheet)
+            } else if self.sheetSelection == "follower" {
+                FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
+                            sheetTitle: "Users that are following this PlaceList",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
             }
         }
         .onAppear {
@@ -92,7 +106,11 @@ struct InnerPlaceListView: View {
         VStack (alignment: .leading){
             VStack {
                 // Follow button only on foreign user profiles
-                PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
+                PlaceListInfoView(placeListId: placeListId,
+                              showSheet: $showSheet,
+                              sheetSelection: $sheetSelection,
+                              tabSelection: $tabSelection)
+                .environmentObject(firestorePlaceList)
                     .padding()
                 
                 Picker(selection: $selection, label: Text("View")) {
@@ -103,7 +121,7 @@ struct InnerPlaceListView: View {
                 .pickerStyle(SegmentedPickerStyle())
             }
             .padding(0)
-            .background(Color("background"))
+            .background(Color("elevation-1"))
             
             if selection == 0 {
                 List {
@@ -122,7 +140,6 @@ struct InnerPlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .background(Color("background"))
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
             if (self.firestorePlaceList.isOwnedPlaceList) {
@@ -133,8 +150,6 @@ struct InnerPlaceListView: View {
         })
     }
 }
-
-
 
 struct PlaceListFollowButton: View {
     var placeListId: String

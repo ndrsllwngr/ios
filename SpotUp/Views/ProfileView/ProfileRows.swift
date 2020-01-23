@@ -27,12 +27,10 @@ struct CreateNewPlaceListRow: View {
                             .frame(height: 32)
                     }
                     .frame(width: 120, height: 100)
-                    .background(Color("dark-background"))
-                    
                     Text("Create new place list")
                 }
                 .frame(width: geo.size.width, alignment: .leading)
-                .background(Color.white)
+                .background(Color("elevation-1"))
                 .mask(Rectangle().cornerRadius(15))
             }.frame(height: 120)
             
@@ -66,7 +64,7 @@ struct PlacesListRow: View {
                                     .frame(height: 12)
                             }
                             .frame(width: 20, height: 20)
-                            .background(Color("dark-background"))
+                            .background(Color("bg-placeholder"))
                             .mask(Rectangle().cornerRadius(100))
                         }
                         if (self.placeList.isCollaborative) {
@@ -77,14 +75,14 @@ struct PlacesListRow: View {
                                     .frame(width: 12)
                             }
                             .frame(width: 20, height: 20)
-                            .background(Color("dark-background"))
+                            .background(Color("bg-placeholder"))
                             .mask(Rectangle().cornerRadius(100))
                         }
                     }
                 }.padding(.trailing)
             }
             .frame(width: geo.size.width, alignment: .leading)
-            .background(Color.white)
+            .background(Color("elevation-1"))
             .mask(Rectangle().cornerRadius(15))
         }.frame(height: 120)
     }

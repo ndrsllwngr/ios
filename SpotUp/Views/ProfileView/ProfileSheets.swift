@@ -11,27 +11,31 @@ import FirebaseFirestore
 struct CreatePlacelistSheet: View {
     var user: User
     @Binding var showSheet: Bool
-    @State private var placeListName: String = ""
+    
+    @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
+    
+//    @State private var placeListName: String = ""
     
     var body: some View {
         VStack(alignment: .center) {
             Text("Enter a name for your placelist")
             Spacer()
-            TextField("place list name", text: $placeListName)
+            TextField("Name", text: $createPlacelistViewModel.placelistName).autocapitalization(.none)
+            Text(createPlacelistViewModel.placelistNameMessage).foregroundColor(.red)
             HStack {
                 Button(action: {
                     self.showSheet.toggle()
                 }) {
-                    Text("cancel")
+                    Text("Cancel")
                 }
                 Spacer()
                 Button(action: {
-                    let newPlaceList = PlaceList(name: self.placeListName, owner: self.user.toListOwner(), followerIds: [self.user.id], createdAt:Timestamp())
+                    let newPlaceList = PlaceList(name: self.createPlacelistViewModel.placelistName, owner: self.user.toListOwner(), followerIds: [self.user.id], createdAt:Timestamp())
                     FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
-                    Text("create")
-                }
+                    Text("Create")
+                }.disabled(!self.createPlacelistViewModel.isValidplacelist)
             }
             .frame(width: 300, height: 100)
             Spacer()
@@ -46,139 +50,71 @@ struct ProfileSettingsSheet: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-
+    
+    @ObservedObject private var profileSettingsViewModel = ProfileSettingsViewModel()
+    
     @Binding var showSheet: Bool
-    
-    @State private var newUserName: String = ""
-    @State private var newEmail: String = ""
-    @State private var currentPasswordChangeEmail: String = ""
-    @State private var newPassword: String = ""
-    @State private var currentPasswordChangePassword: String = ""
-    @State private var currentPasswordDeleteAccount: String = ""
-    
     
     var body: some View {
         VStack (alignment: .leading) {
             Text(self.firestoreProfile.user.username)
             Spacer()
-            HStack {
-                TextField(self.firestoreProfile.user.username, text: $newUserName)
-                Spacer()
-                Button(action: {
-                    FirestoreConnection.shared.updateUserName(userId: self.firebaseAuthentication.currentUser!.uid, newUserName: self.newUserName)
-                    UIApplication.shared.endEditing(true)
-                }) {
-                    Text("Change Username")
+            Form {
+                // 1)
+                Section(footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
+                    TextField("Username", text: $profileSettingsViewModel.newUserName)
+                        .autocapitalization(.none)
+                    Button(action: {
+                        FirestoreConnection.shared.updateUserName(userId: self.firebaseAuthentication.currentUser!.uid, newUserName: self.profileSettingsViewModel.newUserName)
+                        UIApplication.shared.endEditing(true)
+                    }) {
+                        Text("Change username")
+                    }.disabled(!self.profileSettingsViewModel.isValidUsername)
                 }
-            }
-            HStack {
-                TextField(self.firebaseAuthentication.currentUser != nil ? "\(self.firebaseAuthentication.currentUser!.email)" : "", text: $newEmail)
-                SecureField("current password", text: $currentPasswordChangeEmail)
-                Button(action: {
-                    FirebaseAuthentication.shared.changeEmail(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordChangeEmail, newEmail: self.newEmail)
-                }) {
-                    Text("Change Email").foregroundColor(.blue)
+                // 2)
+                Section(footer: Text(profileSettingsViewModel.emailMessage).foregroundColor(.red)) {
+                    TextField("Email", text: $profileSettingsViewModel.newEmail)
+                        .autocapitalization(.none)
+                    SecureField("Current password", text: $profileSettingsViewModel.currentPasswordChangeEmail)
+                    Button(action: { FirebaseAuthentication.shared.changeEmail(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordChangeEmail, newEmail: self.profileSettingsViewModel.newEmail)
+                    }) {
+                        Text("Change email")
+                    }.disabled(!self.profileSettingsViewModel.isValidEmail)
                 }
-            }
-            HStack {
-                TextField("New password", text: $newPassword)
-                SecureField("current password", text: $currentPasswordChangePassword)
-                Button(action: {
-                    FirebaseAuthentication.shared.changePassword(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordChangePassword, newPassword: self.newPassword)
-                }) {
-                    Text("Change Password").foregroundColor(.blue)
+                // 3)
+                Section(footer: Text(profileSettingsViewModel.passwordMessage).foregroundColor(.red)) {
+                    SecureField("Password", text: $profileSettingsViewModel.newPassword)
+                    SecureField("Password again", text: $profileSettingsViewModel.currentPasswordChangePassword)
+                    Button(action: { FirebaseAuthentication.shared.changePassword(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordChangePassword, newPassword: self.profileSettingsViewModel.newPassword)
+                    }) {
+                        Text("Change password")
+                    }.disabled(!self.profileSettingsViewModel.isValidPassword)
                 }
-            }
-            HStack {
-                SecureField("current password", text: $currentPasswordDeleteAccount)
-                Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                    self.firestoreProfile.removeProfileListener()
-                    FirebaseAuthentication.shared.deleteAccount(currentEmail: self.firebaseAuthentication.currentUser!.email, currentPassword: self.currentPasswordDeleteAccount)
-                }) {
-                    Text("Delete Account").foregroundColor(.red)
+                // 4)
+                Section(footer: Text(profileSettingsViewModel.deleteAccMessage).foregroundColor(.red)) {
+                    SecureField("Password", text: $profileSettingsViewModel.currentPasswordDeleteAccount)
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                        self.firestoreProfile.removeProfileListener()
+                        FirebaseAuthentication.shared.deleteAccount(currentEmail: self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordDeleteAccount)
+                    }) {
+                        Text("Delete account").foregroundColor(.red)
+                    }.disabled(!self.profileSettingsViewModel.isValidDeleteAcc)
                 }
-            }
-            Spacer()
-            Button(action: {
-                self.presentationMode.wrappedValue.dismiss()
-                FirebaseAuthentication.shared.logOut()
-            }) {
-                Text("Log Out").foregroundColor(.red)
+                // 5)
+                Section {
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                        FirebaseAuthentication.shared.logOut()
+                    }) {
+                        Text("Sign out").foregroundColor(.red)
+                    }
+                }
             }
         }.onAppear {
-            self.newUserName = self.firestoreProfile.user.username
+            self.profileSettingsViewModel.newUserName = self.firestoreProfile.user.username
+            self.profileSettingsViewModel.newEmail = self.firebaseAuthentication.currentUser != nil ? "\(self.firebaseAuthentication.currentUser!.email)" : ""
         }
-        .padding()
+//        .padding()
     }
 }
-
-struct UsersThatAreFollowingMeSheet: View {
-    @Binding var showSheet: Bool
-    var userId: String
-    @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
-    @Binding var profileUserIdToNavigateTo: String?
-    @Binding var goToOtherProfile: Int?
-    
-    var body: some View {
-        VStack {
-            Text("Users that are following me")
-            List {
-                ForEach(self.firestoreFollowSheet.usersThatAreFollowingMe.sorted{$0.username.lowercased() < $1.username.lowercased()}) { (user: User) in
-                    Button(action: {
-                        self.profileUserIdToNavigateTo = user.id
-                        self.goToOtherProfile = 1
-                        self.showSheet.toggle()
-                    }) {
-                        Text(user.username)}
-                    
-                }
-                Spacer()
-            }
-            Spacer()
-        }
-        .onAppear {
-            self.firestoreFollowSheet.addUsersThatAreFollowingMeListener(userId: self.userId)
-        }
-        .onDisappear {
-            self.firestoreFollowSheet.removeUsersThatAreFollowingMeListener()
-        }
-        .padding()
-    }
-}
-
-struct UsersThatIAmFollowingSheet: View {
-    @Binding var showSheet: Bool
-    var userId: String
-    @ObservedObject var firestoreFollowSheet = FirestoreFollowSheet()
-    @EnvironmentObject var firestoreProfile: FirestoreProfile
-    @Binding var profileUserIdToNavigateTo: String?
-    @Binding var goToOtherProfile: Int?
-    
-    var body: some View {
-        VStack {
-            Text("Users that I am following")
-            List {
-                ForEach(self.firestoreFollowSheet.usersThatIAmFollowing.sorted{$0.username.lowercased() < $1.username.lowercased()}) { (user: User) in
-                    Button(action: {
-                        self.profileUserIdToNavigateTo = user.id
-                        self.goToOtherProfile = 1
-                        self.showSheet.toggle()
-                    }) {
-                        Text(user.username)}
-                    
-                }
-                Spacer()
-            }
-            Spacer()
-        }
-        .onAppear {
-            self.firestoreFollowSheet.addUsersThatIAmFollowingListener(userId: self.userId)
-        }
-        .onDisappear {
-            self.firestoreFollowSheet.removeUsersThatIAmFollowingListener()
-        }
-        .padding()
-    }
-}
-
