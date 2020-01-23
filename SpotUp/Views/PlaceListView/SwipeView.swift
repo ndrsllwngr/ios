@@ -63,7 +63,7 @@ struct SwipeView: View {
 struct PlaceCard: View {
     let place: GMSPlace
     @State var image: UIImage?
-    @State var location: String?
+    @State var address: String?
     
     var body: some View {
         VStack(alignment: .leading){
@@ -71,7 +71,7 @@ struct PlaceCard: View {
             VStack(alignment: .leading){
                 Text(place.name != nil ? place.name! : "")
                     .font(.system(size: 20))
-                Text(location != nil ? location! : "")
+                Text(address != nil ? address! : "")
                     .font(.system(size: 12))
                     .foregroundColor(Color.gray)
             }.frame(height: 50, alignment: .topLeading)
@@ -82,8 +82,8 @@ struct PlaceCard: View {
             .background(Color.white)
             .cornerRadius(15)
             .onAppear {
-                if let com = self.place.plusCode {
-                    self.location = String(com.compoundCode!)[8...]
+                if let address = self.place.formattedAddress {
+                    self.address = address
                 }
                 if let photos = self.place.photos {
                     getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
