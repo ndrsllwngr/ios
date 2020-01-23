@@ -130,7 +130,7 @@ struct PlaceMenuSheet: View {
             }.padding()
         }
         .sheet(isPresented: $showAddPlaceToListSheet) {
-            AddPlaceToListSheet(place: self.gmsPlaceWithTimestamp.gmsPlace, placeImage: self.$image, showSheet: self.$showAddPlaceToListSheet)
+            AddPlaceToListSheet(place: self.gmsPlaceWithTimestamp.gmsPlace, placeImage: self.image, showSheet: self.$showAddPlaceToListSheet)
         }
         .padding()
     }
