@@ -35,7 +35,6 @@ struct CreateNewPlaceListRow: View {
                 .background(Color.white)
                 .mask(Rectangle().cornerRadius(15))
             }.frame(height: 120)
-            .background(Color("background"))
             
         }
     }

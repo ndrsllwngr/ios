@@ -1,10 +1,3 @@
-//
-//  PlaceListInfoView.swift
-//  SpotUp
-//
-//  Created by Fangli Lu on 17.01.20.
-//
-
 import Foundation
 import SwiftUI
 
@@ -13,6 +6,7 @@ struct PlaceListInfoView: View {
     var placeListId: String
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    @Binding var tabSelection: Int
     
     var body: some View {
         VStack {
@@ -48,6 +42,7 @@ struct PlaceListInfoView: View {
                         Spacer()
                         Button(action: {
                             ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
+                            self.tabSelection = 2
                         }) {
                             VStack{
                                 Text("Explore")
