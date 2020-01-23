@@ -111,7 +111,7 @@ struct ExplorePlaceRow: View {
                     PlaceRowImage(image: self.place.image)
                     VStack (alignment: .leading) {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
-                        Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "distance")
+                        Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "loading")
                     }
                     Spacer()
                 }
