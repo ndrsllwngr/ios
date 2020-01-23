@@ -8,7 +8,6 @@
 
 import SwiftUI
 
-
 struct PlaceListView: View {
     
     var placeListId: String
@@ -90,18 +89,21 @@ struct InnerPlaceListView: View {
     @State private var selection = 0
     
     var body: some View {
-        VStack {
-            // Follow button only on foreign user profiles
-            PlaceListInfoView(placeListId: placeListId, tabSelection: $tabSelection).environmentObject(firestorePlaceList)
-            
-            Picker(selection: $selection, label: Text("View")) {
-                Text("List").tag(0)
-                Text("Map").tag(1)
+        VStack (alignment: .leading){
+            VStack {
+                // Follow button only on foreign user profiles
+                PlaceListInfoView(placeListId: placeListId).environmentObject(firestorePlaceList)
+                    .padding()
+                
+                Picker(selection: $selection, label: Text("View")) {
+                    Text("List").tag(0)
+                    Text("Map").tag(1)
+                }
+                .padding()
+                .pickerStyle(SegmentedPickerStyle())
             }
-            .padding()
-            .pickerStyle(SegmentedPickerStyle())
-            
-            Spacer()
+            .padding(0)
+            .background(Color("background"))
             
             if selection == 0 {
                 List {
@@ -114,11 +116,16 @@ struct InnerPlaceListView: View {
                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
                     }
+                    
+                }
+                .onDisappear {
+                    UITableView.appearance().separatorStyle = .singleLine
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
+        .background(Color("background"))
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
             if (self.firestorePlaceList.isOwnedPlaceList) {
@@ -130,42 +137,7 @@ struct InnerPlaceListView: View {
     }
 }
 
-struct PlaceListInfoView: View {
-    
-    var placeListId: String
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    @Binding var tabSelection: Int
-    
-    var body: some View {
-        VStack {
-            HStack {
-                FirebasePlaceListImage(imageUrl: self.firestorePlaceList.placeList.imageUrl).padding(.top)
-                VStack {
-                    Text(self.firestorePlaceList.placeList.name)
-                    HStack {
-                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                        HStack {
-                            Image(systemName: "map.fill")
-                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
-                        }
-                        HStack {
-                            Image(systemName: "person.fill")
-                            Text("\(self.firestorePlaceList.placeList.followerIds.count)")
-                        }
-                    }
-                    Button(action: {
-                        ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
-                        self.tabSelection = 2
-                    }) {
-                        Text("Explore")
-                    }
-                }
-            }
-        }
-    }
-}
+
 
 struct PlaceListFollowButton: View {
     var placeListId: String
@@ -191,6 +163,7 @@ struct PlaceListFollowButton: View {
         }
     }
 }
+
 struct PlaceListSettingsButton: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var showSheet: Bool
@@ -212,9 +185,3 @@ struct PlaceListSettingsButton: View {
         
     }
 }
-
-//struct ListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PlaceListView(placeList: lists[0], isOwnedPlacelist: true)
-//    }
-//}

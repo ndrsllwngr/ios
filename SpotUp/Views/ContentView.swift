@@ -28,7 +28,10 @@ struct ContentView: View {
                 LoginView()
             }
         }
-        .onAppear(perform: startUp)
+        .onAppear(){
+            self.startUp()
+            UITableView.appearance().separatorStyle = .none
+        }
     }
     
     func startUp() {
