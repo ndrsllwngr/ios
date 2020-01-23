@@ -3,7 +3,7 @@ import GooglePlaces
 
 let placesClient = GMSPlacesClient.shared()
 
-let fields : GMSPlaceField = GMSPlaceField(rawValue:
+let fields: GMSPlaceField = GMSPlaceField(rawValue:
     UInt(GMSPlaceField.name.rawValue) |
         UInt(GMSPlaceField.placeID.rawValue) |
         UInt(GMSPlaceField.coordinate.rawValue) |
@@ -18,8 +18,21 @@ let fields : GMSPlaceField = GMSPlaceField(rawValue:
         UInt(GMSPlaceField.plusCode.rawValue)
     )!
 
+let fieldsSimple: GMSPlaceField = GMSPlaceField(rawValue:
+        UInt(GMSPlaceField.name.rawValue) |
+            UInt(GMSPlaceField.placeID.rawValue) |
+            UInt(GMSPlaceField.coordinate.rawValue) |
+            UInt(GMSPlaceField.formattedAddress.rawValue) |
+            UInt(GMSPlaceField.photos.rawValue)
+        )!
+
+
 func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {
     placesClient.fetchPlace(fromPlaceID: placeID, placeFields: fields, sessionToken: nil, callback: handler)
+}
+
+func getPlaceSimple (placeID: String, handler: @escaping GMSPlaceResultCallback) {
+    placesClient.fetchPlace(fromPlaceID: placeID, placeFields: fieldsSimple, sessionToken: nil, callback: handler)
 }
 
 func getPlaceFoto(photoMetadata: GMSPlacePhotoMetadata, handler: @escaping GMSPlacePhotoImageResultCallback) {
@@ -58,7 +71,7 @@ func getPlacePriceLevel(priceLevel:GMSPlacesPriceLevel)->Int{
         temp = 4
     case.unknown:
         temp = 0
-        default:
+    default:
         temp = 0
     }
     return temp
