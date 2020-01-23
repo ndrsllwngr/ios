@@ -121,7 +121,7 @@ struct InnerPlaceListView: View {
                 .pickerStyle(SegmentedPickerStyle())
             }
             .padding(0)
-            .background(Color("background"))
+            .background(Color("elevation-1"))
             
             if selection == 0 {
                 List {
@@ -143,7 +143,6 @@ struct InnerPlaceListView: View {
                 MapView().environmentObject(firestorePlaceList)
             }
         }
-        .background(Color("background"))
         .navigationBarTitle(Text(""), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
             if (self.firestorePlaceList.isOwnedPlaceList) {
