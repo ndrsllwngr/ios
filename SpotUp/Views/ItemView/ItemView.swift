@@ -16,14 +16,24 @@ struct ItemView: View {
     @State var priceLevel: Int? = nil
     @State var type: String? = nil
     @State var openingHoursText: [String]? = []
+    @State var photos: [GMSPlacePhotoMetadata]? = []
+    @State var gallery: [UIImage] = []
+    
+    
     
     var body: some View {
         VStack {
             if (place == nil) {
                 Text("")
             } else {
-                InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!)
-            }
+                ScrollView{
+                    VStack{
+                    VStack{
+                        GalleryView(gallery: self.$gallery)
+                            }
+                        InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: gallery)
+                            .offset(y:-30)
+                    }}}
         }.onAppear {
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
@@ -40,6 +50,25 @@ struct ItemView: View {
                     self.priceLevel = getPlacePriceLevel(priceLevel: place.priceLevel)
                     if let types = place.types{
                         self.type = parseType(types:types)}
+                    if let photos = place.photos{
+                        print("photos l.54")
+                        for (index, image) in photos.enumerated(){
+                        guard index <= 5 else {
+                            print("break")
+                            break}
+                        getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
+                            if let error = error {
+                                print("Error loading photo metadata: \(error.localizedDescription)")
+                                return
+                            }
+                            if let photo = photo {
+                                self.gallery.append(photo)
+                            }
+                        }
+                        }
+                        
+                    }
+                    
                     print("The selected place is: \(String(describing: place.name))")
                 }
             }
@@ -59,12 +88,11 @@ struct InnerItemView: View {
     
     
     var body: some View {
-        ScrollView(showsIndicators: false){
+//        ScrollView(showsIndicators: false){
             VStack{
-                ZStack {
                     //---------------------------------------------
-                    GalleryView(photos: place.photos, gallery: self.$gallery)
-                        .frame(width:UIScreen.main.bounds.width, height:300)
+//                    GalleryView(photos: place.photos, gallery: self.$gallery)
+//                        .frame(width:UIScreen.main.bounds.width, height:300)
                     //---------------------------------------------
                     //topbar info
                     HStack(){
@@ -102,10 +130,9 @@ struct InnerItemView: View {
                         .frame(width:UIScreen.main.bounds.width, height:50)
                         .background(Color.white)
                         .cornerRadius(15)
-                        .offset(y:+150)
                     
                     
-                }//end Zstack
+                //end Zstack
                 
                 //---------------------------------------------
                 //main info
@@ -144,7 +171,7 @@ struct InnerItemView: View {
                 
                 
             }// end Vstack
-        }// end ScrollView
+//        }// end ScrollView
             .sheet(isPresented: $showSheet) {
                 ItemAddSheet(place: self.place, placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil, showSheet: self.$showSheet)
                 
@@ -158,42 +185,41 @@ struct InnerItemView: View {
 
 
 struct GalleryView:View{
-    var photos: [GMSPlacePhotoMetadata]?
+//    var photos: [GMSPlacePhotoMetadata]?
     @Binding var gallery: [UIImage]
-    @ObservedObject var photoGallery : Gallery = Gallery()
+//    @ObservedObject var photoGallery : Gallery = Gallery()
     
     var body : some View {
-        VStack {
             ScrollView(.horizontal,showsIndicators: false){
                 HStack (spacing:5) {
                     ForEach(self.gallery, id:\.self){
                         photo in
-                        return HStack{ ItemImageView(image:photo)}
+                        return HStack{ ItemImageView(image:photo)} .frame(width:UIScreen.main.bounds.width, height:300)
                     }
                 }
             }
-        }.onAppear {
-            if let photos = self.photos {
-                    for (index, image) in photos.enumerated(){
-                        guard index <= 5 else {
-                            break}
-                        getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
-                            if let error = error {
-                                print("Error loading photo metadata: \(error.localizedDescription)")
-                                return
-                            }
-                            if let photo = photo {
-                                self.gallery.append(photo)
-                            }
-                        }
-                        //            else {
-                        //                return
-                        //            }
-                    }
-                self.photoGallery.getGallery(images: photos)} else {
-                self.gallery.append(UIImage(named: "place_image_placeholder")!)
-            }
-        }
+//        .onAppear {
+//            if let photos = self.photos {
+//                    for (index, image) in photos.enumerated(){
+//                        guard index <= 5 else {
+//                            break}
+//                        getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
+//                            if let error = error {
+//                                print("Error loading photo metadata: \(error.localizedDescription)")
+//                                return
+//                            }
+//                            if let photo = photo {
+//                                self.gallery.append(photo)
+//                            }
+//                        }
+//                        //            else {
+//                        //                return
+//                        //            }
+//                    }
+//                self.photoGallery.getGallery(images: photos)} else {
+//                self.gallery.append(UIImage(named: "place_image_placeholder")!)
+//            }
+//        }
     }
 }
 

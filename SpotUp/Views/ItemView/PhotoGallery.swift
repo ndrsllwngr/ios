@@ -10,7 +10,7 @@ import GooglePlaces
 import SwiftUI
 
 
-class Gallery:ObservableObject, Identifiable{
+class Gallery: ObservableObject, Identifiable{
     @Published var gallery: [UIImage] = []
     
     func getGallery (images: [GMSPlacePhotoMetadata]?){
@@ -24,6 +24,7 @@ class Gallery:ObservableObject, Identifiable{
                         return
                     }
                     if let photo = photo {
+                        print("added photo Gallery!")
                         self.gallery.append(photo)
                     }
                 }
