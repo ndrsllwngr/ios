@@ -109,6 +109,7 @@ struct InnerProfileView: View {
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                    .padding(.bottom, 10)
                     
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         
@@ -127,9 +128,8 @@ struct InnerProfileView: View {
                                 self.placeListIdToNavigateTo = placeList.id
                                 self.goToPlaceList = 1
                             }
-                            .frame(height: 120)
                     }
-
+                    Spacer()
                 }
                 Spacer()
             }

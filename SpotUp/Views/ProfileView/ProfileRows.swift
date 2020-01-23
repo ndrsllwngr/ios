@@ -45,48 +45,61 @@ struct PlacesListRow: View {
     
     var body: some View {
         GeometryReader { geo in
-            HStack {
-                
-                FirebasePlaceListRowImage(imageUrl: self.placeList.imageUrl)
-                    .scaledToFill()
-                    .frame(width: 100, height: 60)
-                
-                VStack(alignment: .leading) {
-                    Text(self.placeList.name)
-                        .bold()
+            ZStack {
+                HStack {
                     
-                    HStack {
+                    FirebasePlaceListRowImage(imageUrl: self.placeList.imageUrl)
+                        .scaledToFill()
+                        .frame(width: 100, height: 60)
+                    
+                    VStack(alignment: .leading) {
+                        Text(self.placeList.name)
+                            .font(.system(size: 18))
+                            .bold()
                         Text("by \(self.placeList.owner.username)")
+                            .font(.system(size: 12))
+                        
+                    }
+                    .padding(.trailing)
+                }
+                .frame(width: geo.size.width, height: 60, alignment: .leading)
+                .background(Color("elevation-1"))
+                .mask(Rectangle().cornerRadius(15))
+                .shadow(radius: 5, y: 4)
+                
+                VStack {
+                    Spacer()
+                    HStack{
                         Spacer()
                         if (!self.placeList.isPublic) {
                             HStack {
                                 Image(systemName: "lock.fill")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(height: 12)
+                                    .frame(height: 10)
                             }
-                            .frame(width: 20, height: 20)
+                            .frame(width: 18, height: 18)
                             .background(Color("bg-placeholder"))
-                            .mask(Rectangle().cornerRadius(100))
+                            .mask(Circle())
                         }
+                        
                         if (self.placeList.isCollaborative) {
                             HStack {
                                 Image(systemName: "person.2.fill")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 12)
+                                    .frame(width: 10)
                             }
-                            .frame(width: 20, height: 20)
+                            .frame(width: 18, height: 18)
                             .background(Color("bg-placeholder"))
-                            .mask(Rectangle().cornerRadius(100))
+                            .mask(Circle())
                         }
-                    }
-                }.padding(.trailing)
+                    }.padding(.trailing)
+                    .padding(.bottom, 10)
+                    
+                }.frame(width: geo.size.width, height: 60, alignment: .trailing)
             }
-            .frame(width: geo.size.width, alignment: .leading)
-            .background(Color("elevation-1"))
-            .mask(Rectangle().cornerRadius(15))
-            .shadow(radius: 5, y: 4)
+            
         }.frame(height: 60)
     }
     
