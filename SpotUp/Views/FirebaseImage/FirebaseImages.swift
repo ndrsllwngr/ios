@@ -27,8 +27,6 @@ struct FirebaseProfileImage: View {
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
             } else {
                 Image(uiImage: UIImage(named: "profile_image_placeholder")!)
                     .renderingMode(.original)
@@ -36,8 +34,6 @@ struct FirebaseProfileImage: View {
                     .animation(.easeInOut(duration: 0.5))
                     .transition(.fade)
                     .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .clipShape(Circle())
             }
             
         }

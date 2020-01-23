@@ -10,7 +10,8 @@ struct SearchResultsAccountsView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
                     List {
-                        Section(header: Text("Recent")) {
+                        Section() {
+                            Text("Recent").font(.subheadline).fontWeight(.semibold)
                             ForEach(searchViewModel.recentSearchFirebaseAccounts) {
                                 (user: User) in SingleRowAccount(user: user, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
@@ -57,8 +58,10 @@ struct SingleRowAccount: View {
                 self.goToDestination = true
                 self.selection = 1
             }){
-                HStack {
-                    Text(user.username)
+                HStack(alignment: .center) {
+                    FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
+                    .clipShape(Circle())
+                    Text(user.username).font(.body)
                     Spacer()
                 }
             }.padding(.leading)

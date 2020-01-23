@@ -30,7 +30,8 @@ struct SearchResultsGooglePlacesView: View {
         Group {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchPlaces.count > 0) {
-                    List { Section(header: Text("Recent")){
+                    List { Section(){
+                        Text("Recent").font(.subheadline).fontWeight(.semibold)
                         ForEach(searchViewModel.recentSearchPlaces, id: \.placeID) {
                             (result: GMSAutocompletePrediction) in SingleRowPlace(result: result, showRecent: true).environmentObject(self.searchViewModel)
                         }
@@ -75,7 +76,12 @@ struct SingleRowPlace: View {
                 self.selection = 1
             }){
                 HStack {
-                    Text(result.attributedFullText.string)
+                    VStack(alignment: .leading) {
+                        Text(result.attributedPrimaryText.string).font(.headline)
+                        if result.attributedSecondaryText != nil {
+                            Text(result.attributedSecondaryText!.string).font(.body)
+                        }
+                    }
                     Spacer()
                 }
             }.padding(.leading)
