@@ -190,7 +190,7 @@ struct ProfileInfoView: View {
                             Text("\(self.profile.user.isFollowedBy.count)")
                                 .font(.system(size: 14))
                                 .bold()
-                            Text("Follower")
+                            Text("Followers")
                                 .font(.system(size: 12))
                         }
                     }
@@ -203,7 +203,7 @@ struct ProfileInfoView: View {
                             Text("\(self.profile.user.isFollowing.count)")
                                 .font(.system(size: 14))
                                 .bold()
-                            Text("I am following")
+                            Text("Following")
                                 .font(.system(size: 12))
                         }
                     }
@@ -240,6 +240,7 @@ struct ProfileFollowButton: View {
         }
     }
 }
+
 struct ProfileSettingsButton: View {
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @Binding var showSheet: Bool

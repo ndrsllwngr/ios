@@ -26,13 +26,15 @@ struct CreateNewPlaceListRow: View {
                             .scaledToFit()
                             .frame(height: 32)
                     }
-                    .frame(width: 120, height: 100)
+                    .frame(width: 100, height: 60)
                     Text("Create new place list")
                 }
                 .frame(width: geo.size.width, alignment: .leading)
                 .background(Color("elevation-1"))
                 .mask(Rectangle().cornerRadius(15))
-            }.frame(height: 120)
+                .shadow(radius: 5, y: 4)
+                .padding(.vertical)
+            }.frame(height: 60)
             
         }
     }
@@ -47,7 +49,7 @@ struct PlacesListRow: View {
                 
                 FirebasePlaceListRowImage(imageUrl: self.placeList.imageUrl)
                     .scaledToFill()
-                    .frame(width: 120, height: 100)
+                    .frame(width: 100, height: 60)
                 
                 VStack(alignment: .leading) {
                     Text(self.placeList.name)
@@ -84,7 +86,8 @@ struct PlacesListRow: View {
             .frame(width: geo.size.width, alignment: .leading)
             .background(Color("elevation-1"))
             .mask(Rectangle().cornerRadius(15))
-        }.frame(height: 120)
+            .shadow(radius: 5, y: 4)
+        }.frame(height: 60)
     }
     
 }
