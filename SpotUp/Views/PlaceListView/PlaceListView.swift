@@ -105,20 +105,22 @@ struct InnerPlaceListView: View {
     var body: some View {
         VStack (alignment: .leading){
             VStack {
-                // Follow button only on foreign user profiles
-                PlaceListInfoView(placeListId: placeListId,
-                              showSheet: $showSheet,
-                              sheetSelection: $sheetSelection,
-                              tabSelection: $tabSelection)
-                .environmentObject(firestorePlaceList)
-                    .padding()
-                
+                if (selection == 0) {
+                    // Follow button only on foreign user profiles
+                    PlaceListInfoView(placeListId: placeListId,
+                                  showSheet: $showSheet,
+                                  sheetSelection: $sheetSelection,
+                                  tabSelection: $tabSelection)
+                    .environmentObject(firestorePlaceList)
+                        .padding()
+                }
                 Picker(selection: $selection, label: Text("View")) {
                     Text("List").tag(0)
                     Text("Map").tag(1)
                 }
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
+                .animation(.default)
             }
             .padding(0)
             .background(Color("elevation-1"))
