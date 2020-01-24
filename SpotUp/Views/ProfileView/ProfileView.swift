@@ -236,25 +236,27 @@ struct ProfileFollowButton: View {
     
     var body: some View {
         VStack {
-            if (!self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "person.badge.plus.fill")
+            if(self.firebaseAuthentication.currentUser != nil) {
+                if (!self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "person.badge.plus.fill")
+                        }
+                        .frame(width: 49, height: 49)
                     }
-                    .frame(width: 49, height: 49)
-                }
-            } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "person.badge.minus.fill")
+                } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "person.badge.minus.fill")
+                        }
+                        .frame(width: 49, height: 49)
                     }
-                    .frame(width: 49, height: 49)
                 }
             }
         }
