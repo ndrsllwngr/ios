@@ -56,10 +56,8 @@ struct ExploreView: View {
                 ExploreSettingsSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "select_placelist") {
                 SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
-            } else if (self.sheetSelection == "place_menu") {
-                ExplorePlaceMenuSheet(place: self.placeForPlaceMenuSheet!,
-                                      image: self.$imageForPlaceMenuSheet,
-                                      showSheet: self.$showSheet)
+            } else if (self.sheetSelection == "add_to_placelist"){
+                AddPlaceToListSheet(place: self.placeForPlaceMenuSheet!.place, placeImage: self.imageForPlaceMenuSheet, showSheet: self.$showSheet)
             }
             
         }
