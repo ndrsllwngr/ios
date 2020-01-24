@@ -51,9 +51,7 @@ struct ProfileView: View {
             Spacer()
         }
         .sheet(isPresented: $showSheet) {
-            if self.sheetSelection == "settings" {
-                ProfileSettingsSheet(showSheet: self.$showSheet).environmentObject(self.firestoreProfile)
-            } else if self.sheetSelection == "create_placelist"{
+            if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
                 FollowSheet(userIds: self.firestoreProfile.user.isFollowedBy,
@@ -112,8 +110,8 @@ struct InnerProfileView: View {
                     
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
                         PlacesListRow(placeList: placeList).onTapGesture {
-                                self.placeListIdToNavigateTo = placeList.id
-                                self.goToPlaceList = 1
+                            self.placeListIdToNavigateTo = placeList.id
+                            self.goToPlaceList = 1
                         }
                     }
                 }
@@ -121,8 +119,8 @@ struct InnerProfileView: View {
                 List {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
                         PlacesListRow(placeList: placeList).onTapGesture {
-                                self.placeListIdToNavigateTo = placeList.id
-                                self.goToPlaceList = 1
+                            self.placeListIdToNavigateTo = placeList.id
+                            self.goToPlaceList = 1
                         }
                     }
                 }
@@ -131,7 +129,7 @@ struct InnerProfileView: View {
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
             if (self.isMyProfile) {
-                ProfileSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
+                ProfileSettingsButton().environmentObject(self.firestoreProfile)
             } else if (!self.isMyProfile) {
                 ProfileFollowButton(profileUserId: self.profileUserId).environmentObject(self.firestoreProfile)
             }
@@ -242,13 +240,21 @@ struct ProfileFollowButton: View {
                 Button(action: {
                     FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                 }) {
-                    Image(systemName: "person.badge.plus.fill")
+                    HStack {
+                        Spacer()
+                        Image(systemName: "person.badge.plus.fill")
+                    }
+                    .frame(width: 49, height: 49)
                 }
             } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                 }) {
-                    Image(systemName: "person.badge.minus.fill")
+                    HStack {
+                        Spacer()
+                        Image(systemName: "person.badge.minus.fill")
+                    }
+                    .frame(width: 49, height: 49)
                 }
             }
         }
@@ -257,18 +263,14 @@ struct ProfileFollowButton: View {
 
 struct ProfileSettingsButton: View {
     @EnvironmentObject var firestoreProfile: FirestoreProfile
-    @Binding var showSheet: Bool
-    @Binding var sheetSelection: String
     
     var body: some View {
-        VStack {
-            Button(action:  {
-                self.sheetSelection = "settings"
-                self.showSheet.toggle()
-            }) {
+        NavigationLink(destination: ProfileSettingsView().environmentObject(self.firestoreProfile)) {
+            HStack {
+                Spacer()
                 Image(systemName: "gear")
             }
+            .frame(width: 49, height: 49)
         }
-        
     }
 }
