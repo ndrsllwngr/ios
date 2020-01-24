@@ -10,7 +10,10 @@ import SwiftUI
 import GooglePlaces
 
 struct PlaceRow: View {
-    var gmsPlaceWithTimestamp: GMSPlaceWithTimestamp
+    var place: GMSPlaceWithTimestamp
+    var placeListId: String
+    
+    @State var showActionSheet: Bool = false
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -18,8 +21,8 @@ struct PlaceRow: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     @State var image: UIImage?
     @State var address: String?
@@ -34,7 +37,7 @@ struct PlaceRow: View {
                         .padding(.trailing, 10)
                     
                     VStack(alignment: .leading){
-                        Text(self.gmsPlaceWithTimestamp.gmsPlace.name != nil ? self.gmsPlaceWithTimestamp.gmsPlace.name! : "")
+                        Text(self.place.gmsPlace.name != nil ? self.place.gmsPlace.name! : "")
                             .font(.system(size: 18))
                             .lineLimit(1)
                         Text(self.address != nil ? self.address! : "")
@@ -47,29 +50,51 @@ struct PlaceRow: View {
                 }
                     .frame(width: metrics.size.width * 0.85)
                     .onTapGesture {
-                        self.placeIdToNavigateTo = self.gmsPlaceWithTimestamp.gmsPlace.placeID!
+                        self.placeIdToNavigateTo = self.place.gmsPlace.placeID!
                         self.goToPlace = 1
                 }
                 HStack {
                     Spacer()
                     Image(systemName: "ellipsis")
                 }
-                    .frame(width: metrics.size.width * 0.15)
-                    .onTapGesture {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "place_menu"
-                        self.placeForPlaceMenuSheet = self.gmsPlaceWithTimestamp
-                        self.imageForPlaceMenuSheet = self.image
+                .frame(width: metrics.size.width * 0.15)
+                .onTapGesture {
+                    self.showActionSheet.toggle()
+                }
+                .actionSheet(isPresented: self.$showActionSheet) {
+                    ActionSheet(title: Text("\(self.place.gmsPlace.name!)"), buttons: [
+                        .default(Text("Add to explore")) {
+                            ExploreModel.shared.addPlaceToExplore(self.place.gmsPlace)
+                        },
+                        .default(Text("Add to other collection")) {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "add_to_placelist"
+                            self.placeForAddPlaceToListSheet = self.place
+                            self.imageForAddPlaceToListSheet = self.image
+                        },
+                        .default(Text("Set place image as collection image")) {
+                            if let image = self.image {
+                                FirebaseStorage.shared.uploadImageToStorage(id: self.placeListId, imageType: .PLACELIST_IMAGE, uiImage: image)
+                            } else {
+                                print("Place has no image")
+                            }
+                        },
+                        .destructive(Text("Remove from collection")) {
+                            self.showActionSheet.toggle()
+                            FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.place)
+                        },
+                        .cancel()
+                    ])
                 }
             }.frame(height: 60)
         }
         .frame(height: 60)
         .onAppear {
-            if let address = self.gmsPlaceWithTimestamp.gmsPlace.formattedAddress {
+            if let address = self.place.gmsPlace.formattedAddress {
                 self.address = address
             }
             
-            if let photos = self.gmsPlaceWithTimestamp.gmsPlace.photos {
+            if let photos = self.place.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")

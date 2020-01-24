@@ -12,14 +12,16 @@ import GooglePlaces
 struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     
+    @State var showActionSheet: Bool = false
+    
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: ExplorePlace?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
         VStack {
@@ -70,15 +72,25 @@ struct CurrentTargetRow: View {
                                 }
                             }.frame(width: metrics.size.width * 0.10)
                             HStack {
-                                Button(action: {
-                                    self.showSheet.toggle()
-                                    self.sheetSelection = "place_menu"
-                                    self.placeForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!
-                                    self.imageForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!.image
-                                }) {
-                                        Image(systemName: "ellipsis")
-                                }
-                            }.frame(width: metrics.size.width * 0.10)
+                                Image(systemName: "ellipsis")
+                            }
+                            .frame(width: metrics.size.width * 0.10)
+                            .onTapGesture {
+                                self.showActionSheet.toggle()
+                            }
+                            .actionSheet(isPresented: self.$showActionSheet) {
+                                ActionSheet(title: Text("\(self.exploreModel.exploreList!.currentTarget!.place.name!)"), buttons: [
+                                    .default(Text("Add to collection")) {
+                                        self.showSheet.toggle()
+                                        self.sheetSelection = "add_to_placelist"
+                                        self.placeForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!
+                                        self.imageForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!.image
+                                    },
+                                    .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.exploreModel.exploreList!.currentTarget!)
+                                    },
+                                    .cancel()
+                                ])
+                            }
                         }
                     }
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
@@ -95,6 +107,7 @@ struct CurrentTargetRow: View {
 
 struct ExplorePlaceRow: View {
     @State var place: ExplorePlace
+    @State var showActionSheet: Bool = false
     
     @ObservedObject var exploreModel = ExploreModel.shared
     
@@ -104,8 +117,8 @@ struct ExplorePlaceRow: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: ExplorePlace?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
         GeometryReader { metrics in
@@ -151,10 +164,20 @@ struct ExplorePlaceRow: View {
                 }
                 .frame(width: metrics.size.width * 0.2)
                 .onTapGesture {
-                    self.showSheet.toggle()
-                    self.sheetSelection = "place_menu"
-                    self.placeForPlaceMenuSheet = self.place
-                    self.imageForPlaceMenuSheet = self.place.image
+                    self.showActionSheet.toggle()
+                }
+                .actionSheet(isPresented: self.$showActionSheet) {
+                    ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
+                        .default(Text("Add to collection")) {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "add_to_placelist"
+                            self.placeForAddPlaceToListSheet = self.place
+                            self.imageForAddPlaceToListSheet = self.place.image
+                        },
+                        .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.place)
+                        },
+                        .cancel()
+                    ])
                 }
             }
         }
