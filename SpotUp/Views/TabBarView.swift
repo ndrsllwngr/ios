@@ -16,7 +16,7 @@ struct TabBarView: View {
     
     var body: some View {
         GeometryReader { metrics in
-            VStack {
+            VStack(spacing: 0) {
                 VStack {
                     if (self.selection == 0) {
                         NavigationView {
@@ -32,8 +32,8 @@ struct TabBarView: View {
                             ExploreView()
                         }
                     }
-                    Spacer()
                 }
+                Spacer()
                 if (self.exploreModel.exploreList != nil && self.selection != 2) {
                     ExploreIsActiveBar()
                         .frame(width: metrics.size.width, height: 49)
@@ -70,6 +70,8 @@ struct TabBarView: View {
                 .frame(width: metrics.size.width, height: 50)
                 .background(Color("bg-tab-bar"))
             }
+            // TODO colore on the back
+            //.edgesIgnoringSafeArea(.bottom)
         }
     }
 }
