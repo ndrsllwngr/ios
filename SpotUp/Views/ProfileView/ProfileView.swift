@@ -14,7 +14,7 @@ struct ProfileView: View {
     var profileUserId: String
     
     @Binding var tabSelection: Int
-
+    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile = FirestoreProfile()
     
@@ -93,7 +93,7 @@ struct InnerProfileView: View {
     
     @Binding var isMyProfile: Bool
     @Binding var tabSelection: Int
-
+    
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     
     @Binding var showSheet: Bool
@@ -105,31 +105,31 @@ struct InnerProfileView: View {
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
-           
+            
             List {
                 if isMyProfile {
                     CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                        .padding(.bottom, 10)
                     
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         
-                            PlacesListRow(placeList: placeList)
+                        PlacesListRow(placeList: placeList)
                             .onTapGesture {
                                 self.placeListIdToNavigateTo = placeList.id
                                 self.goToPlaceList = 1
-                            }
+                        }
                     }
-
+                    
                 } else {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}){ placeList in
                         
-                            PlacesListRow(placeList: placeList)
+                        PlacesListRow(placeList: placeList)
                             .onTapGesture {
                                 self.placeListIdToNavigateTo = placeList.id
                                 self.goToPlaceList = 1
-                            }
-                            .frame(height: 120)
+                        }
                     }
-
+                    Spacer()
                 }
                 Spacer()
             }
@@ -158,19 +158,39 @@ struct ProfileInfoView: View {
     var body: some View {
         VStack {
             VStack {
-                HStack {
-                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
-                    .clipShape(Circle()).padding(.top)
-                    if (self.isMyProfile) {
-                        Button(action: {
-                            self.showSheet.toggle()
-                            self.sheetSelection = "image_picker"
-                        }) {
-                            Image(systemName: "square.and.pencil")
+                ZStack{
+                    VStack {
+                        FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
+                            .clipShape(Circle()).padding(.top)
+                    }.frame(width: 110, height: 110)
+                    
+                    VStack {
+                        Spacer()
+                        HStack{
+                            Spacer()
+                            if (self.isMyProfile) {
+                                Button(action: {
+                                    self.showSheet.toggle()
+                                    self.sheetSelection = "image_picker"
+                                }) {
+                                    HStack {
+                                        Image(systemName: "pencil")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 18)
+                                            .foregroundColor(Color.white)
+                                    }
+                                    .frame(width: 32, height: 32)
+                                    .background(Color("brand-color-primary"))
+                                    .mask(Circle())
+                                    
+                                }
+                            }
                         }
-                    }
+                    }.frame(width: 110, height: 110)
                 }
             }
+            
             GeometryReader { metrics in
                 HStack {
                     Spacer()
@@ -178,7 +198,7 @@ struct ProfileInfoView: View {
                         Text("\(self.profile.placeLists.count)")
                             .font(.system(size: 14))
                             .bold()
-                        Text("Placelists")
+                        Text("COLLECTIONS")
                             .font(.system(size: 12))
                         
                     }
@@ -191,7 +211,7 @@ struct ProfileInfoView: View {
                             Text("\(self.profile.user.isFollowedBy.count)")
                                 .font(.system(size: 14))
                                 .bold()
-                            Text("Follower")
+                            Text("FOLLOWERS")
                                 .font(.system(size: 12))
                         }
                     }
@@ -204,7 +224,7 @@ struct ProfileInfoView: View {
                             Text("\(self.profile.user.isFollowing.count)")
                                 .font(.system(size: 14))
                                 .bold()
-                            Text("I am following")
+                            Text("FOLLOWING")
                                 .font(.system(size: 12))
                         }
                     }
@@ -241,6 +261,7 @@ struct ProfileFollowButton: View {
         }
     }
 }
+
 struct ProfileSettingsButton: View {
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @Binding var showSheet: Bool
