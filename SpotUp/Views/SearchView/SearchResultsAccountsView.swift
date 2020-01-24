@@ -39,7 +39,7 @@ struct SingleRowAccount: View {
     @EnvironmentObject var searchViewModel: SearchViewModel
     var user: User
     @Binding var tabSelection: Int
-
+    
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
     @State var goToDestination: Bool = false
@@ -60,24 +60,24 @@ struct SingleRowAccount: View {
             }){
                 HStack(alignment: .center) {
                     FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
-                    .clipShape(Circle())
+                        .clipShape(Circle())
                     Text(user.username).font(.body)
                     Spacer()
                 }
             }.padding(.leading)
             Spacer()
-            //            if showRecent == true {
-            //                Group{
-            //                    Button(action: {
-            //                        print("delete invoked")
-            //                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseAccounts.firstIndex(of: self.user)
-            //                        if(indexOfToBeDeletedEntry != nil) {
-            //                            self.searchViewModel.recentSearchFirebaseAccounts.remove(at: indexOfToBeDeletedEntry!)
-            //                        }
-            //                    }) { Image(systemName: "xmark")}
-            //                }
-            //                .padding(.trailing)
-            //            }
+            if showRecent == true {
+                Group{
+                    Button(action: {
+                        print("delete invoked")
+                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseAccounts.firstIndex(of: self.user)
+                        if(indexOfToBeDeletedEntry != nil) {
+                            self.searchViewModel.recentSearchFirebaseAccounts.remove(at: indexOfToBeDeletedEntry!)
+                        }
+                    }) { Image(systemName: "xmark")}
+                }
+                .padding(.trailing)
+            }
             if (self.goToDestination != false) {
                 NavigationLink(destination: ProfileView(profileUserId: user.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
                     EmptyView()
@@ -86,9 +86,3 @@ struct SingleRowAccount: View {
         }
     }
 }
-
-//struct SearchResultsAccountsView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SearchResultsAccountsView()
-//    }
-//}
