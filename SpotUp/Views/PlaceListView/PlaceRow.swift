@@ -73,9 +73,9 @@ struct PlaceRowImage: View {
         Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
             .renderingMode(.original)
             .resizable()
-            .animation(.default)
             .clipShape(Rectangle())
             .scaledToFill()
+            .animation(.easeInOut)
             .frame(width: 50, height: 50)
             .cornerRadius(15)
     }
