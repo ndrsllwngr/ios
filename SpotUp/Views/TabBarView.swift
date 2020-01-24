@@ -20,7 +20,7 @@ struct TabBarView: View {
                 VStack {
                     if (self.selection == 0) {
                         NavigationView {
-                            HomeView(tabSelection: self.$selection)
+                            SearchView(tabSelection: self.$selection)
                         }
                         
                     } else if (self.selection == 1) {

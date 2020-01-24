@@ -1,19 +1,11 @@
 import SwiftUI
 import GooglePlaces
 
-struct HomeView: View {
+struct SearchView: View {
     @Binding var tabSelection: Int
-
     @ObservedObject var searchViewModel = SearchViewModel.shared
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
-    
-    // WARNING! init() gets triggered everytime TabBarView is routing
-//    init() {
-//        print("HomeView()  - init(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
-//        self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
-//        self.searchViewModel.firestoreSearch.addAllUsersListener()
-//    }
     
     var body: some View {
         
@@ -92,12 +84,12 @@ struct HomeView: View {
                 }.navigationBarTitle(Text(""), displayMode: .inline)
             }
             .onAppear {
-                print("HomeView()  - onAppear(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
+                print("SearchView()  - onAppear(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.addAllUsersListener()
             }
             .onDisappear {
-                print("HomeView()  - onDisappear(): REMOVE firestoreSearch Listener (PublicPlaceLists & AllUsers)")
+                print("SearchView()  - onDisappear(): REMOVE firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.removeAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.removeAllUsersListener()
             }
@@ -109,12 +101,6 @@ struct HomeView: View {
     }
     
 }
-
-//struct HomeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HomeView()
-//    }
-//}
 
 extension UIApplication {
     func endEditing(_ force: Bool) {
