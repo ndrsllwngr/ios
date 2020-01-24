@@ -22,6 +22,7 @@ struct MapView: View {
 struct GoogleMapView : UIViewRepresentable {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @Binding var currentIndex: Int
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
     var defaultLocation = CLLocationCoordinate2D(
         latitude: 34.6692097,
         longitude: 135.503039
@@ -39,7 +40,9 @@ struct GoogleMapView : UIViewRepresentable {
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
         mapView.delegate = context.coordinator
-        mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:160, right: 0)
+        if !firestorePlaceList.places.isEmpty {
+            mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:160, right: 0)
+        }
         context.coordinator.firestorePlaceList = self.firestorePlaceList
         return mapView
     }
@@ -91,7 +94,7 @@ struct GoogleMapView : UIViewRepresentable {
             if let index = index {
                 self.parent.currentIndex = Int(index)
             }
-
+            
             return true
         }
     }

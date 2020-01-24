@@ -23,7 +23,7 @@ struct PlaceListInfoView: View {
                 HStack (alignment: .top){
                     VStack (alignment: .leading){
                         Text(self.firestorePlaceList.placeList.name)
-                            .font(Font.custom("Europa-Bold", size: 20))
+                            .font(.system(size: 20))
                         HStack {
                             NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
                                 Text("by \(self.firestorePlaceList.placeList.owner.username)")
@@ -66,7 +66,7 @@ struct PlaceListInfoView: View {
                     .frame(height: 100)
                     .padding(.leading, 10)
                 }
-            }.padding(.horizontal, 22)
+            }
         }
     }
 }
