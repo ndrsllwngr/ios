@@ -13,7 +13,7 @@ struct ExploreIsActiveBar: View {
             } else {
                 Text("No current target")
             }
-        }.padding(.trailing).padding(.leading)
+        }
     }
 }
 
