@@ -104,25 +104,30 @@ struct InnerPlaceListView: View {
     var body: some View {
         VStack (alignment: .leading){
             VStack {
-                if (selection == 0) {
+                if selection == 0 {
                     // Follow button only on foreign user profiles
                     PlaceListInfoView(placeListId: placeListId,
                                   showSheet: $showSheet,
                                   sheetSelection: $sheetSelection,
                                   tabSelection: $tabSelection)
                     .environmentObject(firestorePlaceList)
-                        .padding()
+                    .padding()
+                    .animation(.spring())
+                    .transition(.asymmetric(insertion: .scale, removal: .scale))
                 }
-                Picker(selection: $selection, label: Text("View")) {
+                
+                Picker(selection: $selection.animation(), label: Text("View")) {
                     Text("List").tag(0)
                     Text("Map").tag(1)
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.bottom)
                 .pickerStyle(SegmentedPickerStyle())
-                .animation(.default)
             }
             .padding(0)
-            .background(Color("elevation-1"))
+            .padding(.horizontal, 22)
+            .background(Color("bg-primary"))
+            
             
             if selection == 0 {
                 List {
@@ -166,12 +171,14 @@ struct PlaceListFollowButton: View {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
                     Image(systemName: "heart")
+                    .foregroundColor(Color("text-secondary"))
                 }
             } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
                     Image(systemName: "heart.fill")
+                    .foregroundColor(Color("brand-color-primary"))
                 }
             }
         }
