@@ -25,26 +25,39 @@ struct PlaceRow: View {
     @Binding var imageForAddPlaceToListSheet: UIImage?
     
     @State var image: UIImage?
+    @State var address: String?
     
     var body: some View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
-                        .padding(.trailing)
-                    Text(self.place.gmsPlace.name != nil ? self.place.gmsPlace.name! : "")
+                        .frame(width: 60, height: 60)
+                        .cornerRadius(15)
+                        .padding(.trailing, 10)
+                    
+                    VStack(alignment: .leading){
+                        Text(self.place.gmsPlace.name != nil ? self.place.gmsPlace.name! : "")
+                            .font(.system(size: 18))
+                            .lineLimit(1)
+                        Text(self.address != nil ? self.address! : "")
+                            .font(.system(size: 12))
+                            .lineLimit(1)
+                            //.fixedSize(horizontal: false, vertical: true)
+                            .foregroundColor(Color("text-secondary"))
+                    }
                     Spacer()
                 }
-                .frame(width: metrics.size.width * 0.8)
-                .onTapGesture {
-                    self.placeIdToNavigateTo = self.place.gmsPlace.placeID!
-                    self.goToPlace = 1
+                    .frame(width: metrics.size.width * 0.85)
+                    .onTapGesture {
+                        self.placeIdToNavigateTo = self.place.gmsPlace.placeID!
+                        self.goToPlace = 1
                 }
                 HStack {
                     Spacer()
                     Image(systemName: "ellipsis")
                 }
-                .frame(width: metrics.size.width * 0.2)
+                .frame(width: metrics.size.width * 0.15)
                 .onTapGesture {
                     self.showActionSheet.toggle()
                 }
@@ -73,10 +86,14 @@ struct PlaceRow: View {
                         .cancel()
                     ])
                 }
-            }
+            }.frame(height: 60)
         }
-        .frame(height: 90)
+        .frame(height: 60)
         .onAppear {
+            if let address = self.place.gmsPlace.formattedAddress {
+                self.address = address
+            }
+            
             if let photos = self.place.gmsPlace.photos {
                 getPlaceFoto(photoMetadata: photos[0]) { (photo: UIImage?, error: Error?) in
                     if let error = error {
@@ -98,10 +115,11 @@ struct PlaceRowImage: View {
         Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
             .renderingMode(.original)
             .resizable()
-            .animation(.default)
             .clipShape(Rectangle())
             .scaledToFill()
-            .frame(width: 50, height: 50)
-            .cornerRadius(15)
+            .animation(.easeInOut)
+//            .frame(width: 60, height: 60)
+//            .cornerRadius(15)
+            
     }
 }
