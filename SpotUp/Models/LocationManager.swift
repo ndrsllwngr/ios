@@ -64,7 +64,7 @@ extension LocationManager: CLLocationManagerDelegate {
         guard let location = locations.last else { return }
         self.location = location
         if (self.notifyExplore) {
-            ExploreModel.shared.updateDistancesInPlacesAndSetCurrentTarget()
+            ExploreModel.shared.updateDistancesInPlaces()
             ExploreModel.shared.loadPlaceImages()
         }
     }
