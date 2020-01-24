@@ -29,6 +29,9 @@ struct CurrentTargetRow: View {
                         HStack(alignment: .center) {
                             HStack {
                                 PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
+                                .frame(width: 60, height: 60)
+                                .cornerRadius(15)
+                                
                                 VStack (alignment: .leading) {
                                     Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
                                     Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "distance")
@@ -109,6 +112,9 @@ struct ExplorePlaceRow: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.place.image)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(15)
+                    
                     VStack (alignment: .leading) {
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
                         Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "loading")
@@ -170,6 +176,8 @@ struct ExplorePlaceVisitedRow: View {
             HStack(alignment: .center) {
                 HStack {
                     PlaceRowImage(image: self.place.image)
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(15)
                         .opacity(0.5)
                     VStack (alignment: .leading){
                         Text(self.place.place.name != nil ? self.place.place.name! : "")
