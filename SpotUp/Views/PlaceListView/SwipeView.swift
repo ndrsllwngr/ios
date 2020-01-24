@@ -25,7 +25,7 @@ struct SwipeView: View {
                         PlaceCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
                     }
-                }
+                }.frame(height: 150)
             }
             .content.offset(x: self.getOffset(geoWidth: geometry.size.width))
             .animation(self.isDragging ? .none : .easeInOut(duration: 0.8))
@@ -51,7 +51,7 @@ struct SwipeView: View {
                         
                     })
         )
-        }.frame(width: 260)
+        }.frame(width: 260, height: 150)
     }
     
     func getOffset(geoWidth: CGFloat)-> CGFloat {
@@ -70,16 +70,18 @@ struct PlaceCard: View {
             CardImage(image: self.image != nil ? self.image! : UIImage())
             VStack(alignment: .leading){
                 Text(place.name != nil ? place.name! : "")
-                    .font(.system(size: 20))
+                    .font(.system(size: 18))
+                    .lineLimit(1)
                 Text(address != nil ? address! : "")
                     .font(.system(size: 12))
-                    .foregroundColor(Color.gray)
+                    .lineLimit(1)
+                    .foregroundColor(Color("text-secondary"))
             }.frame(height: 50, alignment: .topLeading)
-                .padding(.horizontal)
+            .padding(.horizontal)
             
         }
             .frame(width: 240) //height: 160
-            .background(Color.white)
+            .background(Color("bg-primary"))
             .cornerRadius(15)
             .onAppear {
                 if let address = self.place.formattedAddress {

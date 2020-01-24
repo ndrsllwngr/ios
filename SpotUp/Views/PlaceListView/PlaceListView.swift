@@ -121,12 +121,14 @@ struct InnerPlaceListView: View {
                     Text("List").tag(0)
                     Text("Map").tag(1)
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.bottom)
                 .pickerStyle(SegmentedPickerStyle())
-                //.animation(.default)
             }
             .padding(0)
-            .background(Color("elevation-1"))
+            .padding(.horizontal, 22)
+            .background(Color("bg-primary"))
+            
             
             if selection == 0 {
                 List {
@@ -169,12 +171,14 @@ struct PlaceListFollowButton: View {
                     FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
                     Image(systemName: "heart")
+                    .foregroundColor(Color("text-secondary"))
                 }
             } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                 Button(action: {
                     FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
                 }) {
                     Image(systemName: "heart.fill")
+                    .foregroundColor(Color("brand-color-primary"))
                 }
             }
         }

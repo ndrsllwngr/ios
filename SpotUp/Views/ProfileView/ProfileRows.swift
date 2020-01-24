@@ -78,7 +78,7 @@ struct PlacesListRow: View {
                                     .scaledToFit()
                                     .frame(height: 10)
                             }
-                            .frame(width: 18, height: 18)
+                            .frame(width: 20, height: 20)
                             .background(Color("bg-placeholder"))
                             .mask(Circle())
                         }
@@ -90,7 +90,7 @@ struct PlacesListRow: View {
                                     .scaledToFit()
                                     .frame(width: 10)
                             }
-                            .frame(width: 18, height: 18)
+                            .frame(width: 20, height: 20)
                             .background(Color("bg-placeholder"))
                             .mask(Circle())
                         }
