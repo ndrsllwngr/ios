@@ -23,9 +23,10 @@ class ExploreModel: ObservableObject {
     static let shared = ExploreModel()
     
     var locationManager = LocationManager()
+    
     @Published var exploreList: ExploreList? = nil
     
-    @Published var fetchingPlacesForExplore: Bool = false
+    var fetchingPlacesForExplore: Bool = false
     
     private init(){}
     
@@ -76,8 +77,8 @@ class ExploreModel: ObservableObject {
         
         dispatchGroup.notify(queue: .main) {
             self.fetchingPlacesForExplore = false
-            self.updateDistancesInPlacesAndSetCurrentTarget()
             self.loadPlaceImages()
+            self.updateDistancesInPlacesAndSetCurrentTarget()
             self.updateLastOpenedAt()
         }
     }
@@ -94,7 +95,8 @@ class ExploreModel: ObservableObject {
             self.exploreList = ExploreList(places: [explorePlace], currentTarget: explorePlace)
         }
         self.updateDistancesInPlacesAndSetCurrentTarget()
-        self.loadPlaceImages()    }
+        self.loadPlaceImages()
+    }
     
     func removePlaceFromExplore(_ place: ExplorePlace) {
         if let exploreList = self.exploreList {
@@ -161,12 +163,11 @@ class ExploreModel: ObservableObject {
             // a.) If no currentTarget pushed manually by user set current target (which is the next nearst not visited place)
             if (!self.fetchingPlacesForExplore && exploreList.currentTarget == nil && !explorePlaces.filter{!$0.visited}.isEmpty) {
                 self.exploreList?.currentTarget = explorePlaces.filter{!$0.visited}[0]
-                // Else also update distance currentTarget
-                // b.) Update distance in current target
-                if (exploreList.currentTarget != nil) {
-                    self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
-                                                                                  location: location)
-                }
+            }
+            // b.) Update distance in current target
+            if (exploreList.currentTarget != nil) {
+                self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
+                                                                              location: location)
             }
             self.fetchingPlacesForExplore = false
         }
