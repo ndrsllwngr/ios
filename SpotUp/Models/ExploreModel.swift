@@ -142,7 +142,7 @@ class ExploreModel: ObservableObject {
         if let exploreList = self.exploreList, let location =
             self.locationManager.location {
             print("Begin updating distances in explore places")
-            // 1. Calculate distance to my location for all places
+            // 1. Calculate distance to my location for all places // ToDo set distance in place directly
             let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
                 var mutablePlace = place
                 let distance = calculateDistance(coordinate: place.place.coordinate,
@@ -150,12 +150,10 @@ class ExploreModel: ObservableObject {
                 mutablePlace.distance = distance
                 return mutablePlace
             }
-                // 2. Sort places based on distance
-                .sorted{(place1, place2) in place1.distance! < place2.distance!}
-            // 3. Set places sorted by distance
+            // 2. Set places
             self.exploreList!.places = explorePlaces
             
-            // 4. Update distance in current target
+            // 3. Update distance in current target
             if (exploreList.currentTarget != nil) {
                 self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
                                                                               location: location)
@@ -256,4 +254,19 @@ func getVisitedAtStringToDisplay(_ visited_at: Date) -> String {
 
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
     return URL(string: "https://www.google.com/maps/search/?api=1&query=\(place.coordinate.latitude),\(place.coordinate.longitude)&query_place_id=\(place.placeID!)")!
+}
+
+func sortPlaces(places: [ExplorePlace], sortByDistance: Bool) ->  [ExplorePlace]{
+    
+    if sortByDistance {
+        return places.sorted{(place1, place2) in
+            if let distance1 = place1.distance, let distance2 = place2.distance {
+                return distance1 < distance2
+            } else {
+                return false
+            }
+        }
+    } else {
+        return places.sorted{(place1, place2) in place1.place.name! < place2.place.name!}
+    }
 }

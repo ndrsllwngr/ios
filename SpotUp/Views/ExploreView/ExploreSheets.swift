@@ -1,27 +1,6 @@
 import SwiftUI
 import GooglePlaces
 
-struct ExploreSettingsSheet: View {
-    
-    @Binding var showSheet: Bool
-    
-    var body: some View {
-        VStack {
-            Text("Explore Settings")
-            Spacer()
-                .padding()
-            Button(action: {
-                print("Pause Exploring")
-            }) {
-                Text("Pause Exploring")
-            }
-            .padding()
-            Spacer()
-        }
-        .padding()
-    }
-}
-
 struct SelectPlaceListToExploreSheet: View {
     @Binding var showSheet: Bool
     
