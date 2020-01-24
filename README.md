@@ -28,10 +28,14 @@ xcodegen generate && pod install --repo-update
 - Google Maps
 - Google Places
 
-
 ## Contributors (Group 7)
 
 - Andreas Ellwanger
 - Timo Erdelt
 - Havy Ha
 - Fangli Lu
+
+## Credits / Attributions
+
+- Icons made by [Freepik](https://www.flaticon.com/authors/freepik) from [www.flaticon.com](https://www.flaticon.com/).
+- Icons may be altered in color and shape.
