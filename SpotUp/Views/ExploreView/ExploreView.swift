@@ -22,6 +22,8 @@ struct ExploreView: View {
     @State var placeForAddPlaceToListSheet: ExplorePlace? = nil
     @State var imageForAddPlaceToListSheet: UIImage? = nil
     
+    @State var sortByDistance = true
+    
     var body: some View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
@@ -35,7 +37,8 @@ struct ExploreView: View {
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                   goToPlace: self.$goToPlace,
                                   placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet,
+                                  sortByDistance: self.$sortByDistance)
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             }
@@ -44,7 +47,7 @@ struct ExploreView: View {
         .onAppear{
             self.exploreModel.locationManagerBeginNotifyingExplore()
             self.exploreModel.updateLastOpenedAt()
-            self.exploreModel.updateDistancesInPlacesAndSetCurrentTarget()
+            self.exploreModel.updateDistancesInPlaces()
             self.exploreModel.loadPlaceImages()
         }
         .onDisappear() {
@@ -52,9 +55,7 @@ struct ExploreView: View {
         }
             
         .sheet(isPresented: $showSheet) {
-            if (self.sheetSelection == "settings") {
-                ExploreSettingsSheet(showSheet: self.$showSheet)
-            } else if (self.sheetSelection == "select_placelist") {
+            if (self.sheetSelection == "select_placelist") {
                 SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "add_to_placelist"){
                 AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.place, placeImage: self.imageForAddPlaceToListSheet, showSheet: self.$showSheet)
@@ -63,7 +64,7 @@ struct ExploreView: View {
         }
         .navigationBarTitle(Text("Explore"), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
-            ExploreSettingsButton(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+            ExploreSettingsButton(sortByDistance: self.$sortByDistance)
         })
             .padding()
     }
@@ -80,6 +81,8 @@ struct ExploreActiveView: View {
     
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    
+    @Binding var sortByDistance: Bool
     
     var body: some View {
         VStack {
@@ -108,7 +111,7 @@ struct ExploreActiveView: View {
                     ScrollView {
                         Text("Travel Queue")
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
-                            ForEach (exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                            ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
                                 ExplorePlaceRow(place: place,
                                                 showSheet: self.$showSheet,
@@ -175,16 +178,18 @@ struct ExploreInactiveView: View {
 }
 
 struct ExploreSettingsButton: View {
-    @Binding var showSheet: Bool
-    @Binding var sheetSelection: String
+    @Binding var sortByDistance: Bool
     
     var body: some View {
         VStack {
             Button(action: {
-                self.showSheet.toggle()
-                self.sheetSelection = "settings"
+                self.sortByDistance.toggle()
             }) {
-                Image(systemName: "ellipsis")
+                HStack {
+                    Spacer()
+                    Image(systemName: sortByDistance ? "textformat.abc" : "textformat.123")
+                }
+                .frame(width: 49, height: 49)
             }
         }
         
