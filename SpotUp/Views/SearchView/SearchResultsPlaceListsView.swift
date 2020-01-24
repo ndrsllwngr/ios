@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SearchResultsPlaceListsView: View {
     @Binding var tabSelection: Int
-
+    
     @EnvironmentObject var searchViewModel: SearchViewModel
     
     var body: some View {
@@ -39,7 +39,7 @@ struct SingleRowPlaceList: View {
     var placeList: PlaceList
     
     @Binding var tabSelection: Int
-
+    
     
     @State var showRecent: Bool = false
     @State var selection: Int? = nil
@@ -62,25 +62,25 @@ struct SingleRowPlaceList: View {
             }){
                 HStack {
                     VStack(alignment: .leading) {
-                    Text(placeList.name).font(.headline)
-                    Text("by \(placeList.owner.username)").font(.body)
+                        Text(placeList.name).font(.headline)
+                        Text("by \(placeList.owner.username)").font(.body)
                     }
                     Spacer()
                 }
             }.padding(.leading)
             Spacer()
-            //            if showRecent == true {
-            //                Group{
-            //                    Button(action: {
-            //                        print("delete invoked")
-            //                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseLists.firstIndex(of: self.placeList)
-            //                        if(indexOfToBeDeletedEntry != nil) {
-            //                            self.searchViewModel.recentSearchFirebaseLists.remove(at: indexOfToBeDeletedEntry!)
-            //                        }
-            //                    }) { Image(systemName: "xmark")}
-            //                }
-            //                .padding(.trailing)
-            //            }
+            if showRecent == true {
+                Group{
+                    Button(action: {
+                        print("delete invoked")
+                        let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseLists.firstIndex(of: self.placeList)
+                        if(indexOfToBeDeletedEntry != nil) {
+                            self.searchViewModel.recentSearchFirebaseLists.remove(at: indexOfToBeDeletedEntry!)
+                        }
+                    }) { Image(systemName: "xmark")}
+                }
+                .padding(.trailing)
+            }
             if (self.goToDestination != false) {
                 NavigationLink(destination: PlaceListView(placeListId: placeList.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
                     EmptyView()
@@ -90,10 +90,4 @@ struct SingleRowPlaceList: View {
         }
     }
 }
-
-//struct SearchResultsPlaceListsView: PreviewProvider {
-//    static var previews: some View {
-//        SearchResultsPlaceListsView()
-//    }
-//}
 
