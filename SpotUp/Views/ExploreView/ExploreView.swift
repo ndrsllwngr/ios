@@ -50,7 +50,7 @@ struct ExploreView: View {
         .onDisappear() {
             self.exploreModel.locationManagerStopNotifyingExplore()
         }
-
+            
         .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "settings") {
                 ExploreSettingsSheet(showSheet: self.$showSheet)
@@ -105,35 +105,33 @@ struct ExploreActiveView: View {
                                       goToPlace: self.$goToPlace,
                                       placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                    List {
-                        Section (header: Text("Travel Queue")) {
-                            if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
-                                { place in
-                                    ExplorePlaceRow(place: place,
-                                                    showSheet: self.$showSheet,
-                                                    sheetSelection: self.$sheetSelection,
-                                                    placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                    goToPlace: self.$goToPlace,
-                                                    placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                                    imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                                }
-                            } else {
-                                VStack {
-                                    Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
-                                }
+                    ScrollView {
+                        Text("Travel Queue")
+                        if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
+                            ForEach (exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                            { place in
+                                ExplorePlaceRow(place: place,
+                                                showSheet: self.$showSheet,
+                                                sheetSelection: self.$sheetSelection,
+                                                placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                goToPlace: self.$goToPlace,
+                                                placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                            }
+                        } else {
+                            VStack {
+                                Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
                             }
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                            Section(header: Text("Already visited")) {
-                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
-                                { place in
-                                    ExplorePlaceVisitedRow(place: place,
-                                                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                           goToPlace: self.$goToPlace)
-                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                                }
+                            Text("Already visited")
+                            ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                            { place in
+                                ExplorePlaceVisitedRow(place: place,
+                                                       placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                       goToPlace: self.$goToPlace)
+                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             }
                         }
                     }

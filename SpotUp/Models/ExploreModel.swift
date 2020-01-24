@@ -77,8 +77,10 @@ class ExploreModel: ObservableObject {
         
         dispatchGroup.notify(queue: .main) {
             self.fetchingPlacesForExplore = false
-            self.loadPlaceImages()
+            // 1. updateDistancesInPlacesAndSetCurrentTarget
             self.updateDistancesInPlacesAndSetCurrentTarget()
+            // 2. loadPlaceImages
+            self.loadPlaceImages()
             self.updateLastOpenedAt()
         }
     }
@@ -112,6 +114,7 @@ class ExploreModel: ObservableObject {
     
     func quitExplore() {
         self.locationManager.stopUpdatingLocation()
+        self.exploreList?.places = []
         self.exploreList = nil
     }
     
