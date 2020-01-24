@@ -13,19 +13,23 @@ struct LoginView: View {
     
     @ObservedObject private var loginViewModel = LoginViewModel()
     
+    @State var loginErrorText: String? = nil
+    
     var body: some View {
         NavigationView {
             VStack {
                 Text("Login")
                 Form {
-                    Section(footer: Text(loginViewModel.emailMessage).foregroundColor(.red)) {
+                    Section(footer: VStack {
+                        if (self.loginErrorText != nil) {
+                            Text("Wrong credentials").foregroundColor(.red)
+                        }
+                        Text(loginViewModel.emailMessage).foregroundColor(.red)
+                        Text(loginViewModel.passwordMessage).foregroundColor(.red)
+                    }) {
                         TextField("Email", text: $loginViewModel.email)
                             .autocapitalization(.none)
-                    }
-                    Section(footer: Text(loginViewModel.passwordMessage).foregroundColor(.red)) {
                         SecureField("Password", text: $loginViewModel.password)
-                    }
-                    Section {
                         Button(action: { self.logIn() }) {
                             Text("Login")
                         }.disabled(!self.loginViewModel.isValid)
@@ -45,6 +49,7 @@ struct LoginView: View {
         FirebaseAuthentication.shared.logIn(email: loginViewModel.email, password: loginViewModel.password) { (result, error) in
             if let error = error {
                 print("Error during login: \(error)")
+                self.loginErrorText = "\(error)"
             } else {
                 print("success")
                 self.loginViewModel.email = ""
