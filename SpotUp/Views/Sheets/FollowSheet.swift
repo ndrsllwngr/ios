@@ -4,9 +4,9 @@ import FirebaseFirestore
 struct FollowSheet: View {
     var userIds: [String]
     var sheetTitle: String
-
+    
     @State var users: [User] = []
-
+    
     @Binding var showSheet: Bool
     @Binding var profileUserIdToNavigateTo: String?
     @Binding var goToOtherProfile: Int?
@@ -27,6 +27,7 @@ struct FollowSheet: View {
             }
             Spacer()
         }
+        .padding()
         .onAppear {
             self.users = []
             self.userIds.forEach { userId in
@@ -44,6 +45,5 @@ struct FollowSheet: View {
                 }
             }
         }
-        .padding()
     }
 }

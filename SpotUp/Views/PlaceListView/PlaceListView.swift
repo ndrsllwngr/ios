@@ -28,8 +28,8 @@ struct PlaceListView: View {
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
     
-    @State var placeForPlaceMenuSheet: GMSPlaceWithTimestamp? = nil
-    @State var imageForPlaceMenuSheet: UIImage? = nil
+    @State var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp? = nil
+    @State var imageForAddPlaceToListSheet: UIImage? = nil
     
     
     var body: some View {
@@ -49,8 +49,8 @@ struct PlaceListView: View {
                                sheetSelection: $sheetSelection,
                                placeIdToNavigateTo: $placeIdToNavigateTo,
                                goToPlace: $goToPlace,
-                               placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                               imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet,
+                               placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                               imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet,
                                tabSelection: self.$tabSelection)
                 .environmentObject(firestorePlaceList)
         }
@@ -59,17 +59,16 @@ struct PlaceListView: View {
                 PlaceListSettingsSheet(presentationMode: self.presentationMode,
                                        showSheet: self.$showSheet)
                     .environmentObject(self.firestorePlaceList)
-            } else if self.sheetSelection == "place_menu" {
-                PlaceMenuSheet(placeListId: self.placeListId,
-                               gmsPlaceWithTimestamp: self.placeForPlaceMenuSheet!,
-                               image: self.$imageForPlaceMenuSheet,
-                               showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
                 FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
                             sheetTitle: "Users that are following this PlaceList",
                             showSheet: self.$showSheet,
                             profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                             goToOtherProfile: self.$goToOtherProfile)
+            } else if (self.sheetSelection == "add_to_placelist"){
+                AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
+                                    placeImage: self.imageForAddPlaceToListSheet,
+                                    showSheet: self.$showSheet)
             }
         }
         .onAppear {
@@ -95,8 +94,8 @@ struct InnerPlaceListView: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: GMSPlaceWithTimestamp?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     @Binding var tabSelection: Int
     
@@ -133,13 +132,14 @@ struct InnerPlaceListView: View {
             if selection == 0 {
                 List {
                     ForEach(self.firestorePlaceList.places, id: \.self) { place in
-                        PlaceRow(gmsPlaceWithTimestamp: place,
+                        PlaceRow(place: place,
+                                 placeListId: self.placeListId,
                                  showSheet: self.$showSheet,
                                  sheetSelection: self.$sheetSelection,
                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                  goToPlace: self.$goToPlace,
-                                 placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                 imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                 placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                 imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                     }
                     
                 }

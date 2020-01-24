@@ -19,8 +19,8 @@ struct ExploreView: View {
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
     
-    @State var placeForPlaceMenuSheet: ExplorePlace? = nil
-    @State var imageForPlaceMenuSheet: UIImage? = nil
+    @State var placeForAddPlaceToListSheet: ExplorePlace? = nil
+    @State var imageForAddPlaceToListSheet: UIImage? = nil
     
     var body: some View {
         VStack {
@@ -34,8 +34,8 @@ struct ExploreView: View {
                                   sheetSelection: self.$sheetSelection,
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                   goToPlace: self.$goToPlace,
-                                  placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                  imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                  placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             }
@@ -56,10 +56,8 @@ struct ExploreView: View {
                 ExploreSettingsSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "select_placelist") {
                 SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
-            } else if (self.sheetSelection == "place_menu") {
-                ExplorePlaceMenuSheet(place: self.placeForPlaceMenuSheet!,
-                                      image: self.$imageForPlaceMenuSheet,
-                                      showSheet: self.$showSheet)
+            } else if (self.sheetSelection == "add_to_placelist"){
+                AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.place, placeImage: self.imageForAddPlaceToListSheet, showSheet: self.$showSheet)
             }
             
         }
@@ -80,8 +78,8 @@ struct ExploreActiveView: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: ExplorePlace?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
         VStack {
@@ -105,8 +103,8 @@ struct ExploreActiveView: View {
                                       sheetSelection: self.$sheetSelection,
                                       placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                       goToPlace: self.$goToPlace,
-                                      placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                      imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                      imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                     List {
                         Section (header: Text("Travel Queue")) {
                             if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
@@ -117,8 +115,8 @@ struct ExploreActiveView: View {
                                                     sheetSelection: self.$sheetSelection,
                                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                                     goToPlace: self.$goToPlace,
-                                                    placeForPlaceMenuSheet: self.$placeForPlaceMenuSheet,
-                                                    imageForPlaceMenuSheet: self.$imageForPlaceMenuSheet)
+                                                    placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                    imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                                         .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                                 }
                             } else {
