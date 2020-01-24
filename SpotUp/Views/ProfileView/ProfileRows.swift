@@ -13,29 +13,27 @@ struct CreateNewPlaceListRow: View {
     @Binding var sheetSelection: String
     
     var body: some View {
-        Button(action: {
-            print("buttonPressed")
+        GeometryReader { geo in
+            HStack {
+                HStack {
+                    Image(systemName: "plus.rectangle.on.rectangle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 32)
+                }
+                .frame(width: 100, height: 60)
+                Text("Create new place list")
+            }
+            .frame(width: geo.size.width, alignment: .leading)
+            .background(Color("elevation-1"))
+            .mask(Rectangle().cornerRadius(15))
+            .shadow(radius: 5, y: 4)
+            .padding(.vertical)
+        }
+        .frame(height: 60)
+        .onTapGesture {
             self.sheetSelection = "create_placelist"
             self.showSheet.toggle()
-        }) {
-            GeometryReader { geo in
-                HStack {
-                    HStack {
-                        Image(systemName: "plus.rectangle.on.rectangle")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 32)
-                    }
-                    .frame(width: 100, height: 60)
-                    Text("Create new place list")
-                }
-                .frame(width: geo.size.width, alignment: .leading)
-                .background(Color("elevation-1"))
-                .mask(Rectangle().cornerRadius(15))
-                .shadow(radius: 5, y: 4)
-                .padding(.vertical)
-            }.frame(height: 60)
-            
         }
     }
 }
@@ -95,7 +93,7 @@ struct PlacesListRow: View {
                             .mask(Circle())
                         }
                     }.padding(.trailing)
-                    .padding(.bottom, 10)
+                        .padding(.bottom, 10)
                     
                 }.frame(width: geo.size.width, height: 60, alignment: .trailing)
             }
