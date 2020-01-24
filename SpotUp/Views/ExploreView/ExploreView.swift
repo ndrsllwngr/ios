@@ -64,7 +64,9 @@ struct ExploreView: View {
         }
         .navigationBarTitle(Text("Explore"), displayMode: .inline)
         .navigationBarItems(trailing: HStack {
-            ExploreSettingsButton(sortByDistance: self.$sortByDistance)
+            if self.exploreModel.exploreList != nil {
+                ExploreSortButton(sortByDistance: self.$sortByDistance)
+            }
         })
             .padding()
     }
@@ -177,7 +179,7 @@ struct ExploreInactiveView: View {
     }
 }
 
-struct ExploreSettingsButton: View {
+struct ExploreSortButton: View {
     @Binding var sortByDistance: Bool
     
     var body: some View {
