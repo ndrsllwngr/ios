@@ -23,7 +23,7 @@ struct AddPlaceToListSheet: View {
         VStack {
             Text("Welcher Liste möchstest du \(place.name!) hinzufügen?")
             List {
-                ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser?.uid || $0.isCollaborative}){ placeList in
+                ForEach(profile.placeLists.filter{ $0.owner.id == firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
                     Button(action: {
                         FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.place.placeID!, placeImage: self.placeImage)
                         self.showSheet.toggle()

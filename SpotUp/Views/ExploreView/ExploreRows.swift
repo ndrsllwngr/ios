@@ -20,8 +20,8 @@ struct CurrentTargetRow: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: ExplorePlace?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
         VStack {
@@ -80,8 +80,8 @@ struct CurrentTargetRow: View {
                                     .default(Text("Add to collection")) {
                                         self.showSheet.toggle()
                                         self.sheetSelection = "add_to_placelist"
-                                        self.placeForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!
-                                        self.imageForPlaceMenuSheet = self.exploreModel.exploreList!.currentTarget!.image
+                                        self.placeForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!
+                                        self.imageForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!.image
                                     },
                                     .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.exploreModel.exploreList!.currentTarget!)
                                     },
@@ -114,8 +114,8 @@ struct ExplorePlaceRow: View {
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
-    @Binding var placeForPlaceMenuSheet: ExplorePlace?
-    @Binding var imageForPlaceMenuSheet: UIImage?
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
         GeometryReader { metrics in
@@ -165,8 +165,8 @@ struct ExplorePlaceRow: View {
                         .default(Text("Add to collection")) {
                             self.showSheet.toggle()
                             self.sheetSelection = "add_to_placelist"
-                            self.placeForPlaceMenuSheet = self.place
-                            self.imageForPlaceMenuSheet = self.place.image
+                            self.placeForAddPlaceToListSheet = self.place
+                            self.imageForAddPlaceToListSheet = self.place.image
                         },
                         .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.place)
                         },
