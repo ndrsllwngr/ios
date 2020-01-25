@@ -6,7 +6,7 @@ struct SearchResultsProfilesEmptyStateView: View {
             Spacer()
             VStack() {
                 Spacer()
-                Image(uiImage: UIImage(named: "placeholder-search-1")!)
+                Image(uiImage: UIImage(named: "placeholder-search-accounts")!)
                     .renderingMode(.original)
                     .resizable()
                     .scaledToFit()
@@ -33,7 +33,7 @@ struct SearchResultsListsEmptyStateView: View {
             Spacer()
             VStack() {
                 Spacer()
-                Image(uiImage: UIImage(named: "placeholder-search-3")!)
+                Image(uiImage: UIImage(named: "placeholder-search-collections")!)
                     .renderingMode(.original)
                     .resizable()
                     .scaledToFit()
@@ -60,7 +60,7 @@ struct SearchResultsPlacesEmptyStateView: View {
             Spacer()
             VStack() {
                 Spacer()
-                Image(uiImage: UIImage(named: "placeholder-search-2")!)
+                Image(uiImage: UIImage(named: "placeholder-search-places")!)
                     .renderingMode(.original)
                     .resizable()
                     .scaledToFit()
