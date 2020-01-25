@@ -24,9 +24,8 @@ struct TabBarView: View {
                     Spacer()
                 }
                 .frame(minHeight: 0, maxHeight: .infinity)
-                    //                .background(Color.red)
-                    .background(Color("bg-tab-bar"))
-                    .edgesIgnoringSafeArea(.bottom)
+                .background(Color("bg-tab-bar"))
+                .edgesIgnoringSafeArea(.bottom)
                 VStack(spacing: 0) {
                     VStack(spacing: 0) {
                         if (self.selection == 0) {
@@ -45,6 +44,7 @@ struct TabBarView: View {
                             }
                         }
                     }
+                    .padding(.bottom, -10)
                     Spacer()
                     if (self.exploreModel.exploreList != nil && self.selection != 0) {
                         ExploreIsActiveBar(tabSelection: self.$selection)
