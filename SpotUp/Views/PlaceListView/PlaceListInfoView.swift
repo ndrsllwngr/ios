@@ -62,7 +62,7 @@ struct PlaceListInfoView: View {
                                             }
                                         }
                                     }.frame(width: 100)
-                                    .padding(.bottom, 8)
+                                    .padding(.bottom, 6)
                                     
                                 }.frame(width: geo.size.width, height: 60, alignment: .trailing)
                             }
