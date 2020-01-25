@@ -68,7 +68,6 @@ struct ExploreView: View {
                 ExploreSortButton(sortByDistance: self.$sortByDistance)
             }
         })
-            .padding()
     }
 }
 
@@ -97,8 +96,10 @@ struct ExploreActiveView: View {
                         self.exploreModel.quitExplore()
                     }) {
                         Text("Quit")
+                            .accentColor(Color("text-secondary"))
                     }
                 }
+                .padding(.horizontal)
                 
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
                     .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
@@ -142,7 +143,13 @@ struct ExploreActiveView: View {
                     }
                 } else {
                     Spacer()
-                    Text("There are currently no places in your Explore Queue. Feel free to add some!")
+                    Button(action: {
+                        print("todo go to search tab")
+                    }) {
+                        Text("Add places and start exploring.")
+                            .font(.system(size:20, weight:.bold))
+                            .accentColor(Color("brand-color-primary"))
+                    }
                 }
                 Spacer()
                 
@@ -158,24 +165,47 @@ struct ExploreInactiveView: View {
     @Binding var sheetSelection: String
     
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Explore is currently not active.")
-            Text("Why dont you...")
-            Spacer()
-            Button(action: {
-                self.showSheet.toggle()
-                self.sheetSelection = "select_placelist"
-            }) {
-                Text("1. Select a placelist you want to explore")
-            }.padding()
-            Button(action: {
-                self.exploreModel.startExploreWithEmptyList()
-            }) {
-                Text("2. Create an empty explore queue and add places by yourself")
-            }.padding()
-            Spacer()
+        GeometryReader { metrics in
+            VStack {
+                Spacer()
+                Image(uiImage: UIImage(named: "placeholder-onboarding-3")!)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                Spacer()
+                Button(action: {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "select_placelist"
+                }) {
+                    VStack {
+                        Text("Explore collection")
+                            .font(.system(size:20, weight:.bold))
+                            .accentColor(Color.white)
+                            .padding([.vertical], 15)
+                    }
+                    .frame(width: metrics.size.width * 0.8)
+                    .background(Color("brand-color-primary-soft"))
+                    .cornerRadius(15)
+                }
+                .padding([.bottom], 20)
+                Button(action: {
+                    self.exploreModel.startExploreWithEmptyList()
+                }) {
+                    VStack {
+                        Text("Start new queue")
+                            .font(.system(size:20, weight:.bold))
+                            .accentColor(Color.white)
+                            .padding([.vertical], 15)
+                    }
+                    .frame(width: metrics.size.width * 0.8)
+                    .background(Color("brand-color-secondary"))
+                    .cornerRadius(15)
+                }
+                Spacer()
+            }
         }
+        
     }
 }
 

@@ -9,7 +9,7 @@ struct SelectPlaceListToExploreSheet: View {
     
     var body: some View {
         VStack {
-            Text("Which of your Lists do you want to explore?")
+            Text("Select collection to explore")
             List {
                 ForEach(profile.placeLists){ placeList in
                     Button(action: {
