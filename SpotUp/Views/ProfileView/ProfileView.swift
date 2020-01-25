@@ -48,7 +48,6 @@ struct ProfileView: View {
                              sheetSelection: $sheetSelection,
                              placeListIdToNavigateTo: self.$placeListIdToNavigateTo,
                              goToPlaceList: self.$goToPlaceList).environmentObject(firestoreProfile)
-            Spacer()
         }
         .sheet(isPresented: $showSheet) {
             if self.sheetSelection == "create_placelist"{

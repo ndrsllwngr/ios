@@ -30,6 +30,7 @@ struct CurrentTargetRow: View {
                     HStack(alignment: .center, spacing: 0.0) {
                         HStack {
                             PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
+                                .clipShape(Rectangle())
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(15)
                             
@@ -72,7 +73,7 @@ struct CurrentTargetRow: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 18, height: 18)
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(Color("elevation-1"))
                                     .font(Font.title.weight(.bold))
                             }
                             .frame(width: 40, height: 40)
@@ -107,15 +108,16 @@ struct CurrentTargetRow: View {
                     }
                     .padding([.leading], 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
-                    VStack(alignment: .leading) {
-                        Text("Current target")
-                            .font(.system(size:20, weight:.bold))
-                        HStack {
-                            Spacer()
-                            Text("To select current target tap GO")
-                                .foregroundColor(Color("text-secondary"))
-                            Spacer()
-                        }
+                    HStack(spacing: 0.0) {
+                        Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50.0, height: 50.0, alignment: .center)
+                        Spacer()
+                        Text("No target selected")
+                            .foregroundColor(Color("text-secondary"))
+                        Spacer()
                     }
                     .padding([.horizontal], 10)
                 } else {
@@ -177,6 +179,7 @@ struct ExplorePlaceRow: View {
             .padding([.trailing], 5)
             HStack {
                 PlaceRowImage(image: self.place.image)
+                    .clipShape(Rectangle())
                     .frame(width: 50, height: 50)
                     .cornerRadius(15)
                 VStack (alignment: .leading) {
@@ -200,7 +203,7 @@ struct ExplorePlaceRow: View {
                 VStack {
                     Text("GO")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                 }
                 .frame(width: 40, height: 40)
                 .background(Color(UIColor.systemRed))
@@ -257,6 +260,7 @@ struct ExplorePlaceVisitedRow: View {
         HStack(alignment: .center, spacing: 0.0) {
             HStack {
                 PlaceRowImage(image: self.place.image)
+                    .clipShape(Rectangle())
                     .frame(width: 50, height: 50)
                     .cornerRadius(15)
                     .opacity(0.5)
@@ -286,7 +290,7 @@ struct ExplorePlaceVisitedRow: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 18, height: 18)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                         .font(Font.title.weight(.bold))
                 }
                 .frame(width: 40, height: 40)
