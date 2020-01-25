@@ -73,7 +73,7 @@ struct CurrentTargetRow: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 18, height: 18)
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(Color("elevation-1"))
                                     .font(Font.title.weight(.bold))
                             }
                             .frame(width: 40, height: 40)
@@ -203,7 +203,7 @@ struct ExplorePlaceRow: View {
                 VStack {
                     Text("GO")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                 }
                 .frame(width: 40, height: 40)
                 .background(Color(UIColor.systemRed))
@@ -290,7 +290,7 @@ struct ExplorePlaceVisitedRow: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 18, height: 18)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                         .font(Font.title.weight(.bold))
                 }
                 .frame(width: 40, height: 40)
