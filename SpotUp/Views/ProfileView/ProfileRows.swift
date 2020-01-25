@@ -22,7 +22,7 @@ struct CreateNewPlaceListRow: View {
                         .frame(height: 32)
                 }
                 .frame(width: 100, height: 60)
-                Text("Create new place list")
+                Text("Create new collection")
             }
             .frame(width: geo.size.width, alignment: .leading)
             .background(Color("elevation-1"))
@@ -31,6 +31,7 @@ struct CreateNewPlaceListRow: View {
             .padding(.vertical)
         }
         .frame(height: 60)
+        .contentShape(Rectangle())
         .onTapGesture {
             self.sheetSelection = "create_placelist"
             self.showSheet.toggle()
@@ -38,7 +39,7 @@ struct CreateNewPlaceListRow: View {
     }
 }
 
-struct PlacesListRow: View {
+struct PlaceListRow: View {
     var placeList: PlaceList
     
     var body: some View {

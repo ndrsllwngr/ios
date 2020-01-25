@@ -1,21 +1,10 @@
-//
-//  AddPlaceToListSheet.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 07.01.20.
-//
-
 import SwiftUI
-import FirebaseFirestore
 import GooglePlaces
 
-struct AddPlaceToListSheet: View {
-    var place: GMSPlace
-    var placeImage: UIImage?
+struct ExplorePlaceListSheet: View {
+    @Binding var showSheet: Bool
     
     @State var placeLists: [PlaceList] = []
-    
-    @Binding var showSheet: Bool
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
@@ -26,12 +15,12 @@ struct AddPlaceToListSheet: View {
                 .frame(width: 30, height: 3)
                 .padding(10)
             List {
-                Text("Add to collection").font(.system(size:18)).fontWeight(.bold)
-                ForEach(self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
+                Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
+                ForEach(self.placeLists){ placeList in
                     PlaceListRow(placeList: placeList)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.place.placeID!, placeImage: self.placeImage)
+                            ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
                             self.showSheet.toggle()
                     }
                 }
@@ -70,9 +59,3 @@ struct AddPlaceToListSheet: View {
         }
     }
 }
-//
-//struct AddPlaceToListSheet_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddPlaceToListSheet()
-//    }
-//}

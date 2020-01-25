@@ -21,33 +21,54 @@ struct PlaceListInfoView: View {
                     .cornerRadius(15)
                 
                 HStack (alignment: .top){
-                    VStack (alignment: .leading){
-                        Text(self.firestorePlaceList.placeList.name)
-                            .font(.system(size: 20))
-                        HStack {
-                            NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
-                                Text("by \(self.firestorePlaceList.placeList.owner.username)")
-                                    .font(Font.custom("Europa-Regular", size: 12))
+                    VStack {
+                        GeometryReader { geo in
+                            ZStack {
+                                VStack(alignment: .leading) {
+                                    Text(self.firestorePlaceList.placeList.name)
+                                        .font(.system(size: 20))
+                                        .padding(.bottom, 5)
+                                    NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
+                                        Text("by \(self.firestorePlaceList.placeList.owner.username)")
+                                            .font(.footnote)
+                                            .foregroundColor(Color("text-primary"))
+                                            .lineLimit(1)
+                                            .padding(.trailing, 100)
+                                    }
+                                }.frame(width: geo.size.width, height: 60, alignment: .leading)
+                                
+                                VStack {
+                                    Spacer()
+                                    HStack{
+                                        Spacer()
+                                        HStack {
+                                            Image(systemName: "map")
+                                                .frame(height: 16)
+                                            Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
+                                                .font(.footnote)
+                                        }
+                                        Spacer()
+                                        Button(action: {
+                                            self.sheetSelection = "follower"
+                                            self.showSheet.toggle()
+                                        }) {
+                                            HStack {
+                                                Image(systemName: "person")
+                                                    .frame(height: 16)
+                                                .foregroundColor(Color("text-primary"))
+                                                Text("\(self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id}.count)")
+                                                    .font(.footnote)
+                                                .foregroundColor(Color("text-primary"))
+                                            }
+                                        }
+                                    }.frame(width: 100)
+                                    .padding(.bottom, 6)
+                                    
+                                }.frame(width: geo.size.width, height: 60, alignment: .trailing)
                             }
-                            Spacer()
-                            HStack {
-                                Image(systemName: "map")
-                                    .frame(height: 16)
-                                Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
-                                    .font(Font.custom("Europa-Regular", size: 12))
-                            }
-                            Spacer()
-                            Button(action: {
-                                self.sheetSelection = "follower"
-                                self.showSheet.toggle()
-                            }) {
-                                HStack {
-                                    Image(systemName: "person")
-                                        .frame(height: 16)
-                                    Text("\(self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id}.count)")                                .font(Font.custom("Europa-Regular", size: 12))
-                                }
-                            }
-                        }
+                            
+                        }.frame(height: 60)
+                        
                         Spacer()
                         Button(action: {
                             ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})

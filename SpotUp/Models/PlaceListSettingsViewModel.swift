@@ -63,7 +63,7 @@ class PlaceListSettingsViewModel: ObservableObject {
                 case .empty:
                     return ""
                 case .notLongEnough:
-                    return "Placelist name must at least have 3 characters"
+                    return "Collection name must at least have 3 characters"
                 default:
                     return ""
                 }

@@ -39,7 +39,6 @@ struct CurrentTargetRow: View {
                                     .font(.system(size:18))
                                     .fontWeight(.semibold)
                                     .lineLimit(1)
-                                
                                 Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "Loading distance...")
                                     .font(.system(size: 12))
                                     .lineLimit(1)
@@ -47,11 +46,11 @@ struct CurrentTargetRow: View {
                             }
                             Spacer()
                         }
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             self.placeIdToNavigateTo = self.exploreModel.exploreList!.currentTarget!.place.placeID!
                             self.goToPlace = 1
                         }
-                        Spacer()
                         HStack {
                             Button(action: {
                                 UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
@@ -73,7 +72,7 @@ struct CurrentTargetRow: View {
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 18, height: 18)
-                                    .foregroundColor(Color.white)
+                                    .foregroundColor(Color("elevation-1"))
                                     .font(Font.title.weight(.bold))
                             }
                             .frame(width: 40, height: 40)
@@ -82,13 +81,18 @@ struct CurrentTargetRow: View {
                             .frame(width: 40)
                         }
                         .frame(width: 40)
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             self.exploreModel.markPlaceAsVisited(self.exploreModel.exploreList!.currentTarget!)
                         }
                         HStack {
                             Image(systemName: "ellipsis")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
                         }
                         .frame(width: 40)
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             self.showActionSheet.toggle()
                         }
@@ -194,29 +198,34 @@ struct ExplorePlaceRow: View {
                 }
                 Spacer()
             }
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.placeIdToNavigateTo = self.place.place.placeID!
                 self.goToPlace = 1
             }
-            Spacer()
             VStack {
                 VStack {
                     Text("GO")
                         .font(.system(size: 18, weight: .bold))
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                 }
                 .frame(width: 40, height: 40)
                 .background(Color(UIColor.systemRed))
                 .cornerRadius(15)
             }
             .frame(width: 40)
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.exploreModel.changeCurrentTargetTo(self.place)
             }
             HStack {
                 Image(systemName: "ellipsis")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
             }
             .frame(width: 40)
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.showActionSheet.toggle()
             }
@@ -279,18 +288,18 @@ struct ExplorePlaceVisitedRow: View {
                 }
                 Spacer()
             }
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.placeIdToNavigateTo = self.place.place.placeID!
                 self.goToPlace = 1
             }
-            Spacer()
             VStack {
                 VStack {
                     Image(systemName: "gobackward")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 18, height: 18)
-                        .foregroundColor(Color.white)
+                        .foregroundColor(Color("bg-primary"))
                         .font(Font.title.weight(.bold))
                 }
                 .frame(width: 40, height: 40)
@@ -299,13 +308,18 @@ struct ExplorePlaceVisitedRow: View {
                 .frame(width: 40)
             }
             .frame(width: 40)
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.exploreModel.markPlaceAsUnvisited(self.place)
             }
             HStack {
                 Image(systemName: "ellipsis")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
             }
             .frame(width: 40)
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.showActionSheet.toggle()
             }

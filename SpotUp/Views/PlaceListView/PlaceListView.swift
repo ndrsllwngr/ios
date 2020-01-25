@@ -36,12 +36,12 @@ struct PlaceListView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
-                    Text("")
+                    EmptyView()
                 }
             }
             if (self.profileUserIdToNavigateTo != nil) {
                 NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
-                    Text("")
+                    EmptyView()
                 }
             }
             InnerPlaceListView(placeListId: placeListId,
@@ -121,7 +121,6 @@ struct InnerPlaceListView: View {
                     Text("Map").tag(1)
                 }
                 .padding(.horizontal)
-                .padding(.bottom)
                 .pickerStyle(SegmentedPickerStyle())
             }
             .padding(0)
@@ -174,10 +173,12 @@ struct PlaceListFollowButton: View {
                         HStack {
                             Spacer()
                             Image(systemName: "heart")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
                                 .foregroundColor(Color("text-secondary"))
                         }
                         .frame(width: 49, height: 49)
-                        
                     }
                 } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
@@ -186,9 +187,11 @@ struct PlaceListFollowButton: View {
                         HStack {
                             Spacer()
                             Image(systemName: "heart.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
                                 .foregroundColor(Color("brand-color-primary"))
                         }
-                        .frame(width: 49, height: 49)
                     }
                 }
             }
@@ -210,6 +213,11 @@ struct PlaceListSettingsButton: View {
                 HStack {
                     Spacer()
                     Image(systemName: "ellipsis")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color("text-primary"))
+                    
                 }
                 .frame(width: 49, height: 49)
             }

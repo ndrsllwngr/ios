@@ -18,7 +18,7 @@ struct ProfileView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile = FirestoreProfile()
     
-    @State var isMyProfile: Bool = false
+    @State var isMyProfile: Bool = true
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
@@ -31,13 +31,13 @@ struct ProfileView: View {
         VStack {
             if (self.profileUserIdToNavigateTo != nil) {
                 NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
-                    Text("")
+                    EmptyView()
                 }
             }
             
             if (self.placeListIdToNavigateTo != nil) {
                 NavigationLink(destination: PlaceListView(placeListId: self.placeListIdToNavigateTo!, tabSelection:self.$tabSelection), tag: 1, selection: self.$goToPlaceList) {
-                    Text("")
+                    EmptyView()
                 }
             }
             
@@ -108,7 +108,7 @@ struct InnerProfileView: View {
                         .padding(.bottom, 10)
                     
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlacesListRow(placeList: placeList).onTapGesture {
+                        PlaceListRow(placeList: placeList).onTapGesture {
                             self.placeListIdToNavigateTo = placeList.id
                             self.goToPlaceList = 1
                         }
@@ -117,7 +117,7 @@ struct InnerProfileView: View {
             } else {
                 List {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlacesListRow(placeList: placeList).onTapGesture {
+                        PlaceListRow(placeList: placeList).onTapGesture {
                             self.placeListIdToNavigateTo = placeList.id
                             self.goToPlaceList = 1
                         }
@@ -126,7 +126,7 @@ struct InnerProfileView: View {
             }
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
-        .navigationBarItems(trailing: HStack {
+        .navigationBarItems(trailing: HStack{
             if (self.isMyProfile) {
                 ProfileSettingsButton().environmentObject(self.firestoreProfile)
             } else if (!self.isMyProfile) {
@@ -147,40 +147,38 @@ struct ProfileInfoView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                ZStack{
-                    VStack {
-                        FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
-                            .clipShape(Circle()).padding(.top)
-                    }.frame(width: 110, height: 110)
-                    
+            ZStack{
+                VStack {
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
+                        .clipShape(Circle()).padding(.top)
+                }.frame(width: 110, height: 100)
+                if (self.isMyProfile) {
                     VStack {
                         Spacer()
                         HStack{
                             Spacer()
-                            if (self.isMyProfile) {
-                                Button(action: {
-                                    self.showSheet.toggle()
-                                    self.sheetSelection = "image_picker"
-                                }) {
-                                    HStack {
-                                        Image(systemName: "pencil")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 18)
-                                            .foregroundColor(Color.white)
-                                    }
-                                    .frame(width: 32, height: 32)
-                                    .background(Color("brand-color-primary"))
-                                    .mask(Circle())
-                                    
+                            
+                            Button(action: {
+                                self.showSheet.toggle()
+                                self.sheetSelection = "image_picker"
+                            }) {
+                                HStack {
+                                    Image(systemName: "pencil")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 18)
+                                        .foregroundColor(Color.white)
                                 }
+                                .frame(width: 32, height: 32)
+                                .background(Color("brand-color-primary"))
+                                .mask(Circle())
                             }
+                            
                         }
-                    }.frame(width: 110, height: 110)
+                    }.frame(width: 110, height: 100)
                 }
             }
-            
+            Spacer()
             GeometryReader { metrics in
                 HStack {
                     Spacer()
@@ -221,9 +219,12 @@ struct ProfileInfoView: View {
                     .frame(width: metrics.size.width * 0.3)
                     Spacer()
                 }
+                .foregroundColor(Color("text-primary"))
             }.frame(height: 50)
-            
+            Spacer()
         }
+        .frame(height: 150)
+        .padding(.top, 10)
     }
 }
 
@@ -234,31 +235,40 @@ struct ProfileFollowButton: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
     var body: some View {
-        VStack {
+        HStack {
+            Spacer()
             if(self.firebaseAuthentication.currentUser != nil) {
                 if (!self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
                         FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                     }) {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "person.badge.plus.fill")
+                        VStack (alignment: .trailing) {
+                            Text("FOLLOW")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(.white))
+                                .padding(.vertical, 4)
+                            
                         }
-                        .frame(width: 49, height: 49)
+                        .frame(width: 90)
+                        .background(Color("brand-color-primary"))
+                        .mask(Rectangle().cornerRadius(8))
                     }
                 } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
                         FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                     }) {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "person.badge.minus.fill")
-                        }
-                        .frame(width: 49, height: 49)
+                        VStack (alignment: .trailing){
+                            Text("FOLLOWING")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(.gray))
+                                .padding(.vertical, 4)
+                            
+                        }.frame(width: 90)
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
                     }
                 }
             }
-        }
+        }.padding(.trailing, -2)
     }
 }
 
@@ -270,6 +280,10 @@ struct ProfileSettingsButton: View {
             HStack {
                 Spacer()
                 Image(systemName: "gear")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(Color("text-primary"))
             }
             .frame(width: 49, height: 49)
         }
