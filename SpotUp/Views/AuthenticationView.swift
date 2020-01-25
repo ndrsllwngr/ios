@@ -74,46 +74,155 @@ struct AuthenticationView: View {
                         .edgesIgnoringSafeArea(.all)
                     if self.selection == "login" {
                         VStack(spacing: 0) {
+                            
+                            // EMAIL
+                            Section(footer: VStack {
+                                if(self.loginViewModel.emailMessage != "") {
+                                    Text(loginViewModel.emailMessage).foregroundColor(.red)
+                                }
+                            }) {
+                                HStack {
+                                    TextField("Email", text: $loginViewModel.email)
+                                        .textContentType(.username)
+                                        .keyboardType(.emailAddress)
+                                        .autocapitalization(.none)
+                                        .foregroundColor(.primary)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
+                            }
+                            
+                            // PASSWORD
+                            Section(footer: VStack {
+                                if(self.loginViewModel.passwordMessage != "") {
+                                    Text(loginViewModel.passwordMessage).foregroundColor(.red)
+                                }
+                            }) {
+                                HStack {
+                                    SecureField("Password", text: $loginViewModel.password)
+                                        .textContentType(.password)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
+                            }
+                            
+                            // LOGIN BUTTON
                             Section(footer: VStack {
                                 if (self.loginErrorText != nil) {
                                     Text("Wrong credentials").foregroundColor(.red)
                                 }
-                                Text(loginViewModel.emailMessage).foregroundColor(.red)
-                                Text(loginViewModel.passwordMessage).foregroundColor(.red)
                             }) {
-                                TextField("Email", text: $loginViewModel.email)
-                                    .autocapitalization(.none)
-                                SecureField("Password", text: $loginViewModel.password)
                                 Button(action: { self.logIn() }) {
-                                    Text("Login")
-                                }.disabled(!self.loginViewModel.isValid)
+                                    HStack {
+                                        Spacer()
+                                        Text("Login").foregroundColor(.primary)
+                                        Spacer()
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
+                                .disabled(!self.loginViewModel.isValid)
                             }
+                            
                             Spacer()
-                        }
+                        }.padding(.horizontal)
                     }
                     if self.selection == "signup" {
                         VStack(spacing: 0) {
-                            Section(footer: Text(signUpViewModel.usernameMessage).foregroundColor(.red)) {
-                                TextField("Username", text: $signUpViewModel.username)
-                                    .autocapitalization(.none)
+                            
+                            // USERNAME
+                            Section(footer: VStack {
+                                if(self.signUpViewModel.usernameMessage != "") {
+                                    Text(signUpViewModel.usernameMessage).foregroundColor(.red)
+                                }
+                            }) {
+                                HStack {
+                                    TextField("Username", text: $signUpViewModel.username)
+                                        .autocapitalization(.none)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
                             }
-                            Section(footer: Text(signUpViewModel.emailMessage).foregroundColor(.red)) {
-                                TextField("Email", text: $signUpViewModel.email)
-                                    .autocapitalization(.none)
+                            
+                            // EMAIL
+                            Section(footer: VStack {
+                                if(self.signUpViewModel.emailMessage != "") {
+                                    Text(signUpViewModel.emailMessage).foregroundColor(.red)
+                                }
+                            }) {
+                                HStack {
+                                    TextField("Email", text: $signUpViewModel.email)
+                                        .textContentType(.username)
+                                        .keyboardType(.emailAddress)
+                                        .autocapitalization(.none)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
                             }
-                            Section(footer: Text(signUpViewModel.passwordMessage).foregroundColor(.red)) {
-                                SecureField("Password", text: $signUpViewModel.password)
-                                SecureField("Password again", text: $signUpViewModel.passwordAgain)
+                            
+                            // PASSWORD
+                            Section(footer: VStack {
+                                if(self.signUpViewModel.passwordMessage != "") {
+                                    Text(signUpViewModel.passwordMessage).foregroundColor(.red)
+                                }
+                            }) {
+                                HStack {
+                                    SecureField("Password", text: $signUpViewModel.password)
+                                        .textContentType(.newPassword)
+                                        .autocapitalization(.none)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
+                                HStack {
+                                    SecureField("Password again", text: $signUpViewModel.passwordAgain)
+                                        .textContentType(.password)
+                                        .autocapitalization(.none)
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
                             }
+                            
+                            // SIGN UP BUTTON
                             Section {
                                 Button(action: { self.signUp() }) {
-                                    Text("Sign up")
-                                }.disabled(!self.signUpViewModel.isValid)
+                                    HStack {
+                                        Spacer()
+                                        Text("Sign up").foregroundColor(.primary)
+                                        Spacer()
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+                                .foregroundColor(.secondary)
+                                .background(Color(.secondarySystemBackground))
+                                .cornerRadius(10.0)
+                                .padding(.top)
+                                .disabled(!self.signUpViewModel.isValid)
                             }
-                        }
+                            Spacer()
+                        }.padding(.horizontal)
                     }
                 }
-                
             }
         }.navigationBarTitle(Text(""), displayMode: .inline).navigationBarHidden(true)
     }
