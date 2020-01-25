@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct SearchResultsPlaceListsView: View {
+struct SearchResultsCollectionsView: View {
     @Binding var tabSelection: Int
     
     @EnvironmentObject var searchViewModel: SearchViewModel
@@ -11,7 +11,7 @@ struct SearchResultsPlaceListsView: View {
                 if (self.searchViewModel.recentSearchFirebaseLists.count > 0) {
                     List {
                         Section() {
-                            Text("Recent").font(.subheadline).fontWeight(.semibold)
+                            Text("Recent").font(.system(size:18)).fontWeight(.bold)
                             ForEach(searchViewModel.recentSearchFirebaseLists) {
                                 (placeList: PlaceList) in SingleRowPlaceList(placeList: placeList, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
@@ -47,7 +47,20 @@ struct SingleRowPlaceList: View {
     
     var body: some View {
         HStack {
-            Button(action: {
+            
+            HStack(alignment: .center) {
+                Image(uiImage: UIImage(named: "placeholder-row-collection")!)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 42.0, height: 42.0, alignment: .center)
+                    .padding(.trailing, 5)
+                VStack(alignment: .leading){
+                    Text(placeList.name).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                    Text("by \(placeList.owner.username)").font(.system(size:12)).lineLimit(1)
+                }
+                Spacer()
+            }.onTapGesture {
                 if(self.searchViewModel.recentSearchFirebaseLists.count == 0) {
                     self.searchViewModel.recentSearchFirebaseLists.append(self.placeList)
                 } else if (!self.searchViewModel.recentSearchFirebaseLists.contains(self.placeList)) {
@@ -59,27 +72,18 @@ struct SingleRowPlaceList: View {
                 }
                 self.goToDestination = true
                 self.selection = 1
-            }){
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(placeList.name).font(.headline)
-                        Text("by \(placeList.owner.username)").font(.body)
-                    }
-                    Spacer()
-                }
-            }.padding(.leading)
+            }
             Spacer()
+            Text("")
             if showRecent == true {
-                Group{
-                    Button(action: {
-                        print("delete invoked")
+                Image(systemName: "xmark")
+                    .padding(.trailing)
+                    .onTapGesture {
                         let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseLists.firstIndex(of: self.placeList)
                         if(indexOfToBeDeletedEntry != nil) {
                             self.searchViewModel.recentSearchFirebaseLists.remove(at: indexOfToBeDeletedEntry!)
                         }
-                    }) { Image(systemName: "xmark")}
                 }
-                .padding(.trailing)
             }
             if (self.goToDestination != false) {
                 NavigationLink(destination: PlaceListView(placeListId: placeList.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {

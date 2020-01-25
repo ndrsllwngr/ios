@@ -65,13 +65,13 @@ struct SearchView: View {
                 // RESULTS
                 VStack {
                     if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.googlePlaces.rawValue {
-                        SearchResultsGooglePlacesView()
+                        SearchResultsPlacesView()
                             .environmentObject(self.searchViewModel)
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
                     else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseLists.rawValue {
-                        SearchResultsPlaceListsView(tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
+                        SearchResultsCollectionsView(tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
