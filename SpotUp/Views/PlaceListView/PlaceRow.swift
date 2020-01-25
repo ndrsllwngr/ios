@@ -67,7 +67,7 @@ struct PlaceRow: View {
                         .default(Text("Add to explore")) {
                             ExploreModel.shared.addPlaceToExplore(self.place.gmsPlace)
                         },
-                        .default(Text("Add to other collection")) {
+                        .default(Text("Add to collection")) {
                             self.showSheet.toggle()
                             self.sheetSelection = "add_to_placelist"
                             self.placeForAddPlaceToListSheet = self.place
