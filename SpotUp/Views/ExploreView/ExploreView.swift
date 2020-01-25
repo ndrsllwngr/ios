@@ -11,6 +11,8 @@ import GoogleMaps
 import GooglePlaces
 
 struct ExploreView: View {
+    @Binding var tabSelection: Int
+    
     @ObservedObject var exploreModel = ExploreModel.shared
     
     @State var showSheet: Bool = false
@@ -32,7 +34,8 @@ struct ExploreView: View {
                 }
             }
             if (self.exploreModel.exploreList != nil) {
-                ExploreActiveView(showSheet: self.$showSheet,
+                ExploreActiveView(tabSelection: self.$tabSelection,
+                                  showSheet: self.$showSheet,
                                   sheetSelection: self.$sheetSelection,
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                   goToPlace: self.$goToPlace,
@@ -68,12 +71,13 @@ struct ExploreView: View {
                 ExploreSortButton(sortByDistance: self.$sortByDistance)
             }
         })
-            .padding()
     }
 }
 
 struct ExploreActiveView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var tabSelection: Int
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -87,7 +91,7 @@ struct ExploreActiveView: View {
     @Binding var sortByDistance: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0.0) {
             if (self.exploreModel.exploreList != nil) {
                 HStack {
                     Image(systemName: "map")
@@ -97,21 +101,32 @@ struct ExploreActiveView: View {
                         self.exploreModel.quitExplore()
                     }) {
                         Text("Quit")
+                            .accentColor(Color("text-secondary"))
                     }
                 }
+                .padding(.horizontal)
+                .padding(.bottom)
                 
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
+                    .frame(height: 180) // ToDo make height based on Geometry Reader
                 
                 if !exploreModel.exploreList!.places.isEmpty {
-                    CurrentTargetRow( showSheet: self.$showSheet,
-                                      sheetSelection: self.$sheetSelection,
-                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                      goToPlace: self.$goToPlace,
-                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                      imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                    CurrentTargetRow(showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                        .offset(y: -36)
+                        .padding(.bottom, -36)
                     ScrollView {
-                        Text("Travel Queue")
+                        HStack {
+                            Text("Travel queue")
+                                .font(.system(size:20, weight:.bold))
+                            Spacer()
+                        }
+                        .padding(.leading, 20)
+                        .padding(.top, 10)
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
                             ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
@@ -125,27 +140,58 @@ struct ExploreActiveView: View {
                                     .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             }
                         } else {
-                            VStack {
-                                Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
+                            HStack {
+                                Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw")!)
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50.0, height: 50.0, alignment: .center)
+                                Spacer()
+                                Text("Travel queue is empty")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
                             }
+                            .frame(height: 60)
+                            .padding([.horizontal], 20)
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                            Text("Already visited")
+                            HStack {
+                                Text("Visited")
+                                    .font(.system(size:20, weight:.bold))
+                                Spacer()
+                            }
+                            .padding([.leading], 20)
                             ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
                                 ExplorePlaceVisitedRow(place: place,
+                                                       showSheet: self.$showSheet,
+                                                       sheetSelection: self.$sheetSelection,
                                                        placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                       goToPlace: self.$goToPlace)
+                                                       goToPlace: self.$goToPlace,
+                                                       placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                                     .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             }
                         }
                     }
                 } else {
                     Spacer()
-                    Text("There are currently no places in your Explore Queue. Feel free to add some!")
+                    Button(action: {
+                        self.tabSelection = 1
+                    }) {
+                        VStack {
+                            Image(uiImage: UIImage(named: "explore-empty-map")!)
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150.0, height: 150.0, alignment: .center)
+                            Text("Add places and start exploring.")
+                                .font(.system(size:16, weight:.bold))
+                                .accentColor(Color("brand-color-primary"))
+                        }
+                    }
+                    Spacer()
                 }
-                Spacer()
-                
             }
         }
     }
@@ -158,24 +204,47 @@ struct ExploreInactiveView: View {
     @Binding var sheetSelection: String
     
     var body: some View {
-        VStack {
-            Spacer()
-            Text("Explore is currently not active.")
-            Text("Why dont you...")
-            Spacer()
-            Button(action: {
-                self.showSheet.toggle()
-                self.sheetSelection = "select_placelist"
-            }) {
-                Text("1. Select a placelist you want to explore")
-            }.padding()
-            Button(action: {
-                self.exploreModel.startExploreWithEmptyList()
-            }) {
-                Text("2. Create an empty explore queue and add places by yourself")
-            }.padding()
-            Spacer()
+        GeometryReader { metrics in
+            VStack {
+                Spacer()
+                Image(uiImage: UIImage(named: "explore-empty-trail-sign")!)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                Spacer()
+                Button(action: {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "select_placelist"
+                }) {
+                    VStack {
+                        Text("Explore collection")
+                            .font(.system(size:20, weight:.bold))
+                            .accentColor(Color.white)
+                            .padding([.vertical], 15)
+                    }
+                    .frame(width: metrics.size.width * 0.8)
+                    .background(Color("brand-color-primary-soft"))
+                    .cornerRadius(15)
+                }
+                .padding([.bottom], 20)
+                Button(action: {
+                    self.exploreModel.startExploreWithEmptyList()
+                }) {
+                    VStack {
+                        Text("Start new queue")
+                            .font(.system(size:20, weight:.bold))
+                            .accentColor(Color.white)
+                            .padding([.vertical], 15)
+                    }
+                    .frame(width: metrics.size.width * 0.8)
+                    .background(Color("brand-color-secondary"))
+                    .cornerRadius(15)
+                }
+                Spacer()
+            }
         }
+        
     }
 }
 
