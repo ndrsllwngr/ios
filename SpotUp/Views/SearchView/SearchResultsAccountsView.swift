@@ -46,7 +46,15 @@ struct SingleRowAccount: View {
     
     var body: some View {
         HStack {
-            Button(action: {
+            HStack(alignment: .center) {
+                FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
+                    .clipShape(Circle())
+                    .padding(.trailing, 5)
+                VStack(alignment: .leading){
+                    Text(user.username).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                }
+                Spacer()
+            }.onTapGesture {
                 if(self.searchViewModel.recentSearchFirebaseAccounts.count == 0) {
                     self.searchViewModel.recentSearchFirebaseAccounts.append(self.user)
                 } else if (!self.searchViewModel.recentSearchFirebaseAccounts.contains(self.user)) {
@@ -57,18 +65,9 @@ struct SingleRowAccount: View {
                 }
                 self.goToDestination = true
                 self.selection = 1
-            }){
-                HStack(alignment: .center) {
-                    FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
-                        .clipShape(Circle())
-                        .padding(.trailing, 5)
-                    VStack(alignment: .leading){
-                        Text(user.username).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
-                    }
-                    Spacer()
-                }
             }
             Spacer()
+            Text("")
             if showRecent == true {
                 Image(systemName: "xmark")
                     .padding(.trailing)

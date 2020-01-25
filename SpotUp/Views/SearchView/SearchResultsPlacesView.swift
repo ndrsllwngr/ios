@@ -42,7 +42,22 @@ struct SingleRowPlace: View {
     
     var body: some View {
         HStack {
-            Button(action: {
+            
+            HStack(alignment: .center) {
+                Image(uiImage: UIImage(named: "placeholder-row-place")!)
+                    .renderingMode(.original)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 42.0, height: 42.0, alignment: .center)
+                    .padding(.trailing, 5)
+                VStack(alignment: .leading){
+                    Text(result.attributedPrimaryText.string).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                    if result.attributedSecondaryText != nil {
+                        Text(result.attributedSecondaryText!.string).font(.system(size:12)).lineLimit(1)
+                    }
+                }
+                Spacer()
+            }.onTapGesture {
                 if(self.searchViewModel.recentSearchPlaces.count == 0) {
                     self.searchViewModel.recentSearchPlaces.append(self.result)
                 } else if (!self.searchViewModel.recentSearchPlaces.contains(self.result)) {
@@ -53,24 +68,9 @@ struct SingleRowPlace: View {
                 }
                 self.goToDestination = true
                 self.selection = 1
-            }){
-                HStack(alignment: .center) {
-                    Image(uiImage: UIImage(named: "placeholder-row-place")!)
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 42.0, height: 42.0, alignment: .center)
-                        .padding(.trailing, 5)
-                    VStack(alignment: .leading){
-                        Text(result.attributedPrimaryText.string).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
-                        if result.attributedSecondaryText != nil {
-                            Text(result.attributedSecondaryText!.string).font(.system(size:12)).lineLimit(1)
-                        }
-                    }
-                    Spacer()
-                }
             }
             Spacer()
+            Text("")
             if showRecent == true {
                 Image(systemName: "xmark")
                     .padding(.trailing)
