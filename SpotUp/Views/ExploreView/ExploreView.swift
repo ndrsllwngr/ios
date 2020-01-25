@@ -102,10 +102,10 @@ struct ExploreActiveView: View {
                     }) {
                         Text("Quit")
                             .accentColor(Color("text-secondary"))
-                        
                     }
                 }
                 .padding(.horizontal)
+                .padding(.bottom)
                 
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
                     .frame(height: 180) // ToDo make height based on Geometry Reader
@@ -138,9 +138,19 @@ struct ExploreActiveView: View {
                                     .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             }
                         } else {
-                            VStack {
-                                Text("Your travel queue is empty. Add more places!").listRowInsets(EdgeInsets())
+                            HStack {
+                                Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw")!)
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 50.0, height: 50.0, alignment: .center)
+                                Spacer()
+                                Text("Travel queue is empty")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
                             }
+                            .frame(height: 60)
+                            .padding([.horizontal], 20)
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             HStack {
