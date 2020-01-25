@@ -18,7 +18,7 @@ struct ProfileView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile = FirestoreProfile()
     
-    @State var isMyProfile: Bool = false
+    @State var isMyProfile: Bool = true
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
@@ -127,7 +127,6 @@ struct InnerProfileView: View {
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack{
-            Spacer()
             if (self.isMyProfile) {
                 ProfileSettingsButton().environmentObject(self.firestoreProfile)
             } else if (!self.isMyProfile) {
@@ -281,9 +280,9 @@ struct ProfileSettingsButton: View {
             HStack {
                 Spacer()
                 Image(systemName: "gear")
+                .foregroundColor(Color("text-primary"))
             }
             .frame(width: 49, height: 49)
-            .padding(.trailing, -2)
         }
     }
 }
