@@ -12,7 +12,7 @@ import SwiftUI
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var exploreModel = ExploreModel.shared
-    @State var selection = 1
+    @State var selection = 2
     
     var body: some View {
         GeometryReader { metrics in
@@ -20,48 +20,50 @@ struct TabBarView: View {
                 VStack {
                     if (self.selection == 0) {
                         NavigationView {
-                            SearchView(tabSelection: self.$selection)
+                            ExploreView()
                         }
                         
                     } else if (self.selection == 1) {
                         NavigationView {
-                            ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid, tabSelection: self.$selection)
+                            SearchView(tabSelection: self.$selection)
                         }
                     } else if (self.selection == 2) {
                         NavigationView {
-                            ExploreView()
+                            ProfileView(profileUserId: self.firebaseAuthentication.currentUser!.uid, tabSelection: self.$selection)
+                            
                         }
                     }
                 }
                 Spacer()
-                if (self.exploreModel.exploreList != nil && self.selection != 2) {
+                if (self.exploreModel.exploreList != nil && self.selection != 0) {
                     ExploreIsActiveBar()
                         .frame(width: metrics.size.width, height: 49)
                         .background(Color("bg-explore-bar"))
                         //.offset(y: -49) // 49 is the exact height of the TabBar
                         .onTapGesture {
-                            self.selection = 2
+                            self.selection = 0
                     }
                 }
                 HStack {
                     Spacer()
                     VStack {
-                        Image(systemName: self.selection == 0 ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
-                        Text("Search")
+                        Image(systemName: self.selection == 0 ? "map.fill" : "map")
+                        Text("Explore")
+                        
                     }.onTapGesture {
                         self.selection = 0
                     }
                     Spacer()
                     VStack {
-                        Image(systemName: self.selection == 1 ? "person.fill" : "person")
-                        Text("Profile")
+                        Image(systemName: self.selection == 1 ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
+                        Text("Search")
                     }.onTapGesture {
                         self.selection = 1
                     }
                     Spacer()
                     VStack {
-                        Image(systemName: self.selection == 2 ? "map.fill" : "map")
-                        Text("Explore")
+                        Image(systemName: self.selection == 2 ? "person.fill" : "person")
+                        Text("Profile")
                     }.onTapGesture {
                         self.selection = 2
                     }

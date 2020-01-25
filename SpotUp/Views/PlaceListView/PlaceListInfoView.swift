@@ -51,7 +51,7 @@ struct PlaceListInfoView: View {
                         Spacer()
                         Button(action: {
                             ExploreModel.shared.startExploreWithPlaceList(placeList: self.firestorePlaceList.placeList, places: self.firestorePlaceList.places.map{$0.gmsPlace})
-                            self.tabSelection = 2
+                            self.tabSelection = 0
                         }) {
                             VStack{
                                 Text("Explore")
