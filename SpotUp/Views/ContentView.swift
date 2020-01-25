@@ -18,14 +18,20 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if !self.launchedBefore {
-                OnboardingView(launchedBefore: $launchedBefore)
-            } else if !self.permissionRequestedBefore {
-                PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
-            } else if firebaseAuthentication.currentUser != nil {
-                TabBarView()
+            if firebaseAuthentication.startUpInProgress {
+                SplashScreen()
+                    .animation(.easeIn)
+                    .transition(.asymmetric(insertion: .scale, removal: .scale))
             } else {
-                AuthenticationView()
+                if !self.launchedBefore {
+                    OnboardingView(launchedBefore: $launchedBefore)
+                } else if !self.permissionRequestedBefore {
+                    PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
+                } else if firebaseAuthentication.currentUser != nil {
+                    TabBarView()
+                } else {
+                    AuthenticationView()
+                }
             }
         }
         .onAppear(){
