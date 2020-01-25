@@ -12,12 +12,12 @@ import FirebaseFirestore
 struct ItemView: View {
     var placeId: String
     @State var place: GMSPlace? = nil
-    @State var isOpen: String? = nil
     @State var priceLevel: Int? = nil
     @State var type: String? = nil
     @State var openingHoursText: [String]? = []
     @State var photos: [GMSPlacePhotoMetadata]? = []
     @State var gallery: [UIImage] = [UIImage(named: "place_image_placeholder")!]
+    @State var showSheet = false
     
     
     
@@ -27,13 +27,25 @@ struct ItemView: View {
                 Text("")
             } else {
                 ScrollView{
-                    VStack{
-                        VStack{
+                    VStack(spacing: 0){
+                        //                        ZStack{
+                        VStack(spacing: 0){
                             GalleryView(gallery: self.$gallery)
+                            Spacer()
                         }
-                        InnerItemView(place: place!, isOpen: isOpen!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: self.$gallery)
-                            .offset(y:-30)
-                    }}}
+                        InnerItemView(place: place!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: self.$gallery, showSheet:self.$showSheet)
+                            //                                .background(Color("bg-primary"))
+                            .offset(y: -25)
+                        //                                .cornerRadius(15)
+                        //                        .offset(y:-60)
+                        //                                .padding(.top, 270)
+                        //                                .zIndex(10)
+                        //                        }
+                    }
+                    //                    ButtonOnTopView(showSheet:self.$showSheet)
+                    //                    .offset(y:-930)
+                    
+                }}
         }.onAppear {
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
@@ -46,7 +58,6 @@ struct ItemView: View {
                         if let openingHoursTexts = openingHours.weekdayText{
                             self.openingHoursText = openingHoursTexts
                         }}
-                    self.isOpen = getPlaceIsOpenNow(isOpen: place.isOpen(at:NSDate.now))
                     self.priceLevel = getPlacePriceLevel(priceLevel: place.priceLevel)
                     if let types = place.types{
                         self.type = parseType(types:types)}
@@ -65,7 +76,7 @@ struct ItemView: View {
                                     tmp.append(photo)
                                 }
                                 if tmp.isEmpty == false{
-                                self.gallery.removeAll()
+                                    self.gallery.removeAll()
                                     self.gallery = tmp}
                             }
                         }
@@ -81,26 +92,20 @@ struct ItemView: View {
 
 struct InnerItemView: View {
     var place: GMSPlace
-    var isOpen: String
     var priceLevel: Int
     var type: String
     var openingHoursText: [String]
     @Binding var gallery: [UIImage]
-    @State var showSheet = false
+    @Binding var showSheet: Bool
     
     
     
     var body: some View {
         //        ScrollView(showsIndicators: false){
         VStack{
-            //---------------------------------------------
-            //                    GalleryView(photos: place.photos, gallery: self.$gallery)
-            //                        .frame(width:UIScreen.main.bounds.width, height:300)
-            //---------------------------------------------
-            //topbar info
-            HStack(){
-                //type
+            HStack{
                 Text(type)
+                    .padding(.leading, 20)
                 //distance
                 //priceLevel
                 Spacer()
@@ -108,41 +113,30 @@ struct InnerItemView: View {
                     ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "eurosign.circle"), id: \.self) { sign in
                         Image(systemName:sign)}
                     
-                }
-                Spacer()
-                //addbutton
-                Button(action: {
-                    self.showSheet.toggle()
-                }){
-                    HStack {
-                        Image(systemName: "plus")
-                            .font(.body)
-                        Text("add")
-                            .fontWeight(.semibold)
-                            .font(.body)
-                    }
-                    .padding(5)
-                    .foregroundColor(.white)
-                    .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.orange]), startPoint: .leading, endPoint: .trailing))
-                    .cornerRadius(5)
-                    
-                }
+                }.padding(.trailing, 40)
+            }
+            .frame(width: UIScreen.main.bounds.width, height: 50)
+            .background(Color.white)
+            .cornerRadius(15)
+            
+            ButtonOnTopView(showSheet:self.$showSheet)
+            .offset(y:-83.5)
+            .padding(.bottom, -83.5)
                 
-            } // end stack top bar
-                .padding(.horizontal,5)
-                .frame(width:UIScreen.main.bounds.width, height:50)
-                .background(Color.white)
-                .cornerRadius(15)
             
-            
-            //end Zstack
-            
-            //---------------------------------------------
-            //main info
-            VStack(alignment:.leading, spacing: 10){
-                Text(place.name != nil ? place.name! : "")
-                    .font(.title)
-                Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
+            VStack(alignment:.leading, spacing:10){
+                
+                
+                VStack{Text(place.name != nil ? place.name! : "")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                }
+                .padding(.horizontal, 15)
+                
+                VStack{
+                    Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")}
+                    .padding(.horizontal, 15)
+                
                 Button(action:{
                     if let phoneNumber = self.place.phoneNumber{
                         let prefix = "tel://"
@@ -150,30 +144,57 @@ struct InnerItemView: View {
                         let tel = URL(string:(prefix + trimmed))
                         UIApplication.shared.open(tel!)
                     }
-                }){Text("Call Now").foregroundColor(.red)}
-                Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "no phone number")
+                }){HStack(spacing:20){
+                    Image(systemName: "phone")
+                        .foregroundColor(Color("brand-color-primary"))
+                    Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "No phone number could be found.")
+                        .foregroundColor(Color("text-primary"))
+                    
+                }.padding(.horizontal,15)
+                    
+                }
+                
                 Button(action: {
                     if let website = self.place.website {
                         UIApplication.shared.open(website)
                     }
                 }){
-                    Text("Open Website").foregroundColor(.red)
+                    HStack(spacing:20){
+                        Image(systemName: "desktopcomputer").foregroundColor(Color("brand-color-primary"))
+                        Text("Open Website").foregroundColor(Color("text-primary"))
+                        
+                    }.padding(.horizontal, 15)
                 }
-                Text(isOpen)}
-                .frame(width:UIScreen.main.bounds.width-10, height:300)
-            //---------------------------------------------
-            //map
-            VStack(alignment: .center){
-                ItemMapView(coordinate: place.coordinate)}.cornerRadius(15)
-                .frame(width:UIScreen.main.bounds.width-10, height:220)
+            }
+            .frame(width:UIScreen.main.bounds.width, height:250)
+            
+            VStack{
+                ItemMapView(coordinate: place.coordinate)
+                    .frame(width:UIScreen.main.bounds.width-30, height:200)
+                    .cornerRadius(15)
+                    .padding(20)
+            }
+            .frame(width:UIScreen.main.bounds.width-30, height:250)
+            
             //end
             //---------------------------------------------
-            VStack{
-                ScrollWeekView(data: createDateCardData(openingHoursText: openingHoursText))
-            }.frame(width:UIScreen.main.bounds.width-10, height:250)
+            
+            VStack(spacing:10){
+                if openingHoursText.count == 0 {
+                    Image("placeholder-openingHours")
+                        .resizable()
+                        .scaledToFit()
+                    Text("No opening hours could be find at this time.")
+                }
+                else{
+                    ScrollWeekView(data: createDateCardData(openingHoursText: openingHoursText))
+                }
+            }.frame(width:UIScreen.main.bounds.width-10, height:200)
+                .padding()
             
             
-        }// end Vstack
+        }
+            // end Vstack
             //        }// end ScrollView
             .sheet(isPresented: $showSheet) {
                 ItemAddSheet(place: self.place, placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil, showSheet: self.$showSheet)
@@ -184,7 +205,27 @@ struct InnerItemView: View {
         //        }
     }//end body
 }//end wholew View
-
+struct ButtonOnTopView: View{
+    
+    @Binding var showSheet:Bool
+    
+    var body: some View{
+        VStack{
+            HStack{
+                Spacer()
+                Button(action: {
+                    self.showSheet.toggle()
+                }){
+                    ZStack {
+                        Circle().fill(Color("brand-color-primary"))
+                        Image(systemName: "plus")
+                            .font(.title).foregroundColor(Color.white)
+                    }.frame(width: 47, height:47)
+                }
+            }.padding(.trailing)
+        }
+    }
+}
 
 struct GalleryView:View{
     @Binding var gallery: [UIImage]
@@ -204,35 +245,40 @@ struct GalleryView:View{
 struct DateCardView: View {
     var day: String
     var hours: String
-
+    @State var color = ""
+    
     
     var body: some View {
-        VStack {
-            HStack {
-                Text(self.day)
-                    .foregroundColor(Color.white)
-                    .fontWeight(.bold)
-            }.padding(5)
-                .frame(width:160, height:30)
-                .background(Color.red)
-            Spacer()
+        VStack{
+            VStack {
+                HStack {
+                    Text(self.day)
+                        .foregroundColor(Color.white)
+                        .fontWeight(.bold)
+                }.padding(5)
+                    .frame(width:160, height:30)
+                    .background(Color(self.color))
+                Spacer()
+                
+                HStack() {
+                    Text(self.hours)
+                        .font(.system(size:12))
+                    
+                }.padding(.horizontal, 5)
+                Spacer()
+            }
+            .frame(width:160, height:120)
+            .cornerRadius(15)
+            .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color(self.color), lineWidth: 1))
             
-            HStack() {
-                Text(self.hours)
-                    .font(.system(size:12))
-                
-                //                    .frame(width:210, alignment:.leading)
-                
-            }.padding(.horizontal, 5)
-            Spacer()
+        }.onAppear{
+            self.color = setDateCardColor(today: Date().dayofTheWeek, day:self.day)
         }
-        .frame(width:160, height:120)
-        .background(Color.gray)
-        .cornerRadius(20)
-        
         
     }
+    
 }
+
 struct ScrollWeekView:View{
     var data : [DateCard]
     var body: some View {
@@ -246,9 +292,23 @@ struct ScrollWeekView:View{
                                 Double(geometry.frame(in:.global).minX - 30) / -30), axis:(x:0, y:10, z:0))
                         
                     }.frame(width:160, height:120)
+                    
                 }
             }.padding(30)
         }
+    }
+}
+
+extension Date {
+    
+    var dayofTheWeek: String {
+        let dayNumber = Calendar.current.component(.weekday, from: self)
+        // day number starts from 1 but array count from 0
+        return daysOfTheWeek[dayNumber - 1]
+    }
+    
+    private var daysOfTheWeek: [String] {
+        return  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
     }
 }
 
@@ -297,5 +357,14 @@ func parseType(types:[String])->String{
     let temp = types[0].replacingOccurrences(of: "_", with: " ")
     return temp.firstUppercased
     
+}
+
+func setDateCardColor(today:String, day: String)->String {
+    var color: String
+    if (day.contains(today)){
+        color = "brand-color-primary"
+    }
+    else{color = "text-secondary"}
+    return color
 }
 
