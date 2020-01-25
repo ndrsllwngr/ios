@@ -219,7 +219,7 @@ struct ProfileInfoView: View {
                     .frame(width: metrics.size.width * 0.3)
                     Spacer()
                 }
-            .foregroundColor(Color("text-primary"))
+                .foregroundColor(Color("text-primary"))
             }.frame(height: 50)
             Spacer()
         }
@@ -247,7 +247,7 @@ struct ProfileFollowButton: View {
                                 .font(.system(size: 12))
                                 .foregroundColor(Color(.white))
                                 .padding(.vertical, 4)
-                                
+                            
                         }
                         .frame(width: 90)
                         .background(Color("brand-color-primary"))
@@ -262,9 +262,9 @@ struct ProfileFollowButton: View {
                                 .font(.system(size: 12))
                                 .foregroundColor(Color(.gray))
                                 .padding(.vertical, 4)
-                                
+                            
                         }.frame(width: 90)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
                     }
                 }
             }
@@ -280,7 +280,10 @@ struct ProfileSettingsButton: View {
             HStack {
                 Spacer()
                 Image(systemName: "gear")
-                .foregroundColor(Color("text-primary"))
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
+                    .foregroundColor(Color("text-primary"))
             }
             .frame(width: 49, height: 49)
         }
