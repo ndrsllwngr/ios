@@ -54,22 +54,22 @@ struct PlaceListView: View {
                                tabSelection: self.$tabSelection)
                 .environmentObject(firestorePlaceList)
         }
-            .sheet(isPresented: $showSheet) {
-                if self.sheetSelection == "settings" {
-                    PlaceListSettingsSheet(presentationMode: self.presentationMode,
-                                           showSheet: self.$showSheet)
-                        .environmentObject(self.firestorePlaceList)
-                } else if self.sheetSelection == "follower" {
-                    FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
-                                sheetTitle: "Followers",
-                                showSheet: self.$showSheet,
-                                profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
-                                goToOtherProfile: self.$goToOtherProfile)
-                } else if (self.sheetSelection == "add_to_placelist"){
-                    AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
-                                        placeImage: self.imageForAddPlaceToListSheet,
-                                        showSheet: self.$showSheet)
-                }
+        .sheet(isPresented: $showSheet) {
+            if self.sheetSelection == "settings" {
+                PlaceListSettingsSheet(presentationMode: self.presentationMode,
+                                       showSheet: self.$showSheet)
+                    .environmentObject(self.firestorePlaceList)
+            } else if self.sheetSelection == "follower" {
+                FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
+                            sheetTitle: "Followers",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
+            } else if (self.sheetSelection == "add_to_placelist"){
+                AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
+                                    placeImage: self.imageForAddPlaceToListSheet,
+                                    showSheet: self.$showSheet)
+            }
         }
         .onAppear {
             print("PlaceListView() - onAppear()")
@@ -166,28 +166,30 @@ struct PlaceListFollowButton: View {
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "heart")
-                            .foregroundColor(Color("text-secondary"))
+            if(self.firebaseAuthentication.currentUser != nil){
+                if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "heart")
+                                .foregroundColor(Color("text-secondary"))
+                        }
+                        .frame(width: 49, height: 49)
+                        
                     }
-                    .frame(width: 49, height: 49)
-                    
-                }
-            } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(Color("brand-color-primary"))
+                } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "heart.fill")
+                                .foregroundColor(Color("brand-color-primary"))
+                        }
+                        .frame(width: 49, height: 49)
                     }
-                    .frame(width: 49, height: 49)
                 }
             }
         }
