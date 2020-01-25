@@ -38,7 +38,7 @@ struct TabBarView: View {
                 if (self.exploreModel.exploreList != nil && self.selection != 0) {
                     ExploreIsActiveBar()
                         .frame(width: metrics.size.width, height: 49)
-                        .background(Color("bg-explore-bar"))
+                        .background(Color("brand-color-secondary"))
                         //.offset(y: -49) // 49 is the exact height of the TabBar
                         .onTapGesture {
                             self.selection = 0
