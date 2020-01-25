@@ -63,7 +63,7 @@ struct SingleRowAccount: View {
     var body: some View {
         HStack {
             HStack(alignment: .center) {
-                FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
+                FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 40, height: 40)
                     .clipShape(Circle())
                     .padding(.trailing, 5)
                 VStack(alignment: .leading){
