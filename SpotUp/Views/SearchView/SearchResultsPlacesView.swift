@@ -59,12 +59,13 @@ struct SingleRowPlace: View {
     var body: some View {
         HStack {
             HStack(alignment: .center) {
-                Image(uiImage: UIImage(named: "placeholder-row-place")!)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 42.0, height: 42.0, alignment: .center)
-                    .padding(.trailing, 5)
+                HStack {
+                    Image(systemName: "mappin")
+                        .foregroundColor(Color(.gray)) //"text-secondary"
+                }.frame(width: 40, height: 40)
+                .overlay(Circle().stroke(Color(.lightGray).opacity(0.5), lineWidth: 1))
+                .padding(.trailing, 5)
+                    
                 VStack(alignment: .leading){
                     Text(result.attributedPrimaryText.string).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
                     if result.attributedSecondaryText != nil {
