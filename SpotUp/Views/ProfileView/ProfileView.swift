@@ -31,13 +31,13 @@ struct ProfileView: View {
         VStack {
             if (self.profileUserIdToNavigateTo != nil) {
                 NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
-                    Text("")
+                    EmptyView()
                 }
             }
             
             if (self.placeListIdToNavigateTo != nil) {
                 NavigationLink(destination: PlaceListView(placeListId: self.placeListIdToNavigateTo!, tabSelection:self.$tabSelection), tag: 1, selection: self.$goToPlaceList) {
-                    Text("")
+                    EmptyView()
                 }
             }
             
@@ -147,40 +147,38 @@ struct ProfileInfoView: View {
     
     var body: some View {
         VStack {
-            VStack {
-                ZStack{
-                    VStack {
-                        FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
-                            .clipShape(Circle()).padding(.top)
-                    }.frame(width: 110, height: 110)
-                    
+            ZStack{
+                VStack {
+                    FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
+                        .clipShape(Circle()).padding(.top)
+                }.frame(width: 110, height: 100)
+                if (self.isMyProfile) {
                     VStack {
                         Spacer()
                         HStack{
                             Spacer()
-                            if (self.isMyProfile) {
-                                Button(action: {
-                                    self.showSheet.toggle()
-                                    self.sheetSelection = "image_picker"
-                                }) {
-                                    HStack {
-                                        Image(systemName: "pencil")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(height: 18)
-                                            .foregroundColor(Color.white)
-                                    }
-                                    .frame(width: 32, height: 32)
-                                    .background(Color("brand-color-primary"))
-                                    .mask(Circle())
-                                    
+                            
+                            Button(action: {
+                                self.showSheet.toggle()
+                                self.sheetSelection = "image_picker"
+                            }) {
+                                HStack {
+                                    Image(systemName: "pencil")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 18)
+                                        .foregroundColor(Color.white)
                                 }
+                                .frame(width: 32, height: 32)
+                                .background(Color("brand-color-primary"))
+                                .mask(Circle())
                             }
+                            
                         }
-                    }.frame(width: 110, height: 110)
+                    }.frame(width: 110, height: 100)
                 }
             }
-            
+            Spacer()
             GeometryReader { metrics in
                 HStack {
                     Spacer()
@@ -221,9 +219,12 @@ struct ProfileInfoView: View {
                     .frame(width: metrics.size.width * 0.3)
                     Spacer()
                 }
+            .foregroundColor(Color("text-primary"))
             }.frame(height: 50)
-            
+            Spacer()
         }
+        .frame(height: 150)
+        .padding(.top, 10)
     }
 }
 

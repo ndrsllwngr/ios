@@ -36,12 +36,12 @@ struct PlaceListView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
-                    Text("")
+                    EmptyView()
                 }
             }
             if (self.profileUserIdToNavigateTo != nil) {
                 NavigationLink(destination: ProfileView(profileUserId: self.profileUserIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToOtherProfile) {
-                    Text("")
+                    EmptyView()
                 }
             }
             InnerPlaceListView(placeListId: placeListId,
