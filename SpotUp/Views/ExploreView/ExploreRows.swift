@@ -30,6 +30,7 @@ struct CurrentTargetRow: View {
                     HStack(alignment: .center, spacing: 0.0) {
                         HStack {
                             PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
+                                .clipShape(Rectangle())
                                 .frame(width: 50, height: 50)
                                 .cornerRadius(15)
                             
@@ -178,6 +179,7 @@ struct ExplorePlaceRow: View {
             .padding([.trailing], 5)
             HStack {
                 PlaceRowImage(image: self.place.image)
+                    .clipShape(Rectangle())
                     .frame(width: 50, height: 50)
                     .cornerRadius(15)
                 VStack (alignment: .leading) {
@@ -258,6 +260,7 @@ struct ExplorePlaceVisitedRow: View {
         HStack(alignment: .center, spacing: 0.0) {
             HStack {
                 PlaceRowImage(image: self.place.image)
+                    .clipShape(Rectangle())
                     .frame(width: 50, height: 50)
                     .cornerRadius(15)
                     .opacity(0.5)
