@@ -107,15 +107,16 @@ struct CurrentTargetRow: View {
                     }
                     .padding([.leading], 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
-                    VStack(alignment: .leading) {
-                        Text("Current target")
-                            .font(.system(size:20, weight:.bold))
-                        HStack {
-                            Spacer()
-                            Text("To select current target tap GO")
-                                .foregroundColor(Color("text-secondary"))
-                            Spacer()
-                        }
+                    HStack(spacing: 0.0) {
+                        Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50.0, height: 50.0, alignment: .center)
+                        Spacer()
+                        Text("No target selected")
+                            .foregroundColor(Color("text-secondary"))
+                        Spacer()
                     }
                     .padding([.horizontal], 10)
                 } else {
