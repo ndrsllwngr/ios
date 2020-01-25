@@ -1,7 +1,7 @@
 import SwiftUI
 import GooglePlaces
 
-struct SearchResultsGooglePlacesView: View {
+struct SearchResultsPlacesView: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
     
@@ -10,7 +10,7 @@ struct SearchResultsGooglePlacesView: View {
             if self.searchViewModel.searchTerm == "" {
                 if (self.searchViewModel.recentSearchPlaces.count > 0) {
                     List { Section(){
-                        Text("Recent").font(.subheadline).fontWeight(.semibold)
+                        Text("Recent").font(.system(size:18)).fontWeight(.bold)
                         ForEach(searchViewModel.recentSearchPlaces, id: \.placeID) {
                             (result: GMSAutocompletePrediction) in SingleRowPlace(result: result, showRecent: true).environmentObject(self.searchViewModel)
                         }
@@ -54,28 +54,33 @@ struct SingleRowPlace: View {
                 self.goToDestination = true
                 self.selection = 1
             }){
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(result.attributedPrimaryText.string).font(.headline)
+                HStack(alignment: .center) {
+                    Image(uiImage: UIImage(named: "placeholder-row-place")!)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 42.0, height: 42.0, alignment: .center)
+                        .padding(.trailing, 5)
+                    VStack(alignment: .leading){
+                        Text(result.attributedPrimaryText.string).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
                         if result.attributedSecondaryText != nil {
-                            Text(result.attributedSecondaryText!.string).font(.body)
+                            Text(result.attributedSecondaryText!.string).font(.system(size:12)).lineLimit(1)
                         }
                     }
                     Spacer()
                 }
-            }.padding(.leading)
+            }
             Spacer()
             if showRecent == true {
-                Group{
-                    Button(action: {
-                        print("delete invoked")
+                Image(systemName: "xmark")
+                    .padding(.trailing)
+                    .onTapGesture {
                         let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchPlaces.firstIndex(of: self.result)
                         if(indexOfToBeDeletedEntry != nil) {
                             self.searchViewModel.recentSearchPlaces.remove(at: indexOfToBeDeletedEntry!)
                         }
-                    }) { Image(systemName: "xmark")}
                 }
-                .padding(.trailing)
+                
             }
             if (self.goToDestination != false) {
                 NavigationLink(destination:ItemView(placeId: result.placeID), tag: 1, selection: $selection) { EmptyView() }
