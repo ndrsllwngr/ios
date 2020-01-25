@@ -87,6 +87,9 @@ struct CurrentTargetRow: View {
                         }
                         HStack {
                             Image(systemName: "ellipsis")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
                         }
                         .frame(width: 40)
                         .onTapGesture {
@@ -215,6 +218,9 @@ struct ExplorePlaceRow: View {
             }
             HStack {
                 Image(systemName: "ellipsis")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
             }
             .frame(width: 40)
             .onTapGesture {
@@ -304,6 +310,9 @@ struct ExplorePlaceVisitedRow: View {
             }
             HStack {
                 Image(systemName: "ellipsis")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 20, height: 20)
             }
             .frame(width: 40)
             .onTapGesture {

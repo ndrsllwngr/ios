@@ -54,22 +54,22 @@ struct PlaceListView: View {
                                tabSelection: self.$tabSelection)
                 .environmentObject(firestorePlaceList)
         }
-            .sheet(isPresented: $showSheet) {
-                if self.sheetSelection == "settings" {
-                    PlaceListSettingsSheet(presentationMode: self.presentationMode,
-                                           showSheet: self.$showSheet)
-                        .environmentObject(self.firestorePlaceList)
-                } else if self.sheetSelection == "follower" {
-                    FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
-                                sheetTitle: "Followers",
-                                showSheet: self.$showSheet,
-                                profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
-                                goToOtherProfile: self.$goToOtherProfile)
-                } else if (self.sheetSelection == "add_to_placelist"){
-                    AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
-                                        placeImage: self.imageForAddPlaceToListSheet,
-                                        showSheet: self.$showSheet)
-                }
+        .sheet(isPresented: $showSheet) {
+            if self.sheetSelection == "settings" {
+                PlaceListSettingsSheet(presentationMode: self.presentationMode,
+                                       showSheet: self.$showSheet)
+                    .environmentObject(self.firestorePlaceList)
+            } else if self.sheetSelection == "follower" {
+                FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
+                            sheetTitle: "Followers",
+                            showSheet: self.$showSheet,
+                            profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
+                            goToOtherProfile: self.$goToOtherProfile)
+            } else if (self.sheetSelection == "add_to_placelist"){
+                AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
+                                    placeImage: self.imageForAddPlaceToListSheet,
+                                    showSheet: self.$showSheet)
+            }
         }
         .onAppear {
             print("PlaceListView() - onAppear()")
@@ -173,6 +173,9 @@ struct PlaceListFollowButton: View {
                     HStack {
                         Spacer()
                         Image(systemName: "heart")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
                             .foregroundColor(Color("text-secondary"))
                     }
                     .frame(width: 49, height: 49)
@@ -185,6 +188,9 @@ struct PlaceListFollowButton: View {
                     HStack {
                         Spacer()
                         Image(systemName: "heart.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 20, height: 20)
                             .foregroundColor(Color("brand-color-primary"))
                     }
                     .frame(width: 49, height: 49)
@@ -208,6 +214,11 @@ struct PlaceListSettingsButton: View {
                 HStack {
                     Spacer()
                     Image(systemName: "ellipsis")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color("text-primary"))
+                    
                 }
                 .frame(width: 49, height: 49)
             }
