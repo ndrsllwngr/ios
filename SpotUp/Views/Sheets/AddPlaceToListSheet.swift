@@ -28,7 +28,8 @@ struct AddPlaceToListSheet: View {
             List {
                 Text("Add to collection").font(.system(size:18)).fontWeight(.bold)
                 ForEach(self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
-                    PlacesListRow(placeList: placeList)
+                    PlaceListRow(placeList: placeList)
+                        .contentShape(Rectangle())
                         .onTapGesture {
                             FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.place.placeID!, placeImage: self.placeImage)
                             self.showSheet.toggle()

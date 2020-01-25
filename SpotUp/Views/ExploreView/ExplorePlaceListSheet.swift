@@ -21,7 +21,7 @@ struct ExplorePlaceListSheet: View {
                         ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
                         self.showSheet.toggle()
                     }) {
-                        PlacesListRow(placeList: placeList)
+                        PlaceListRow(placeList: placeList)
                     }
                 }
             }

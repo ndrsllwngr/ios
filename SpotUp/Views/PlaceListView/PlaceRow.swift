@@ -47,6 +47,7 @@ struct PlaceRow: View {
                 }
                 Spacer()
             }
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.placeIdToNavigateTo = self.place.gmsPlace.placeID!
                 self.goToPlace = 1
@@ -58,6 +59,7 @@ struct PlaceRow: View {
                     .frame(width: 20, height: 20)
             }
             .frame(width: 40)
+            .contentShape(Rectangle())
             .onTapGesture {
                 self.showActionSheet.toggle()
             }

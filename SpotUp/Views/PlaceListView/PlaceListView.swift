@@ -121,7 +121,6 @@ struct InnerPlaceListView: View {
                     Text("Map").tag(1)
                 }
                 .padding(.horizontal)
-                .padding(.bottom)
                 .pickerStyle(SegmentedPickerStyle())
             }
             .padding(0)
