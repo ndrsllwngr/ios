@@ -119,7 +119,12 @@ struct ExploreActiveView: View {
                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                         .offset(y: -36)
                     ScrollView {
-                        Text("Travel Queue")
+                        HStack {
+                            Text("Travel queue")
+                            .font(.system(size:20, weight:.bold))
+                            Spacer()
+                        }
+                        .padding([.leading], 20)
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
                             ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
@@ -138,12 +143,21 @@ struct ExploreActiveView: View {
                             }
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                            Text("Already visited")
+                            HStack {
+                                Text("Visited")
+                                .font(.system(size:20, weight:.bold))
+                                Spacer()
+                            }
+                            .padding([.leading], 20)
                             ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
                                 ExplorePlaceVisitedRow(place: place,
+                                                       showSheet: self.$showSheet,
+                                                       sheetSelection: self.$sheetSelection,
                                                        placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                       goToPlace: self.$goToPlace)
+                                                       goToPlace: self.$goToPlace,
+                                                       placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                                     .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
                             }
                         }
