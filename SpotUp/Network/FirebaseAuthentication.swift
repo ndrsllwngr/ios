@@ -20,7 +20,8 @@ class FirebaseAuthentication: ObservableObject {
     static let shared = FirebaseAuthentication()
     
     @Published var currentUser: FirebaseUser?
-    @Published var isLoggedIn: Bool?
+    @Published var isLoggedIn: Bool? // ToDo remove
+    @Published var startUpInProgress: Bool = true
     
     private init(){}
     
@@ -30,9 +31,15 @@ class FirebaseAuthentication: ObservableObject {
             if let user = user {
                 self.currentUser = FirebaseUser(uid: user.uid, email: user.email!)
                 self.isLoggedIn = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.startUpInProgress = false
+                }
             } else {
                 self.isLoggedIn = false
                 self.currentUser = nil
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.startUpInProgress = false
+                }
             }
         }
     }
