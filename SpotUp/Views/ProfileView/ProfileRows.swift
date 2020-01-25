@@ -54,8 +54,10 @@ struct PlacesListRow: View {
                         Text(self.placeList.name)
                             .font(.system(size: 18))
                             .bold()
+                            .lineLimit(1)
                         Text("by \(self.placeList.owner.username)")
                             .font(.system(size: 12))
+                            .lineLimit(1)
                         
                     }
                     .padding(.trailing)
