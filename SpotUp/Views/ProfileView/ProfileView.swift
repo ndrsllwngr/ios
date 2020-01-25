@@ -126,7 +126,8 @@ struct InnerProfileView: View {
             }
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
-        .navigationBarItems(trailing: HStack {
+        .navigationBarItems(trailing: HStack{
+            Spacer()
             if (self.isMyProfile) {
                 ProfileSettingsButton().environmentObject(self.firestoreProfile)
             } else if (!self.isMyProfile) {
@@ -235,31 +236,40 @@ struct ProfileFollowButton: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
     var body: some View {
-        VStack {
+        HStack {
+            Spacer()
             if(self.firebaseAuthentication.currentUser != nil) {
                 if (!self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
                         FirestoreConnection.shared.followUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                     }) {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "person.badge.plus.fill")
+                        VStack (alignment: .trailing) {
+                            Text("FOLLOW")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(.white))
+                                .padding(.vertical, 4)
+                                
                         }
-                        .frame(width: 49, height: 49)
+                        .frame(width: 90)
+                        .background(Color("brand-color-primary"))
+                        .mask(Rectangle().cornerRadius(8))
                     }
                 } else if (self.firestoreProfile.user.isFollowedBy.contains(self.firebaseAuthentication.currentUser!.uid)) {
                     Button(action: {
                         FirestoreConnection.shared.unfollowUser(myUserId: self.firebaseAuthentication.currentUser!.uid, userIdToFollow: self.profileUserId)
                     }) {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "person.badge.minus.fill")
-                        }
-                        .frame(width: 49, height: 49)
+                        VStack (alignment: .trailing){
+                            Text("FOLLOWING")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color(.gray))
+                                .padding(.vertical, 4)
+                                
+                        }.frame(width: 90)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
                     }
                 }
             }
-        }
+        }.padding(.trailing, -2)
     }
 }
 
@@ -273,6 +283,7 @@ struct ProfileSettingsButton: View {
                 Image(systemName: "gear")
             }
             .frame(width: 49, height: 49)
+            .padding(.trailing, -2)
         }
     }
 }
