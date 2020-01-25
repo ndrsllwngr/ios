@@ -119,10 +119,10 @@ struct InnerItemView: View {
             .background(Color.white)
             .cornerRadius(15)
             
-            ButtonOnTopView(showSheet:self.$showSheet)
-            .offset(y:-83.5)
-            .padding(.bottom, -83.5)
-                
+            ButtonOnTopView(place: self.place, showSheet: self.$showSheet)
+                .offset(y:-83.5)
+                .padding(.bottom, -83.5)
+            
             
             VStack(alignment:.leading, spacing:10){
                 
@@ -197,7 +197,9 @@ struct InnerItemView: View {
             // end Vstack
             //        }// end ScrollView
             .sheet(isPresented: $showSheet) {
-                ItemAddSheet(place: self.place, placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil, showSheet: self.$showSheet)
+                AddPlaceToListSheet(place: self.place,
+                                    placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil,
+                                    showSheet: self.$showSheet)
                 
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
@@ -206,21 +208,34 @@ struct InnerItemView: View {
     }//end body
 }//end wholew View
 struct ButtonOnTopView: View{
-    
+    var place: GMSPlace
     @Binding var showSheet:Bool
+    
+    @State var showActionSheet: Bool = false
     
     var body: some View{
         VStack{
             HStack{
                 Spacer()
-                Button(action: {
-                    self.showSheet.toggle()
-                }){
-                    ZStack {
-                        Circle().fill(Color("brand-color-primary"))
-                        Image(systemName: "plus")
-                            .font(.title).foregroundColor(Color.white)
-                    }.frame(width: 47, height:47)
+                ZStack {
+                    Circle().fill(Color("brand-color-primary"))
+                    Image(systemName: "plus")
+                        .font(.title).foregroundColor(Color.white)
+                }
+                .frame(width: 47, height:47)
+                .onTapGesture {
+                    self.showActionSheet.toggle()
+                }
+                .actionSheet(isPresented: self.$showActionSheet) {
+                    ActionSheet(title: Text("\(self.place.name!)"), buttons: [
+                        .default(Text("Add to explore")) {
+                            ExploreModel.shared.addPlaceToExplore(self.place)
+                        },
+                        .default(Text("Add to collection")) {
+                            self.showSheet.toggle()
+                        },
+                        .cancel()
+                    ])
                 }
             }.padding(.trailing)
         }
