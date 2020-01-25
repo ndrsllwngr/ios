@@ -11,7 +11,7 @@ struct SearchResultsAccountsView: View {
                 if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
                     List {
                         Section() {
-                            Text("Recent").font(.subheadline).fontWeight(.semibold)
+                            Text("Recent").font(.system(size:18)).fontWeight(.bold)
                             ForEach(searchViewModel.recentSearchFirebaseAccounts) {
                                 (user: User) in SingleRowAccount(user: user, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
                             }
@@ -61,22 +61,23 @@ struct SingleRowAccount: View {
                 HStack(alignment: .center) {
                     FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
                         .clipShape(Circle())
-                    Text(user.username).font(.body)
+                        .padding(.trailing, 5)
+                    VStack(alignment: .leading){
+                        Text(user.username).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                    }
                     Spacer()
                 }
-            }.padding(.leading)
+            }
             Spacer()
             if showRecent == true {
-                Group{
-                    Button(action: {
-                        print("delete invoked")
+                Image(systemName: "xmark")
+                    .padding(.trailing)
+                    .onTapGesture {
                         let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseAccounts.firstIndex(of: self.user)
                         if(indexOfToBeDeletedEntry != nil) {
                             self.searchViewModel.recentSearchFirebaseAccounts.remove(at: indexOfToBeDeletedEntry!)
                         }
-                    }) { Image(systemName: "xmark")}
                 }
-                .padding(.trailing)
             }
             if (self.goToDestination != false) {
                 NavigationLink(destination: ProfileView(profileUserId: user.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
