@@ -34,7 +34,7 @@ struct PlaceListSettingsSheet: View {
             
             VStack (alignment: .leading){
                 VStack (alignment: .leading){
-                    TextField("Collection Name", text: $placeListSettingsViewModel.placelistName)
+                    TextField("New Collection Name", text: $placeListSettingsViewModel.placelistName)
                         .autocapitalization(.none)
                         .textFieldStyle(PlainTextFieldStyle())
                     Rectangle()
