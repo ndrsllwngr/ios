@@ -17,11 +17,11 @@ struct ExplorePlaceListSheet: View {
             List {
                 Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
                 ForEach(self.placeLists){ placeList in
-                    Button(action: {
-                        ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
-                        self.showSheet.toggle()
-                    }) {
-                        PlaceListRow(placeList: placeList)
+                    PlaceListRow(placeList: placeList)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
+                            self.showSheet.toggle()
                     }
                 }
             }
