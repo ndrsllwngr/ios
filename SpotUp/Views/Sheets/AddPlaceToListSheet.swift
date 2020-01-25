@@ -29,10 +29,12 @@ struct AddPlaceToListSheet: View {
                 Text("Add to collection").font(.system(size:18)).fontWeight(.bold)
                 ForEach(self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
                     PlaceListRow(placeList: placeList)
+                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
                         .contentShape(Rectangle())
                         .onTapGesture {
                             FirestoreConnection.shared.addPlaceToList(placeList: placeList, placeId: self.place.placeID!, placeImage: self.placeImage)
                             self.showSheet.toggle()
+                            
                     }
                 }
             }
