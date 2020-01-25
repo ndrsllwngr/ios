@@ -49,37 +49,56 @@ struct TabBarView: View {
                     if (self.exploreModel.exploreList != nil && self.selection != 0) {
                         ExploreIsActiveBar(tabSelection: self.$selection)
                     }
-                    HStack(spacing: 0) {
-                        Spacer()
-                        VStack {
-                            Image(systemName: self.selection == 0 ? "map.fill" : "map")
-                            Text("Explore")
-                            
-                        }.onTapGesture {
-                            self.selection = 0
+                    HStack {
+                        GeometryReader{ geo in
+                            VStack {
+                                //Image(systemName: self.selection == 0 ? "map.fill" : "map")
+                                Image(systemName: "map")
+                                    .foregroundColor(self.selection == 0 ? Color("brand-color-primary") : Color("text-secondary"))
+                                Text("Explore")
+                                    .foregroundColor(self.selection == 0 ? Color("brand-color-primary") : Color("text-secondary"))
+                                    .font(.footnote)
+                                
+                            }.onTapGesture {
+                                self.selection = 0
+                            }.frame(width: geo.size.width)
                         }
-                        Spacer()
-                        VStack {
-                            Image(systemName: self.selection == 1 ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
-                            Text("Search")
-                        }.onTapGesture {
-                            self.selection = 1
+                        
+                        
+                        GeometryReader{ geo in
+                            VStack {
+                                //Image(systemName: self.selection == 1 ? "magnifyingglass.circle.fill" : "magnifyingglass.circle")
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(self.selection == 1 ? Color("brand-color-primary") : Color("text-secondary"))
+                                Text("Search")
+                                    .foregroundColor(self.selection == 1 ? Color("brand-color-primary") : Color("text-secondary"))
+                                    .font(.footnote)
+                            }.onTapGesture {
+                                self.selection = 1
+                            }.frame(width: geo.size.width)
                         }
-                        Spacer()
-                        VStack {
-                            Image(systemName: self.selection == 2 ? "person.fill" : "person")
-                            Text("Profile")
-                        }.onTapGesture {
-                            self.selection = 2
+                        
+                        
+                        GeometryReader{ geo in
+                            VStack {
+                                //Image(systemName: self.selection == 2 ? "person.fill" : "person")
+                                Image(systemName: "person")
+                                    .foregroundColor(self.selection == 2 ? Color("brand-color-primary") : Color("text-secondary"))
+                                Text("Profile")
+                                    .foregroundColor(self.selection == 2 ? Color("brand-color-primary") : Color("text-secondary"))
+                                    .font(.footnote)
+                            }
+                            .onTapGesture {
+                                self.selection = 2
+                            }
+                            .frame(width: geo.size.width)
                         }
-                        Spacer()
+                        
                     }
                     .frame(width: metrics.size.width, height: 50)
                     .background(Color("bg-tab-bar"))
                 }
             }
-            // TODO colore on the back
-            //.edgesIgnoringSafeArea(.bottom)
         }
     }
 }

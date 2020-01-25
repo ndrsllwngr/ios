@@ -25,7 +25,7 @@ class ExploreModel: ObservableObject {
     var locationManager = LocationManager()
     
     @Published var exploreList: ExploreList? = nil
-        
+    
     private init(){}
     
     func startExploreWithEmptyList() {
@@ -43,11 +43,10 @@ class ExploreModel: ObservableObject {
         } else {
             self.locationManager.startUpdatingLocation()
             self.locationManager.beginNotifyingExplore()
-            if (places.isEmpty) {
-                self.exploreList = ExploreList()
-            } else {
-                let explorePlaces = places.map{return ExplorePlace(place: $0)}
-                self.exploreList = ExploreList(places: explorePlaces)
+            // Create list before adding places to make sure they get marked as isNew
+            self.exploreList = ExploreList()
+            if (!places.isEmpty) {
+                self.exploreList?.places = places.map{return ExplorePlace(place: $0)}
             }
         }
     }
@@ -82,13 +81,12 @@ class ExploreModel: ObservableObject {
     }
     
     func addPlaceToExplore(_ place: GMSPlace) {
-        let explorePlace = ExplorePlace(place: place)
-        if (self.exploreList != nil) {
-            self.exploreList?.places.append(explorePlace)
-        } else {
+        if (self.exploreList == nil) {
+            // Create list before adding place to make sure it gets marked as isNew
+            self.exploreList = ExploreList()
             self.locationManager.startUpdatingLocation()
-            self.exploreList = ExploreList(places: [explorePlace])
         }
+        self.exploreList?.places.append(ExplorePlace(place: place))
         self.updateDistancesInPlaces()
         self.loadPlaceImages()
     }
@@ -122,6 +120,8 @@ class ExploreModel: ObservableObject {
             if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
                 self.exploreList!.places[index].visited = true
                 self.exploreList!.places[index].visited_at = Date.init()
+                // Remove isNew badge on action
+                self.exploreList!.places[index].isNewPlace = false
             }
             self.updateDistancesInPlaces()
         }
@@ -142,18 +142,15 @@ class ExploreModel: ObservableObject {
         if let exploreList = self.exploreList, let location =
             self.locationManager.location {
             print("Begin updating distances in explore places")
-            // 1. Calculate distance to my location for all places // ToDo set distance in place directly
-            let explorePlaces: [ExplorePlace] = self.exploreList!.places.map { place in
-                var mutablePlace = place
-                let distance = calculateDistance(coordinate: place.place.coordinate,
-                                                 location: location)
-                mutablePlace.distance = distance
-                return mutablePlace
+            // 1. Calculate and distance to my location for all places
+            self.exploreList!.places.forEach { place in
+                if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
+                    let distance = calculateDistance(coordinate: place.place.coordinate,
+                                                                  location: location)
+                    self.exploreList!.places[index].distance = distance
+                }
             }
-            // 2. Set places
-            self.exploreList!.places = explorePlaces
-            
-            // 3. Update distance in current target
+            // 2. Update distance in current target
             if (exploreList.currentTarget != nil) {
                 self.exploreList?.currentTarget!.distance = calculateDistance(coordinate: self.exploreList!.currentTarget!.place.coordinate,
                                                                               location: location)

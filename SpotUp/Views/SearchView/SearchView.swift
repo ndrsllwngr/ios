@@ -46,7 +46,7 @@ struct SearchView: View {
                         }
                     }
                     .padding(.horizontal)
-                        .navigationBarHidden(showCancelButton) // .animation(.default)
+                       // .navigationBarHidden(showCancelButton) // .animation(.default)
                     // animation does not work properly
                     
                 }

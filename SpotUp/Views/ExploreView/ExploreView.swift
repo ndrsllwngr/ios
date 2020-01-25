@@ -28,7 +28,7 @@ struct ExploreView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
-                    Text("")
+                    EmptyView()
                 }
             }
             if (self.exploreModel.exploreList != nil) {
@@ -56,7 +56,7 @@ struct ExploreView: View {
             
         .sheet(isPresented: $showSheet) {
             if (self.sheetSelection == "select_placelist") {
-                SelectPlaceListToExploreSheet(showSheet: self.$showSheet)
+                ExplorePlaceListSheet(showSheet: self.$showSheet)
             } else if (self.sheetSelection == "add_to_placelist"){
                 AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.place, placeImage: self.imageForAddPlaceToListSheet, showSheet: self.$showSheet)
             }

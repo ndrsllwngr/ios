@@ -15,18 +15,48 @@ struct CreatePlacelistSheet: View {
     @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
     
 //    @State private var placeListName: String = ""
+    var buttonColor: Color {
+        return self.createPlacelistViewModel.isValidplacelist ? Color("brand-color-primary") : Color(.lightGray)
+    }
     
     var body: some View {
         VStack(alignment: .center) {
-            Text("Enter a name for your placelist")
+            Capsule()
+                .fill(Color.secondary)
+                .frame(width: 30, height: 3)
+                .padding(.top, 10)
+                .padding(.bottom, 40)
+            
+            Text("Enter a name for your new collection")
             Spacer()
-            TextField("Name", text: $createPlacelistViewModel.placelistName).autocapitalization(.none)
-            Text(createPlacelistViewModel.placelistNameMessage).foregroundColor(.red)
+            
+            VStack (alignment: .leading){
+                TextField("Collection Name", text: self.$createPlacelistViewModel.placelistName)
+                .autocapitalization(.none)
+
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(Color(.lightGray))
+                .opacity(0.8)
+
+                Text(self.createPlacelistViewModel.placelistNameMessage)
+                .font(.footnote)
+                .foregroundColor(.red)
+            Spacer()
+            }.frame(height: 60)
+            .padding(.horizontal)
+            
             HStack {
                 Button(action: {
                     self.showSheet.toggle()
                 }) {
-                    Text("Cancel")
+                    GeometryReader { geo in
+                        Text("Cancel")
+                            .foregroundColor(Color(.gray))
+                            .frame(width: geo.size.width, height: 40)
+                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color(.gray), lineWidth: 1))
+                            .padding(.top, 20)
+                    }.frame(height: 40)
                 }
                 Spacer()
                 Button(action: {
@@ -34,10 +64,18 @@ struct CreatePlacelistSheet: View {
                     FirestoreConnection.shared.createPlaceList(placeList: newPlaceList)
                     self.showSheet.toggle()
                 }) {
-                    Text("Create")
+                    GeometryReader { geo in
+                        Text("Create")
+                            .foregroundColor(self.buttonColor)
+                            .frame(width: geo.size.width, height: 40)
+                            .overlay(RoundedRectangle(cornerRadius: 15).stroke(self.buttonColor, lineWidth: 1))
+                            .padding(.top, 20)
+                    }.frame(height: 40)
                 }.disabled(!self.createPlacelistViewModel.isValidplacelist)
             }
-            .frame(width: 300, height: 100)
+            .frame(height: 100)
+            .padding(.horizontal)
+            Spacer()
             Spacer()
         }
         .padding()
