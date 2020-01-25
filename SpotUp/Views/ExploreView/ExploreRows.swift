@@ -27,7 +27,7 @@ struct CurrentTargetRow: View {
         VStack {
             if (exploreModel.exploreList != nil) {
                 if (exploreModel.exploreList!.currentTarget != nil) {
-                    HStack(alignment: .center) {
+                    HStack(alignment: .center, spacing: 0.0) {
                         HStack {
                             PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
                                 .frame(width: 50, height: 50)
@@ -35,7 +35,8 @@ struct CurrentTargetRow: View {
                             
                             VStack (alignment: .leading) {
                                 Text(self.exploreModel.exploreList!.currentTarget!.place.name != nil ? self.exploreModel.exploreList!.currentTarget!.place.name! : "")
-                                    .font(.system(size:18, weight:.bold))
+                                    .font(.system(size:18))
+                                    .fontWeight(.semibold)
                                     .lineLimit(1)
                                 
                                 Text(self.exploreModel.exploreList!.currentTarget!.distance != nil ? "\(getDistanceStringToDisplay(self.exploreModel.exploreList!.currentTarget!.distance!))" : "Loading distance...")
@@ -50,6 +51,21 @@ struct CurrentTargetRow: View {
                             self.goToPlace = 1
                         }
                         Spacer()
+                        HStack {
+                            Button(action: {
+                                UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
+                            }) {
+                                VStack {
+                                    Image(systemName: "arrow.up.right.diamond.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40, height: 40)
+                                        .foregroundColor(Color(UIColor.systemBlue))
+                                }
+                                .frame(width: 40)
+                            }
+                        }
+                        .padding([.trailing], 10)
                         VStack {
                             VStack {
                                 Image(systemName: "checkmark")
@@ -67,20 +83,6 @@ struct CurrentTargetRow: View {
                         .frame(width: 40)
                         .onTapGesture {
                             self.exploreModel.markPlaceAsVisited(self.exploreModel.exploreList!.currentTarget!)
-                        }
-                        HStack {
-                            Button(action: {
-                                UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.exploreModel.exploreList!.currentTarget!.place))
-                            }) {
-                                VStack {
-                                    Image(systemName: "arrow.up.right.diamond.fill")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 40)
-                                        .foregroundColor(Color(UIColor.systemBlue))
-                                }
-                                .frame(width: 40)
-                            }
                         }
                         HStack {
                             Image(systemName: "ellipsis")
@@ -103,8 +105,7 @@ struct CurrentTargetRow: View {
                             ])
                         }
                     }
-                    .padding([.horizontal], 10)
-                    
+                    .padding([.leading], 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
                     VStack(alignment: .leading) {
                         Text("Current target")
@@ -116,7 +117,7 @@ struct CurrentTargetRow: View {
                             Spacer()
                         }
                     }
-                    .padding(.horizontal)
+                    .padding([.horizontal], 10)
                 } else {
                     HStack {
                         Image(uiImage: UIImage(named: "explore-empty-guidebook-bw")!)
@@ -129,7 +130,7 @@ struct CurrentTargetRow: View {
                             .foregroundColor(Color("text-secondary"))
                         Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding([.horizontal], 10)
                 }
             }
         }
@@ -158,7 +159,7 @@ struct ExplorePlaceRow: View {
     @Binding var imageForAddPlaceToListSheet: UIImage?
     
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
+        HStack(alignment: .center, spacing: 0.0) {
             HStack {
                 if (self.place.isNewPlace) {
                     Image(systemName: "circle.fill")
@@ -180,7 +181,8 @@ struct ExplorePlaceRow: View {
                     .cornerRadius(15)
                 VStack (alignment: .leading) {
                     Text(self.place.place.name != nil ? self.place.place.name! : "")
-                        .font(.system(size:18, weight:.bold))
+                        .font(.system(size:18))
+                        .fontWeight(.semibold)
                         .lineLimit(1)
                     Text(self.place.distance != nil ? "\(getDistanceStringToDisplay(self.place.distance!))" : "Loading distance...")
                         .font(.system(size: 12))
@@ -231,50 +233,94 @@ struct ExplorePlaceRow: View {
         }
         .frame(height: 60)
         .padding([.leading], 5)
+        .padding([.trailing], 10)
     }
 }
 
 
 struct ExplorePlaceVisitedRow: View {
     @State var place: ExplorePlace
+    @State var showActionSheet: Bool = false
     
     @ObservedObject var exploreModel = ExploreModel.shared
+    
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
     
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
+    
     var body: some View {
-        GeometryReader { metrics in
-            HStack(alignment: .center) {
-                HStack {
-                    PlaceRowImage(image: self.place.image)
-                        .frame(width: 50, height: 50)
-                        .cornerRadius(15)
-                        .opacity(0.5)
-                    VStack (alignment: .leading){
-                        Text(self.place.place.name != nil ? self.place.place.name! : "")
-                        Text(self.place.visited_at != nil ? getVisitedAtStringToDisplay(self.place.visited_at!) : "")
-                    }
-                    Spacer()
+        HStack(alignment: .center, spacing: 0.0) {
+            HStack {
+                PlaceRowImage(image: self.place.image)
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(15)
+                    .opacity(0.5)
+                VStack (alignment: .leading){
+                    Text(self.place.place.name != nil ? self.place.place.name! : "")
+                        .font(.system(size:18))
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                        .foregroundColor(Color("text-secondary"))
+                    
+                    Text(self.place.visited_at != nil ? getVisitedAtStringToDisplay(self.place.visited_at!) : "")
+                        .font(.system(size: 12))
+                        .lineLimit(1)
+                        .foregroundColor(Color("text-secondary"))
+                    
                 }
-                .frame(width: metrics.size.width * 0.8)
-                .onTapGesture {
-                    self.placeIdToNavigateTo = self.place.place.placeID!
-                    self.goToPlace = 1
-                }
+                Spacer()
+            }
+            .onTapGesture {
+                self.placeIdToNavigateTo = self.place.place.placeID!
+                self.goToPlace = 1
+            }
+            Spacer()
+            VStack {
                 VStack {
                     Image(systemName: "gobackward")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 20, height: 20)
-                    Text("Unvisit")
+                        .frame(width: 18, height: 18)
+                        .foregroundColor(Color.white)
+                        .font(Font.title.weight(.bold))
                 }
-                .frame(width: metrics.size.width * 0.2)
-                .onTapGesture {
-                    self.exploreModel.markPlaceAsUnvisited(self.place)
-                }
-            }.foregroundColor(Color.gray)
+                .frame(width: 40, height: 40)
+                .background(Color("text-secondary"))
+                .cornerRadius(15)
+                .frame(width: 40)
+            }
+            .frame(width: 40)
+            .onTapGesture {
+                self.exploreModel.markPlaceAsUnvisited(self.place)
+            }
+            HStack {
+                Image(systemName: "ellipsis")
+            }
+            .frame(width: 40)
+            .onTapGesture {
+                self.showActionSheet.toggle()
+            }
+            .actionSheet(isPresented: self.$showActionSheet) {
+                ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
+                    .default(Text("Add to collection")) {
+                        self.showSheet.toggle()
+                        self.sheetSelection = "add_to_placelist"
+                        self.placeForAddPlaceToListSheet = self.place
+                        self.imageForAddPlaceToListSheet = self.place.image
+                    },
+                    .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.place)
+                    },
+                    .cancel()
+                ])
+            }
         }
         .frame(height: 60)
+        .padding([.leading], 20)
+        .padding([.trailing], 10)
     }
 }
