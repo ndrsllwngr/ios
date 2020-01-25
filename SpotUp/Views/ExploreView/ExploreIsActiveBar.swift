@@ -1,18 +1,43 @@
 import SwiftUI
 
 struct ExploreIsActiveBar: View {
+    @Binding var tabSelection: Int
+    
     @ObservedObject var exploreModel = ExploreModel.shared
     var body: some View {
-        HStack {
-            Image(systemName: "map.fill")
-            Text("Exploring... ")
-            Spacer()
-            if (self.exploreModel.exploreList != nil && self.exploreModel.exploreList!.currentTarget != nil) {
-                Text(self.exploreModel.exploreList!.currentTarget!.place.name!)
-                ExploreIsActiveCurrentTargetImage(image: self.exploreModel.exploreList!.currentTarget!.image != nil ? self.exploreModel.exploreList!.currentTarget!.image! : UIImage())
-            } else {
-                Text("No current target")
+        VStack {
+            HStack {
+                if (self.exploreModel.exploreList != nil && self.exploreModel.exploreList!.currentTarget != nil) {
+                    PlaceRowImage(image: self.exploreModel.exploreList!.currentTarget!.image)
+                        .clipShape(Circle())
+                        .frame(width: 40, height: 40)
+                    VStack (alignment: .leading) {
+                        Text(self.exploreModel.exploreList!.currentTarget!.place.name!)
+                            .fontWeight(.semibold)
+                            .lineLimit(1)
+                        Text(self.exploreModel.exploreList!.currentTarget!.place.formattedAddress != nil ? self.exploreModel.exploreList!.currentTarget!.place.formattedAddress! : "")
+                            .font(.system(size: 12))
+                            .lineLimit(1)
+                    }
+                    Spacer()
+                } else {
+                    Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40, alignment: .center)
+                    Spacer()
+                    Text("No target selected")
+                    Spacer()
+                }
             }
+            .padding(.horizontal)
+        }
+        .frame(height: 50)
+        .background(Color("brand-color-primary-soft"))
+        .foregroundColor(Color.white)
+        .onTapGesture {
+            self.tabSelection = 0
         }
     }
 }

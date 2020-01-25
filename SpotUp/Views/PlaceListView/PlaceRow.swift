@@ -31,7 +31,8 @@ struct PlaceRow: View {
         GeometryReader { metrics in
             HStack(alignment: .center) {
                 HStack {
-                    PlaceRowImage(image: self.image != nil ? self.image! : UIImage())
+                    PlaceRowImage(image: self.image)
+                        .clipShape(Rectangle())
                         .frame(width: 60, height: 60)
                         .cornerRadius(15)
                         .padding(.trailing, 10)
@@ -115,7 +116,6 @@ struct PlaceRowImage: View {
         Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
             .renderingMode(.original)
             .resizable()
-            .clipShape(Rectangle())
             .scaledToFill()
             .animation(.easeInOut)
 //            .frame(width: 60, height: 60)
