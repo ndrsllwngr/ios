@@ -61,7 +61,7 @@ struct PlaceListView: View {
                         .environmentObject(self.firestorePlaceList)
                 } else if self.sheetSelection == "follower" {
                     FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
-                                sheetTitle: "Users that are following this PlaceList",
+                                sheetTitle: "Followers",
                                 showSheet: self.$showSheet,
                                 profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                                 goToOtherProfile: self.$goToOtherProfile)
