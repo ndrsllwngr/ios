@@ -55,13 +55,13 @@ struct ProfileView: View {
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
                 FollowSheet(userIds: self.firestoreProfile.user.isFollowedBy,
-                            sheetTitle: "Users that are following me",
+                            sheetTitle: "Followers",
                             showSheet: self.$showSheet,
                             profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                             goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "following" {
                 FollowSheet(userIds: self.firestoreProfile.user.isFollowing,
-                            sheetTitle: "Users that I am following:",
+                            sheetTitle: "Following",
                             showSheet: self.$showSheet,
                             profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                             goToOtherProfile: self.$goToOtherProfile)
