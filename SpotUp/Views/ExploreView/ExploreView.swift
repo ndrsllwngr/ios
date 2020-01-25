@@ -11,6 +11,8 @@ import GoogleMaps
 import GooglePlaces
 
 struct ExploreView: View {
+    @Binding var tabSelection: Int
+    
     @ObservedObject var exploreModel = ExploreModel.shared
     
     @State var showSheet: Bool = false
@@ -32,7 +34,8 @@ struct ExploreView: View {
                 }
             }
             if (self.exploreModel.exploreList != nil) {
-                ExploreActiveView(showSheet: self.$showSheet,
+                ExploreActiveView(tabSelection: self.$tabSelection,
+                                  showSheet: self.$showSheet,
                                   sheetSelection: self.$sheetSelection,
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                   goToPlace: self.$goToPlace,
@@ -74,6 +77,8 @@ struct ExploreView: View {
 struct ExploreActiveView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     
+    @Binding var tabSelection: Int
+    
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -86,7 +91,7 @@ struct ExploreActiveView: View {
     @Binding var sortByDistance: Bool
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0.0) {
             if (self.exploreModel.exploreList != nil) {
                 HStack {
                     Image(systemName: "map")
@@ -97,12 +102,13 @@ struct ExploreActiveView: View {
                     }) {
                         Text("Quit")
                             .accentColor(Color("text-secondary"))
+                        
                     }
                 }
                 .padding(.horizontal)
                 
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                    .frame(height: 180, alignment: .center) // ToDo make height based on Geometry Reader
+                    .frame(height: 180) // ToDo make height based on Geometry Reader
                 
                 if !exploreModel.exploreList!.places.isEmpty {
                     CurrentTargetRow( showSheet: self.$showSheet,
@@ -111,6 +117,7 @@ struct ExploreActiveView: View {
                                       goToPlace: self.$goToPlace,
                                       placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                        .offset(y: -36)
                     ScrollView {
                         Text("Travel Queue")
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
@@ -141,18 +148,25 @@ struct ExploreActiveView: View {
                             }
                         }
                     }
+                    Spacer()
                 } else {
                     Spacer()
                     Button(action: {
-                        print("todo go to search tab")
+                        self.tabSelection = 1
                     }) {
-                        Text("Add places and start exploring.")
-                            .font(.system(size:20, weight:.bold))
-                            .accentColor(Color("brand-color-primary"))
+                        VStack {
+                            Image(uiImage: UIImage(named: "explore-empty-map")!)
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150.0, height: 150.0, alignment: .center)
+                            Text("Add places and start exploring.")
+                                .font(.system(size:16, weight:.bold))
+                                .accentColor(Color("brand-color-primary"))
+                        }
                     }
+                    Spacer()
                 }
-                Spacer()
-                
             }
         }
     }
@@ -168,7 +182,7 @@ struct ExploreInactiveView: View {
         GeometryReader { metrics in
             VStack {
                 Spacer()
-                Image(uiImage: UIImage(named: "placeholder-onboarding-3")!)
+                Image(uiImage: UIImage(named: "explore-empty-trail-sign")!)
                     .renderingMode(.original)
                     .resizable()
                     .scaledToFit()
