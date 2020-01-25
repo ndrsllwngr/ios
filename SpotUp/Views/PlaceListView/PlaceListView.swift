@@ -165,34 +165,34 @@ struct PlaceListFollowButton: View {
     
     var body: some View {
         VStack {
-            if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "heart")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(Color("text-secondary"))
+            if(self.firebaseAuthentication.currentUser != nil){
+                if (!self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.followPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "heart")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(Color("text-secondary"))
+                        }
+                        .frame(width: 49, height: 49)
                     }
-                    .frame(width: 49, height: 49)
-                    
-                }
-            } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
-                Button(action: {
-                    FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
-                }) {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "heart.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 20, height: 20)
-                            .foregroundColor(Color("brand-color-primary"))
+                } else if (self.firestorePlaceList.placeList.followerIds.contains(self.firebaseAuthentication.currentUser!.uid)) {
+                    Button(action: {
+                        FirestoreConnection.shared.unfollowPlaceList(userId: self.firebaseAuthentication.currentUser!.uid, placeListId: self.placeListId)
+                    }) {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "heart.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(Color("brand-color-primary"))
+                        }
                     }
-                    .frame(width: 49, height: 49)
                 }
             }
         }
