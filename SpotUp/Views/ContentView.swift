@@ -25,7 +25,7 @@ struct ContentView: View {
             } else if firebaseAuthentication.currentUser != nil {
                 TabBarView()
             } else {
-                LoginView()
+                AuthenticationView()
             }
         }
         .onAppear(){
