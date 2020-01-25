@@ -29,6 +29,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationBar.shadowImage = UIImage()
         
+        UITableView.appearance().separatorStyle = .none
+        UITableView.appearance().backgroundColor = UIColor.clear
+        
         return true
     }
     

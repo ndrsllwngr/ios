@@ -36,7 +36,6 @@ struct ContentView: View {
         }
         .onAppear(){
             self.startUp()
-            UITableView.appearance().separatorStyle = .none
         }
     }
     

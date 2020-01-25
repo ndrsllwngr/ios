@@ -18,6 +18,7 @@ struct ExplorePlaceListSheet: View {
                 Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
                 ForEach(self.placeLists){ placeList in
                     PlaceListRow(placeList: placeList)
+                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
                         .contentShape(Rectangle())
                         .onTapGesture {
                             ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)

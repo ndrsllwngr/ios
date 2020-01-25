@@ -87,6 +87,7 @@ struct ProfileView: View {
 
 struct InnerProfileView: View {
     var profileUserId: String
+    let bgColor: String = "bg-profile"
     
     @Binding var isMyProfile: Bool
     @Binding var tabSelection: Int
@@ -102,28 +103,35 @@ struct InnerProfileView: View {
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
-            if isMyProfile {
-                List {
-                    CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
-                        .padding(.bottom, 10)
+
+            VStack {
+                if isMyProfile {
                     
-                    ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlaceListRow(placeList: placeList).onTapGesture {
-                            self.placeListIdToNavigateTo = placeList.id
-                            self.goToPlaceList = 1
-                        }
+                    List {
+                        CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                            .listRowBackground(Color(bgColor))
+                            .padding(.top, 5)
+                        ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                            PlaceListRow(placeList: placeList)
+                                .onTapGesture {
+                                    self.placeListIdToNavigateTo = placeList.id
+                                    self.goToPlaceList = 1
+                            }
+                            
+                        }.listRowBackground(Color(bgColor))
+                    }
+                } else {
+                    List {
+                        ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                            PlaceListRow(placeList: placeList)
+                                .onTapGesture {
+                                    self.placeListIdToNavigateTo = placeList.id
+                                    self.goToPlaceList = 1
+                            }
+                        }.listRowBackground(Color(bgColor))
                     }
                 }
-            } else {
-                List {
-                    ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlaceListRow(placeList: placeList).onTapGesture {
-                            self.placeListIdToNavigateTo = placeList.id
-                            self.goToPlaceList = 1
-                        }
-                    }
-                }
-            }
+            }.background(Color(bgColor))
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack{
