@@ -23,9 +23,7 @@ struct ExploreView: View {
     
     @State var placeForAddPlaceToListSheet: ExplorePlace? = nil
     @State var imageForAddPlaceToListSheet: UIImage? = nil
-    
-    @State var sortByDistance = true
-    
+        
     var body: some View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
@@ -40,8 +38,7 @@ struct ExploreView: View {
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
                                   goToPlace: self.$goToPlace,
                                   placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet,
-                                  sortByDistance: self.$sortByDistance)
+                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
             } else {
                 ExploreInactiveView(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
             }
@@ -66,11 +63,6 @@ struct ExploreView: View {
             
         }
         .navigationBarTitle(Text("Explore"), displayMode: .inline)
-        .navigationBarItems(trailing: HStack {
-            if self.exploreModel.exploreList != nil {
-                ExploreSortButton(sortByDistance: self.$sortByDistance)
-            }
-        })
     }
 }
 
@@ -88,8 +80,8 @@ struct ExploreActiveView: View {
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
     
-    @Binding var sortByDistance: Bool
-    
+    @State var sortByDistance = true
+
     var body: some View {
         VStack(spacing: 0.0) {
             if (self.exploreModel.exploreList != nil) {
@@ -124,9 +116,11 @@ struct ExploreActiveView: View {
                             Text("Travel queue")
                                 .font(.system(size:20, weight:.bold))
                             Spacer()
+                            ExploreSortButton(sortByDistance: self.$sortByDistance)
                         }
                         .padding(.leading, 20)
                         .padding(.top, 10)
+                        .padding(.trailing, 20)
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
                             ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
@@ -257,10 +251,10 @@ struct ExploreSortButton: View {
                 self.sortByDistance.toggle()
             }) {
                 HStack {
-                    Spacer()
+                    Image(systemName: "arrow.up.arrow.down")
                     Image(systemName: sortByDistance ? "textformat.abc" : "textformat.123")
                 }
-                .frame(width: 49, height: 49)
+                .frame(width: 50, height: 50)
             }
         }
         
