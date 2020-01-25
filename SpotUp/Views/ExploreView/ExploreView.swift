@@ -28,7 +28,7 @@ struct ExploreView: View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
                 NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
-                    Text("")
+                    EmptyView()
                 }
             }
             if (self.exploreModel.exploreList != nil) {
