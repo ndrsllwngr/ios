@@ -111,20 +111,22 @@ struct ExploreActiveView: View {
                     .frame(height: 180) // ToDo make height based on Geometry Reader
                 
                 if !exploreModel.exploreList!.places.isEmpty {
-                    CurrentTargetRow( showSheet: self.$showSheet,
-                                      sheetSelection: self.$sheetSelection,
-                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                      goToPlace: self.$goToPlace,
-                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                      imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                    CurrentTargetRow(showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                         .offset(y: -36)
+                        .padding(.bottom, -36)
                     ScrollView {
                         HStack {
                             Text("Travel queue")
-                            .font(.system(size:20, weight:.bold))
+                                .font(.system(size:20, weight:.bold))
                             Spacer()
                         }
-                        .padding([.leading], 20)
+                        .padding(.leading, 20)
+                        .padding(.top, 10)
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
                             ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                             { place in
@@ -155,7 +157,7 @@ struct ExploreActiveView: View {
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             HStack {
                                 Text("Visited")
-                                .font(.system(size:20, weight:.bold))
+                                    .font(.system(size:20, weight:.bold))
                                 Spacer()
                             }
                             .padding([.leading], 20)
@@ -172,7 +174,6 @@ struct ExploreActiveView: View {
                             }
                         }
                     }
-                    Spacer()
                 } else {
                     Spacer()
                     Button(action: {
