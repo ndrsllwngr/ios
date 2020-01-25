@@ -119,7 +119,7 @@ struct CurrentTargetRow: View {
                     }
                     .padding([.horizontal], 10)
                 } else {
-                    HStack {
+                    HStack(spacing: 0.0) {
                         Image(uiImage: UIImage(named: "explore-empty-guidebook-bw")!)
                             .renderingMode(.original)
                             .resizable()
