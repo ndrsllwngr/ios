@@ -5,29 +5,45 @@ struct SearchResultsAccountsView: View {
     @Binding var tabSelection: Int
     @EnvironmentObject var searchViewModel: SearchViewModel
     
+    @State var profileIdToNavigateTo: String? = nil
+    @State var goToProfile: Int? = nil
+    
     var body: some View {
-        Group {
-            if self.searchViewModel.searchTerm == "" {
-                if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
-                    List {
-                        Section() {
-                            Text("Recent").font(.system(size:18)).fontWeight(.bold)
-                            ForEach(searchViewModel.recentSearchFirebaseAccounts) {
-                                (user: User) in SingleRowAccount(user: user, tabSelection: self.$tabSelection, showRecent: true).environmentObject(self.searchViewModel)
+        VStack {
+            if (self.profileIdToNavigateTo != nil) {
+                NavigationLink(destination: ProfileView(profileUserId: self.profileIdToNavigateTo!, tabSelection: $tabSelection), tag: 1, selection: self.$goToProfile) {
+                    EmptyView()
+                }
+            }
+            Group {
+                if self.searchViewModel.searchTerm == "" {
+                    if (self.searchViewModel.recentSearchFirebaseAccounts.count > 0) {
+                        List {
+                            Text("Recent")
+                                .font(.system(size:18))
+                                .fontWeight(.bold)
+                            ForEach(searchViewModel.recentSearchFirebaseAccounts) { (user: User) in
+                                SingleRowAccount(user: user,
+                                                 showRecent: true,
+                                                 tabSelection: self.$tabSelection,
+                                                 profileIdToNavigateTo: self.$profileIdToNavigateTo,
+                                                 goToProfile: self.$goToProfile).environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
+                    } else {
+                        SearchResultsProfilesEmptyStateView()
                     }
-                }
-                else {
-                    SearchResultsProfilesEmptyStateView()
-                }
-            } else {
-                List {
-                    ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) { (user: User) in
-                        SingleRowAccount(user: user, tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
+                } else {
+                    List {
+                        ForEach(self.searchViewModel.firestoreSearch.allUsers.filter{self.searchViewModel.searchTerm.isEmpty ? false : $0.username.localizedCaseInsensitiveContains(self.searchViewModel.searchTerm)}) { (user: User) in
+                            SingleRowAccount(user: user,
+                                             tabSelection: self.$tabSelection,
+                                             profileIdToNavigateTo: self.$profileIdToNavigateTo,
+                                             goToProfile: self.$goToProfile).environmentObject(self.searchViewModel)
+                        }
+                        Spacer()
                     }
-                    Spacer()
                 }
             }
         }
@@ -38,11 +54,11 @@ struct SingleRowAccount: View {
     
     @EnvironmentObject var searchViewModel: SearchViewModel
     var user: User
-    @Binding var tabSelection: Int
-    
     @State var showRecent: Bool = false
-    @State var selection: Int? = nil
-    @State var goToDestination: Bool = false
+    
+    @Binding var tabSelection: Int
+    @Binding var profileIdToNavigateTo: String?
+    @Binding var goToProfile: Int?
     
     var body: some View {
         HStack {
@@ -54,7 +70,9 @@ struct SingleRowAccount: View {
                     Text(user.username).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
                 }
                 Spacer()
-            }.onTapGesture {
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
                 if(self.searchViewModel.recentSearchFirebaseAccounts.count == 0) {
                     self.searchViewModel.recentSearchFirebaseAccounts.append(self.user)
                 } else if (!self.searchViewModel.recentSearchFirebaseAccounts.contains(self.user)) {
@@ -63,24 +81,19 @@ struct SingleRowAccount: View {
                         self.searchViewModel.recentSearchFirebaseAccounts = Array(self.searchViewModel.recentSearchFirebaseAccounts.prefix(5))
                     }
                 }
-                self.goToDestination = true
-                self.selection = 1
+                self.profileIdToNavigateTo = self.user.id
+                self.goToProfile = 1
             }
-            Spacer()
-            Text("")
             if showRecent == true {
                 Image(systemName: "xmark")
                     .padding(.trailing)
+                    .frame(width: 40)
+                    .contentShape(Rectangle())
                     .onTapGesture {
                         let indexOfToBeDeletedEntry = self.searchViewModel.recentSearchFirebaseAccounts.firstIndex(of: self.user)
                         if(indexOfToBeDeletedEntry != nil) {
                             self.searchViewModel.recentSearchFirebaseAccounts.remove(at: indexOfToBeDeletedEntry!)
                         }
-                }
-            }
-            if (self.goToDestination != false) {
-                NavigationLink(destination: ProfileView(profileUserId: user.id, tabSelection: $tabSelection), tag: 1, selection: $selection) {
-                    EmptyView()
                 }
             }
         }

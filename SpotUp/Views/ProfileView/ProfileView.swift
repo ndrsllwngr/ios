@@ -108,7 +108,7 @@ struct InnerProfileView: View {
                         .padding(.bottom, 10)
                     
                     ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlacesListRow(placeList: placeList).onTapGesture {
+                        PlaceListRow(placeList: placeList).onTapGesture {
                             self.placeListIdToNavigateTo = placeList.id
                             self.goToPlaceList = 1
                         }
@@ -117,7 +117,7 @@ struct InnerProfileView: View {
             } else {
                 List {
                     ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                        PlacesListRow(placeList: placeList).onTapGesture {
+                        PlaceListRow(placeList: placeList).onTapGesture {
                             self.placeListIdToNavigateTo = placeList.id
                             self.goToPlaceList = 1
                         }
