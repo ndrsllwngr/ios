@@ -101,7 +101,7 @@ struct InnerProfileView: View {
     @Binding var goToPlaceList: Int?
     
     @State var sortByCreationDate: Bool = true
-
+    
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
@@ -111,7 +111,7 @@ struct InnerProfileView: View {
                     List {
                         HStack {
                             Text("My Collections")
-                            .font(.system(size: 16, weight:.bold))
+                                .font(.system(size: 16, weight:.bold))
                             Spacer()
                             SortButton(sortByDate: self.$sortByCreationDate)
                         }
@@ -144,7 +144,7 @@ struct InnerProfileView: View {
                     List {
                         HStack {
                             Text("Public collections")
-                            .font(.system(size: 16, weight:.bold))
+                                .font(.system(size: 16, weight:.bold))
                             Spacer()
                             SortButton(sortByDate: self.$sortByCreationDate)
                         }
@@ -195,7 +195,8 @@ struct ProfileInfoView: View {
             ZStack{
                 VStack {
                     FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
-                        .clipShape(Circle()).padding(.top)
+                        .clipShape(Circle())
+                        .padding(.top)
                 }.frame(width: 110, height: 100)
                 if (self.isMyProfile) {
                     VStack {
@@ -217,6 +218,7 @@ struct ProfileInfoView: View {
                                 .frame(width: 32, height: 32)
                                 .background(Color("brand-color-primary"))
                                 .mask(Circle())
+                                .overlay(Circle().stroke(Color("bg-primary"), lineWidth: 2))
                             }
                             
                         }
