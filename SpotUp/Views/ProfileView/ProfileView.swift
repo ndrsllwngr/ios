@@ -324,7 +324,7 @@ struct ProfileSettingsButton: View {
         NavigationLink(destination: ProfileSettingsView().environmentObject(self.firestoreProfile)) {
             HStack {
                 Spacer()
-                Image(systemName: "gear")
+                Image(systemName: "slider.horizontal.3")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
