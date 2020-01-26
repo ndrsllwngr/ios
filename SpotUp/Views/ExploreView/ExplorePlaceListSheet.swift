@@ -5,6 +5,7 @@ struct ExplorePlaceListSheet: View {
     @Binding var showSheet: Bool
     
     @State var placeLists: [PlaceList] = []
+    @State var isLoading = false
     
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
@@ -14,27 +15,52 @@ struct ExplorePlaceListSheet: View {
                 .fill(Color.secondary)
                 .frame(width: 30, height: 3)
                 .padding(10)
-            List {
-                Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
-                ForEach(self.placeLists){ placeList in
-                    PlaceListRow(placeList: placeList)
-                        .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
-                            self.showSheet.toggle()
+            VStack {
+                HStack {
+                    Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
+                    Spacer()
+                }
+                .padding(.leading, 15)
+                if (isLoading) {
+                    Spacer()
+                    ActivityIndicator()
+                        .frame(width: 50, height: 50)
+                        .foregroundColor(Color("text-secondary"))
+                } else {
+                    if (!self.placeLists.isEmpty) {
+                        List {
+                            ForEach(self.placeLists){ placeList in
+                                PlaceListRow(placeList: placeList)
+                                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
+                                    .contentShape(Rectangle())
+                                    .onTapGesture {
+                                        ExploreModel.shared.startExploreWithPlaceListAndFetchPlaces(placeList: placeList)
+                                        self.showSheet.toggle()
+                                }
+                            }
+                        }
+                        .animation(.easeInOut)
+                        .transition(.asymmetric(insertion: .scale, removal: .scale))
+                    } else {
+                        Spacer()
+                        Text("No collections found")
+                            .foregroundColor(Color("text-secondary"))
                     }
                 }
+                Spacer()
             }
-            .padding()
-            Spacer()
+            .padding(.horizontal)
         }
         .onAppear {
+            self.isLoading = true
             self.placeLists = []
+            let dispatchGroup = DispatchGroup()
+            
             let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: self.firebaseAuthentication.currentUser!.uid)
             query.getDocuments { querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
                     print("Error retrieving Lists")
+                    self.isLoading = false
                     return
                 }
                 self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
@@ -42,7 +68,7 @@ struct ExplorePlaceListSheet: View {
                     return dataToPlaceList(data: data)
                 }
                 for (i, placeList) in self.placeLists.enumerated() {
-                    // Listener for owners of these lists (basically myself)
+                    dispatchGroup.enter()
                     FirestoreConnection.shared.getUsersRef().document(placeList.owner.id).getDocument { documentSnapshot, error in
                         guard let documentSnapshot = documentSnapshot else {
                             print("Error retrieving user")
@@ -56,6 +82,10 @@ struct ExplorePlaceListSheet: View {
                         })
                     }
                 }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                self.isLoading = false
             }
         }
     }
