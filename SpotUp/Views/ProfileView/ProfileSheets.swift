@@ -44,7 +44,7 @@ struct CreatePlacelistSheet: View {
                 .foregroundColor(.red)
             Spacer()
             }.frame(height: 60)
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
             
             HStack {
                 Button(action: {
@@ -74,10 +74,8 @@ struct CreatePlacelistSheet: View {
                 }.disabled(!self.createPlacelistViewModel.isValidplacelist)
             }
             .frame(height: 100)
-            .padding(.horizontal)
-            Spacer()
+            .padding(.horizontal, 30)
             Spacer()
         }
-        .padding()
     }
 }
