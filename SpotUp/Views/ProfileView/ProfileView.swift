@@ -103,32 +103,52 @@ struct InnerProfileView: View {
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
-
+            
             VStack {
                 if isMyProfile {
-                    
                     List {
                         CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                             .listRowBackground(Color(bgColor))
                             .padding(.top, 5)
-                        ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                            PlaceListRow(placeList: placeList)
-                                .onTapGesture {
-                                    self.placeListIdToNavigateTo = placeList.id
-                                    self.goToPlaceList = 1
+                        if(!firestoreProfile.placeLists.isEmpty) {
+                            ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                                PlaceListRow(placeList: placeList)
+                                    .onTapGesture {
+                                        self.placeListIdToNavigateTo = placeList.id
+                                        self.goToPlaceList = 1
+                                }
+                                
+                            }.listRowBackground(Color(bgColor))
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("You have no collections")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
+                                
                             }
-                            
-                        }.listRowBackground(Color(bgColor))
+                            .listRowBackground(Color(bgColor))
+                        }
                     }
                 } else {
                     List {
-                        ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                            PlaceListRow(placeList: placeList)
-                                .onTapGesture {
-                                    self.placeListIdToNavigateTo = placeList.id
-                                    self.goToPlaceList = 1
+                        if (!firestoreProfile.placeLists.filter{$0.isPublic}.isEmpty) {
+                            ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                                PlaceListRow(placeList: placeList)
+                                    .onTapGesture {
+                                        self.placeListIdToNavigateTo = placeList.id
+                                        self.goToPlaceList = 1
+                                }
+                            }.listRowBackground(Color(bgColor))
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("User has no public collections")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
                             }
-                        }.listRowBackground(Color(bgColor))
+                            .listRowBackground(Color(bgColor))
+                        }
                     }
                 }
             }.background(Color(bgColor))
