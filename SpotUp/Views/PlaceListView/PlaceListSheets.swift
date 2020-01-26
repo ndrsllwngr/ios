@@ -73,7 +73,7 @@ struct PlaceListSettingsSheet: View {
             VStack (alignment: .leading){
                 if (self.firestorePlaceList.placeList.isPublic) {
                     Button(action: {
-                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isPublic: false)
+                        FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, isPublic: false, ownerId: self.firestorePlaceList.placeList.owner.id)
                     }) {
                         SettingsButton(iconName: "lock", description: "Make private")
                     }

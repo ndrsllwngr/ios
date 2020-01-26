@@ -176,7 +176,7 @@ class FirestoreConnection: ObservableObject {
     }
     
     // ToDo update with more parameters
-    func updatePlaceList(placeListId: String, newName: String? = nil, isPublic: Bool? = nil, isCollaborative: Bool? = nil) {
+    func updatePlaceList(placeListId: String, newName: String? = nil, isPublic: Bool? = nil,  ownerId: String? = nil, isCollaborative: Bool? = nil) {
         let listRef = dbPlaceListsRef.document(placeListId)
         var data: Dictionary<String, Any> = [:]
         if let newName = newName {
@@ -184,6 +184,11 @@ class FirestoreConnection: ObservableObject {
         }
         if let isPublic = isPublic {
             data["is_public"] = isPublic
+            // remove all followers on setting list private
+            if let ownerId = ownerId, !isPublic {
+                data["follower_ids"] = [ownerId]
+            }
+
         }
         if let isCollaborative = isCollaborative {
             data["is_collaborative"] = isCollaborative
