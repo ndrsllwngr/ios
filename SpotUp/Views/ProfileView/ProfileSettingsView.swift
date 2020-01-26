@@ -1,5 +1,6 @@
 import SwiftUI
 import FirebaseFirestore
+import Combine
 
 struct ProfileSettingsView: View {
     
@@ -7,12 +8,14 @@ struct ProfileSettingsView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject private var profileSettingsViewModel = ProfileSettingsViewModel()
     
+    @State private var showModal = false
+    
     var body: some View {
         VStack (alignment: .leading, spacing: 0) {
             // Avoids that form view scrolls under navbar
             Rectangle()
                 .frame(height: 1)
-            .foregroundColor(Color("bg-primary"))
+                .foregroundColor(Color("bg-primary"))
             Form {
                 // 1)
                 Section(header: Text("Change username").fontWeight(.bold), footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
@@ -62,9 +65,64 @@ struct ProfileSettingsView: View {
                         Text("Sign out").foregroundColor(.red)
                     }
                 }
+                Section {
+                    Button("Credits") {
+                        self.showModal = true
+                    }
+                }
             }
-        .background(Color("bg-profile"))
+            .background(Color("bg-profile"))
         }
         .navigationBarTitle(Text("Settings"))
+        .sheet(isPresented: $showModal, onDismiss: {
+            print(self.showModal)
+        }) {
+            ModalView(message: "This is Modal view")
+        }
+    }
+}
+
+struct ModalView: View {
+    @Environment(\.presentationMode) var presentation
+    let message: String
+    
+    var body: some View {
+        VStack {
+            Capsule()
+                .fill(Color.secondary)
+                .frame(width: 30, height: 3)
+                .padding(10)
+            VStack {
+                HStack {
+                    Text("Credits").font(.system(size:18)).fontWeight(.bold)
+                    Spacer()
+                }
+                VStack(alignment: .leading) {
+                    HStack(spacing: 0) {
+                        Text("Icons made by ")
+                        Button(action: {
+                            UIApplication.shared.open(URL(string: "https://www.flaticon.com/authors/freepik")!)
+                            
+                        }) {
+                            Text("Freepik")
+                        }
+                    }
+                    HStack(spacing: 0){
+                        Text("from ")
+                        Button(action: {
+                            UIApplication.shared.open(URL(string: "https://www.flaticon.com/")!)
+                            
+                        }) {
+                            Text("www.flaticon.com")
+                            
+                        }
+                        Text(".")
+                    }
+                    Text("Icons may be modified by Andreas Ellwanger, Timo Erdelt, Havy Ha and Fangli Lu.").multilineTextAlignment(.leading).padding(.top, 30)
+                    Text("App made by Andreas Ellwanger, Timo Erdelt, Havy Ha and Fangli Lu.").multilineTextAlignment(.leading).padding(.top, 30)
+                }.padding(.top, 30)
+                Spacer()
+            }.padding(.horizontal, 30)
+        }
     }
 }
