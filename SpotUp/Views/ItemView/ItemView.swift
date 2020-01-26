@@ -180,10 +180,20 @@ struct InnerItemView: View {
             
             // MAP
             VStack{
-                ItemMapView(coordinate: place.coordinate)
-                    .frame(width:UIScreen.main.bounds.width-30, height:200)
-                    .cornerRadius(15)
-                    .padding(20)
+                ZStack{
+                    ItemMapView(coordinate: place.coordinate)
+                        .frame(width:UIScreen.main.bounds.width-30, height:200)
+                        .cornerRadius(15)
+                        .padding(20)
+                    HStack{
+                        Spacer()
+                    }.frame(width:UIScreen.main.bounds.width-30, height:200)
+                        .contentShape(Rectangle())
+                        .background(Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.01))
+                        .onTapGesture {
+                            UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
+                    }
+                }
             }
             .frame(width:UIScreen.main.bounds.width-30)
             
@@ -234,21 +244,6 @@ struct ButtonOnTopView: View{
         
         HStack{
             Spacer()
-            //Button
-            Button(action: {
-                UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
-            }) {
-                ZStack {
-                    Rectangle().fill(Color(UIColor.systemBlue))
-                    Spacer()
-                    Image(systemName: "arrow.turn.up.right")
-                        .font(.title)
-                        .foregroundColor(Color.white)
-                    Spacer()
-                }
-                .frame(width: 46, height:46)
-                .cornerRadius(5)
-            }
             //EndButton
             ZStack(alignment: .center) {
                 Circle().fill(Color("brand-color-primary"))
