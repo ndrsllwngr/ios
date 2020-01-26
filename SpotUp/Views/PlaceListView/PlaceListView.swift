@@ -133,7 +133,7 @@ struct InnerPlaceListView: View {
                 List {
                     HStack {
                          Text("Places")
-                         .font(.system(size: 16, weight:.bold))
+                         .font(.system(size: 16, weight:.semibold))
                          Spacer()
                          SortButton(sortByDate: self.$sortByCreationDate)
                      }

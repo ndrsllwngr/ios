@@ -25,6 +25,8 @@ struct ExplorePlaceListSheet: View {
                     ActivityIndicator()
                         .frame(width: 50, height: 50)
                         .foregroundColor(Color("text-secondary"))
+                        .animation(.easeInOut)
+                        .transition(.asymmetric(insertion: .scale, removal: .scale))
                 } else {
                     if (!self.placeLists.isEmpty) {
                         ScrollView {
@@ -54,7 +56,7 @@ struct ExplorePlaceListSheet: View {
             self.isLoading = true
             self.placeLists = []
             let dispatchGroup = DispatchGroup()
-            
+            dispatchGroup.enter()
             let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: self.firebaseAuthentication.currentUser!.uid)
             query.getDocuments { querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
@@ -62,6 +64,7 @@ struct ExplorePlaceListSheet: View {
                     self.isLoading = false
                     return
                 }
+                dispatchGroup.leave()
                 self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
                     let data = documentSnapshot.data()
                     return dataToPlaceList(data: data)
@@ -78,6 +81,7 @@ struct ExplorePlaceListSheet: View {
                             if self.placeLists.count > i {
                                 self.placeLists[i].owner.username = username
                             }
+                            dispatchGroup.leave()
                         })
                     }
                 }
