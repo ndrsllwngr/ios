@@ -6,12 +6,21 @@ import GooglePlaces
 struct MapView: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @State var currentIndex: Int = 0
+    @State var placeIdToNavigateTo: String? = nil
+    @State var goToPlace: Int? = nil
     
     var body: some View {
         ZStack(alignment: .bottom){
+            if (self.placeIdToNavigateTo != nil) {
+                NavigationLink(destination: ItemView(placeId: self.placeIdToNavigateTo!), tag: 1, selection: self.$goToPlace) {
+                    EmptyView()
+                }
+            }
             GoogleMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
             if(!self.firestorePlaceList.places.isEmpty){
-                SwipeView(index: self.$currentIndex).environmentObject(self.firestorePlaceList)
+                SwipeView(index: self.$currentIndex,
+                          placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                          goToPlace: self.$goToPlace).environmentObject(self.firestorePlaceList)
                     .frame(height: 180)
             }
             
