@@ -143,8 +143,7 @@ struct CurrentTargetRow: View {
         .frame(height: 72)
         .background(Color("elevation-1"))
         .cornerRadius(15)
-        .shadow(radius: 5, y: 4)
-        .padding([.horizontal], 10)
+        .shadow(color: Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.24), radius: 20, x: 0, y: 10)      .padding(.horizontal, 10)
     }
 }
 
@@ -243,7 +242,7 @@ struct ExplorePlaceRow: View {
                 ])
             }
         }
-        .frame(height: 60)
+        .frame(height: 50)
         .padding([.leading], 5)
         .padding([.trailing], 10)
     }
@@ -317,6 +316,7 @@ struct ExplorePlaceVisitedRow: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
+                    .foregroundColor(Color("text-secondary"))
             }
             .frame(width: 40)
             .contentShape(Rectangle())
@@ -337,7 +337,7 @@ struct ExplorePlaceVisitedRow: View {
                 ])
             }
         }
-        .frame(height: 60)
+        .frame(height: 50)
         .padding([.leading], 20)
         .padding([.trailing], 10)
     }

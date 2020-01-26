@@ -36,7 +36,7 @@ struct GoogleMapView : UIViewRepresentable {
             zoom: 10.0
         )
         let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        //mapView.settings.myLocationButton = true
+        mapView.settings.myLocationButton = true
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
         mapView.delegate = context.coordinator

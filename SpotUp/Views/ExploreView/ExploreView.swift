@@ -23,7 +23,7 @@ struct ExploreView: View {
     
     @State var placeForAddPlaceToListSheet: ExplorePlace? = nil
     @State var imageForAddPlaceToListSheet: UIImage? = nil
-        
+    
     var body: some View {
         VStack {
             if (self.placeIdToNavigateTo != nil) {
@@ -81,7 +81,7 @@ struct ExploreActiveView: View {
     @Binding var imageForAddPlaceToListSheet: UIImage?
     
     @State var sortByDistance = true
-
+    
     var body: some View {
         VStack(spacing: 0.0) {
             if (self.exploreModel.exploreList != nil) {
@@ -118,8 +118,9 @@ struct ExploreActiveView: View {
                             Spacer()
                             ExploreSortButton(sortByDistance: self.$sortByDistance)
                         }
+                        .frame(height: 20)
                         .padding(.leading, 20)
-                        .padding(.top, 10)
+                        .padding(.top, 25)
                         .padding(.trailing, 20)
                         if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
                             ForEach (sortPlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
@@ -149,23 +150,28 @@ struct ExploreActiveView: View {
                             .padding([.horizontal], 20)
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
-                            HStack {
-                                Text("Visited")
-                                    .font(.system(size:20, weight:.bold))
-                                Spacer()
+                            VStack {
+                                HStack {
+                                    Text("Visited")
+                                        .font(.system(size:20, weight:.bold))
+                                    Spacer()
+                                }
+                                .frame(height: 20)
+                                .padding(.leading, 20)
+                                .padding(.top, 15)
+                                ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                                { place in
+                                    ExplorePlaceVisitedRow(place: place,
+                                                           showSheet: self.$showSheet,
+                                                           sheetSelection: self.$sheetSelection,
+                                                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                           goToPlace: self.$goToPlace,
+                                                           placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                           imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
                             }
-                            .padding([.leading], 20)
-                            ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
-                            { place in
-                                ExplorePlaceVisitedRow(place: place,
-                                                       showSheet: self.$showSheet,
-                                                       sheetSelection: self.$sheetSelection,
-                                                       placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                       goToPlace: self.$goToPlace,
-                                                       placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                                       imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
-                            }
+                            .padding(.bottom, 10)
                         }
                     }
                 } else {
