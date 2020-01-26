@@ -111,7 +111,7 @@ struct InnerProfileView: View {
                     List {
                         HStack {
                             Text("My Collections")
-                                .font(.system(size: 16, weight:.bold))
+                                .font(.system(size: 16, weight:.semibold))
                             Spacer()
                             SortButton(sortByDate: self.$sortByCreationDate)
                         }
@@ -144,7 +144,7 @@ struct InnerProfileView: View {
                     List {
                         HStack {
                             Text("Public collections")
-                                .font(.system(size: 16, weight:.bold))
+                                .font(.system(size: 16, weight:.semibold))
                             Spacer()
                             SortButton(sortByDate: self.$sortByCreationDate)
                         }

@@ -58,7 +58,7 @@ struct AddPlaceToListSheet: View {
             self.isLoading = true
             self.placeLists = []
             let dispatchGroup = DispatchGroup()
-            
+            dispatchGroup.enter()
             let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: self.firebaseAuthentication.currentUser!.uid)
             query.getDocuments { querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
@@ -66,6 +66,7 @@ struct AddPlaceToListSheet: View {
                     self.isLoading = false
                     return
                 }
+                dispatchGroup.leave()
                 self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
                     let data = documentSnapshot.data()
                     return dataToPlaceList(data: data)
@@ -83,6 +84,7 @@ struct AddPlaceToListSheet: View {
                             if self.placeLists.count > i {
                                 self.placeLists[i].owner.username = username
                             }
+                            dispatchGroup.leave()
                         })
                     }
                 }
