@@ -72,7 +72,7 @@ func sortPlaces(places: [GMSPlaceWithTimestamp], sortByCreationDate: Bool) -> [G
     } else {
         return places.sorted{(place1, place2) in
             if let name1 = place1.gmsPlace.name, let name2 = place2.gmsPlace.name {
-                return name1 > name2
+                return name1 < name2
             } else {
                 return false
             }

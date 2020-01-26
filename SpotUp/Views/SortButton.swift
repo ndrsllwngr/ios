@@ -8,7 +8,7 @@ struct SortButton: View {
     var body: some View {
         HStack {
             Image(systemName: "arrow.up.arrow.down")
-            Image(systemName: sortByDate ? "calendar" : "textformat.abc")
+            Image(systemName: sortByDate ? "textformat.abc" : "calendar")
         }
         .foregroundColor(.blue)
         .frame(width: 50, height: 25)
