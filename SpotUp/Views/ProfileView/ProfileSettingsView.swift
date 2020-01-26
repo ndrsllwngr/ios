@@ -118,7 +118,7 @@ struct ModalView: View {
                         }
                         Text(".")
                     }
-                    Text("Icons may be modified by Andreas Ellwanger, Timo Erdelt, Havy Ha and Fangli Lu.").multilineTextAlignment(.leading).padding(.top, 30)
+                    Text("Icons may be altered in color and shape.").multilineTextAlignment(.leading).padding(.top, 30)
                     Text("App made by Andreas Ellwanger, Timo Erdelt, Havy Ha and Fangli Lu.").multilineTextAlignment(.leading).padding(.top, 30)
                 }.padding(.top, 30)
                 Spacer()
