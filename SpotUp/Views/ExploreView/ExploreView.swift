@@ -136,11 +136,11 @@ struct ExploreActiveView: View {
                             }
                         } else {
                             HStack {
-                                Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw")!)
+                                Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw-50")!)
                                     .renderingMode(.original)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 50.0, height: 50.0, alignment: .center)
+                                    .frame(height: 50.0, alignment: .center)
                                 Spacer()
                                 Text("Travel queue is empty")
                                     .foregroundColor(Color("text-secondary"))
@@ -180,11 +180,14 @@ struct ExploreActiveView: View {
                         self.tabSelection = 1
                     }) {
                         VStack {
-                            Image(uiImage: UIImage(named: "explore-empty-map")!)
-                                .renderingMode(.original)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 150.0, height: 150.0, alignment: .center)
+                            VStack(alignment: .center, spacing: 0){
+                                Spacer()
+                                Image(uiImage: UIImage(named: "explore-empty-map-150")!)
+                                    .renderingMode(.original)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 150, alignment: .center)
+                            }.frame(width: 150, height: 150, alignment: .center)
                             Text("Add places and start exploring.")
                                 .font(.system(size:16, weight:.bold))
                                 .accentColor(Color("brand-color-primary"))
@@ -207,11 +210,14 @@ struct ExploreInactiveView: View {
         GeometryReader { metrics in
             VStack {
                 Spacer()
-                Image(uiImage: UIImage(named: "explore-empty-trail-sign")!)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200.0, height: 200.0, alignment: .center)
+                VStack(alignment: .center, spacing: 0){
+                    Spacer()
+                    Image(uiImage: UIImage(named: "explore-empty-trail-sign-200")!)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 200, alignment: .center)
+                }.frame(width: 200, height: 200, alignment: .center)
                 Spacer()
                 Button(action: {
                     self.showSheet.toggle()

@@ -14,9 +14,9 @@ struct OnboardingView: View {
     @Binding var launchedBefore: Bool
     
     var subviews = [
-        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-1")),
-        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-2")),
-        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-3"))
+        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-1-200")),
+        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-2-200")),
+        UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-3-200"))
     ]
     
     var titles = ["Avoid Missing Out", "Join the Community", "Explore at Ease"]
@@ -36,7 +36,7 @@ struct OnboardingView: View {
                         PageViewController(currentPageIndex: $currentPageIndex, viewControllers: subviews)
                     }
                 }
-                .padding(.top, 80)
+//                .padding(.top, 80)
                 //                .background(Color.blue)
                 Group {
                     VStack(spacing: 0) {

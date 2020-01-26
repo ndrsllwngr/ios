@@ -17,7 +17,7 @@ struct SplashScreen: View {
                 .renderingMode(.original)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 100, height: 100, alignment: .center)
+                .frame(height: 102, alignment: .center)
                 Spacer()
             }
             Spacer()
