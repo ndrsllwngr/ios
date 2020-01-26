@@ -100,6 +100,7 @@ struct InnerPlaceListView: View {
     @Binding var tabSelection: Int
     
     @State private var selection = 0
+    @State var sortByCreationDate: Bool = true
     
     var body: some View {
         VStack (alignment: .leading){
@@ -130,18 +131,32 @@ struct InnerPlaceListView: View {
             
             if selection == 0 {
                 List {
-                    ForEach(self.firestorePlaceList.places, id: \.self) { place in
-                        PlaceRow(place: place,
-                                 placeListId: self.placeListId,
-                                 showSheet: self.$showSheet,
-                                 sheetSelection: self.$sheetSelection,
-                                 placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                 goToPlace: self.$goToPlace,
-                                 placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                 imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                            .environmentObject(self.firestorePlaceList)
+                    HStack {
+                         Text("Places")
+                         .font(.system(size: 16, weight:.semibold))
+                         Spacer()
+                         SortButton(sortByDate: self.$sortByCreationDate)
+                     }
+                    if (!self.firestorePlaceList.places.isEmpty) {
+                        ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
+                            PlaceRow(place: place,
+                                     placeListId: self.placeListId,
+                                     showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                .environmentObject(self.firestorePlaceList)
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("Collection is empty")
+                                .foregroundColor(Color("text-secondary"))
+                            Spacer()
+                        }
                     }
-                    
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)

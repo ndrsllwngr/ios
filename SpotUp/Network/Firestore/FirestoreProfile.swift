@@ -68,3 +68,12 @@ class FirestoreProfile: ObservableObject {
     }
     
 }
+
+func sortPlaceLists(placeLists: [PlaceList], sortByCreationDate: Bool) -> [PlaceList] {
+    if sortByCreationDate {
+        // New Placelists always first!
+        return placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}
+    } else {
+        return placeLists.sorted{$0.name < $1.name}
+    }
+}

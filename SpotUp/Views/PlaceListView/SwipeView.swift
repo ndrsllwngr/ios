@@ -12,9 +12,13 @@ import GooglePlaces
 struct SwipeView: View {
     @State private var offset: CGFloat = 0
     @State private var isDragging: Bool = false
+    
     @Binding var index: Int
+    @Binding var placeIdToNavigateTo: String?
+    @Binding var goToPlace: Int?
     
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    
     let spacing: CGFloat = 10
     
     var body: some View {
@@ -24,6 +28,11 @@ struct SwipeView: View {
                     ForEach((self.firestorePlaceList.places), id: \.self) { place in
                         PlaceCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                self.placeIdToNavigateTo = place.gmsPlace.placeID!
+                                self.goToPlace = 1
+                        }
                     }
                 }.frame(height: 150)
             }
@@ -45,12 +54,12 @@ struct SwipeView: View {
                         if value.predictedEndTranslation.width > geometry.size.width / 2, self.index > 0 {
                             self.index -= 1
                         }
-
+                        
                         withAnimation { self.offset = -(geometry.size.width + self.spacing) * CGFloat(self.index) }
                         self.isDragging = false
                         
                     })
-        )
+            )
         }.frame(width: 260, height: 150)
     }
     
@@ -77,7 +86,7 @@ struct PlaceCard: View {
                     .lineLimit(1)
                     .foregroundColor(Color("text-secondary"))
             }.frame(height: 50, alignment: .topLeading)
-            .padding(.horizontal)
+                .padding(.horizontal)
             
         }
             .frame(width: 240) //height: 160
