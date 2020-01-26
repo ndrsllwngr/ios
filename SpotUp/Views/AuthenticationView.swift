@@ -26,7 +26,7 @@ struct AuthenticationView: View {
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                        .frame(width: 56.0, height: 70.0, alignment: .center)
+                        .frame(height: 70.0, alignment: .center)
                         .padding(.trailing, 15)
                     Text("SpotUp").font(.system(size:32)).fontWeight(.bold)
                     Spacer()
