@@ -139,6 +139,7 @@ struct InnerPlaceListView: View {
                                  goToPlace: self.$goToPlace,
                                  placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                            .environmentObject(self.firestorePlaceList)
                     }
                     
                 }

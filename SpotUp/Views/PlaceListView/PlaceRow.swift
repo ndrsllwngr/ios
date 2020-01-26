@@ -13,7 +13,10 @@ struct PlaceRow: View {
     var place: GMSPlaceWithTimestamp
     var placeListId: String
     
-    @State var showActionSheet: Bool = false
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    
+    @State var showActionSheetSimple: Bool = false
+    @State var showActionSheetWithWriteOptions: Bool = false
     
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -52,41 +55,71 @@ struct PlaceRow: View {
                 self.placeIdToNavigateTo = self.place.gmsPlace.placeID!
                 self.goToPlace = 1
             }
-            HStack {
-                Image(systemName: "ellipsis")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-            }
-            .frame(width: 40)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                self.showActionSheet.toggle()
-            }
-            .actionSheet(isPresented: self.$showActionSheet) {
-                ActionSheet(title: Text("\(self.place.gmsPlace.name!)"), buttons: [
-                    .default(Text("Add to explore")) {
-                        ExploreModel.shared.addPlaceToExplore(self.place.gmsPlace)
-                    },
-                    .default(Text("Add to collection")) {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "add_to_placelist"
-                        self.placeForAddPlaceToListSheet = self.place
-                        self.imageForAddPlaceToListSheet = self.image
-                    },
-                    .default(Text("Set place image as collection image")) {
-                        if let image = self.image {
-                            FirebaseStorage.shared.uploadImageToStorage(id: self.placeListId, imageType: .PLACELIST_IMAGE, uiImage: image)
-                        } else {
-                            print("Place has no image")
-                        }
-                    },
-                    .destructive(Text("Remove from collection")) {
-                        self.showActionSheet.toggle()
-                        FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.place)
-                    },
-                    .cancel()
-                ])
+            // We have to make the whole button conditional, not just the action sheet,
+            //because it's not possible to place two action sheets on one onTapGesture
+            if (self.firestorePlaceList.isOwnedPlaceList || self.firestorePlaceList.placeList.isCollaborative) {
+                HStack {
+                    Image(systemName: "ellipsis")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                }
+                .frame(width: 40)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    self.showActionSheetWithWriteOptions.toggle()
+                }
+                .actionSheet(isPresented: self.$showActionSheetWithWriteOptions) {
+                    ActionSheet(title: Text("\(self.place.gmsPlace.name!)"), buttons: [
+                        .default(Text("Add to explore")) {
+                            ExploreModel.shared.addPlaceToExplore(self.place.gmsPlace)
+                        },
+                        .default(Text("Add to collection")) {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "add_to_placelist"
+                            self.placeForAddPlaceToListSheet = self.place
+                            self.imageForAddPlaceToListSheet = self.image
+                        },
+                        .default(Text("Set place image as collection image")) {
+                            if let image = self.image {
+                                FirebaseStorage.shared.uploadImageToStorage(id: self.placeListId, imageType: .PLACELIST_IMAGE, uiImage: image)
+                            } else {
+                                print("Place has no image")
+                            }
+                        },
+                        .destructive(Text("Remove from collection")) {
+                            self.showActionSheetWithWriteOptions.toggle()
+                            FirestoreConnection.shared.deletePlaceFromList(placeListId: self.placeListId, place: self.place)
+                        },
+                        .cancel()
+                    ])
+                }
+            } else {
+                HStack {
+                    Image(systemName: "ellipsis")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                }
+                .frame(width: 40)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    self.showActionSheetSimple.toggle()
+                }
+                .actionSheet(isPresented: self.$showActionSheetSimple) {
+                    ActionSheet(title: Text("\(self.place.gmsPlace.name!)"), buttons: [
+                        .default(Text("Add to explore")) {
+                            ExploreModel.shared.addPlaceToExplore(self.place.gmsPlace)
+                        },
+                        .default(Text("Add to collection")) {
+                            self.showSheet.toggle()
+                            self.sheetSelection = "add_to_placelist"
+                            self.placeForAddPlaceToListSheet = self.place
+                            self.imageForAddPlaceToListSheet = self.image
+                        },
+                        .cancel()
+                    ])
+                }
             }
         }.frame(height: 60)
             .onAppear {
