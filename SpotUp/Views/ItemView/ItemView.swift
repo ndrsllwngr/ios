@@ -29,27 +29,20 @@ struct ItemView: View {
                 // Avoids that scroll view scrolls under navbar
                 Rectangle()
                     .frame(height: 1)
-                .foregroundColor(Color("bg-primary"))
-                ScrollView{
+                    .foregroundColor(Color("bg-primary"))
+                ScrollView(showsIndicators:false){
                     VStack(spacing: 0){
-                        //                        ZStack{
-                        VStack(spacing: 0){
-                            GalleryView(gallery: self.$gallery)
-                            Spacer()
-                        }
+                        GalleryView(gallery: self.$gallery)
+                            .frame(height: 300)
+                            .clipped()
                         InnerItemView(place: place!, priceLevel: priceLevel!, type: type!, openingHoursText: openingHoursText!, gallery: self.$gallery, showSheet:self.$showSheet)
-                            //                                .background(Color("bg-primary"))
-                            .offset(y: -25)
-                        //                                .cornerRadius(15)
-                        //                        .offset(y:-60)
-                        //                                .padding(.top, 270)
-                        //                                .zIndex(10)
-                        //                        }
+                            .offset(y:-40)
+                            .padding(.bottom, -40)
                     }
-                    //                    ButtonOnTopView(showSheet:self.$showSheet)
-                    //                    .offset(y:-930)
                     
-                }}
+                }
+                
+            }
         }.onAppear {
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
@@ -105,42 +98,45 @@ struct InnerItemView: View {
     
     
     var body: some View {
-        //        ScrollView(showsIndicators: false){
-        VStack{
-            HStack{
-                Text(type)
-                    .padding(.leading, 20)
-                //distance
-                //priceLevel
-                Spacer()
-                HStack{
-                    ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "eurosign.circle"), id: \.self) { sign in
-                        Image(systemName:sign)}
-                    
-                }.padding(.trailing, 40)
-            }
-            .frame(width: UIScreen.main.bounds.width, height: 50)
-            .background(Color.white)
-            .cornerRadius(15)
-            
-            ButtonOnTopView(place: self.place, showSheet: self.$showSheet)
-                .offset(y:-83.5)
-                .padding(.bottom, -83.5)
-            
-            
-            VStack(alignment:.leading, spacing:10){
-                
-                
-                VStack{Text(place.name != nil ? place.name! : "")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                }
-                .padding(.horizontal, 15)
-                
+        VStack(spacing: 0){
+            // TYPE and PRICE LEVEL
+            ZStack{
                 VStack{
-                    Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")}
-                    .padding(.horizontal, 15)
-                
+                    HStack{
+                        Text(type)
+                            .padding(.leading, 20)
+                        Spacer()
+                        HStack{
+                            ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "€"), id: \.self) { sign in
+                                Text(sign)
+                            }
+                        }
+                        .padding(.trailing, 40)
+                    }
+                        
+                    .frame(width: UIScreen.main.bounds.width, height: 80)
+                    .background(Color("bg-primary"))
+                    .cornerRadius(15, corners: [.topLeft, .topRight])
+                    .offset(y:-40)
+                    .padding(.bottom, -40);
+                }
+                // ADD BUTTON
+                ButtonOnTopView(place: self.place, showSheet: self.$showSheet)
+                    .offset(y:-61.5)
+            }
+            // PLACE NAME and ADDRESS and PHONE and WEBSITE
+            VStack(alignment:.leading, spacing:15) {
+                VStack{
+                    Text(place.name != nil ? place.name! : "")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(Color("brand-color-primary"))
+                        .multilineTextAlignment(.leading)
+                }
+                VStack{
+                    Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
+                        .multilineTextAlignment(.leading)
+                }
                 Button(action:{
                     if let phoneNumber = self.place.phoneNumber{
                         let prefix = "tel://"
@@ -148,66 +144,93 @@ struct InnerItemView: View {
                         let tel = URL(string:(prefix + trimmed))
                         UIApplication.shared.open(tel!)
                     }
-                }){HStack(spacing:20){
-                    Image(systemName: "phone")
-                        .foregroundColor(Color("brand-color-primary"))
-                    Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "No phone number could be found.")
-                        .foregroundColor(Color("text-primary"))
-                    
-                }.padding(.horizontal,15)
-                    
+                })
+                {
+                    HStack(spacing:20){
+                        Image(systemName: "phone")
+                            .foregroundColor(Color("brand-color-primary"))
+                        Text(place.phoneNumber != nil ? "\(place.phoneNumber!)" : "No phone number could be found.")
+                            .foregroundColor(Color("text-primary"))
+                        Spacer()
+                        
+                    }
+                    .padding(.horizontal,30)
                 }
-                
                 Button(action: {
                     if let website = self.place.website {
                         UIApplication.shared.open(website)
                     }
-                }){
+                })
+                {
                     HStack(spacing:20){
-                        Image(systemName: "desktopcomputer").foregroundColor(Color("brand-color-primary"))
-                        Text("Open Website").foregroundColor(Color("text-primary"))
+                        Image(systemName: "desktopcomputer")
+                            .foregroundColor(Color("brand-color-primary"))
+                        Text("Open Website")
+                            .foregroundColor(Color("text-primary"))
+                        Spacer()
                         
-                    }.padding(.horizontal, 15)
+                    }
+                    .padding(.horizontal, 30)
+                    
                 }
             }
-            .frame(width:UIScreen.main.bounds.width, height:250)
+            .padding()
+            .padding(.horizontal, 15)
             
+            
+            // MAP
             VStack{
-                ItemMapView(coordinate: place.coordinate)
-                    .frame(width:UIScreen.main.bounds.width-30, height:200)
-                    .cornerRadius(15)
-                    .padding(20)
+                ZStack{
+                    ItemMapView(coordinate: place.coordinate)
+                        .frame(width:UIScreen.main.bounds.width-30, height:200)
+                        .cornerRadius(15)
+                        .padding(20)
+                    HStack{
+                        Spacer()
+                    }.frame(width:UIScreen.main.bounds.width-30, height:200)
+                        .contentShape(Rectangle())
+                        .background(Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.01))
+                        .onTapGesture {
+                            UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
+                    }
+                }
             }
-            .frame(width:UIScreen.main.bounds.width-30, height:250)
+            .frame(width:UIScreen.main.bounds.width-30)
             
-            //end
-            //---------------------------------------------
-            
-            VStack(spacing:10){
-                if openingHoursText.count == 0 {
-                    Image("placeholder-openingHours")
-                        .resizable()
-                        .scaledToFit()
-                    Text("No opening hours could be find at this time.")
-                }
-                else{
-                    ScrollWeekView(data: createDateCardData(openingHoursText: openingHoursText))
-                }
-            }.frame(width:UIScreen.main.bounds.width-10, height:200)
-                .padding()
-            
-            
-        }
-            // end Vstack
-            //        }// end ScrollView
-            .sheet(isPresented: $showSheet) {
-                AddPlaceToListSheet(place: self.place,
-                                    placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil,
-                                    showSheet: self.$showSheet)
+            // OPENING HOURS
+            VStack{
                 
+                HStack{
+                    Text("Opening Hours")
+                        .foregroundColor(Color("brand-color-primary"))
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    Spacer()
+                }.padding(.leading, 15)
+                
+                VStack(spacing:10){
+                    if openingHoursText.count == 0 {
+                        Image("placeholder-openingHours")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200, height: 200)
+                        Text("Opening hours could not be found.")
+                            .padding()
+                    }
+                    else{
+                        ScrollWeekView(data: createDateCardData(openingHoursText: openingHoursText))
+                    }
+                }
+            }
+            .frame(width:UIScreen.main.bounds.width, height:300)
+            .padding()
+        }
+        .sheet(isPresented: $showSheet) {
+            AddPlaceToListSheet(place: self.place,
+                                placeImage: self.gallery.indices.contains(0) ? self.gallery[0] : nil,
+                                showSheet: self.$showSheet)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
-        
         //        }
     }//end body
 }//end wholew View
@@ -218,31 +241,36 @@ struct ButtonOnTopView: View{
     @State var showActionSheet: Bool = false
     
     var body: some View{
-        VStack{
-            HStack{
-                Spacer()
-                ZStack {
-                    Circle().fill(Color("brand-color-primary"))
+        
+        HStack{
+            Spacer()
+            //EndButton
+            ZStack(alignment: .center) {
+                Circle().fill(Color("brand-color-primary"))
+                VStack{
+                    Spacer()
                     Image(systemName: "plus")
                         .font(.title).foregroundColor(Color.white)
+                    Spacer()
                 }
-                .frame(width: 47, height:47)
-                .onTapGesture {
-                    self.showActionSheet.toggle()
-                }
-                .actionSheet(isPresented: self.$showActionSheet) {
-                    ActionSheet(title: Text("\(self.place.name!)"), buttons: [
-                        .default(Text("Add to explore")) {
-                            ExploreModel.shared.addPlaceToExplore(self.place)
-                        },
-                        .default(Text("Add to collection")) {
-                            self.showSheet.toggle()
-                        },
-                        .cancel()
-                    ])
-                }
-            }.padding(.trailing)
-        }
+            }
+            .frame(width: 46, height:46)
+            .onTapGesture {
+                self.showActionSheet.toggle()
+            }
+            .actionSheet(isPresented: self.$showActionSheet) {
+                ActionSheet(title: Text("\(self.place.name!)"), buttons: [
+                    .default(Text("Add to explore")) {
+                        ExploreModel.shared.addPlaceToExplore(self.place)
+                    },
+                    .default(Text("Add to collection")) {
+                        self.showSheet.toggle()
+                    },
+                    .cancel()
+                ])
+            }
+        }.padding(.trailing, 40)
+        
     }
 }
 
@@ -264,7 +292,7 @@ struct GalleryView:View{
 struct DateCardView: View {
     var day: String
     var hours: String
-    @State var color = ""
+    @State var color:String = "border-daycard"
     
     
     var body: some View {
@@ -308,7 +336,7 @@ struct ScrollWeekView:View{
                     GeometryReader { geometry in
                         DateCardView(day:item.day, hours:item.hours)
                             .rotation3DEffect(Angle(degrees:
-                                Double(geometry.frame(in:.global).minX - 30) / -30), axis:(x:0, y:10, z:0))
+                                Double(geometry.frame(in:.global).minX - 30) / -30), axis:(x:0, y:20, z:0))
                         
                     }.frame(width:160, height:120)
                     
@@ -383,7 +411,7 @@ func setDateCardColor(today:String, day: String)->String {
     if (day.contains(today)){
         color = "brand-color-primary"
     }
-    else{color = "text-secondary"}
+    else{color = "border-daycard"}
     return color
 }
 
