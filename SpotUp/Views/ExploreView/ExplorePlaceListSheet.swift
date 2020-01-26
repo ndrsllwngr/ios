@@ -20,7 +20,6 @@ struct ExplorePlaceListSheet: View {
                     Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
                     Spacer()
                 }
-                .padding(.leading, 15)
                 if (isLoading) {
                     Spacer()
                     ActivityIndicator()
@@ -28,7 +27,7 @@ struct ExplorePlaceListSheet: View {
                         .foregroundColor(Color("text-secondary"))
                 } else {
                     if (!self.placeLists.isEmpty) {
-                        List {
+                        ScrollView {
                             ForEach(self.placeLists){ placeList in
                                 PlaceListRow(placeList: placeList)
                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
@@ -49,7 +48,7 @@ struct ExplorePlaceListSheet: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
         }
         .onAppear {
             self.isLoading = true
