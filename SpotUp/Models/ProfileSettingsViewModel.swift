@@ -198,8 +198,8 @@ class ProfileSettingsViewModel: ObservableObject {
     private var arePasswordsEqualPublisher: AnyPublisher<Bool, Never> {
         Publishers.CombineLatest($newPassword, $currentPasswordChangePassword)
             .debounce(for: 0.2, scheduler: RunLoop.main)
-            .map { password, passwordAgain in
-                return password == passwordAgain
+            .map { password, currentPassword in
+                return password == currentPassword
         }
         .eraseToAnyPublisher()
     }
@@ -208,7 +208,7 @@ class ProfileSettingsViewModel: ObservableObject {
         case valid
         case notLongEnough
         case empty
-        case noMatch
+        case match
     }
     
     private var isPasswordValidPublisher: AnyPublisher<PasswordCheck, Never> {
@@ -220,8 +220,8 @@ class ProfileSettingsViewModel: ObservableObject {
                 else if (!passwordIsMinLength) {
                     return .notLongEnough
                 }
-                else if (!passwordsAreEqual) {
-                    return .noMatch
+                else if (passwordsAreEqual) {
+                    return .match
                 }
                 else {
                     return .valid
@@ -338,8 +338,8 @@ class ProfileSettingsViewModel: ObservableObject {
                 //                    return "Password must not be empty"
                 case .notLongEnough:
                     return "Password must be at least 6 characters long"
-                case .noMatch:
-                    return "Passwords don't match"
+                case .match:
+                    return "New password is old password"
                 default:
                     return ""
                 }
