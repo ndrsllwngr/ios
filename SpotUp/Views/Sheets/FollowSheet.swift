@@ -23,7 +23,6 @@ struct FollowSheet: View {
                     Text(self.sheetTitle).font(.system(size:18)).fontWeight(.bold)
                     Spacer()
                 }
-                .padding(.leading, 15)
                 if (self.userIds.isEmpty) {
                     Spacer()
                     Text("None found")
@@ -34,7 +33,7 @@ struct FollowSheet: View {
                         .frame(width: 50, height: 50)
                         .foregroundColor(Color("text-secondary"))
                 } else {
-                    List {
+                    ScrollView {
                         ForEach(self.users.sorted{$0.username.lowercased() < $1.username.lowercased()}) {(user: User) in
                             HStack(alignment: .center) {
                                 FirebaseProfileImage(imageUrl: user.imageUrl).frame(width: 42, height: 42)
@@ -58,7 +57,7 @@ struct FollowSheet: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
         }
         .onAppear {
             self.isLoading = true
