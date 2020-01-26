@@ -31,7 +31,7 @@ struct PermissionView: View {
                     Spacer()
                     VStack(alignment: .center) {
                         Spacer()
-                        Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
+                        Image(uiImage: UIImage(named: "explore-empty-target-bw-100")!)
                             .renderingMode(.original)
                             .resizable()
                             .scaledToFit()
