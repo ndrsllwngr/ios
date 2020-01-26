@@ -130,18 +130,26 @@ struct InnerPlaceListView: View {
             
             if selection == 0 {
                 List {
-                    ForEach(self.firestorePlaceList.places, id: \.self) { place in
-                        PlaceRow(place: place,
-                                 placeListId: self.placeListId,
-                                 showSheet: self.$showSheet,
-                                 sheetSelection: self.$sheetSelection,
-                                 placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                 goToPlace: self.$goToPlace,
-                                 placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                 imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                            .environmentObject(self.firestorePlaceList)
+                    if (!self.firestorePlaceList.places.isEmpty) {
+                        ForEach(self.firestorePlaceList.places, id: \.self) { place in
+                            PlaceRow(place: place,
+                                     placeListId: self.placeListId,
+                                     showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                     goToPlace: self.$goToPlace,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                .environmentObject(self.firestorePlaceList)
+                        }
+                    } else {
+                        HStack {
+                            Spacer()
+                            Text("Collection is empty")
+                                .foregroundColor(Color("text-secondary"))
+                            Spacer()
+                        }
                     }
-                    
                 }
             } else {
                 MapView().environmentObject(firestorePlaceList)
