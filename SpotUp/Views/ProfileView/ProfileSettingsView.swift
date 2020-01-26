@@ -15,43 +15,43 @@ struct ProfileSettingsView: View {
             .foregroundColor(Color("bg-primary"))
             Form {
                 // 1)
-                Section(footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
-                    TextField("Username", text: $profileSettingsViewModel.newUserName)
+                Section(header: Text("Change username").fontWeight(.bold), footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
+                    TextField("New username", text: $profileSettingsViewModel.newUserName)
                         .autocapitalization(.none)
                     Button(action: {
                         FirestoreConnection.shared.updateUserName(userId: self.firebaseAuthentication.currentUser!.uid, newUserName: self.profileSettingsViewModel.newUserName)
                         UIApplication.shared.endEditing(true)
                     }) {
-                        Text("Change username")
+                        Text("Save")
                     }.disabled(!self.profileSettingsViewModel.isValidUsername)
                 }
                 // 2)
-                Section(footer: Text(profileSettingsViewModel.emailMessage).foregroundColor(.red)) {
-                    TextField("Email", text: $profileSettingsViewModel.newEmail)
+                Section(header: Text("Change email").fontWeight(.bold), footer: Text(profileSettingsViewModel.emailMessage).foregroundColor(.red)) {
+                    TextField("New email", text: $profileSettingsViewModel.newEmail)
                         .autocapitalization(.none)
                     SecureField("Current password", text: $profileSettingsViewModel.currentPasswordChangeEmail)
                     Button(action: { FirebaseAuthentication.shared.changeEmail(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordChangeEmail, newEmail: self.profileSettingsViewModel.newEmail)
                     }) {
-                        Text("Change email")
+                        Text("Save")
                     }.disabled(!self.profileSettingsViewModel.isValidEmail)
                 }
                 // 3)
-                Section(footer: Text(profileSettingsViewModel.passwordMessage).foregroundColor(.red)) {
-                    SecureField("Password", text: $profileSettingsViewModel.newPassword)
-                    SecureField("Password again", text: $profileSettingsViewModel.currentPasswordChangePassword)
+                Section(header: Text("Change password").fontWeight(.bold), footer: Text(profileSettingsViewModel.passwordMessage).foregroundColor(.red)) {
+                    SecureField("Old password", text: $profileSettingsViewModel.currentPasswordChangePassword)
+                    SecureField("New password", text: $profileSettingsViewModel.newPassword)
                     Button(action: { FirebaseAuthentication.shared.changePassword(currentEmail: self.self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordChangePassword, newPassword: self.profileSettingsViewModel.newPassword)
                     }) {
-                        Text("Change password")
+                        Text("Save")
                     }.disabled(!self.profileSettingsViewModel.isValidPassword)
                 }
                 // 4)
-                Section(footer: Text(profileSettingsViewModel.deleteAccMessage).foregroundColor(.red)) {
-                    SecureField("Password", text: $profileSettingsViewModel.currentPasswordDeleteAccount)
+                Section(header: Text("Delete account").fontWeight(.bold), footer: Text(profileSettingsViewModel.deleteAccMessage).foregroundColor(.red)) {
+                    SecureField("Current password", text: $profileSettingsViewModel.currentPasswordDeleteAccount)
                     Button(action: {
                         self.firestoreProfile.removeProfileListener()
                         FirebaseAuthentication.shared.deleteAccount(currentEmail: self.firebaseAuthentication.currentUser!.email, currentPassword: self.profileSettingsViewModel.currentPasswordDeleteAccount)
                     }) {
-                        Text("Delete account").foregroundColor(.red)
+                        Text("Delete").foregroundColor(.red)
                     }.disabled(!self.profileSettingsViewModel.isValidDeleteAcc)
                 }
                 // 5)
@@ -63,11 +63,8 @@ struct ProfileSettingsView: View {
                     }
                 }
             }
+        .background(Color("bg-profile"))
         }
         .navigationBarTitle(Text("Settings"))
-        .onAppear {
-            self.profileSettingsViewModel.newUserName = self.firestoreProfile.user.username
-            self.profileSettingsViewModel.newEmail = self.firebaseAuthentication.currentUser != nil ? "\(self.firebaseAuthentication.currentUser!.email)" : ""
-        }
     }
 }

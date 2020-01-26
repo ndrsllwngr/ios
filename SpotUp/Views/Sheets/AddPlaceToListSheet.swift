@@ -24,7 +24,6 @@ struct AddPlaceToListSheet: View {
                     Text("Add to collection").font(.system(size:18)).fontWeight(.bold)
                     Spacer()
                 }
-                .padding(.leading, 15)
                 if (isLoading) {
                     Spacer()
                     ActivityIndicator()
@@ -32,7 +31,7 @@ struct AddPlaceToListSheet: View {
                         .foregroundColor(Color("text-secondary"))
                 } else {
                     if (!self.placeLists.isEmpty) {
-                        List {
+                        ScrollView {
                             ForEach(self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
                                 PlaceListRow(placeList: placeList)
                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
@@ -53,13 +52,13 @@ struct AddPlaceToListSheet: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
         }
         .onAppear {
             self.isLoading = true
             self.placeLists = []
             let dispatchGroup = DispatchGroup()
-            
+            dispatchGroup.enter()
             let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: self.firebaseAuthentication.currentUser!.uid)
             query.getDocuments { querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
@@ -67,6 +66,7 @@ struct AddPlaceToListSheet: View {
                     self.isLoading = false
                     return
                 }
+                dispatchGroup.leave()
                 self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
                     let data = documentSnapshot.data()
                     return dataToPlaceList(data: data)
@@ -84,6 +84,7 @@ struct AddPlaceToListSheet: View {
                             if self.placeLists.count > i {
                                 self.placeLists[i].owner.username = username
                             }
+                            dispatchGroup.leave()
                         })
                     }
                 }

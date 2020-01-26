@@ -253,7 +253,7 @@ func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
     return URL(string: "https://www.google.com/maps/search/?api=1&query=\(place.coordinate.latitude),\(place.coordinate.longitude)&query_place_id=\(place.placeID!)")!
 }
 
-func sortPlaces(places: [ExplorePlace], sortByDistance: Bool) ->  [ExplorePlace]{
+func sortExplorePlaces(places: [ExplorePlace], sortByDistance: Bool) ->  [ExplorePlace]{
     
     if sortByDistance {
         return places.sorted{(place1, place2) in

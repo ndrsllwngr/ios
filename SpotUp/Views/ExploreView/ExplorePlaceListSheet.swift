@@ -20,15 +20,16 @@ struct ExplorePlaceListSheet: View {
                     Text("Explore collection").font(.system(size:18)).fontWeight(.bold)
                     Spacer()
                 }
-                .padding(.leading, 15)
                 if (isLoading) {
                     Spacer()
                     ActivityIndicator()
                         .frame(width: 50, height: 50)
                         .foregroundColor(Color("text-secondary"))
+                        .animation(.easeInOut)
+                        .transition(.asymmetric(insertion: .scale, removal: .scale))
                 } else {
                     if (!self.placeLists.isEmpty) {
-                        List {
+                        ScrollView {
                             ForEach(self.placeLists){ placeList in
                                 PlaceListRow(placeList: placeList)
                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
@@ -49,13 +50,13 @@ struct ExplorePlaceListSheet: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 30)
         }
         .onAppear {
             self.isLoading = true
             self.placeLists = []
             let dispatchGroup = DispatchGroup()
-            
+            dispatchGroup.enter()
             let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: self.firebaseAuthentication.currentUser!.uid)
             query.getDocuments { querySnapshot, error in
                 guard let querySnapshot = querySnapshot else {
@@ -63,6 +64,7 @@ struct ExplorePlaceListSheet: View {
                     self.isLoading = false
                     return
                 }
+                dispatchGroup.leave()
                 self.placeLists = querySnapshot.documents.map { (documentSnapshot) in
                     let data = documentSnapshot.data()
                     return dataToPlaceList(data: data)
@@ -79,6 +81,7 @@ struct ExplorePlaceListSheet: View {
                             if self.placeLists.count > i {
                                 self.placeLists[i].owner.username = username
                             }
+                            dispatchGroup.leave()
                         })
                     }
                 }

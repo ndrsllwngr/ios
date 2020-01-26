@@ -100,35 +100,72 @@ struct InnerProfileView: View {
     @Binding var placeListIdToNavigateTo: String?
     @Binding var goToPlaceList: Int?
     
+    @State var sortByCreationDate: Bool = true
+    
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
-
+            
             VStack {
                 if isMyProfile {
-                    
                     List {
+                        HStack {
+                            Text("My Collections")
+                                .font(.system(size: 16, weight:.semibold))
+                            Spacer()
+                            SortButton(sortByDate: self.$sortByCreationDate)
+                        }
+                        .listRowBackground(Color(bgColor))
+                        
                         CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                             .listRowBackground(Color(bgColor))
-                            .padding(.top, 5)
-                        ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                            PlaceListRow(placeList: placeList)
-                                .onTapGesture {
-                                    self.placeListIdToNavigateTo = placeList.id
-                                    self.goToPlaceList = 1
+                        
+                        if(!firestoreProfile.placeLists.isEmpty) {
+                            ForEach(sortPlaceLists(placeLists: firestoreProfile.placeLists, sortByCreationDate: self.sortByCreationDate)) { placeList in
+                                PlaceListRow(placeList: placeList)
+                                    .onTapGesture {
+                                        self.placeListIdToNavigateTo = placeList.id
+                                        self.goToPlaceList = 1
+                                }
+                                
+                            }.listRowBackground(Color(bgColor))
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("You have no collections")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
+                                
                             }
-                            
-                        }.listRowBackground(Color(bgColor))
+                            .listRowBackground(Color(bgColor))
+                        }
                     }
                 } else {
                     List {
-                        ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
-                            PlaceListRow(placeList: placeList)
-                                .onTapGesture {
-                                    self.placeListIdToNavigateTo = placeList.id
-                                    self.goToPlaceList = 1
+                        HStack {
+                            Text("Public collections")
+                                .font(.system(size: 16, weight:.semibold))
+                            Spacer()
+                            SortButton(sortByDate: self.$sortByCreationDate)
+                        }
+                        .listRowBackground(Color(bgColor))
+                        if (!firestoreProfile.placeLists.filter{$0.isPublic}.isEmpty) {
+                            ForEach(sortPlaceLists(placeLists: firestoreProfile.placeLists.filter{$0.isPublic}, sortByCreationDate: self.sortByCreationDate)) { placeList in
+                                PlaceListRow(placeList: placeList)
+                                    .onTapGesture {
+                                        self.placeListIdToNavigateTo = placeList.id
+                                        self.goToPlaceList = 1
+                                }
+                            }.listRowBackground(Color(bgColor))
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("User has no public collections")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
                             }
-                        }.listRowBackground(Color(bgColor))
+                            .listRowBackground(Color(bgColor))
+                        }
                     }
                 }
             }.background(Color(bgColor))
@@ -158,7 +195,8 @@ struct ProfileInfoView: View {
             ZStack{
                 VStack {
                     FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
-                        .clipShape(Circle()).padding(.top)
+                        .clipShape(Circle())
+                        .padding(.top)
                 }.frame(width: 110, height: 100)
                 if (self.isMyProfile) {
                     VStack {
@@ -180,6 +218,7 @@ struct ProfileInfoView: View {
                                 .frame(width: 32, height: 32)
                                 .background(Color("brand-color-primary"))
                                 .mask(Circle())
+                                .overlay(Circle().stroke(Color("bg-primary"), lineWidth: 2))
                             }
                             
                         }
@@ -287,7 +326,7 @@ struct ProfileSettingsButton: View {
         NavigationLink(destination: ProfileSettingsView().environmentObject(self.firestoreProfile)) {
             HStack {
                 Spacer()
-                Image(systemName: "gear")
+                Image(systemName: "slider.horizontal.3")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
