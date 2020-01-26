@@ -24,6 +24,10 @@ class LocationManager: NSObject, ObservableObject {
         self.locationManager.requestWhenInUseAuthorization()
     }
     
+    func requestAuth(){
+        self.locationManager.requestWhenInUseAuthorization()
+    }
+    
     func startUpdatingLocation() {
         self.locationManager.pausesLocationUpdatesAutomatically = true
         if CLLocationManager.significantLocationChangeMonitoringAvailable() {
