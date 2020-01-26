@@ -25,7 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         let navigationBar = UINavigationBar.appearance()
-        navigationBar.barTintColor = UIColor.white
+        navigationBar.barTintColor = UIColor.white // ToDo nil when app ends
         navigationBar.setBackgroundImage(UIImage(), for:.default)
         navigationBar.shadowImage = UIImage()
         

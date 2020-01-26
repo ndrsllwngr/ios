@@ -20,7 +20,7 @@ struct ContentView: View {
         Group {
             if firebaseAuthentication.startUpInProgress {
                 SplashScreen()
-                    .animation(.easeIn)
+                    .animation(.easeInOut)
                     .transition(.asymmetric(insertion: .scale, removal: .scale))
             } else {
                 if !self.launchedBefore {
