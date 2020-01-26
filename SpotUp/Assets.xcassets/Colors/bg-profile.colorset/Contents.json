@@ -18,10 +18,10 @@
       "color" : {
         "color-space" : "srgb",
         "components" : {
-          "red" : "0.945",
+          "red" : "0xF0",
           "alpha" : "1.000",
-          "blue" : "0.957",
-          "green" : "0.941"
+          "blue" : "0xF4",
+          "green" : "0xEF"
         }
       }
     },
