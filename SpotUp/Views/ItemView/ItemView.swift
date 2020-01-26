@@ -22,10 +22,14 @@ struct ItemView: View {
     
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             if (place == nil) {
                 Text("")
             } else {
+                // Avoids that scroll view scrolls under navbar
+                Rectangle()
+                    .frame(height: 1)
+                .foregroundColor(Color("bg-primary"))
                 ScrollView{
                     VStack(spacing: 0){
                         //                        ZStack{

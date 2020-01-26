@@ -8,7 +8,11 @@ struct ProfileSettingsView: View {
     @ObservedObject private var profileSettingsViewModel = ProfileSettingsViewModel()
     
     var body: some View {
-        VStack (alignment: .leading) {
+        VStack (alignment: .leading, spacing: 0) {
+            // Avoids that form view scrolls under navbar
+            Rectangle()
+                .frame(height: 1)
+            .foregroundColor(Color("bg-primary"))
             Form {
                 // 1)
                 Section(footer: Text(profileSettingsViewModel.usernameMessage).foregroundColor(.red)) {
