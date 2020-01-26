@@ -49,7 +49,6 @@ class FirestorePlaceList: ObservableObject {
                                 }
                                 if let place = place {
                                     self.places.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeIDWithTimestamp.addedAt))
-                                    self.places.sort{ $0.addedAt.dateValue() < $1.addedAt.dateValue()}
                                 }
                             }
                     }
@@ -63,5 +62,20 @@ class FirestorePlaceList: ObservableObject {
         self.ownerListener?.remove()
         self.places = []
         print("Successfully removed placeListListener")
+    }
+}
+
+func sortPlaces(places: [GMSPlaceWithTimestamp], sortByCreationDate: Bool) -> [GMSPlaceWithTimestamp] {
+    if sortByCreationDate {
+        // New Placelists always first!
+        return places.sorted{$0.addedAt.dateValue() > $1.addedAt.dateValue()}
+    } else {
+        return places.sorted{(place1, place2) in
+            if let name1 = place1.gmsPlace.name, let name2 = place2.gmsPlace.name {
+                return name1 > name2
+            } else {
+                return false
+            }
+        }
     }
 }

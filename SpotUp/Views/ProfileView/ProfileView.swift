@@ -100,6 +100,8 @@ struct InnerProfileView: View {
     @Binding var placeListIdToNavigateTo: String?
     @Binding var goToPlaceList: Int?
     
+    @State var sortByCreationDate: Bool = true
+
     var body: some View {
         VStack {
             ProfileInfoView(profileUserId: profileUserId, isMyProfile: isMyProfile, showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
@@ -107,11 +109,19 @@ struct InnerProfileView: View {
             VStack {
                 if isMyProfile {
                     List {
+                        HStack {
+                            Text("My Collections")
+                            .font(.system(size: 16, weight:.bold))
+                            Spacer()
+                            SortButton(sortByDate: self.$sortByCreationDate)
+                        }
+                        .listRowBackground(Color(bgColor))
+                        
                         CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
                             .listRowBackground(Color(bgColor))
-                            .padding(.top, 5)
+                        
                         if(!firestoreProfile.placeLists.isEmpty) {
-                            ForEach(firestoreProfile.placeLists.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                            ForEach(sortPlaceLists(placeLists: firestoreProfile.placeLists, sortByCreationDate: self.sortByCreationDate)) { placeList in
                                 PlaceListRow(placeList: placeList)
                                     .onTapGesture {
                                         self.placeListIdToNavigateTo = placeList.id
@@ -132,8 +142,15 @@ struct InnerProfileView: View {
                     }
                 } else {
                     List {
+                        HStack {
+                            Text("Public collections")
+                            .font(.system(size: 16, weight:.bold))
+                            Spacer()
+                            SortButton(sortByDate: self.$sortByCreationDate)
+                        }
+                        .listRowBackground(Color(bgColor))
                         if (!firestoreProfile.placeLists.filter{$0.isPublic}.isEmpty) {
-                            ForEach(firestoreProfile.placeLists.filter{$0.isPublic}.sorted{$0.createdAt.dateValue() > $1.createdAt.dateValue()}) { placeList in
+                            ForEach(sortPlaceLists(placeLists: firestoreProfile.placeLists.filter{$0.isPublic}, sortByCreationDate: self.sortByCreationDate)) { placeList in
                                 PlaceListRow(placeList: placeList)
                                     .onTapGesture {
                                         self.placeListIdToNavigateTo = placeList.id
