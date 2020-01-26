@@ -100,6 +100,7 @@ struct InnerPlaceListView: View {
     @Binding var tabSelection: Int
     
     @State private var selection = 0
+    @State var sortByCreationDate: Bool = true
     
     var body: some View {
         VStack (alignment: .leading){
@@ -130,8 +131,14 @@ struct InnerPlaceListView: View {
             
             if selection == 0 {
                 List {
+                    HStack {
+                         Text("Places")
+                         .font(.system(size: 16, weight:.bold))
+                         Spacer()
+                         SortButton(sortByDate: self.$sortByCreationDate)
+                     }
                     if (!self.firestorePlaceList.places.isEmpty) {
-                        ForEach(self.firestorePlaceList.places, id: \.self) { place in
+                        ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
                             PlaceRow(place: place,
                                      placeListId: self.placeListId,
                                      showSheet: self.$showSheet,
