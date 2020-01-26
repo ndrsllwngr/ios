@@ -104,14 +104,14 @@ struct InnerItemView: View {
                 VStack{
                     HStack{
                         Text(type)
-                            .padding(.leading, 20)
+                            .padding(.leading, 15)
                         Spacer()
                         HStack{
                             ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "€"), id: \.self) { sign in
                                 Text(sign)
                             }
                         }
-                        .padding(.trailing, 40)
+                        .padding(.trailing, 15)
                     }
                         
                     .frame(width: UIScreen.main.bounds.width, height: 80)
@@ -222,7 +222,7 @@ struct InnerItemView: View {
                     }
                 }
             }
-            .frame(width:UIScreen.main.bounds.width, height:300)
+            .frame(width:UIScreen.main.bounds.width)
             .padding()
         }
         .sheet(isPresented: $showSheet) {
@@ -269,7 +269,7 @@ struct ButtonOnTopView: View{
                     .cancel()
                 ])
             }
-        }.padding(.trailing, 40)
+        }.padding(.trailing, 63.5)
         
     }
 }
