@@ -33,11 +33,3 @@ struct ItemMapView: UIViewRepresentable {
     
     
 }
-
-//
-//struct ItemMapView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ItemMapView(coordinate: placeData[0].placeCoordinate)
-//    }
-//}
-
