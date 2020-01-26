@@ -37,7 +37,7 @@ struct OnboardingView: View {
                     }
                 }
                 .padding(.top, 80)
-//                .background(Color.blue)
+                //                .background(Color.blue)
                 Group {
                     VStack(spacing: 0) {
                         Text(titles[currentPageIndex]).font(.title).multilineTextAlignment(.center)
@@ -45,7 +45,7 @@ struct OnboardingView: View {
                         Spacer()
                     }.padding(.horizontal)
                 }
-//                .background(Color.red)
+                //                .background(Color.red)
                 Spacer()
             }
             HStack {
@@ -89,7 +89,9 @@ struct OnboardingView: View {
                         .mask(Rectangle().cornerRadius(8))
                     }
                 }
-            }.padding(.horizontal)
+            }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
     }
 }
