@@ -13,7 +13,7 @@ struct SplashScreen: View {
             Spacer()
             HStack {
                 Spacer()
-                Image(uiImage: UIImage(named: "logo-icon")!)
+                Image(uiImage: UIImage(named: "logo-icon-100")!)
                 .renderingMode(.original)
                 .resizable()
                 .scaledToFit()
