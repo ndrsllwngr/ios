@@ -5,7 +5,8 @@ struct Subview: View {
     var imageString: String
     
     var body: some View {
-        Group{
+        VStack(alignment: .center, spacing: 0){
+            Spacer()
             Image(uiImage: UIImage(named: imageString)!)
                 .renderingMode(.original)
                 .resizable()

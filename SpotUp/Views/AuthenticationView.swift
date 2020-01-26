@@ -26,9 +26,8 @@ struct AuthenticationView: View {
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 70.0, alignment: .center)
-                        .padding(.trailing, 15)
-                    Text("SpotUp").font(.system(size:32)).fontWeight(.bold)
+                        .frame(height: 72.0, alignment: .center)
+                    Text("SpotUp").font(.system(size:32)).fontWeight(.bold).padding(.leading, 15)
                     Spacer()
                 }
                 .offset(y: -70)

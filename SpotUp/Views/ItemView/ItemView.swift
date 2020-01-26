@@ -210,10 +210,10 @@ struct InnerItemView: View {
                 
                 VStack(spacing:10){
                     if openingHoursText.count == 0 {
-                        Image("placeholder-openingHours")
+                        Image("placeholder-openingHours-200")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 200, height: 200)
+                            .frame(height: 200, alignment: .center)
                         Text("Opening hours could not be found.")
                             .padding()
                     }

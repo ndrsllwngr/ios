@@ -113,11 +113,14 @@ struct CurrentTargetRow: View {
                     .padding([.leading], 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
                     HStack(spacing: 0.0) {
-                        Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50.0, height: 50.0, alignment: .center)
+                        VStack(alignment: .center, spacing: 0){
+                        Image(uiImage: UIImage(named: "explore-empty-target-bw-50")!)
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 50, alignment: .center)
+                        }
+                        .frame(width: 50, height: 50, alignment: .center)
                         Spacer()
                         Text("No target selected")
                             .foregroundColor(Color("text-secondary"))
@@ -126,11 +129,14 @@ struct CurrentTargetRow: View {
                     .padding([.horizontal], 10)
                 } else {
                     HStack(spacing: 0.0) {
-                        Image(uiImage: UIImage(named: "explore-empty-guidebook-bw")!)
-                            .renderingMode(.original)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50.0, height: 50.0, alignment: .center)
+                        VStack(alignment: .center, spacing: 0){
+                        Image(uiImage: UIImage(named: "explore-empty-guidebook-bw-50")!)
+                                .renderingMode(.original)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 50, alignment: .center)
+                        }
+                        .frame(width: 50, height: 50, alignment: .center)
                         Spacer()
                         Text("All places were visited")
                             .foregroundColor(Color("text-secondary"))

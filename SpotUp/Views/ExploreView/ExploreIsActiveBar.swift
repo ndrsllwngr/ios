@@ -21,7 +21,7 @@ struct ExploreIsActiveBar: View {
                     }
                     Spacer()
                 } else {
-                    Image(uiImage: UIImage(named: "explore-empty-target-bw")!)
+                    Image(uiImage: UIImage(named: "explore-empty-target-bw-40")!)
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
