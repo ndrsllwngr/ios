@@ -1,11 +1,3 @@
-//
-//  ProfileRows.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 21.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 
 struct CreateNewPlaceListRow: View {
@@ -28,9 +20,7 @@ struct CreateNewPlaceListRow: View {
             .frame(width: geo.size.width, alignment: .leading)
             .background(Color("elevation-1"))
             .mask(Rectangle().cornerRadius(15))
-//            .shadow(radius: 5, y: 4)
             .padding(.vertical)
-//            .shadow(color: Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.24), radius: 24, x: 0, y: 12)
         }
         .frame(height: 60)
         .contentShape(Rectangle())
@@ -69,8 +59,6 @@ struct PlaceListRow: View {
                 .frame(width: geo.size.width, height: 60, alignment: .leading)
                 .background(Color("elevation-1"))
                 .mask(Rectangle().cornerRadius(15))
-//                .shadow(radius: 5, y: 4)
-//                    .shadow(color: Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.14), radius: 5, x: 0, y: 8)
                 
                 VStack {
                     Spacer()

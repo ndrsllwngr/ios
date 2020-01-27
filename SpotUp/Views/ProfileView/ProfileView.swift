@@ -1,11 +1,3 @@
-//
-//  ProfileView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import FirebaseFirestore
 
@@ -82,12 +74,6 @@ struct ProfileView: View {
         }
     }
 }
-
-//struct ProfileView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ProfileView()
-//    }
-//}
 
 struct InnerProfileView: View {
     var profileUserId: String

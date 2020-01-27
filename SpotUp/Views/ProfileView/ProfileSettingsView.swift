@@ -3,7 +3,6 @@ import FirebaseFirestore
 import Combine
 
 struct ProfileSettingsView: View {
-    
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject private var profileSettingsViewModel = ProfileSettingsViewModel()
