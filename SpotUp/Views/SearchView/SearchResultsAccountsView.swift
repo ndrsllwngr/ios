@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct SearchResultsAccountsView: View {
-    
-    @Binding var tabSelection: Int
     @EnvironmentObject var searchViewModel: SearchViewModel
-    
+    // PROPS
+    @Binding var tabSelection: Int
+    // LOCAL
     @State var profileIdToNavigateTo: String? = nil
     @State var goToProfile: Int? = nil
     
@@ -24,10 +24,11 @@ struct SearchResultsAccountsView: View {
                                 .fontWeight(.bold)
                             ForEach(searchViewModel.recentSearchFirebaseAccounts) { (user: User) in
                                 SingleRowAccount(user: user,
-                                                 showRecent: true,
                                                  tabSelection: self.$tabSelection,
                                                  profileIdToNavigateTo: self.$profileIdToNavigateTo,
-                                                 goToProfile: self.$goToProfile).environmentObject(self.searchViewModel)
+                                                 goToProfile: self.$goToProfile,
+                                                 showRecent: true)
+                                    .environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -40,7 +41,8 @@ struct SearchResultsAccountsView: View {
                             SingleRowAccount(user: user,
                                              tabSelection: self.$tabSelection,
                                              profileIdToNavigateTo: self.$profileIdToNavigateTo,
-                                             goToProfile: self.$goToProfile).environmentObject(self.searchViewModel)
+                                             goToProfile: self.$goToProfile)
+                                .environmentObject(self.searchViewModel)
                         }
                         Spacer()
                     }
@@ -51,14 +53,13 @@ struct SearchResultsAccountsView: View {
 }
 
 struct SingleRowAccount: View {
-    
     @EnvironmentObject var searchViewModel: SearchViewModel
+    // PROPS
     var user: User
-    @State var showRecent: Bool = false
-    
     @Binding var tabSelection: Int
     @Binding var profileIdToNavigateTo: String?
     @Binding var goToProfile: Int?
+    @State var showRecent: Bool = false
     
     var body: some View {
         HStack {
@@ -67,7 +68,10 @@ struct SingleRowAccount: View {
                     .clipShape(Circle())
                     .padding(.trailing, 5)
                 VStack(alignment: .leading){
-                    Text(user.username).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                    Text(user.username)
+                        .font(.system(size:18))
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
                 }
                 Spacer()
             }
