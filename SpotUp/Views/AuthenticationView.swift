@@ -1,25 +1,17 @@
-//
-//  LoginView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import UIKit
 
 struct AuthenticationView: View {
-    
+    // LOCAL
     @ObservedObject private var loginViewModel = LoginViewModel()
     @ObservedObject private var signUpViewModel = SignUpViewModel()
-    
     @State var loginErrorText: String? = nil
     @State var selection: String = "login"
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                // LOGO
                 HStack(alignment: .center) {
                     Spacer()
                     Image(uiImage: UIImage(named: "logo-icon-70")!)
@@ -27,7 +19,10 @@ struct AuthenticationView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(height: 72.0, alignment: .center)
-                    Text("SpotUp").font(.system(size:32)).fontWeight(.bold).padding(.leading, 15)
+                    Text("SpotUp")
+                        .font(.system(size:32))
+                        .fontWeight(.bold)
+                        .padding(.leading, 15)
                     Spacer()
                 }
                 .offset(y: -70)
@@ -37,7 +32,10 @@ struct AuthenticationView: View {
                 HStack(alignment: .center, spacing: 0){
                     HStack(alignment: .center, spacing: 0){
                         Spacer()
-                        Text("Sign in").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
+                        Text("Sign in")
+                            .font(.system(size:20))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                         Spacer()
                     }
                     .frame(minHeight: 65)
@@ -48,7 +46,10 @@ struct AuthenticationView: View {
                     }
                     HStack(alignment: .center, spacing: 0){
                         Spacer()
-                        Text("Sign up").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
+                        Text("Sign up")
+                            .font(.system(size:20))
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
                         Spacer()
                     }
                     .frame(minHeight: 65)
@@ -68,18 +69,18 @@ struct AuthenticationView: View {
                         Spacer()
                     }
                     .frame(minHeight: 0, maxHeight: .infinity)
-                        //                .background(Color.red)
-                        //                        .background(Color(selection == "login" ? "brand-color-primary-soft" : "brand-color-secondary"))
-                        .background(Color("brand-color-primary"))
-                        .edgesIgnoringSafeArea(.all)
+                    .background(Color("brand-color-primary"))
+                    .edgesIgnoringSafeArea(.all)
                     if self.selection == "login" {
-                        
-                        
                         VStack(spacing: 0) {
                             // EMAIL
                             Section(footer: HStack {
                                 if(self.loginViewModel.emailMessage != "") {
-                                    Text(loginViewModel.emailMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Text(loginViewModel.emailMessage)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top, 5)
+                                        .padding(.leading, 6)
                                     Spacer()
                                 }
                             }) {
@@ -96,11 +97,14 @@ struct AuthenticationView: View {
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
-                            
                             // PASSWORD
                             Section(footer: HStack {
                                 if(self.loginViewModel.passwordMessage != "") {
-                                    Text(loginViewModel.passwordMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Text(loginViewModel.passwordMessage)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top, 5)
+                                        .padding(.leading, 6)
                                 }
                                 Spacer()
                             }) {
@@ -119,7 +123,11 @@ struct AuthenticationView: View {
                                 Spacer()
                                 Section(footer: HStack {
                                     if (self.loginErrorText != nil) {
-                                        Text("Wrong credentials").foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                        Text("Wrong credentials")
+                                            .foregroundColor(.white)
+                                            .multilineTextAlignment(.leading)
+                                            .padding(.top, 5)
+                                            .padding(.leading, 6)
                                         Spacer()
                                     }
                                 }) {
@@ -142,13 +150,15 @@ struct AuthenticationView: View {
                         }.padding(.horizontal)
                     }
                     if self.selection == "signup" {
-                        
                         VStack(spacing: 0) {
-                            //                            Spacer()
                             // USERNAME
                             Section(footer: HStack {
                                 if(self.signUpViewModel.usernameMessage != "") {
-                                    Text(signUpViewModel.usernameMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Text(signUpViewModel.usernameMessage)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top, 5)
+                                        .padding(.leading, 6)
                                 }
                             }) {
                                 HStack {
@@ -161,11 +171,14 @@ struct AuthenticationView: View {
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
-                            
                             // EMAIL
                             Section(footer: HStack {
                                 if(self.signUpViewModel.emailMessage != "") {
-                                    Text(signUpViewModel.emailMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Text(signUpViewModel.emailMessage)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top, 5)
+                                        .padding(.leading, 6)
                                     Spacer()
                                 }
                             }) {
@@ -181,11 +194,14 @@ struct AuthenticationView: View {
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
-                            
                             // PASSWORD
                             Section(footer: HStack {
                                 if(self.signUpViewModel.passwordMessage != "") {
-                                    Text(signUpViewModel.passwordMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Text(signUpViewModel.passwordMessage)
+                                        .foregroundColor(.white)
+                                        .multilineTextAlignment(.leading)
+                                        .padding(.top, 5)
+                                        .padding(.leading, 6)
                                     Spacer()
                                 }
                             }) {
@@ -210,7 +226,6 @@ struct AuthenticationView: View {
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
-                            
                             // SIGN UP BUTTON
                             HStack{
                                 Spacer()
@@ -266,13 +281,14 @@ struct AuthenticationView: View {
 }
 
 struct LoginView_Previews: PreviewProvider {
+    
     static var previews: some View {
         AuthenticationView()
     }
 }
 
 struct RoundedCorner: Shape {
-    
+    // PROPS
     var radius: CGFloat = .infinity
     var corners: UIRectCorner = .allCorners
     
@@ -283,6 +299,7 @@ struct RoundedCorner: Shape {
 }
 
 extension View {
+    
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape( RoundedCorner(radius: radius, corners: corners) )
     }

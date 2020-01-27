@@ -1,17 +1,10 @@
-//
-//  PermissionsView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import CoreLocation
 
 struct PermissionView: View {
-    
+    // PROPS
     @Binding var permissionRequestedBefore: Bool
+    // LOCAL
     @State var locationManager: LocationManager?
     
     var body: some View {
@@ -36,8 +29,17 @@ struct PermissionView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 100, height: 100, alignment: .center)
-                        Text("Don't overthink").font(.title).fontWeight(.bold).foregroundColor(Color.white).multilineTextAlignment(.center).padding(.horizontal)
-                        Text("Get guided to all your favourite spots\n near your location.").font(.body).foregroundColor(Color.white).multilineTextAlignment(.center).padding(.horizontal)
+                        Text("Don't overthink")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                        Text("Get guided to all your favourite spots\n near your location.")
+                            .font(.body)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
                         Group {
                             Button(action: {
                                 self.locationManager = LocationManager()
@@ -85,7 +87,9 @@ struct PermissionView: View {
 }
 
 struct PermissionView_Previews: PreviewProvider {
+    // LOCAL
     @State static var permissionRequestedBefore = false
+    
     static var previews: some View {
         PermissionView(permissionRequestedBefore: $permissionRequestedBefore)
     }
