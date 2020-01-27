@@ -19,12 +19,12 @@ let fields: GMSPlaceField = GMSPlaceField(rawValue:
     )!
 
 let fieldsSimple: GMSPlaceField = GMSPlaceField(rawValue:
-        UInt(GMSPlaceField.name.rawValue) |
-            UInt(GMSPlaceField.placeID.rawValue) |
-            UInt(GMSPlaceField.coordinate.rawValue) |
-            UInt(GMSPlaceField.formattedAddress.rawValue) |
-            UInt(GMSPlaceField.photos.rawValue)
-        )!
+    UInt(GMSPlaceField.name.rawValue) |
+        UInt(GMSPlaceField.placeID.rawValue) |
+        UInt(GMSPlaceField.coordinate.rawValue) |
+        UInt(GMSPlaceField.formattedAddress.rawValue) |
+        UInt(GMSPlaceField.photos.rawValue)
+    )!
 
 
 func getPlace (placeID: String, handler: @escaping GMSPlaceResultCallback) {

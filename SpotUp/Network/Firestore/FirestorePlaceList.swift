@@ -3,7 +3,6 @@ import FirebaseFirestore
 import GooglePlaces
 
 class FirestorePlaceList: ObservableObject {
-    
     var placeListListener: ListenerRegistration? = nil
     var ownerListener: ListenerRegistration? = nil
     
@@ -56,7 +55,6 @@ class FirestorePlaceList: ObservableObject {
         }
     }
     
-    // ToDo not needed?
     func removePlaceListListener() {
         self.placeListListener?.remove()
         self.ownerListener?.remove()

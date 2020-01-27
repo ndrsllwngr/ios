@@ -188,7 +188,7 @@ class FirestoreConnection: ObservableObject {
             if let ownerId = ownerId, !isPublic {
                 data["follower_ids"] = [ownerId]
             }
-
+            
         }
         if let isCollaborative = isCollaborative {
             data["is_collaborative"] = isCollaborative
