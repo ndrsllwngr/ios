@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 struct TabBarView: View {
     // LOCAL
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
