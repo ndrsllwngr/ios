@@ -49,7 +49,10 @@ struct ProfileView: View {
                              placeListIdToNavigateTo: self.$placeListIdToNavigateTo,
                              goToPlaceList: self.$goToPlaceList).environmentObject(firestoreProfile)
         }
-        .sheet(isPresented: $showSheet) {
+        .sheet(isPresented: $showSheet, onDismiss: {
+            self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
+            self.firestoreProfile.addProfileListener(profileUserId: self.profileUserId)
+        }) {
             if self.sheetSelection == "create_placelist"{
                 CreatePlacelistSheet(user: self.firestoreProfile.user, showSheet: self.$showSheet)
             } else if self.sheetSelection == "follower" {
@@ -117,7 +120,7 @@ struct InnerProfileView: View {
                         }
                         .listRowBackground(Color(bgColor))
                         
-                        CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection)
+                        CreateNewPlaceListRow(showSheet: self.$showSheet, sheetSelection: self.$sheetSelection).environmentObject(self.firestoreProfile)
                             .listRowBackground(Color(bgColor))
                         
                         if(!firestoreProfile.placeLists.isEmpty) {
@@ -205,6 +208,7 @@ struct ProfileInfoView: View {
                             Spacer()
                             
                             Button(action: {
+                                self.profile.removeProfileListener()
                                 self.showSheet.toggle()
                                 self.sheetSelection = "image_picker"
                             }) {
@@ -239,6 +243,7 @@ struct ProfileInfoView: View {
                     }
                     .frame(width: metrics.size.width * 0.3)
                     Button(action: {
+                        self.profile.removeProfileListener()
                         self.sheetSelection = "follower"
                         self.showSheet.toggle()
                     }) {
@@ -252,6 +257,7 @@ struct ProfileInfoView: View {
                     }
                     .frame(width: metrics.size.width * 0.3)
                     Button(action: {
+                        self.profile.removeProfileListener()
                         self.sheetSelection = "following"
                         self.showSheet.toggle()
                     }) {
