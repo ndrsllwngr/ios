@@ -250,8 +250,10 @@ struct AuthenticationView: View {
                         }.padding(.horizontal)
                     }
                 }
-            }.keyboardSensible($offsetValue)
-        }.navigationBarTitle(Text(""), displayMode: .inline).navigationBarHidden(true)
+            }
+                .keyboardSensible($offsetValue) // Scroll input fields to visible area while keyboard is opened
+        }
+        .navigationBarTitle(Text(""), displayMode: .inline).navigationBarHidden(true)
     }
     
     func logIn() {
