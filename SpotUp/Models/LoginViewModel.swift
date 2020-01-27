@@ -122,7 +122,6 @@ class LoginViewModel: ObservableObject {
                 switch emailCheck {
                 case .empty:
                     return ""
-                //                    return "Email must not be empty"
                 case .notValid:
                     return "Email must be a valid email address"
                 default:
@@ -138,7 +137,6 @@ class LoginViewModel: ObservableObject {
                 switch passwordCheck {
                 case .empty:
                     return ""
-                //                    return "Password must not be empty"
                 case .notLongEnough:
                     return "Password must be at least 6 characters long"
                 default:
