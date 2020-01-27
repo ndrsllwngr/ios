@@ -16,6 +16,8 @@ struct AuthenticationView: View {
     
     @State var loginErrorText: String? = nil
     @State var selection: String = "login"
+    @State var didTapSignIn: Bool = true
+    @State var didTapSignUp: Bool = false
     
     var body: some View {
         NavigationView {
@@ -41,10 +43,12 @@ struct AuthenticationView: View {
                         Spacer()
                     }
                     .frame(minHeight: 65)
-                    .background(Color( "brand-color-primary-soft"))
+                    .background(didTapSignIn ? Color("brand-color-primary-soft") : Color("brand-color-secondary"))
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "login"
+                        self.didTapSignIn = true
+                        self.didTapSignUp = false
                     }
                     HStack(alignment: .center, spacing: 0){
                         Spacer()
@@ -52,10 +56,13 @@ struct AuthenticationView: View {
                         Spacer()
                     }
                     .frame(minHeight: 65)
-                    .background(Color("brand-color-secondary"))
+                    .background(didTapSignUp ? Color("brand-color-primary-soft") : Color("brand-color-secondary"))
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "signup"
+                        self.didTapSignUp = true
+                        self.didTapSignIn = false
+                        print("tapped")
                     }
                 }
                 .edgesIgnoringSafeArea(.horizontal)
@@ -69,11 +76,14 @@ struct AuthenticationView: View {
                     }
                     .frame(minHeight: 0, maxHeight: .infinity)
                         //                .background(Color.red)
-                        .background(Color(selection == "login" ? "brand-color-primary-soft" : "brand-color-secondary"))
-                        .edgesIgnoringSafeArea(.all)
+//                        .background(Color(selection == "login" ? "brand-color-primary-soft" : "brand-color-secondary"))
+                    .background(Color("brand-color-primary-soft"))
+                    .edgesIgnoringSafeArea(.all)
                     if self.selection == "login" {
+                       
+                        
                         VStack(spacing: 0) {
-                            
+                             Spacer()
                             // EMAIL
                             Section(footer: VStack {
                                 if(self.loginViewModel.emailMessage != "") {
@@ -112,23 +122,33 @@ struct AuthenticationView: View {
                             }
                             
                             // LOGIN BUTTON
+                           
                             Section(footer: VStack {
                                 if (self.loginErrorText != nil) {
                                     Text("Wrong credentials").foregroundColor(.red)
                                 }
                             }) {
+                                 Spacer()
+
                                 Button(action: { self.logIn() }) {
                                     HStack {
                                         Spacer()
-                                        Text("Login").foregroundColor(.primary)
-                                        Spacer()
+                                        Image(systemName: "arrow.right.circle")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width:45, height:45)
+                                        .font(.headline)
+                                        .foregroundColor(Color("elevation-1"))
+
+//                                        Text("Login").foregroundColor(Color("elevation-1"))
+//                                            .fontWeight(.bold)
+//                                        .padding()
+//                                        .overlay(
+//                                        RoundedRectangle(cornerRadius: 30)
+//                                        .stroke(Color("elevation-1"), lineWidth: 5))
                                     }
                                 }
-                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10.0)
-                                .padding(.top)
+                                
                                 .disabled(!self.loginViewModel.isValid)
                             }
                             
@@ -136,8 +156,9 @@ struct AuthenticationView: View {
                         }.padding(.horizontal)
                     }
                     if self.selection == "signup" {
+                       
                         VStack(spacing: 0) {
-                            
+                             Spacer()
                             // USERNAME
                             Section(footer: VStack {
                                 if(self.signUpViewModel.usernameMessage != "") {
@@ -149,7 +170,7 @@ struct AuthenticationView: View {
                                         .autocapitalization(.none)
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.primary)
                                 .background(Color(.secondarySystemBackground))
                                 .cornerRadius(10.0)
                                 .padding(.top)
@@ -168,7 +189,7 @@ struct AuthenticationView: View {
                                         .autocapitalization(.none)
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.primary)
                                 .background(Color(.secondarySystemBackground))
                                 .cornerRadius(10.0)
                                 .padding(.top)
@@ -186,7 +207,7 @@ struct AuthenticationView: View {
                                         .autocapitalization(.none)
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.primary)
                                 .background(Color(.secondarySystemBackground))
                                 .cornerRadius(10.0)
                                 .padding(.top)
@@ -196,27 +217,36 @@ struct AuthenticationView: View {
                                         .autocapitalization(.none)
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.primary)
                                 .background(Color(.secondarySystemBackground))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
                             
                             // SIGN UP BUTTON
+                            Spacer()
                             Section {
                                 Button(action: { self.signUp() }) {
                                     HStack {
                                         Spacer()
-                                        Text("Sign up").foregroundColor(.primary)
-                                        Spacer()
+                                        Text("Create Account").foregroundColor(Color("elevation-1"))
+                                        .font(.headline)
+                                        .fontWeight(.bold)
+                                        .padding()
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 30)
+                                            .stroke(Color("elevation-1"), lineWidth: 5)
+                                        )
+                                        
                                     }
                                 }
-                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-                                .foregroundColor(.secondary)
-                                .background(Color(.secondarySystemBackground))
-                                .cornerRadius(10.0)
-                                .padding(.top)
-                                .disabled(!self.signUpViewModel.isValid)
+//                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
+//                                .foregroundColor(.secondary)
+//                                .background(Color(.secondarySystemBackground))
+//                                .cornerRadius(10.0)
+                            
+                                
+                                    .disabled(!self.signUpViewModel.isValid)
                             }
                             Spacer()
                         }.padding(.horizontal)
