@@ -2,9 +2,8 @@ import SwiftUI
 import GooglePlaces
 
 struct SearchResultsPlacesView: View {
-    
     @EnvironmentObject var searchViewModel: SearchViewModel
-    
+    // LOCAL
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
     
@@ -23,9 +22,10 @@ struct SearchResultsPlacesView: View {
                                 .fontWeight(.bold)
                             ForEach(searchViewModel.recentSearchPlaces, id: \.placeID) { (result: GMSAutocompletePrediction) in
                                 SingleRowPlace(result: result,
-                                               showRecent: true,
                                                placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                               goToPlace: self.$goToPlace).environmentObject(self.searchViewModel)
+                                               goToPlace: self.$goToPlace,
+                                               showRecent: true)
+                                    .environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -37,7 +37,8 @@ struct SearchResultsPlacesView: View {
                         ForEach(searchViewModel.googlePlaces, id: \.placeID) { result in
                             SingleRowPlace(result: result,
                                            placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                           goToPlace: self.$goToPlace).environmentObject(self.searchViewModel)
+                                           goToPlace: self.$goToPlace)
+                                .environmentObject(self.searchViewModel)
                         }
                         Spacer()
                     }
@@ -48,28 +49,33 @@ struct SearchResultsPlacesView: View {
 }
 
 struct SingleRowPlace: View {
-    
     @EnvironmentObject var searchViewModel: SearchViewModel
+    // PROPS
     @State var result: GMSAutocompletePrediction
-    @State var showRecent: Bool = false
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
+    @State var showRecent: Bool = false
     
     var body: some View {
         HStack {
             HStack(alignment: .center) {
                 HStack {
                     Image(systemName: "mappin")
-                        .foregroundColor(Color(.gray)) //"text-secondary"
-                }.frame(width: 40, height: 40)
-                .overlay(Circle().stroke(Color(.lightGray).opacity(0.5), lineWidth: 1))
+                        .foregroundColor(Color(.gray))
+                }
+                .frame(width: 40, height: 40)
+                .overlay(Circle()
+                .stroke(Color(.lightGray)
+                .opacity(0.5), lineWidth: 1))
                 .padding(.trailing, 5)
-                    
+                
                 VStack(alignment: .leading){
-                    Text(result.attributedPrimaryText.string).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
+                    Text(result.attributedPrimaryText.string)
+                        .font(.system(size:18))
+                        .fontWeight(.semibold).lineLimit(1)
                     if result.attributedSecondaryText != nil {
-                        Text(result.attributedSecondaryText!.string).font(.system(size:12)).lineLimit(1)
+                        Text(result.attributedSecondaryText!.string)
+                            .font(.system(size:12)).lineLimit(1)
                     }
                 }
                 Spacer()

@@ -2,13 +2,14 @@ import SwiftUI
 import GooglePlaces
 
 struct SearchView: View {
+    // PROPS
     @Binding var tabSelection: Int
+    // LOCAL
     @ObservedObject var searchViewModel = SearchViewModel.shared
     @State private var showCancelButton: Bool = false
     let searchController = UISearchController(searchResultsController: nil)
     
     var body: some View {
-        
         VStack {
             VStack {
                 // SEARCHBAR
@@ -22,12 +23,14 @@ struct SearchView: View {
                                 self.showCancelButton = true
                             }, onCommit: {
                                 print("onCommit")
-                            }).foregroundColor(.primary)
+                            })
+                                .foregroundColor(.primary)
                             
                             Button(action: {
                                 self.resetSearchTerm()
                             }) {
-                                Image(systemName: "xmark.circle.fill").opacity(searchViewModel.searchTerm == "" ? 0.0 : 1.0)
+                                Image(systemName: "xmark.circle.fill")
+                                    .opacity(searchViewModel.searchTerm == "" ? 0.0 : 1.0)
                             }
                         }
                         .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
@@ -46,22 +49,19 @@ struct SearchView: View {
                         }
                     }
                     .padding(.horizontal)
-                       // .navigationBarHidden(showCancelButton) // .animation(.default)
-                    // animation does not work properly
-                    
                 }
                 // PICKER
                 Picker(selection: $searchViewModel.searchSpaceSelection, label: Text("View")) {
-                    Text("Places").tag("places")
-                    Text("Collections").tag("lists")
-                    Text("Accounts").tag("accounts")
-                    
+                    Text("Places")
+                        .tag("places")
+                    Text("Collections")
+                        .tag("lists")
+                    Text("Accounts")
+                        .tag("accounts")
                 }
                 .padding()
                 .pickerStyle(SegmentedPickerStyle())
-                
                 Spacer()
-                
                 // RESULTS
                 VStack {
                     if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.googlePlaces.rawValue {
@@ -71,7 +71,8 @@ struct SearchView: View {
                         Spacer()
                     }
                     else if searchViewModel.searchSpaceSelection == SearchViewModel.SearchSpace.firebaseLists.rawValue {
-                        SearchResultsCollectionsView(tabSelection: self.$tabSelection).environmentObject(self.searchViewModel)
+                        SearchResultsPlaceListView(tabSelection: self.$tabSelection)
+                            .environmentObject(self.searchViewModel)
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
@@ -81,25 +82,22 @@ struct SearchView: View {
                             .resignKeyboardOnDragGesture()
                         Spacer()
                     }
-                }.navigationBarTitle(Text(""), displayMode: .inline)
+                }
+                .navigationBarTitle(Text(""), displayMode: .inline)
             }
             .onAppear {
-                print("SearchView()  - onAppear(): ADD firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.addAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.addAllUsersListener()
             }
             .onDisappear {
-                print("SearchView()  - onDisappear(): REMOVE firestoreSearch Listener (PublicPlaceLists & AllUsers)")
                 self.searchViewModel.firestoreSearch.removeAllPublicPlaceListsListener()
                 self.searchViewModel.firestoreSearch.removeAllUsersListener()
             }
         }
     }
-    
     func resetSearchTerm() {
         self.searchViewModel.searchTerm = ""
     }
-    
 }
 
 extension UIApplication {
