@@ -1,10 +1,3 @@
-//
-//  PhotoGallery.swift
-//  SpotUp
-//
-//  Created by Havy Ha on 18.01.20.
-//
-
 import Foundation
 import GooglePlaces
 import SwiftUI
@@ -28,12 +21,7 @@ class Gallery: ObservableObject, Identifiable{
                         self.gallery.append(photo)
                     }
                 }
-                //            else {
-                //                return
-                //            }
             }
-            
         }
-        
     }
 }

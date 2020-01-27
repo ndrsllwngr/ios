@@ -1,10 +1,3 @@
-//
-//  SwipeView.swift
-//  SpotUp
-//
-//  Created by Fangli Lu on 14.01.20.
-//
-
 import Foundation
 import SwiftUI
 import GooglePlaces
