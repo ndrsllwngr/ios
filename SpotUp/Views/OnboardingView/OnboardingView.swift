@@ -36,7 +36,7 @@ struct OnboardingView: View {
                         PageViewController(currentPageIndex: $currentPageIndex, viewControllers: subviews)
                     }
                 }
-//                .padding(.top, 80)
+                //                .padding(.top, 80)
                 //                .background(Color.blue)
                 Group {
                     VStack(spacing: 0) {
@@ -49,7 +49,17 @@ struct OnboardingView: View {
                 Spacer()
             }
             HStack {
-                PageControl(numberOfPages: subviews.count, currentPageIndex: $currentPageIndex)
+                ZStack {
+                    PageControl(numberOfPages: subviews.count, currentPageIndex: $currentPageIndex)
+                    HStack{
+                        Spacer()
+                    }
+                    .frame(width: 40, height:40)
+                    .contentShape(Rectangle())
+                    .background(Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.01))
+                    .onTapGesture {
+                    }
+                }
                 Spacer()
                 if(self.currentPageIndex == 2) {
                     Button(action: {
