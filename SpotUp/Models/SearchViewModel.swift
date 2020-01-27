@@ -109,4 +109,15 @@ class SearchViewModel: ObservableObject {
                                                  callback: callback
         )
     }
+    
+    func resetSearch() {
+        self.searchTerm = ""
+        self.searchSpaceSelection = SearchSpace.googlePlaces.rawValue
+        
+        self.googlePlaces = []
+        
+        self.recentSearchPlaces = []
+        self.recentSearchFirebaseAccounts = []
+        self.recentSearchFirebaseLists = []
+    }
 }
