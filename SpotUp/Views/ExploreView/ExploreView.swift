@@ -147,7 +147,7 @@ struct ExploreActiveView: View {
                                 Spacer()
                             }
                             .frame(height: 60)
-                            .padding([.horizontal], 20)
+                            .padding(.horizontal, 20)
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             VStack {
@@ -227,13 +227,13 @@ struct ExploreInactiveView: View {
                         Text("Explore collection")
                             .font(.system(size:20, weight:.bold))
                             .accentColor(Color.white)
-                            .padding([.vertical], 15)
+                            .padding(.vertical, 15)
                     }
                     .frame(width: metrics.size.width * 0.8)
                     .background(Color("brand-color-primary-soft"))
                     .cornerRadius(15)
                 }
-                .padding([.bottom], 20)
+                .padding(.bottom, 20)
                 Button(action: {
                     self.exploreModel.startExploreWithEmptyList()
                 }) {
@@ -241,7 +241,7 @@ struct ExploreInactiveView: View {
                         Text("Start new queue")
                             .font(.system(size:20, weight:.bold))
                             .accentColor(Color.white)
-                            .padding([.vertical], 15)
+                            .padding(.vertical, 15)
                     }
                     .frame(width: metrics.size.width * 0.8)
                     .background(Color("brand-color-secondary"))
