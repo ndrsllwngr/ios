@@ -32,7 +32,7 @@ struct AddPlaceToListSheet: View {
                 } else {
                     if (!self.placeLists.isEmpty) {
                         ScrollView {
-                            ForEach(self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}){ placeList in
+                            ForEach(sortPlaceLists(placeLists: self.placeLists.filter{ $0.owner.id == self.firebaseAuthentication.currentUser!.uid || $0.isCollaborative}, sortByCreationDate: true)){ placeList in
                                 PlaceListRow(placeList: placeList)
                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
                                     .contentShape(Rectangle())
