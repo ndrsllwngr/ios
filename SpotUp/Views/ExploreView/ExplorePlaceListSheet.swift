@@ -30,7 +30,7 @@ struct ExplorePlaceListSheet: View {
                 } else {
                     if (!self.placeLists.isEmpty) {
                         ScrollView {
-                            ForEach(self.placeLists){ placeList in
+                            ForEach(sortPlaceLists(placeLists: self.placeLists, sortByCreationDate: true)){ placeList in
                                 PlaceListRow(placeList: placeList)
                                     .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color("border-tab-bar"), lineWidth: 1))
                                     .contentShape(Rectangle())
