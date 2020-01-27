@@ -7,6 +7,7 @@ struct AuthenticationView: View {
     @ObservedObject private var signUpViewModel = SignUpViewModel()
     @State var loginErrorText: String? = nil
     @State var selection: String = "login"
+    @State private var offsetValue: CGFloat = 0.0
     
     var body: some View {
         NavigationView {
@@ -249,7 +250,7 @@ struct AuthenticationView: View {
                         }.padding(.horizontal)
                     }
                 }
-            }
+            }.keyboardSensible($offsetValue)
         }.navigationBarTitle(Text(""), displayMode: .inline).navigationBarHidden(true)
     }
     
