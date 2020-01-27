@@ -112,7 +112,9 @@ struct InnerPlaceListView: View {
                                       sheetSelection: $sheetSelection,
                                       tabSelection: $tabSelection)
                         .environmentObject(firestorePlaceList)
-                        .padding()
+                        .padding(.top)
+                        .padding(.horizontal)
+                        
                         .animation(.spring())
                         .transition(.asymmetric(insertion: .scale, removal: .scale))
                 }
@@ -121,11 +123,10 @@ struct InnerPlaceListView: View {
                     Text("List").tag(0)
                     Text("Map").tag(1)
                 }
-                .padding(.horizontal)
+                .padding(.horizontal, 37)
                 .pickerStyle(SegmentedPickerStyle())
             }
             .padding(0)
-            .padding(.horizontal, 22)
             .background(Color("bg-primary"))
             
             
