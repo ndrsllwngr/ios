@@ -3,15 +3,12 @@ import Firebase
 import FirebaseAuth
 
 class FirebaseUser {
-    
     var uid: String
     var email: String
-    // var displayName: String?
     
     init(uid: String, email: String) {
         self.uid = uid
         self.email = email
-        // self.displayName = displayName
     }
 }
 
@@ -20,22 +17,18 @@ class FirebaseAuthentication: ObservableObject {
     static let shared = FirebaseAuthentication()
     
     @Published var currentUser: FirebaseUser?
-    @Published var isLoggedIn: Bool? // ToDo remove
     @Published var startUpInProgress: Bool = true
     
     private init(){}
     
     func listen() {
-        //try! Auth.auth().signOut()
         Auth.auth().addStateDidChangeListener { (auth, user) in
             if let user = user {
                 self.currentUser = FirebaseUser(uid: user.uid, email: user.email!)
-                self.isLoggedIn = true
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.startUpInProgress = false
                 }
             } else {
-                self.isLoggedIn = false
                 self.currentUser = nil
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.startUpInProgress = false
@@ -50,7 +43,6 @@ class FirebaseAuthentication: ObservableObject {
     
     func logOut() {
         try! Auth.auth().signOut()
-        self.isLoggedIn = false
         self.currentUser = nil
     }
     
