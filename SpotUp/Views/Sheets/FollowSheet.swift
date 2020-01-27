@@ -72,7 +72,6 @@ struct FollowSheet: View {
                     }
                     documentSnapshot.data().flatMap({ data in
                         let user = dataToUser(data: data)
-                        print("got user \(user)")
                         self.users.append(user)
                     })
                     self.isLoading = false

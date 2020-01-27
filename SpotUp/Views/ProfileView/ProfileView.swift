@@ -72,11 +72,12 @@ struct ProfileView: View {
             }
         }
         .onAppear {
-            print("On Appear profile")
+            print("ProfileView() - onAppear()")
             self.isMyProfile = self.profileUserId == self.firebaseAuthentication.currentUser!.uid
             self.firestoreProfile.addProfileListener(profileUserId: self.profileUserId)
         }
         .onDisappear {
+            print("ProfileView() - onDisappear()")
             self.firestoreProfile.removeProfileListener()
         }
     }
