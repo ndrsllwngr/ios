@@ -1,27 +1,17 @@
-//
-//  ListComponent.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import GooglePlaces
 
 struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
-    
-    @State var showActionSheet: Bool = false
-    
+    // PROPS
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    // LOCAL
+    @State var showActionSheet: Bool = false
     
     var body: some View {
         VStack {
@@ -149,25 +139,24 @@ struct CurrentTargetRow: View {
         .frame(height: 72)
         .background(Color("elevation-1"))
         .cornerRadius(15)
-        .shadow(color: Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.24), radius: 20, x: 0, y: 10)      .padding(.horizontal, 10)
+        .shadow(color: Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.24), radius: 20, x: 0, y: 10)
+        .padding(.horizontal, 10)
     }
 }
 
 
 struct ExplorePlaceRow: View {
-    @State var place: ExplorePlace
-    @State var showActionSheet: Bool = false
-    
     @ObservedObject var exploreModel = ExploreModel.shared
-    
+    // PROPS
+    var place: ExplorePlace
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    // LOCAL
+    @State var showActionSheet: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 0.0) {
@@ -256,19 +245,17 @@ struct ExplorePlaceRow: View {
 
 
 struct ExplorePlaceVisitedRow: View {
-    @State var place: ExplorePlace
-    @State var showActionSheet: Bool = false
-    
     @ObservedObject var exploreModel = ExploreModel.shared
-    
+    // PROPS
+    var place: ExplorePlace
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    // LOCAL
+    @State var showActionSheet: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 0.0) {
