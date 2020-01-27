@@ -65,7 +65,7 @@ struct CurrentTargetRow: View {
                                 .frame(width: 40)
                             }
                         }
-                        .padding([.trailing], 10)
+                        .padding(.trailing, 10)
                         VStack {
                             VStack {
                                 Image(systemName: "checkmark")
@@ -110,7 +110,7 @@ struct CurrentTargetRow: View {
                             ])
                         }
                     }
-                    .padding([.leading], 10)
+                    .padding(.leading, 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
                     HStack(spacing: 0.0) {
                         VStack(alignment: .center, spacing: 0){
@@ -126,7 +126,7 @@ struct CurrentTargetRow: View {
                             .foregroundColor(Color("text-secondary"))
                         Spacer()
                     }
-                    .padding([.horizontal], 10)
+                    .padding(.horizontal, 10)
                 } else {
                     HStack(spacing: 0.0) {
                         VStack(alignment: .center, spacing: 0){
@@ -142,7 +142,7 @@ struct CurrentTargetRow: View {
                             .foregroundColor(Color("text-secondary"))
                         Spacer()
                     }
-                    .padding([.horizontal], 10)
+                    .padding(.horizontal, 10)
                 }
             }
         }
@@ -185,7 +185,7 @@ struct ExplorePlaceRow: View {
                     .frame(width: 10, height: 10)
                 }
             }
-            .padding([.trailing], 5)
+            .padding(.trailing, 5)
             HStack {
                 PlaceRowImage(image: self.place.image)
                     .clipShape(Rectangle())
@@ -249,8 +249,8 @@ struct ExplorePlaceRow: View {
             }
         }
         .frame(height: 50)
-        .padding([.leading], 5)
-        .padding([.trailing], 10)
+        .padding(.leading, 5)
+        .padding(.trailing, 10)
     }
 }
 
@@ -344,7 +344,7 @@ struct ExplorePlaceVisitedRow: View {
             }
         }
         .frame(height: 50)
-        .padding([.leading], 20)
-        .padding([.trailing], 10)
+        .padding(.leading, 20)
+        .padding(.trailing, 10)
     }
 }
