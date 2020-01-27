@@ -16,8 +16,6 @@ struct AuthenticationView: View {
     
     @State var loginErrorText: String? = nil
     @State var selection: String = "login"
-    @State var didTapSignIn: Bool = true
-    @State var didTapSignUp: Bool = false
     
     var body: some View {
         NavigationView {
@@ -39,30 +37,25 @@ struct AuthenticationView: View {
                 HStack(alignment: .center, spacing: 0){
                     HStack(alignment: .center, spacing: 0){
                         Spacer()
-                        Text("Sign In").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
+                        Text("Sign in").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
                         Spacer()
                     }
                     .frame(minHeight: 65)
-                    .background(didTapSignIn ? Color("brand-color-primary-soft") : Color("brand-color-secondary"))
+                    .background(self.selection == "login" ? Color("brand-color-primary") : Color("brand-color-secondary"))
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "login"
-                        self.didTapSignIn = true
-                        self.didTapSignUp = false
                     }
                     HStack(alignment: .center, spacing: 0){
                         Spacer()
-                        Text("Sign Up").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
+                        Text("Sign up").font(.system(size:20)).fontWeight(.bold).foregroundColor(.white)
                         Spacer()
                     }
                     .frame(minHeight: 65)
-                    .background(didTapSignUp ? Color("brand-color-primary-soft") : Color("brand-color-secondary"))
+                    .background(self.selection != "login" ? Color("brand-color-primary") : Color("brand-color-secondary"))
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "signup"
-                        self.didTapSignUp = true
-                        self.didTapSignIn = false
-                        print("tapped")
                     }
                 }
                 .edgesIgnoringSafeArea(.horizontal)
@@ -76,18 +69,18 @@ struct AuthenticationView: View {
                     }
                     .frame(minHeight: 0, maxHeight: .infinity)
                         //                .background(Color.red)
-//                        .background(Color(selection == "login" ? "brand-color-primary-soft" : "brand-color-secondary"))
-                    .background(Color("brand-color-primary-soft"))
-                    .edgesIgnoringSafeArea(.all)
+                        //                        .background(Color(selection == "login" ? "brand-color-primary-soft" : "brand-color-secondary"))
+                        .background(Color("brand-color-primary"))
+                        .edgesIgnoringSafeArea(.all)
                     if self.selection == "login" {
-                       
+                        
                         
                         VStack(spacing: 0) {
-                             Spacer()
                             // EMAIL
-                            Section(footer: VStack {
+                            Section(footer: HStack {
                                 if(self.loginViewModel.emailMessage != "") {
-                                    Text(loginViewModel.emailMessage).foregroundColor(.red)
+                                    Text(loginViewModel.emailMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Spacer()
                                 }
                             }) {
                                 HStack {
@@ -99,16 +92,17 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.secondary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
                             
                             // PASSWORD
-                            Section(footer: VStack {
+                            Section(footer: HStack {
                                 if(self.loginViewModel.passwordMessage != "") {
-                                    Text(loginViewModel.passwordMessage).foregroundColor(.red)
+                                    Text(loginViewModel.passwordMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
                                 }
+                                Spacer()
                             }) {
                                 HStack {
                                     SecureField("Password", text: $loginViewModel.password)
@@ -116,53 +110,45 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.secondary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
-                            
                             // LOGIN BUTTON
-                           
-                            Section(footer: VStack {
-                                if (self.loginErrorText != nil) {
-                                    Text("Wrong credentials").foregroundColor(.red)
-                                }
-                            }) {
-                                 Spacer()
-
-                                Button(action: { self.logIn() }) {
-                                    HStack {
+                            HStack{
+                                Spacer()
+                                Section(footer: HStack {
+                                    if (self.loginErrorText != nil) {
+                                        Text("Wrong credentials").foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
                                         Spacer()
-                                        Image(systemName: "arrow.right.circle")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width:45, height:45)
-                                        .font(.headline)
-                                        .foregroundColor(Color("elevation-1"))
-
-//                                        Text("Login").foregroundColor(Color("elevation-1"))
-//                                            .fontWeight(.bold)
-//                                        .padding()
-//                                        .overlay(
-//                                        RoundedRectangle(cornerRadius: 30)
-//                                        .stroke(Color("elevation-1"), lineWidth: 5))
                                     }
+                                }) {
+                                    Button(action: { self.logIn() }) {
+                                        HStack {
+                                            Text("Sign in")
+                                                .fontWeight(.bold)
+                                                .foregroundColor(self.loginViewModel.isValid ? Color("brand-color-primary") : Color("brand-color-secondary"))
+                                        }
+                                    }
+                                    .padding(.horizontal)
+                                    .frame(height: 42)
+                                    .background(Color("bg-primary"))
+                                    .mask(Rectangle().cornerRadius(.infinity))
+                                    .disabled(!self.loginViewModel.isValid)
+                                    .padding(.top)
                                 }
-                                
-                                .disabled(!self.loginViewModel.isValid)
                             }
-                            
                             Spacer()
                         }.padding(.horizontal)
                     }
                     if self.selection == "signup" {
-                       
+                        
                         VStack(spacing: 0) {
-                             Spacer()
+                            //                            Spacer()
                             // USERNAME
-                            Section(footer: VStack {
+                            Section(footer: HStack {
                                 if(self.signUpViewModel.usernameMessage != "") {
-                                    Text(signUpViewModel.usernameMessage).foregroundColor(.red)
+                                    Text(signUpViewModel.usernameMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
                                 }
                             }) {
                                 HStack {
@@ -171,15 +157,16 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.primary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
                             
                             // EMAIL
-                            Section(footer: VStack {
+                            Section(footer: HStack {
                                 if(self.signUpViewModel.emailMessage != "") {
-                                    Text(signUpViewModel.emailMessage).foregroundColor(.red)
+                                    Text(signUpViewModel.emailMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Spacer()
                                 }
                             }) {
                                 HStack {
@@ -190,15 +177,16 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.primary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
                             
                             // PASSWORD
-                            Section(footer: VStack {
+                            Section(footer: HStack {
                                 if(self.signUpViewModel.passwordMessage != "") {
-                                    Text(signUpViewModel.passwordMessage).foregroundColor(.red)
+                                    Text(signUpViewModel.passwordMessage).foregroundColor(.white).multilineTextAlignment(.leading).padding(.top, 5).padding(.leading, 6)
+                                    Spacer()
                                 }
                             }) {
                                 HStack {
@@ -208,7 +196,7 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.primary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                                 HStack {
@@ -218,35 +206,29 @@ struct AuthenticationView: View {
                                 }
                                 .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
                                 .foregroundColor(.primary)
-                                .background(Color(.secondarySystemBackground))
+                                .background(Color("bg-primary"))
                                 .cornerRadius(10.0)
                                 .padding(.top)
                             }
                             
                             // SIGN UP BUTTON
-                            Spacer()
-                            Section {
-                                Button(action: { self.signUp() }) {
-                                    HStack {
-                                        Spacer()
-                                        Text("Create Account").foregroundColor(Color("elevation-1"))
-                                        .font(.headline)
-                                        .fontWeight(.bold)
-                                        .padding()
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 30)
-                                            .stroke(Color("elevation-1"), lineWidth: 5)
-                                        )
-                                        
+                            HStack{
+                                Spacer()
+                                Section {
+                                    Button(action: { self.signUp() }) {
+                                        HStack {
+                                            Text("Sign up")
+                                                .fontWeight(.bold)
+                                                .foregroundColor(self.signUpViewModel.isValid ? Color("brand-color-primary") : Color("brand-color-secondary"))
+                                        }
                                     }
-                                }
-//                                .padding(EdgeInsets(top: 8, leading: 6, bottom: 8, trailing: 6))
-//                                .foregroundColor(.secondary)
-//                                .background(Color(.secondarySystemBackground))
-//                                .cornerRadius(10.0)
-                            
-                                
+                                    .padding(.horizontal)
+                                    .frame(height: 42)
+                                    .background(Color("bg-primary"))
+                                    .mask(Rectangle().cornerRadius(.infinity))
                                     .disabled(!self.signUpViewModel.isValid)
+                                    .padding(.top)
+                                }
                             }
                             Spacer()
                         }.padding(.horizontal)
