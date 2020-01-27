@@ -60,6 +60,8 @@ struct ProfileSettingsView: View {
                 // 5)
                 Section {
                     Button(action: {
+                        ExploreModel.shared.quitExplore()
+                        SearchViewModel.shared.resetSearch()
                         FirebaseAuthentication.shared.logOut()
                     }) {
                         Text("Sign out").foregroundColor(.red)
