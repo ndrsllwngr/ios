@@ -9,6 +9,7 @@
 import SwiftUI
 
 struct CreateNewPlaceListRow: View {
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -34,6 +35,7 @@ struct CreateNewPlaceListRow: View {
         .frame(height: 60)
         .contentShape(Rectangle())
         .onTapGesture {
+            self.firestoreProfile.removeProfileListener()
             self.sheetSelection = "create_placelist"
             self.showSheet.toggle()
         }
