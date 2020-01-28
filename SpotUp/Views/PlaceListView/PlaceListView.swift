@@ -47,17 +47,17 @@ struct PlaceListView: View {
                 .environmentObject(firestorePlaceList)
         }
         .sheet(isPresented: $showSheet) {
-            if self.sheetSelection == "settings" {
+            if (self.sheetSelection == "settings") {
                 PlaceListSettingsSheet(presentationMode: self.presentationMode,
                                        showSheet: self.$showSheet)
                     .environmentObject(self.firestorePlaceList)
-            } else if self.sheetSelection == "follower" {
+            } else if (self.sheetSelection == "follower") {
                 FollowSheet(userIds: self.firestorePlaceList.placeList.followerIds.filter{$0 != self.firestorePlaceList.placeList.owner.id},
                             sheetTitle: "Followers",
                             showSheet: self.$showSheet,
                             profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                             goToOtherProfile: self.$goToOtherProfile)
-            } else if (self.sheetSelection == "add_to_placelist"){
+            } else if (self.sheetSelection == "add_to_placelist") {
                 AddPlaceToListSheet(place: self.placeForAddPlaceToListSheet!.gmsPlace,
                                     placeImage: self.imageForAddPlaceToListSheet,
                                     showSheet: self.$showSheet)
@@ -121,33 +121,46 @@ struct InnerPlaceListView: View {
             .padding(0)
             .background(Color("bg-primary"))
             
-            
             if selection == 0 {
-                List {
-                    HStack {
-                        Text("Places")
-                            .font(.system(size: 16, weight:.semibold))
+                if (self.firestorePlaceList.isLoadingPlaces) {
+                    VStack {
                         Spacer()
-                        SortButton(sortByDate: self.$sortByCreationDate)
-                    }
-                    if (!self.firestorePlaceList.places.isEmpty) {
-                        ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
-                            PlaceRow(place: place,
-                                     placeListId: self.placeListId,
-                                     showSheet: self.$showSheet,
-                                     sheetSelection: self.$sheetSelection,
-                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                     goToPlace: self.$goToPlace,
-                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                                .environmentObject(self.firestorePlaceList)
-                        }
-                    } else {
                         HStack {
                             Spacer()
-                            Text("Collection is empty")
-                                .foregroundColor(Color("text-secondary"))
+                            ActivityIndicator()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(Color("text-secondary"))
                             Spacer()
+                        }
+                        Spacer()
+                    }
+                } else {
+                    List {
+                        HStack {
+                            Text("Places")
+                                .font(.system(size: 16, weight:.semibold))
+                            Spacer()
+                            SortButton(sortByDate: self.$sortByCreationDate)
+                        }
+                        if (!self.firestorePlaceList.places.isEmpty) {
+                            ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
+                                PlaceRow(place: place,
+                                         placeListId: self.placeListId,
+                                         showSheet: self.$showSheet,
+                                         sheetSelection: self.$sheetSelection,
+                                         placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                         goToPlace: self.$goToPlace,
+                                         placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                         imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                    .environmentObject(self.firestorePlaceList)
+                            }
+                        } else {
+                            HStack {
+                                Spacer()
+                                Text("Collection is empty")
+                                    .foregroundColor(Color("text-secondary"))
+                                Spacer()
+                            }
                         }
                     }
                 }

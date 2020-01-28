@@ -9,9 +9,9 @@ class FirestorePlaceList: ObservableObject {
     @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [], createdAt: Timestamp.init())
     @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
+    @Published var isLoadingPlaces = false
     
     func addPlaceListListener(placeListId: String, ownUserId: String) {
-        
         // Listener for placeList
         self.placeListListener =
             FirestoreConnection.shared.getPlaceListsRef().document(placeListId).addSnapshotListener { documentSnapshot, error in
@@ -36,20 +36,26 @@ class FirestorePlaceList: ObservableObject {
                                 self.placeList.owner.username = username
                             })
                     }
-                    
+                    self.isLoadingPlaces = true
+                    let dispatchGroup = DispatchGroup()
                     self.places = []
                     self.placeList.places
-                        .forEach {placeIDWithTimestamp in
-                            //dispatchGroup.enter()
+                        .forEach { placeIDWithTimestamp in
+                            dispatchGroup.enter()
                             getPlaceSimple(placeID: placeIDWithTimestamp.placeId) { (place: GMSPlace?, error: Error?) in
                                 if let error = error {
                                     print("An error occurred : \(error.localizedDescription)")
+                                    dispatchGroup.leave()
                                     return
                                 }
                                 if let place = place {
                                     self.places.append(GMSPlaceWithTimestamp(gmsPlace: place, addedAt: placeIDWithTimestamp.addedAt))
+                                    dispatchGroup.leave()
                                 }
                             }
+                    }
+                    dispatchGroup.notify(queue: .main) {
+                        self.isLoadingPlaces = false
                     }
                 })
         }

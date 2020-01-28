@@ -29,8 +29,8 @@ struct ItemView: View {
                 Rectangle()
                     .frame(height: 1)
                     .foregroundColor(Color("bg-primary"))
-                ScrollView(showsIndicators:false){
-                    VStack(spacing: 0){
+                ScrollView(showsIndicators:false) {
+                    VStack(spacing: 0) {
                         GalleryView(gallery: self.$gallery)
                             .frame(height: 300)
                             .clipped()
@@ -40,7 +40,8 @@ struct ItemView: View {
                     }
                 }
             }
-        }.onAppear {
+        }
+        .onAppear {
             self.isLoading = true
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
