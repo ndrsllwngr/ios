@@ -33,7 +33,7 @@ struct SearchResultsAccountsView: View {
                             Spacer()
                         }
                     } else {
-                        SearchResultsProfilesEmptyStateView()
+                        SearchResultsEmptyStateView(imageString: "placeholder-search-accounts-200", titleString: "Add friends", bodyString: "Find your friends or locals to see their\n hot spots collections and\n recommendations.")
                     }
                 } else {
                     List {
