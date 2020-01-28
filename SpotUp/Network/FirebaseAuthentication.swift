@@ -104,7 +104,8 @@ class FirebaseAuthentication: ObservableObject {
                 print("Error during authentication for account deletion: \(error)")
             } else if let result = result {
                 let user = result.user
-                // delete user in firestore first, afterwards I am not authenticated anymore TODO think about this again
+                // Delete user in firestore first, afterwards I am not authenticated anymore
+                // Because of a dispatch group inside deleteUserInFirestore this is a blocking operation
                 FirestoreConnection.shared.deleteUserInFirestore(userId: user.uid)
                 user.delete { error in
                     if let error = error {
