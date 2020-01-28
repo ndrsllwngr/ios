@@ -25,6 +25,7 @@ class ExploreModel: ObservableObject {
     var locationManager = LocationManager()
     
     @Published var exploreList: ExploreList? = nil
+    @Published var isLoadingPlaces = false
     
     private init(){}
     
@@ -55,6 +56,7 @@ class ExploreModel: ObservableObject {
         self.locationManager.startUpdatingLocation()
         self.locationManager.beginNotifyingExplore()
         self.exploreList = ExploreList()
+        self.isLoadingPlaces = true
         let dispatchGroup = DispatchGroup()
         placeList.places.forEach {placeIDWithTimestamp in
             dispatchGroup.enter()
@@ -77,6 +79,7 @@ class ExploreModel: ObservableObject {
             // 2. loadPlaceImages
             self.loadPlaceImages()
             self.updateLastOpenedAt()
+            self.isLoadingPlaces = false
         }
     }
     
@@ -142,13 +145,13 @@ class ExploreModel: ObservableObject {
         if let exploreList = self.exploreList, let location =
             self.locationManager.location {
             print("Begin updating distances in explore places")
-            // 1. Calculate and distance to my location for all places
-            self.exploreList!.places.forEach { place in
-                if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
-                    let distance = calculateDistance(coordinate: place.place.coordinate,
-                                                                  location: location)
-                    self.exploreList!.places[index].distance = distance
-                }
+            // 1. Calculate and set distance to my location for all places
+            self.exploreList!.places = self.exploreList!.places.map { place in
+                var mutablePlace = place
+                let distance = calculateDistance(coordinate: place.place.coordinate,
+                                                 location: location)
+                mutablePlace.distance = distance
+                return mutablePlace
             }
             // 2. Update distance in current target
             if (exploreList.currentTarget != nil) {
