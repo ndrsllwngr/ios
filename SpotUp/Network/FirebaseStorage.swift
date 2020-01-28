@@ -29,7 +29,7 @@ class FirebaseStorage: ObservableObject {
         let imageRef = getImageRef(id: id, imageType: imageType)
         imageRef.putData(data, metadata: metaData) { metadata, error in
             if let error = error {
-                print("Error uplading profile image: \(error)")
+                print("Error uplading image: \(error)")
             } else {
                 print("successfully uploaded")
                 imageRef.downloadURL { (url, error) in
@@ -40,6 +40,22 @@ class FirebaseStorage: ObservableObject {
                 }
             }
         }
+    }
+    
+    func deleteImageFromStorage(id: String, imageType: ImageType) {
+        let imageRef = getImageRef(id: id, imageType: imageType)
+        imageRef.delete { error in
+            if let error = error {
+                print("Error deleting image: \(error)")
+            } else {
+                print("Image successfully deleted")
+            }
+        }
+    }
+    
+    func deleteImageFromStorageWithCallback(id: String, imageType: ImageType, completion: ((Error?) -> Void)? = nil) {
+        let imageRef = getImageRef(id: id, imageType: imageType)
+        imageRef.delete()
     }
 }
 
