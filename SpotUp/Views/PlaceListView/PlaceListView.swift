@@ -201,6 +201,7 @@ struct PlaceListFollowButton: View {
                                 .frame(width: 20, height: 20)
                                 .foregroundColor(Color("brand-color-primary"))
                         }
+                        .frame(width: 49, height: 49)
                     }
                 }
             }
