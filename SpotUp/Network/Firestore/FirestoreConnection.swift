@@ -46,14 +46,14 @@ class FirestoreConnection: ObservableObject {
                     dispatchGroup.enter()
                     user.isFollowedBy.forEach { isFollowedById in
                         self.dbUsersRef.document(isFollowedById).updateData([
-                        "is_following": FieldValue.arrayRemove([userId])
-                    ]) { err in
-                        if let err = err {
-                            print("UserDeletion: Error removing user from is_following: \(err)")
-                        } else {
-                            print("UserDeletion: successfully removed user from is_following")
-                        }
-                        dispatchGroup.leave()
+                            "is_following": FieldValue.arrayRemove([userId])
+                        ]) { err in
+                            if let err = err {
+                                print("UserDeletion: Error removing user from is_following: \(err)")
+                            } else {
+                                print("UserDeletion: successfully removed user from is_following")
+                            }
+                            dispatchGroup.leave()
                         }
                     }
                 }
@@ -62,14 +62,14 @@ class FirestoreConnection: ObservableObject {
                     dispatchGroup.enter()
                     user.isFollowing.forEach { isFollowingId in
                         self.dbUsersRef.document(isFollowingId).updateData([
-                        "is_followed_by": FieldValue.arrayRemove([userId])
-                    ]) { err in
-                        if let err = err {
-                            print("UserDeletion: Error removing user from is_followed_by: \(err)")
-                        } else {
-                            print("UserDeletion: successfully removed user from is_followed_by")
-                        }
-                        dispatchGroup.enter()
+                            "is_followed_by": FieldValue.arrayRemove([userId])
+                        ]) { err in
+                            if let err = err {
+                                print("UserDeletion: Error removing user from is_followed_by: \(err)")
+                            } else {
+                                print("UserDeletion: successfully removed user from is_followed_by")
+                            }
+                            dispatchGroup.enter()
                         }
                     }
                 }
@@ -125,6 +125,16 @@ class FirestoreConnection: ObservableObject {
                         print("UserDeletion: Error removing user: \(err)")
                     } else {
                         print("UserDeletion: User successfuly deleted")
+                    }
+                    dispatchGroup.leave()
+                }
+                // 6. Delete user profile image
+                dispatchGroup.enter()
+                FirebaseStorage.shared.deleteImageFromStorageWithCallback(id: userId, imageType: .PROFILE_IMAGE) { error in
+                    if let error = error {
+                        print("Error deleting profile image: \(error)")
+                    } else {
+                        print("Profile image successfully deleted")
                     }
                     dispatchGroup.leave()
                 }
@@ -208,6 +218,7 @@ class FirestoreConnection: ObservableObject {
                 print("Error deleting PlaceList: \(err)")
             } else {
                 print("PlaceList successfully deleted")
+                FirebaseStorage.shared.deleteImageFromStorage(id: placeListToDelete.id, imageType: .PLACELIST_IMAGE)
             }
         }
     }
