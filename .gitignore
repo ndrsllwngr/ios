@@ -1,6 +1,9 @@
 # Ignore Mac DS_Store files
 .DS_Store
 
+# Jetbrains AppCode
+.idea
+
 # Xcode
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
@@ -69,3 +72,10 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# CUSTOM
+Pods/
+
+SpotUp.xcodeproj/
+
+SpotUp.xcworkspace/
