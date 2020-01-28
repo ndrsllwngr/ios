@@ -153,7 +153,7 @@ struct InnerPlaceListView: View {
                     }
                 }
             } else {
-                PlaceListMapView().environmentObject(firestorePlaceList)
+                PlaceListMapView(sortByCreationDate: self.$sortByCreationDate).environmentObject(firestorePlaceList)
             }
         }
         .navigationBarTitle(Text(""), displayMode: .inline)

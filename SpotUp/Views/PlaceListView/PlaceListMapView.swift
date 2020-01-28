@@ -5,6 +5,8 @@ import GooglePlaces
 
 struct PlaceListMapView: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // PROPS
+    @Binding var sortByCreationDate: Bool
     // LOCAL
     @State var currentIndex: Int = 0
     @State var placeIdToNavigateTo: String? = nil
@@ -21,7 +23,8 @@ struct PlaceListMapView: View {
             if(!self.firestorePlaceList.places.isEmpty){
                 SwipeView(index: self.$currentIndex,
                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                          goToPlace: self.$goToPlace).environmentObject(self.firestorePlaceList)
+                          goToPlace: self.$goToPlace,
+                          sortByCreationDate: self.$sortByCreationDate).environmentObject(self.firestorePlaceList)
                     .frame(height: 180)
             }
         }
