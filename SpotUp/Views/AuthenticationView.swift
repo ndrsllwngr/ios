@@ -41,6 +41,8 @@ struct AuthenticationView: View {
                     }
                     .frame(minHeight: 65)
                     .background(self.selection == "login" ? Color("brand-color-primary") : Color("brand-color-secondary"))
+                    .animation(.linear)
+                    .transition(.fade)
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "login"
@@ -55,6 +57,8 @@ struct AuthenticationView: View {
                     }
                     .frame(minHeight: 65)
                     .background(self.selection != "login" ? Color("brand-color-primary") : Color("brand-color-secondary"))
+                    .animation(.linear)
+                    .transition(.fade)
                     .cornerRadius(20, corners: [.topLeft, .topRight])
                     .onTapGesture {
                         self.selection = "signup"
@@ -79,6 +83,7 @@ struct AuthenticationView: View {
                                 if(self.loginViewModel.emailMessage != "") {
                                     Text(loginViewModel.emailMessage)
                                         .foregroundColor(.white)
+                                        .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                         .padding(.top, 5)
                                         .padding(.leading, 6)
@@ -103,6 +108,7 @@ struct AuthenticationView: View {
                                 if(self.loginViewModel.passwordMessage != "") {
                                     Text(loginViewModel.passwordMessage)
                                         .foregroundColor(.white)
+                                        .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                         .padding(.top, 5)
                                         .padding(.leading, 6)
@@ -126,6 +132,7 @@ struct AuthenticationView: View {
                                     if (self.loginErrorText != nil) {
                                         Text("Wrong credentials")
                                             .foregroundColor(.white)
+                                            .font(.footnote)
                                             .multilineTextAlignment(.leading)
                                             .padding(.top, 5)
                                             .padding(.leading, 6)
@@ -149,6 +156,8 @@ struct AuthenticationView: View {
                             }
                             Spacer()
                         }.padding(.horizontal)
+                        .animation(.linear)
+                        .transition(.fade)
                     }
                     if self.selection == "signup" {
                         VStack(spacing: 0) {
@@ -157,9 +166,11 @@ struct AuthenticationView: View {
                                 if(self.signUpViewModel.usernameMessage != "") {
                                     Text(signUpViewModel.usernameMessage)
                                         .foregroundColor(.white)
+                                        .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                         .padding(.top, 5)
                                         .padding(.leading, 6)
+                                    Spacer()
                                 }
                             }) {
                                 HStack {
@@ -177,6 +188,7 @@ struct AuthenticationView: View {
                                 if(self.signUpViewModel.emailMessage != "") {
                                     Text(signUpViewModel.emailMessage)
                                         .foregroundColor(.white)
+                                        .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                         .padding(.top, 5)
                                         .padding(.leading, 6)
@@ -200,6 +212,7 @@ struct AuthenticationView: View {
                                 if(self.signUpViewModel.passwordMessage != "") {
                                     Text(signUpViewModel.passwordMessage)
                                         .foregroundColor(.white)
+                                        .font(.footnote)
                                         .multilineTextAlignment(.leading)
                                         .padding(.top, 5)
                                         .padding(.leading, 6)
@@ -248,6 +261,8 @@ struct AuthenticationView: View {
                             }
                             Spacer()
                         }.padding(.horizontal)
+                        .animation(.linear)
+                        .transition(.fade)
                     }
                 }
             }
