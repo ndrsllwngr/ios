@@ -3,7 +3,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 
-struct MapView: View {
+struct PlaceListMapView: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @State var currentIndex: Int = 0
     @State var placeIdToNavigateTo: String? = nil
