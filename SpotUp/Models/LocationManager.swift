@@ -32,7 +32,7 @@ class LocationManager: NSObject, ObservableObject {
         self.locationManager.pausesLocationUpdatesAutomatically = true
         if CLLocationManager.significantLocationChangeMonitoringAvailable() {
             self.locationManager.startUpdatingLocation()
-            // ToDo maybe use this function
+            // Possibly use this function to avoid updating location all the time
             //self.locationManager.startMonitoringSignificantLocationChanges()
         } else {
             self.locationManager.startUpdatingLocation()
