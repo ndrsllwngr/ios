@@ -24,6 +24,7 @@ struct PlaceListInfoView: View {
                         HStack {
                             Text(self.firestorePlaceList.placeList.name)
                                 .font(.system(size: 20))
+                                .lineLimit(1)
                                 .padding(.bottom, 5)
                             Spacer()
                         }
