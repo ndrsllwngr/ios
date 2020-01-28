@@ -41,7 +41,7 @@ struct TabBarView: View {
                         ExploreIsActiveBar(tabSelection: self.$selection)
                     }
                     CustomTabBar(selection: self.$selection)
-                        .frame(width: metrics.size.width, height: 50)
+                        .frame(width: metrics.size.width, height: 54)
                         .background(Color("bg-tab-bar"))
                 }
             }

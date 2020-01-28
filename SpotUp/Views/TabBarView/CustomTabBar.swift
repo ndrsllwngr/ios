@@ -17,8 +17,8 @@ struct CustomTabBar: View {
                 }
                 .onTapGesture {
                     self.selection = 0
-                }
-                .frame(width: geo.size.width)
+                }.frame(width: geo.size.width)
+                .padding(.top, 5)
             }
             GeometryReader{ geo in
                 VStack {
@@ -30,8 +30,9 @@ struct CustomTabBar: View {
                 }
                 .onTapGesture {
                     self.selection = 1
-                }
-                .frame(width: geo.size.width)
+                }.frame(width: geo.size.width)
+                .padding(.top, 5)
+                
             }
             GeometryReader{ geo in
                 VStack {
@@ -45,6 +46,7 @@ struct CustomTabBar: View {
                     self.selection = 2
                 }
                 .frame(width: geo.size.width)
+                .padding(.top, 5)
             }
         }
     }
