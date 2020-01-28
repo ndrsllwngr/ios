@@ -2,20 +2,17 @@ import SwiftUI
 import FirebaseFirestore
 
 struct ProfileView: View {
-    
-    var profileUserId: String
-    
-    @Binding var tabSelection: Int
-    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestoreProfile = FirestoreProfile()
-    
+    // PROPS
+    var profileUserId: String
+    @Binding var tabSelection: Int
+    // STATE
     @State var isMyProfile: Bool = true
     @State var showSheet = false
     @State var sheetSelection = "none"
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
-    
     @State var placeListIdToNavigateTo: String? = nil
     @State var goToPlaceList: Int? = nil
     
@@ -60,7 +57,7 @@ struct ProfileView: View {
                             profileUserIdToNavigateTo: self.$profileUserIdToNavigateTo,
                             goToOtherProfile: self.$goToOtherProfile)
             } else if self.sheetSelection == "image_picker" {
-                ImagePicker(imageType: .PROFILE_IMAGE)
+                ImagePicker()
             }
         }
         .onAppear {
@@ -76,21 +73,18 @@ struct ProfileView: View {
 }
 
 struct InnerProfileView: View {
+    @EnvironmentObject var firestoreProfile: FirestoreProfile
+    // PROPS
     var profileUserId: String
-    let bgColor: String = "bg-profile"
-    
     @Binding var isMyProfile: Bool
     @Binding var tabSelection: Int
-    
-    @EnvironmentObject var firestoreProfile: FirestoreProfile
-    
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeListIdToNavigateTo: String?
     @Binding var goToPlaceList: Int?
-    
+    // LOCAL
     @State var sortByCreationDate: Bool = true
+    let bgColor: String = "bg-profile"
     
     var body: some View {
         VStack {
@@ -118,7 +112,8 @@ struct InnerProfileView: View {
                                         self.goToPlaceList = 1
                                 }
                                 
-                            }.listRowBackground(Color(bgColor))
+                            }
+                            .listRowBackground(Color(bgColor))
                         } else {
                             HStack {
                                 Spacer()
@@ -146,7 +141,8 @@ struct InnerProfileView: View {
                                         self.placeListIdToNavigateTo = placeList.id
                                         self.goToPlaceList = 1
                                 }
-                            }.listRowBackground(Color(bgColor))
+                            }
+                            .listRowBackground(Color(bgColor))
                         } else {
                             HStack {
                                 Spacer()
@@ -158,7 +154,8 @@ struct InnerProfileView: View {
                         }
                     }
                 }
-            }.background(Color(bgColor))
+            }
+            .background(Color(bgColor))
         }
         .navigationBarTitle(Text("\(self.firestoreProfile.user.username)"), displayMode: .inline)
         .navigationBarItems(trailing: HStack{
@@ -172,12 +169,14 @@ struct InnerProfileView: View {
 }
 
 struct ProfileInfoView: View {
-    var profileUserId: String
-    var isMyProfile: Bool
     @EnvironmentObject var profile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    // PROPS
+    var profileUserId: String
+    var isMyProfile: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
+    // LOCAL
     @State var showingImagePicker = false
     
     var body: some View {
@@ -187,7 +186,8 @@ struct ProfileInfoView: View {
                     FirebaseProfileImage(imageUrl: self.profile.user.imageUrl).frame(width: 100, height: 100)
                         .clipShape(Circle())
                         .padding(.top)
-                }.frame(width: 110, height: 100)
+                }
+                .frame(width: 110, height: 100)
                 if (self.isMyProfile) {
                     VStack {
                         Spacer()
@@ -213,7 +213,8 @@ struct ProfileInfoView: View {
                             }
                             
                         }
-                    }.frame(width: 110, height: 100)
+                    }
+                    .frame(width: 110, height: 100)
                 }
             }
             Spacer()
@@ -260,7 +261,8 @@ struct ProfileInfoView: View {
                     Spacer()
                 }
                 .foregroundColor(Color("text-primary"))
-            }.frame(height: 50)
+            }
+            .frame(height: 50)
             Spacer()
         }
         .frame(height: 150)
@@ -269,10 +271,10 @@ struct ProfileInfoView: View {
 }
 
 struct ProfileFollowButton: View {
-    var profileUserId: String
-    
     @EnvironmentObject var firestoreProfile: FirestoreProfile
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    // PROPS
+    var profileUserId: String
     
     var body: some View {
         HStack {
@@ -303,12 +305,14 @@ struct ProfileFollowButton: View {
                                 .foregroundColor(Color(.gray))
                                 .padding(.vertical, 4)
                             
-                        }.frame(width: 90)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
+                        }
+                        .frame(width: 90)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(.lightGray), lineWidth: 1))
                     }
                 }
             }
-        }.padding(.trailing, -2)
+        }
+        .padding(.trailing, -2)
     }
 }
 

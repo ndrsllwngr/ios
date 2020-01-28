@@ -3,7 +3,9 @@ import GooglePlaces
 import FirebaseFirestore
 
 struct ItemView: View {
+    // PROPS
     var placeId: String
+    // LOCAL
     @State var place: GMSPlace? = nil
     @State var priceLevel: Int? = nil
     @State var type: String? = nil
@@ -91,6 +93,7 @@ struct ItemView: View {
 }
 
 struct InnerItemView: View {
+    // PROPS
     var place: GMSPlace
     var priceLevel: Int
     var type: String
@@ -234,9 +237,10 @@ struct InnerItemView: View {
 }
 
 struct ButtonOnTopView: View {
+    // PROPS
     var place: GMSPlace
     @Binding var showSheet:Bool
-    
+    // LOCAL
     @State var showActionSheet: Bool = false
     
     var body: some View {
@@ -273,6 +277,7 @@ struct ButtonOnTopView: View {
 }
 
 struct GalleryView: View {
+    // PROPS
     @Binding var gallery: [UIImage]
     
     var body : some View {
@@ -288,6 +293,7 @@ struct GalleryView: View {
 }
 
 struct DateCardView: View {
+    // PROPS
     var day: String
     var hours: String
     @State var color:String = "border-daycard"
@@ -323,6 +329,7 @@ struct DateCardView: View {
 }
 
 struct ScrollWeekView: View {
+    // PROPS
     var data : [DateCard]
     
     var body: some View {
@@ -412,3 +419,40 @@ func setDateCardColor(today:String, day: String) -> String {
     return color
 }
 
+
+func getPlaceIsOpenNow(isOpen: GMSPlaceOpenStatus) -> String {
+    var temp: String
+    switch isOpen{
+    case.closed:
+        temp = ("It's closed")
+    case.open:
+        temp = ("It's open")
+    case.unknown:
+        temp = ("It's unknown")
+    default:
+        temp = ("default")
+    }
+    return temp
+}
+
+
+func getPlacePriceLevel(priceLevel: GMSPlacesPriceLevel) -> Int {
+    var temp: Int
+    switch priceLevel {
+    case.free:
+        temp = 0
+    case.cheap:
+        temp = 1
+    case.medium:
+        temp = 2
+    case.high:
+        temp = 3
+    case.expensive:
+        temp = 4
+    case.unknown:
+        temp = 0
+    default:
+        temp = 0
+    }
+    return temp
+}

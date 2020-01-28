@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct CustomTabBar: View {
+    // PROPS
     @Binding var selection: Int
     
     var body: some View {
@@ -13,9 +14,11 @@ struct CustomTabBar: View {
                         .foregroundColor(self.selection == 0 ? Color("brand-color-primary") : Color("text-secondary"))
                         .font(.footnote)
                     
-                }.onTapGesture {
+                }
+                .onTapGesture {
                     self.selection = 0
-                }.frame(width: geo.size.width)
+                }
+                .frame(width: geo.size.width)
             }
             GeometryReader{ geo in
                 VStack {
@@ -24,9 +27,11 @@ struct CustomTabBar: View {
                     Text("Search")
                         .foregroundColor(self.selection == 1 ? Color("brand-color-primary") : Color("text-secondary"))
                         .font(.footnote)
-                }.onTapGesture {
+                }
+                .onTapGesture {
                     self.selection = 1
-                }.frame(width: geo.size.width)
+                }
+                .frame(width: geo.size.width)
             }
             GeometryReader{ geo in
                 VStack {

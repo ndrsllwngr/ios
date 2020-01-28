@@ -2,11 +2,9 @@ import Foundation
 import SwiftUI
 
 struct PlaceListInfoView: View {
-    
-    var placeListId: String
-    
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
+    // PROPS
+    var placeListId: String
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var tabSelection: Int

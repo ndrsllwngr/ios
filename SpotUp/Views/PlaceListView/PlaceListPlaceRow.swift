@@ -2,23 +2,19 @@ import SwiftUI
 import GooglePlaces
 
 struct PlaceListPlaceRow: View {
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // PROPS
     var place: GMSPlaceWithTimestamp
     var placeListId: String
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    @State var showActionSheetSimple: Bool = false
-    @State var showActionSheetWithWriteOptions: Bool = false
-    
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
+    // LOCAL
+    @State var showActionSheetSimple: Bool = false
+    @State var showActionSheetWithWriteOptions: Bool = false
     @State var image: UIImage?
     @State var address: String?
     

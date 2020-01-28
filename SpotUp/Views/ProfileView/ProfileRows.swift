@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CreateNewPlaceListRow: View {
     @EnvironmentObject var firestoreProfile: FirestoreProfile
+    // PROPS
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -33,13 +34,13 @@ struct CreateNewPlaceListRow: View {
 }
 
 struct PlaceListRow: View {
+    // PROPS
     var placeList: PlaceList
     
     var body: some View {
         GeometryReader { geo in
             ZStack {
                 HStack {
-                    
                     FirebasePlaceListRowImage(imageUrl: self.placeList.imageUrl)
                         .scaledToFill()
                         .frame(width: 100, height: 60)
@@ -62,7 +63,7 @@ struct PlaceListRow: View {
                 
                 VStack {
                     Spacer()
-                    HStack{
+                    HStack {
                         Spacer()
                         if (!self.placeList.isPublic) {
                             HStack {
@@ -75,7 +76,6 @@ struct PlaceListRow: View {
                             .background(Color("bg-placeholder"))
                             .mask(Circle())
                         }
-                        
                         if (self.placeList.isCollaborative) {
                             HStack {
                                 Image(systemName: "person.2.fill")
@@ -87,13 +87,13 @@ struct PlaceListRow: View {
                             .background(Color("bg-placeholder"))
                             .mask(Circle())
                         }
-                    }.padding(.trailing)
-                        .padding(.bottom, 10)
-                    
-                }.frame(width: geo.size.width, height: 60, alignment: .trailing)
+                    }
+                    .padding(.trailing)
+                    .padding(.bottom, 10)
+                }
+                .frame(width: geo.size.width, height: 60, alignment: .trailing)
             }
-            
-        }.frame(height: 60)
+        }
+        .frame(height: 60)
     }
-    
 }

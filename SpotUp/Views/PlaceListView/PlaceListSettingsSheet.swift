@@ -2,15 +2,15 @@ import SwiftUI
 
 struct PlaceListSettingsSheet: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
-    @Binding var presentationMode: PresentationMode
-    
-    @Binding var showSheet: Bool
     @ObservedObject private var placeListSettingsViewModel = PlaceListSettingsViewModel()
-    
+    // PROPS
+    @Binding var presentationMode: PresentationMode
+    @Binding var showSheet: Bool
+    // LOCAL
     var buttonColor: Color {
         return self.placeListSettingsViewModel.isValidplacelist ? Color("brand-color-primary") : Color(.lightGray)
     }
+    
     var body: some View {
         VStack () {
             Capsule()
@@ -109,8 +109,10 @@ struct PlaceListSettingsSheet: View {
 }
 
 struct SettingsButton: View {
+    // PROPS
     var iconName: String
     var description: String
+    
     var body: some View {
         HStack {
             VStack {

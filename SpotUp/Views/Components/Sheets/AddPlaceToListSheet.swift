@@ -3,15 +3,15 @@ import FirebaseFirestore
 import GooglePlaces
 
 struct AddPlaceToListSheet: View {
+    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    //PROPS
     var place: GMSPlace
     var placeImage: UIImage?
     
     @Binding var showSheet: Bool
-    
+    // LOCAL
     @State var placeLists: [PlaceList] = []
     @State var isLoading = false
-    
-    @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     
     var body: some View {
         VStack {

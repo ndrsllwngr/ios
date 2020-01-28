@@ -3,15 +3,14 @@ import SwiftUI
 import GooglePlaces
 
 struct SwipeView: View {
-    @State private var offset: CGFloat = 0
-    @State private var isDragging: Bool = false
-    
+    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // PROPS
     @Binding var index: Int
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
+    // LOCAL
+    @State private var offset: CGFloat = 0
+    @State private var isDragging: Bool = false
     let spacing: CGFloat = 10
     
     var body: some View {
@@ -63,7 +62,9 @@ struct SwipeView: View {
 
 
 struct PlaceCard: View {
-    let place: GMSPlace
+    // PROPS
+    var place: GMSPlace
+    // LOCAL
     @State var image: UIImage?
     @State var address: String?
     
@@ -105,7 +106,9 @@ struct PlaceCard: View {
 }
 
 struct CardImage: View {
+    // PROPS
     var image: UIImage
+    
     var body: some View {
         Image(uiImage: image)
             .renderingMode(.original)
