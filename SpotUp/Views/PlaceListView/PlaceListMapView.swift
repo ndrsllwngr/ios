@@ -19,7 +19,8 @@ struct PlaceListMapView: View {
                     EmptyView()
                 }
             }
-            GoogleMapView(currentIndex: self.$currentIndex).environmentObject(self.firestorePlaceList)
+            GoogleMapView(places: sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: sortByCreationDate),
+                          currentIndex: self.$currentIndex)
             if(!self.firestorePlaceList.places.isEmpty){
                 SwipeView(index: self.$currentIndex,
                           placeIdToNavigateTo: self.$placeIdToNavigateTo,
@@ -32,17 +33,17 @@ struct PlaceListMapView: View {
 }
 
 struct GoogleMapView : UIViewRepresentable {
-    @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     // PROPS
+    var places: [GMSPlaceWithTimestamp]
     @Binding var currentIndex: Int
     // LOCAL
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var defaultLocation = CLLocationCoordinate2D(
-        latitude: 34.6692097,
-        longitude: 135.503039
+        latitude: 48.149552,
+        longitude: 11.594079
     )
     func makeUIView(context: Context) -> GMSMapView {
-        let initialCoords = !firestorePlaceList.places.isEmpty ? firestorePlaceList.places[currentIndex].gmsPlace.coordinate : self.defaultLocation
+        let initialCoords = !places.isEmpty ? places[currentIndex].gmsPlace.coordinate : self.defaultLocation
         
         let camera = GMSCameraPosition.camera(
             withLatitude: initialCoords.latitude,
@@ -54,20 +55,20 @@ struct GoogleMapView : UIViewRepresentable {
         mapView.isMyLocationEnabled = true
         mapView.settings.compassButton = true
         mapView.delegate = context.coordinator
-        if !firestorePlaceList.places.isEmpty {
+        if !places.isEmpty {
             mapView.padding = UIEdgeInsets(top: 0, left: 0, bottom:160, right: 0)
         }
-        context.coordinator.firestorePlaceList = self.firestorePlaceList
+        context.coordinator.places = self.places
         return mapView
     }
     
     func updateUIView(_ view: GMSMapView, context: Context) {
-        if(firestorePlaceList.places.isEmpty) {return}
-        context.coordinator.firestorePlaceList = self.firestorePlaceList
-        let currentPlace = firestorePlaceList.places[currentIndex].gmsPlace.coordinate
+        if(places.isEmpty) {return}
+        context.coordinator.places = self.places
+        let currentPlace = places[currentIndex].gmsPlace.coordinate
         view.animate(toLocation: currentPlace)
         view.clear()
-        for (index,place) in self.firestorePlaceList.places.enumerated() {
+        for (index,place) in self.places.enumerated() {
             let marker = GMSMarker()
             marker.position = CLLocationCoordinate2D(
                 latitude: place.gmsPlace.coordinate.latitude,
@@ -90,7 +91,7 @@ struct GoogleMapView : UIViewRepresentable {
     }
     
     class Coordinator: NSObject, GMSMapViewDelegate {
-        var firestorePlaceList: FirestorePlaceList?
+        var places: [GMSPlaceWithTimestamp]?
         let parent: GoogleMapView
         
         init(_ parent: GoogleMapView) {
@@ -98,7 +99,7 @@ struct GoogleMapView : UIViewRepresentable {
         }
         
         func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
-            let index = firestorePlaceList?.places.firstIndex { (place) -> Bool in
+            let index = places?.firstIndex { (place) -> Bool in
                 return place.gmsPlace.name == marker.title ?? ""
             }
             if let index = index {

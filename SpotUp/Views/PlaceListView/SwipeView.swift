@@ -35,7 +35,7 @@ struct SwipeView: View {
             .gesture(
                 DragGesture()
                     .onChanged({ value in
-                        let currentOffset = geometry.size.width + self.spacing * CGFloat(self.index)
+                        let currentOffset = (geometry.size.width + self.spacing) * CGFloat(self.index)
                         self.offset = value.translation.width - currentOffset
                         
                         self.isDragging = true
