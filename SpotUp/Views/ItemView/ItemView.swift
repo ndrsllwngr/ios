@@ -11,7 +11,7 @@ struct ItemView: View {
     @State var type: String? = nil
     @State var openingHoursText: [String]? = []
     @State var photos: [GMSPlacePhotoMetadata]? = []
-    @State var gallery: [UIImage] = [UIImage(named: "place_image_placeholder")!]
+    @State var gallery: [UIImage] = [UIImage(named: "placeholder-image-place-500")!]
     @State var showSheet = false
     @State var isLoading = false
     
