@@ -18,7 +18,7 @@ struct FirebaseProfileImage: View {
                 }
                 .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
-                    .placeholder(Image(systemName: "profile_image_placeholder")) // Placeholder Image
+                    .placeholder(Image(systemName: "placeholder-image-profile-500")) // Placeholder Image
                     // Supports ViewBuilder as well
                     .placeholder {
                         Rectangle().foregroundColor(.gray)
@@ -29,7 +29,7 @@ struct FirebaseProfileImage: View {
                     .transition(.fade) // Fade Transition
                     .scaledToFit()
             } else {
-                Image(uiImage: UIImage(named: "profile_image_placeholder")!)
+                Image(uiImage: UIImage(named: "placeholder-image-profile-500")!)
                     .renderingMode(.original)
                     .resizable()
                     .animation(.easeInOut(duration: 0.5))
@@ -54,7 +54,7 @@ struct FirebasePlaceListInfoImage: View {
                 }
                 .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
-                    .placeholder(Image(systemName: "placelist_image_placeholder")) // Placeholder Image
+                    .placeholder(Image(systemName: "placeholder-image-placelist-500")) // Placeholder Image
                     // Supports ViewBuilder as well
                     .placeholder {
                         Rectangle().foregroundColor(.gray)
@@ -64,7 +64,7 @@ struct FirebasePlaceListInfoImage: View {
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
             } else {
-                Image(uiImage: UIImage(named: "placelist_image_placeholder")!)
+                Image(uiImage: UIImage(named: "placeholder-image-placelist-500")!)
                     .renderingMode(.original)
                     .resizable()
                     .animation(.easeInOut(duration: 0.5))
@@ -88,7 +88,7 @@ struct FirebasePlaceListRowImage: View {
                 }
                 .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
-                    .placeholder(Image(systemName: "placelist_image_placeholder")) // Placeholder Image
+                    .placeholder(Image(systemName: "placeholder-image-placelist-500")) // Placeholder Image
                     // Supports ViewBuilder as well
                     .placeholder {
                         Rectangle().foregroundColor(.gray)
@@ -98,7 +98,7 @@ struct FirebasePlaceListRowImage: View {
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
             } else {
-                Image(uiImage: UIImage(named: "placelist_image_placeholder")!)
+                Image(uiImage: UIImage(named: "placeholder-image-placelist-500")!)
                     .renderingMode(.original)
                     .resizable()
                     .animation(.easeInOut(duration: 0.5))
