@@ -1,7 +1,7 @@
 import SwiftUI
 import GooglePlaces
 
-struct PlaceRow: View {
+struct PlaceListPlaceRow: View {
     var place: GMSPlaceWithTimestamp
     var placeListId: String
     
@@ -131,16 +131,5 @@ struct PlaceRow: View {
                     }
                 }
         }
-    }
-}
-
-struct PlaceRowImage: View {
-    var image: UIImage?
-    var body: some View {
-        Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
-            .renderingMode(.original)
-            .resizable()
-            .scaledToFill()
-            .animation(.easeInOut)
     }
 }

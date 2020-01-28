@@ -144,7 +144,7 @@ struct InnerPlaceListView: View {
                         }
                         if (!self.firestorePlaceList.places.isEmpty) {
                             ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
-                                PlaceRow(place: place,
+                                PlaceListPlaceRow(place: place,
                                          placeListId: self.placeListId,
                                          showSheet: self.$showSheet,
                                          sheetSelection: self.$sheetSelection,
@@ -165,7 +165,7 @@ struct InnerPlaceListView: View {
                     }
                 }
             } else {
-                MapView().environmentObject(firestorePlaceList)
+                PlaceListMapView().environmentObject(firestorePlaceList)
             }
         }
         .navigationBarTitle(Text(""), displayMode: .inline)
