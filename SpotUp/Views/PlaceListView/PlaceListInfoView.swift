@@ -39,6 +39,7 @@ struct PlaceListInfoView: View {
                                 .frame(height: 16)
                             Text("\(self.firestorePlaceList.placeList.places.map{$0.placeId}.count)")
                                 .font(.footnote)
+                                .padding(.trailing, 10)
                             Button(action: {
                                 self.sheetSelection = "follower"
                                 self.showSheet.toggle()
