@@ -30,7 +30,7 @@ struct SearchResultsPlacesView: View {
                             Spacer()
                         }
                     } else {
-                        SearchResultsPlacesEmptyStateView()
+                        SearchResultsEmptyStateView(imageString: "placeholder-search-places-200", titleString: "Find places", bodyString: "Look up places to get more\n information and options to save it\n in a collection.")
                     }
                 } else {
                     List {

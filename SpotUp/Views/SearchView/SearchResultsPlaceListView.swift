@@ -34,7 +34,7 @@ struct SearchResultsPlaceListView: View {
                             Spacer()
                         }
                     } else {
-                        SearchResultsListsEmptyStateView()
+                        SearchResultsEmptyStateView(imageString: "placeholder-search-collections-200", titleString: "Discover new spots", bodyString: "Search collection lists of places to\n explore recommended spots\n by other users.")
                     }
                 } else {
                     List {
