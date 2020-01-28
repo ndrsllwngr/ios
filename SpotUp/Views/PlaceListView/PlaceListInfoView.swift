@@ -26,7 +26,7 @@ struct PlaceListInfoView: View {
                                 .font(.system(size: 20))
                                 .padding(.bottom, 5)
                             Spacer()
-                        }//.background(Color(.blue))
+                        }
                         Spacer()
                         HStack {
                             NavigationLink(destination: ProfileView(profileUserId: self.firestorePlaceList.placeList.owner.id, tabSelection: self.$tabSelection)) {
@@ -65,13 +65,13 @@ struct PlaceListInfoView: View {
                                 VStack{
                                     Text("Explore")
                                         .accentColor(Color.white)
-                                        .padding([.vertical], 5)
-                                        .padding([.horizontal], 32)
+                                        .padding(.vertical, 5)
+                                        .padding(.horizontal, 32)
                                 }.background(Color("brand-color-primary"))
                                     .cornerRadius(15)
                             }
                             Spacer()
-                        }//.background(Color(.green))
+                        }
                     }
                     .frame(height: 100)
                     .padding(.horizontal)

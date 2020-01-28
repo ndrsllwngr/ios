@@ -23,7 +23,6 @@ struct MapView: View {
                           goToPlace: self.$goToPlace).environmentObject(self.firestorePlaceList)
                     .frame(height: 180)
             }
-            
         }
     }
 }
@@ -77,9 +76,7 @@ struct GoogleMapView : UIViewRepresentable {
                 marker.icon = GMSMarker.markerImage(with: .black)
             }
             marker.map = view
-            
         }
-        
     }
     
     
@@ -103,7 +100,6 @@ struct GoogleMapView : UIViewRepresentable {
             if let index = index {
                 self.parent.currentIndex = Int(index)
             }
-            
             return true
         }
     }

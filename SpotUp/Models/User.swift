@@ -7,7 +7,7 @@ struct User: Identifiable, Decodable, Hashable {
     var isFollowing: [String] = []
     var isFollowedBy: [String] = []
     var imageUrl: String? = nil
-
+    
     func toListOwner() -> ListOwner {
         return ListOwner(id: self.id, username: self.username)
     }

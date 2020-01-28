@@ -3,7 +3,6 @@ import FirebaseFirestore
 import GooglePlaces
 
 class FirestoreProfile: ObservableObject {
-    
     var userProfileListener: ListenerRegistration? = nil
     var placeListsListener: ListenerRegistration? = nil
     var listOwnerListeners: [ListenerRegistration?] = []

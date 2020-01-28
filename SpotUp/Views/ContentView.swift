@@ -1,20 +1,10 @@
-//
-//  ContentView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 14.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 
-
 struct ContentView: View {
-    
+    // LOCAL
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @State var launchedBefore = false
     @State var permissionRequestedBefore = false
-    
     
     var body: some View {
         Group {
@@ -43,7 +33,6 @@ struct ContentView: View {
         self.launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         self.permissionRequestedBefore = UserDefaults.standard.bool(forKey: "permissionRequestedBefore")
         getUser()
-        
     }
     
     func getUser() {
@@ -52,10 +41,10 @@ struct ContentView: View {
     
     func setLaunchedBefore() {
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
+    
     static var previews: some View {
         ContentView()
     }

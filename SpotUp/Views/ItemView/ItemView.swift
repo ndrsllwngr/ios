@@ -1,10 +1,3 @@
-//
-//  ItemView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 07.01.20.
-//
-
 import SwiftUI
 import GooglePlaces
 import FirebaseFirestore
@@ -18,8 +11,6 @@ struct ItemView: View {
     @State var photos: [GMSPlacePhotoMetadata]? = []
     @State var gallery: [UIImage] = [UIImage(named: "place_image_placeholder")!]
     @State var showSheet = false
-    
-    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -94,8 +85,6 @@ struct InnerItemView: View {
     var openingHoursText: [String]
     @Binding var gallery: [UIImage]
     @Binding var showSheet: Bool
-    
-    
     
     var body: some View {
         VStack(spacing: 0){
@@ -243,9 +232,9 @@ struct InnerItemView: View {
                                 showSheet: self.$showSheet)
         }
         .navigationBarTitle(Text(place.name != nil ? place.name! : ""), displayMode:.inline)
-        //        }
-    }//end body
-}//end wholew View
+    }
+}
+
 struct ButtonOnTopView: View{
     var place: GMSPlace
     @Binding var showSheet:Bool
@@ -256,7 +245,6 @@ struct ButtonOnTopView: View{
         
         HStack{
             Spacer()
-            //EndButton
             ZStack(alignment: .center) {
                 Circle().fill(Color("brand-color-primary"))
                 VStack{
@@ -300,12 +288,10 @@ struct GalleryView:View{
     }
 }
 
-// weekdays
 struct DateCardView: View {
     var day: String
     var hours: String
     @State var color:String = "border-daycard"
-    
     
     var body: some View {
         VStack{
@@ -332,10 +318,8 @@ struct DateCardView: View {
             
         }.onAppear{
             self.color = setDateCardColor(today: Date().dayofTheWeek, day:self.day)
-        }
-        
+        }   
     }
-    
 }
 
 struct ScrollWeekView:View{

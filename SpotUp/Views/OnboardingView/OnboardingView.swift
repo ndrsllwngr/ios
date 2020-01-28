@@ -1,29 +1,18 @@
-//
-//  OnboardingView.swift
-//  App Onboarding
-//
-//  Created by Andreas Schultz on 10.08.19.
-//  Copyright © 2019 Andreas Schultz. All rights reserved.
-//
-
 import SwiftUI
 
-// https://www.blckbirds.com/post/how-to-create-an-onboarding-screen-in-swiftui-2
+// Tutorial https://www.blckbirds.com/post/how-to-create-an-onboarding-screen-in-swiftui-2
 struct OnboardingView: View {
-    
+    // PROPS
     @Binding var launchedBefore: Bool
-    
+    // LOCAL
+    @State var currentPageIndex = 0
     var subviews = [
         UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-1-200")),
         UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-2-200")),
         UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-3-200"))
     ]
-    
     var titles = ["Avoid Missing Out", "Join the Community", "Explore at Ease"]
-    
     var captions =  ["Join SpotUp and experience a better way to share travel tips with your friends.", "Follow your friends’ travels on SpotUp and visit their favourite spots visit their favourite spots or share your own favourite spots.", "SpotUp will guide you to the most nearby places by sorting the spots in your travel list."]
-    
-    @State var currentPageIndex = 0
     
     var body: some View {
         VStack(spacing: 0){
@@ -36,20 +25,32 @@ struct OnboardingView: View {
                         PageViewController(currentPageIndex: $currentPageIndex, viewControllers: subviews)
                     }
                 }
-//                .padding(.top, 80)
-                //                .background(Color.blue)
                 Group {
                     VStack(spacing: 0) {
-                        Text(titles[currentPageIndex]).font(.title).multilineTextAlignment(.center)
-                        Text(captions[currentPageIndex]).multilineTextAlignment(.center).padding(.horizontal)
+                        Text(titles[currentPageIndex])
+                            .font(.title)
+                            .multilineTextAlignment(.center)
+                        Text(captions[currentPageIndex])
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
                         Spacer()
-                    }.padding(.horizontal)
+                    }
+                    .padding(.horizontal)
                 }
-                //                .background(Color.red)
                 Spacer()
             }
             HStack {
-                PageControl(numberOfPages: subviews.count, currentPageIndex: $currentPageIndex)
+                ZStack {
+                    PageControl(currentPageIndex: $currentPageIndex, numberOfPages: subviews.count)
+                    HStack{
+                        Spacer()
+                    }
+                    .frame(width: 40, height:40)
+                    .contentShape(Rectangle())
+                    .background(Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.01))
+                    .onTapGesture {
+                    }
+                }
                 Spacer()
                 if(self.currentPageIndex == 2) {
                     Button(action: {
@@ -82,7 +83,6 @@ struct OnboardingView: View {
                                 .fontWeight(.bold)
                                 .foregroundColor(Color(.white))
                                 .padding(.vertical)
-                            
                         }
                         .frame(width: 90, height: 40)
                         .background(Color("brand-color-primary"))
@@ -98,6 +98,7 @@ struct OnboardingView: View {
 
 struct OnboardingView_Previews: PreviewProvider {
     @State static var launchedBefore: Bool = false
+    
     static var previews: some View {
         OnboardingView(launchedBefore: $launchedBefore)
     }

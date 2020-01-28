@@ -1,13 +1,7 @@
-//
-//  SplashScreen.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 25.01.20.
-//
-
 import SwiftUI
 
 struct SplashScreen: View {
+    
     var body: some View {
         VStack {
             Spacer()
@@ -29,6 +23,7 @@ struct SplashScreen: View {
 }
 
 struct SplashScreen_Previews: PreviewProvider {
+    
     static var previews: some View {
         SplashScreen()
     }

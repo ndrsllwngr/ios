@@ -19,7 +19,7 @@ class FirebaseStorage: ObservableObject {
     func uploadImageToStorage(id: String, imageType: ImageType, uiImage: UIImage) {
         
         let croppedImage = cropUiImageToBounds(image: uiImage, width: 500.0, height: 500.0)
-
+        
         var data = Data()
         data = croppedImage.jpegData(compressionQuality: 0.3)!
         
@@ -62,7 +62,7 @@ func getImageRef(id: String, imageType: ImageType) -> StorageReference {
 
 // https://stackoverflow.com/questions/32041420/cropping-image-with-swift-and-put-it-on-center-position
 func cropUiImageToBounds(image: UIImage, width: Double, height: Double) -> UIImage {
-
+    
     let cgimage = image.cgImage!
     let contextImage: UIImage = UIImage(cgImage: cgimage)
     let contextSize: CGSize = contextImage.size
@@ -70,7 +70,7 @@ func cropUiImageToBounds(image: UIImage, width: Double, height: Double) -> UIIma
     var posY: CGFloat = 0.0
     var cgwidth: CGFloat = CGFloat(width)
     var cgheight: CGFloat = CGFloat(height)
-
+    
     // See what size is longer and create the center off of that
     if contextSize.width > contextSize.height {
         posX = ((contextSize.width - contextSize.height) / 2)
@@ -83,14 +83,14 @@ func cropUiImageToBounds(image: UIImage, width: Double, height: Double) -> UIIma
         cgwidth = contextSize.width
         cgheight = contextSize.width
     }
-
+    
     let rect: CGRect = CGRect(x: posX, y: posY, width: cgwidth, height: cgheight)
-
+    
     // Create bitmap image from context using the rect
     let imageRef: CGImage = cgimage.cropping(to: rect)!
-
+    
     // Create a new image based on the imageRef and rotate back to the original orientation
     let image: UIImage = UIImage(cgImage: imageRef, scale: image.scale, orientation: image.imageOrientation)
-
+    
     return image
 }

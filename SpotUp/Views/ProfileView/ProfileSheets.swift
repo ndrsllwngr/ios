@@ -1,10 +1,3 @@
-//
-//  ProfileSheets.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 17.12.19.
-//
-
 import SwiftUI
 import FirebaseFirestore
 
@@ -14,7 +7,6 @@ struct CreatePlacelistSheet: View {
     
     @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
     
-//    @State private var placeListName: String = ""
     var buttonColor: Color {
         return self.createPlacelistViewModel.isValidplacelist ? Color("brand-color-primary") : Color(.lightGray)
     }
@@ -32,19 +24,19 @@ struct CreatePlacelistSheet: View {
             
             VStack (alignment: .leading){
                 TextField("Collection Name", text: self.$createPlacelistViewModel.placelistName)
-                .autocapitalization(.none)
-
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(Color(.lightGray))
-                .opacity(0.8)
-
+                    .autocapitalization(.none)
+                
+                Rectangle()
+                    .frame(height: 1)
+                    .foregroundColor(Color(.lightGray))
+                    .opacity(0.8)
+                
                 Text(self.createPlacelistViewModel.placelistNameMessage)
-                .font(.footnote)
-                .foregroundColor(.red)
-            Spacer()
+                    .font(.footnote)
+                    .foregroundColor(.red)
+                Spacer()
             }.frame(height: 60)
-            .padding(.horizontal, 30)
+                .padding(.horizontal, 30)
             
             HStack {
                 Button(action: {

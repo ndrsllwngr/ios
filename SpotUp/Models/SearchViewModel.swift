@@ -10,7 +10,6 @@ class SearchViewModel: ObservableObject {
     
     // output
     @Published var googlePlaces: [GMSAutocompletePrediction] = []
-    //solution: https://stackoverflow.com/a/58440744
     @Published var firestoreSearch: FirestoreSearch = FirestoreSearch()
     @Published var recentSearchPlaces: [GMSAutocompletePrediction] = []
     @Published var recentSearchFirebaseAccounts: [User] = []
@@ -25,7 +24,7 @@ class SearchViewModel: ObservableObject {
     }
     
     var firestoreSearchCancellable: AnyCancellable? = nil
-
+    
     // GOOGLE SEARCH
     private var isSearchSpaceGoogle: AnyPublisher<Bool, Never> {
         $searchSpaceSelection
@@ -78,16 +77,6 @@ class SearchViewModel: ObservableObject {
             .assign(to: \.googlePlaces, on: self)
             .store(in: &cancellableSet)
     }
-    
-    //    init() {
-    //        isGoogleSearchValidPublisher
-    //            .receive(on: RunLoop.main)
-    //            .map { valid in
-    //                valid ? self.GSM(query: self.searchTerm) : []
-    //        }
-    //        .assign(to: \.googlePlaces, on: self)
-    //        .store(in: &cancellableSet)
-    //    }
     
     /**
      * Create a new session token. Be sure to use the same token for calling

@@ -1,11 +1,3 @@
-//
-//  ListView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 18.11.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 
 struct PlaceListView: View {
@@ -76,8 +68,8 @@ struct PlaceListView: View {
             self.firestorePlaceList.addPlaceListListener(placeListId: self.placeListId, ownUserId: self.firebaseAuthentication.currentUser!.uid)
         }
         .onDisappear {
-            // ToDo: If don't remove the listener, the places in the list wouldn't reload on navigate back from itemView
-            //self.firestorePlaceList.removePlaceListListener()
+            print("PlaceListView() - onDisappear()")
+            self.firestorePlaceList.removePlaceListListener()
         }
     }
 }
@@ -133,11 +125,11 @@ struct InnerPlaceListView: View {
             if selection == 0 {
                 List {
                     HStack {
-                         Text("Places")
-                         .font(.system(size: 16, weight:.semibold))
-                         Spacer()
-                         SortButton(sortByDate: self.$sortByCreationDate)
-                     }
+                        Text("Places")
+                            .font(.system(size: 16, weight:.semibold))
+                        Spacer()
+                        SortButton(sortByDate: self.$sortByCreationDate)
+                    }
                     if (!self.firestorePlaceList.places.isEmpty) {
                         ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
                             PlaceRow(place: place,
