@@ -20,5 +20,6 @@ struct ItemMapView: UIViewRepresentable {
         let marker = GMSMarker()
         marker.position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
         marker.map = view
+        view.moveCamera(GMSCameraUpdate.setTarget(coordinate, zoom: 16))
     }
 }
