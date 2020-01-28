@@ -88,9 +88,15 @@ struct ExploreActiveView: View {
                 .padding(.bottom)
                 
                 ExploreMapView(exploreList: self.exploreModel.exploreList!)
-                    .frame(height: 180) // ToDo make height based on Geometry Reader
+                    .frame(height: 180)
                 
-                if !exploreModel.exploreList!.places.isEmpty {
+                if (exploreModel.isLoadingPlaces) {
+                    Spacer()
+                    ActivityIndicator()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(Color("text-secondary"))
+                    Spacer()
+                } else if !exploreModel.exploreList!.places.isEmpty {
                     CurrentTargetRow(showSheet: self.$showSheet,
                                      sheetSelection: self.$sheetSelection,
                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,

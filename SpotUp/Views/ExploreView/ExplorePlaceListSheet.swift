@@ -23,10 +23,8 @@ struct ExplorePlaceListSheet: View {
                 if (isLoading) {
                     Spacer()
                     ActivityIndicator()
-                        .frame(width: 50, height: 50)
+                        .frame(width: 30, height: 30)
                         .foregroundColor(Color("text-secondary"))
-                        .animation(.easeInOut)
-                        .transition(.asymmetric(insertion: .scale, removal: .scale))
                 } else {
                     if (!self.placeLists.isEmpty) {
                         ScrollView {
