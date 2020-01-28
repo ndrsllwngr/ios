@@ -8,6 +8,7 @@ struct SwipeView: View {
     @Binding var index: Int
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
+    @Binding var sortByCreationDate: Bool
     // LOCAL
     @State private var offset: CGFloat = 0
     @State private var isDragging: Bool = false
@@ -17,7 +18,7 @@ struct SwipeView: View {
         GeometryReader { geometry in
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: self.spacing) {
-                    ForEach((self.firestorePlaceList.places), id: \.self) { place in
+                    ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
                         PlaceCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
                             .contentShape(Rectangle())
@@ -34,8 +35,8 @@ struct SwipeView: View {
             .gesture(
                 DragGesture()
                     .onChanged({ value in
-                        let offsetConst = geometry.size.width + self.spacing
-                        self.offset = value.translation.width - offsetConst * CGFloat(self.index)
+                        let currentOffset = geometry.size.width + self.spacing * CGFloat(self.index)
+                        self.offset = value.translation.width - currentOffset
                         
                         self.isDragging = true
                     })
