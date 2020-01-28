@@ -4,7 +4,7 @@ struct PlaceRowImage: View {
     var image: UIImage?
     
     var body: some View {
-        Image(uiImage: image != nil ? image! : UIImage(named: "place_image_placeholder")!)
+        Image(uiImage: image != nil ? image! : UIImage(named: "placeholder-image-place-500")!)
             .renderingMode(.original)
             .resizable()
             .scaledToFill()
