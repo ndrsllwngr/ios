@@ -219,6 +219,10 @@ struct ExploreInactiveView: View {
                         .frame(height: 200, alignment: .center)
                 }.frame(width: 200, height: 200, alignment: .center)
                 Spacer()
+                Text("Get guided through an existing collection or add spots to your explore queue.")
+                    .foregroundColor(Color("text-primary"))
+                    .padding(.horizontal, 30)
+                Spacer()
                 Button(action: {
                     self.showSheet.toggle()
                     self.sheetSelection = "select_placelist"

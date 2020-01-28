@@ -156,16 +156,33 @@ struct InnerItemView: View {
                     }
                     .padding(.horizontal,30)
                 }
+                
+                
                 Button(action: {
-                    if let website = self.place.website {
-                        UIApplication.shared.open(website)
-                    }
+                                   if let website = self.place.website {
+                                       UIApplication.shared.open(website)
+                                   }
+                               })
+                               {
+                                   HStack(spacing:20){
+                                       Image(systemName: "desktopcomputer")
+                                           .foregroundColor(Color("brand-color-primary"))
+                                       Text("Open Website")
+                                           .foregroundColor(Color("text-primary"))
+                                       Spacer()
+                                       
+                                   }
+                                   .padding(.horizontal, 30)
+                                   
+                               }
+                Button(action: {
+                      UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
                 })
                 {
                     HStack(spacing:20){
-                        Image(systemName: "desktopcomputer")
+                        Image(systemName: "arrow.up.right.diamond.fill")
                             .foregroundColor(Color("brand-color-primary"))
-                        Text("Open Website")
+                        Text("Directions")
                             .foregroundColor(Color("text-primary"))
                         Spacer()
                         
@@ -178,22 +195,17 @@ struct InnerItemView: View {
             .padding(.horizontal, 15)
             
             
+            
+            
             // MAP
             VStack{
-                ZStack{
+                
                     ItemMapView(coordinate: place.coordinate)
                         .frame(width:UIScreen.main.bounds.width-30, height:200)
                         .cornerRadius(15)
                         .padding(20)
-                    HStack{
-                        Spacer()
-                    }.frame(width:UIScreen.main.bounds.width-30, height:200)
-                        .contentShape(Rectangle())
-                        .background(Color.init(red:0.00, green:0.00, blue:0.00, opacity: 0.01))
-                        .onTapGesture {
-                            UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
-                    }
-                }
+                
+                
             }
             .frame(width:UIScreen.main.bounds.width-30)
             
