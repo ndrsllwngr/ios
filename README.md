@@ -23,10 +23,16 @@ xcodegen generate && pod install --repo-update
 
 - Swift 5.1.2
 - SwiftUI
-- Firebase Authentication
-- Firebase Cloud Firestore
+- Firebase
+  - Analytics
+  - Auth
+  - Core
+  - Firestore
+  - Storage
+- FirebaseFirestoreSwift
 - Google Maps
 - Google Places
+- SDWebImageSwiftUI
 
 ## Contributors (Group 7)
 

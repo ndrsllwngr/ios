@@ -24,7 +24,6 @@ class ExploreModel: ObservableObject {
         
     @Published var exploreList: ExploreList? = nil
     @Published var isLoadingPlaces = false
-    
     var locationManager = LocationManager()
     
     private init(){}

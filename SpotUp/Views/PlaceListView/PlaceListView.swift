@@ -93,8 +93,7 @@ struct InnerPlaceListView: View {
                                       tabSelection: $tabSelection)
                         .environmentObject(firestorePlaceList)
                         .padding(.top)
-                        .padding(.horizontal)
-                        
+                        .padding(.horizontal) 
                         .animation(.spring())
                         .transition(.asymmetric(insertion: .scale, removal: .scale))
                 }
@@ -153,7 +152,7 @@ struct InnerPlaceListView: View {
                     }
                 }
             } else {
-                PlaceListMapView().environmentObject(firestorePlaceList)
+                PlaceListMapView(sortByCreationDate: self.$sortByCreationDate).environmentObject(firestorePlaceList)
             }
         }
         .navigationBarTitle(Text(""), displayMode: .inline)
