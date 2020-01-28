@@ -1,10 +1,3 @@
-//
-//  PlaceListSettings.swift
-//  SpotUp
-//
-//  Created by Fangli Lu on 20.12.19.
-//
-
 import SwiftUI
 
 struct PlaceListSettingsSheet: View {
@@ -21,9 +14,9 @@ struct PlaceListSettingsSheet: View {
     var body: some View {
         VStack () {
             Capsule()
-            .fill(Color.secondary)
-            .frame(width: 30, height: 3)
-            .padding(10)
+                .fill(Color.secondary)
+                .frame(width: 30, height: 3)
+                .padding(10)
             
             Spacer()
             Text(self.firestorePlaceList.placeList.name)
@@ -49,7 +42,6 @@ struct PlaceListSettingsSheet: View {
                 
                 Button(action: {
                     FirestoreConnection.shared.updatePlaceList(placeListId: self.firestorePlaceList.placeList.id, newName: self.placeListSettingsViewModel.placelistName)
-                    // ToDo also close on background tap
                     UIApplication.shared.endEditing(true)
                 }) {
                     GeometryReader { geo in
@@ -58,7 +50,8 @@ struct PlaceListSettingsSheet: View {
                             .frame(width: geo.size.width, height: 40)
                             .overlay(RoundedRectangle(cornerRadius: 15).stroke(self.buttonColor, lineWidth: 1))
                             .padding(.top, 20)
-                    }.frame(height: 40)
+                    }
+                    .frame(height: 40)
                     
                 }.disabled(!self.placeListSettingsViewModel.isValidplacelist)
             }.padding(.horizontal)
@@ -107,7 +100,8 @@ struct PlaceListSettingsSheet: View {
                 }
             }
             
-        }.onAppear {
+        }
+        .onAppear {
             self.placeListSettingsViewModel.placelistName = self.firestorePlaceList.placeList.name
         }
         .padding(.horizontal)
@@ -126,7 +120,8 @@ struct SettingsButton: View {
             .frame(width: 20)
             .padding(.trailing)
             
-            Text(description).foregroundColor(Color("text-primary"))
+            Text(description)
+                .foregroundColor(Color("text-primary"))
             Spacer()
         }
         .frame(height: 50)

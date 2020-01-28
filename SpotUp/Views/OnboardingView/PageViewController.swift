@@ -3,9 +3,8 @@ import UIKit
 import SwiftUI
 
 struct PageViewController: UIViewControllerRepresentable {
-    
+    // PROPS
     @Binding var currentPageIndex: Int
-    
     var viewControllers: [UIViewController]
     
     func makeCoordinator() -> Coordinator {
@@ -13,25 +12,20 @@ struct PageViewController: UIViewControllerRepresentable {
     }
     
     func makeUIViewController(context: Context) -> UIPageViewController {
-        let pageViewController = UIPageViewController(
-            transitionStyle: .scroll,
-            navigationOrientation: .horizontal)
-        
+        let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController.dataSource = context.coordinator
         pageViewController.delegate = context.coordinator
-        
         return pageViewController
     }
     
     func updateUIViewController(_ pageViewController: UIPageViewController, context: Context) {
-        pageViewController.setViewControllers(
-            [viewControllers[currentPageIndex]], direction: .forward, animated: true)
+        pageViewController.setViewControllers([viewControllers[currentPageIndex]], direction: .forward, animated: true)
     }
     
     class Coordinator: NSObject, UIPageViewControllerDataSource, UIPageViewControllerDelegate {
         
         var parent: PageViewController
-
+        
         init(_ pageViewController: PageViewController) {
             self.parent = pageViewController
         }
@@ -39,17 +33,14 @@ struct PageViewController: UIViewControllerRepresentable {
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
             //retrieves the index of the currently displayed view controller
             guard let index = parent.viewControllers.firstIndex(of: viewController) else {
-                 return nil
-             }
-            
+                return nil
+            }
             //shows the last view controller when the user swipes back from the first view controller
             if index == 0 {
                 return parent.viewControllers.last
             }
- 
             //show the view controller before the currently displayed view controller
             return parent.viewControllers[index - 1]
-            
         }
         
         func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {

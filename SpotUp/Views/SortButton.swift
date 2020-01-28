@@ -1,8 +1,7 @@
 import SwiftUI
 
-
 struct SortButton: View {
-    
+    // PROPS
     @Binding var sortByDate: Bool
     
     var body: some View {

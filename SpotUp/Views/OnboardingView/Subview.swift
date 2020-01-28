@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct Subview: View {
-    
+    // PROPS
     var imageString: String
     
     var body: some View {
@@ -12,6 +12,7 @@ struct Subview: View {
                 .resizable()
                 .scaledToFit()
                 .frame(height: 200, alignment: .bottom)
-        }.frame(width: 250, height: 250, alignment: .center)
+        }
+        .frame(width: 250, height: 250, alignment: .center)
     }
 }

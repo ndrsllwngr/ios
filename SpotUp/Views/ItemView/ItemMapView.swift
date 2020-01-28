@@ -1,20 +1,11 @@
-//
-//  ItemMapView.swift
-//  SpotUp
-//
-//  Created by Havy Ha on 05.12.19.
-//  Copyright © 2019 iOS WiSe 19/20 Gruppe 7. All rights reserved.
-//
-
 import SwiftUI
 import MapKit
 import GoogleMaps
 
 struct ItemMapView: UIViewRepresentable {
     var coordinate: CLLocationCoordinate2D
-   
+    
     func makeUIView(context: Context) -> GMSMapView {
-
         let camera = GMSCameraPosition.camera(
             withLatitude: coordinate.latitude,
             longitude: coordinate.longitude,

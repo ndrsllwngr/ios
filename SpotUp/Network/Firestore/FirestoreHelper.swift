@@ -10,7 +10,7 @@ func userToData(user: User) -> Dictionary<String, Any> {
         "username": user.username,
         "is_following": user.isFollowing,
         "is_followed_by": user.isFollowedBy,
-        "image_url": user.imageUrl // ToDo warning
+        "image_url": user.imageUrl // Warning "Expression implicitly coerced from 'String?' to 'Any'" can be ignored
     ]
 }
 
@@ -23,9 +23,9 @@ func placeListToData(placeList: PlaceList) -> Dictionary<String, Any> {
         "is_public": placeList.isPublic,
         "places": placeIDsWithTimestampsToDatas(places: placeList.places),
         "is_collaborative": placeList.isCollaborative,
-        "modified_at": placeList.modifiedAt,
+        "modified_at": placeList.modifiedAt, // Warning "Expression implicitly coerced from 'Timestamp?' to 'Any" can be ignored
         "created_at": placeList.createdAt,
-        "image_url": placeList.imageUrl // ToDo warning
+        "image_url": placeList.imageUrl // Warning "Expression implicitly coerced from 'String?' to 'Any'" can be ignored
     ]
 }
 

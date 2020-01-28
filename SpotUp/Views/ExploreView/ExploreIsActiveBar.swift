@@ -1,9 +1,10 @@
 import SwiftUI
 
 struct ExploreIsActiveBar: View {
+    @ObservedObject var exploreModel = ExploreModel.shared
+    // PROPS
     @Binding var tabSelection: Int
     
-    @ObservedObject var exploreModel = ExploreModel.shared
     var body: some View {
         VStack {
             HStack {

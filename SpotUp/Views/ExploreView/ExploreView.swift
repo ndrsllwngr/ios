@@ -1,26 +1,17 @@
-//
-//  ExploreView.swift
-//  SpotUp
-//
-//  Created by Timo Erdelt on 16.01.20.
-//
-
 import SwiftUI
 import UIKit
 import GoogleMaps
 import GooglePlaces
 
 struct ExploreView: View {
-    @Binding var tabSelection: Int
-    
     @ObservedObject var exploreModel = ExploreModel.shared
-    
+    // PROPS
+    @Binding var tabSelection: Int
+    // LOCAL
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
-    
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
-    
     @State var placeForAddPlaceToListSheet: ExplorePlace? = nil
     @State var imageForAddPlaceToListSheet: UIImage? = nil
     
@@ -68,18 +59,15 @@ struct ExploreView: View {
 
 struct ExploreActiveView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
-    
+    // PROPS
     @Binding var tabSelection: Int
-    
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
+    // LOCAL
     @State var sortByDistance = true
     
     var body: some View {
@@ -147,7 +135,7 @@ struct ExploreActiveView: View {
                                 Spacer()
                             }
                             .frame(height: 60)
-                            .padding([.horizontal], 20)
+                            .padding(.horizontal, 20)
                         }
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             VStack {
@@ -202,7 +190,7 @@ struct ExploreActiveView: View {
 
 struct ExploreInactiveView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
-    
+    // PROPS
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -231,13 +219,13 @@ struct ExploreInactiveView: View {
                         Text("Explore collection")
                             .font(.system(size:20, weight:.bold))
                             .accentColor(Color.white)
-                            .padding([.vertical], 15)
+                            .padding(.vertical, 15)
                     }
                     .frame(width: metrics.size.width * 0.8)
                     .background(Color("brand-color-primary-soft"))
                     .cornerRadius(15)
                 }
-                .padding([.bottom], 20)
+                .padding(.bottom, 20)
                 Button(action: {
                     self.exploreModel.startExploreWithEmptyList()
                 }) {
@@ -245,7 +233,7 @@ struct ExploreInactiveView: View {
                         Text("Start new queue")
                             .font(.system(size:20, weight:.bold))
                             .accentColor(Color.white)
-                            .padding([.vertical], 15)
+                            .padding(.vertical, 15)
                     }
                     .frame(width: metrics.size.width * 0.8)
                     .background(Color("brand-color-secondary"))
@@ -254,11 +242,11 @@ struct ExploreInactiveView: View {
                 Spacer()
             }
         }
-        
     }
 }
 
 struct ExploreSortButton: View {
+    // PROPS
     @Binding var sortByDistance: Bool
     
     var body: some View {
@@ -273,7 +261,6 @@ struct ExploreSortButton: View {
                 .frame(width: 50, height: 50)
             }
         }
-        
     }
 }
 
@@ -328,8 +315,6 @@ struct ExploreMapView : UIViewRepresentable {
                 marker.icon = GMSMarker.markerImage(with: UIColor.systemRed )
             }
             marker.map = view
-            
         }
-        
     }
 }

@@ -53,9 +53,7 @@ class CreatePlacelistViewModel: ObservableObject {
         .eraseToAnyPublisher()
     }
     
-    
     init() {
-
         isPlacelistNameValidPublisher
             .receive(on: RunLoop.main)
             .map { nameCheck in

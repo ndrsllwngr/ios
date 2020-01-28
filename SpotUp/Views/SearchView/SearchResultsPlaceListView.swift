@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct SearchResultsCollectionsView: View {
-    @Binding var tabSelection: Int
-    
+struct SearchResultsPlaceListView: View {
     @EnvironmentObject var searchViewModel: SearchViewModel
-    
+    // PROPS
+    @Binding var tabSelection: Int
+    // LOCAL
     @State var placeListIdToNavigateTo: String? = nil
     @State var goToPlaceList: Int? = nil
     
@@ -24,10 +24,12 @@ struct SearchResultsCollectionsView: View {
                                 .fontWeight(.bold)
                             ForEach(searchViewModel.recentSearchFirebaseLists) { (placeList: PlaceList) in
                                 SingleRowPlaceList(placeList: placeList,
-                                                   showRecent: true,
                                                    tabSelection: self.$tabSelection,
                                                    placeListIdToNavigateTo: self.$placeListIdToNavigateTo,
-                                                   goToPlaceList: self.$goToPlaceList).environmentObject(self.searchViewModel)
+                                                   goToPlaceList: self.$goToPlaceList,
+                                                   showRecent: true
+                                )
+                                    .environmentObject(self.searchViewModel)
                             }
                             Spacer()
                         }
@@ -51,15 +53,13 @@ struct SearchResultsCollectionsView: View {
 }
 
 struct SingleRowPlaceList: View {
-    
     @EnvironmentObject var searchViewModel: SearchViewModel
+    // PROPS
     var placeList: PlaceList
-    
-    @State var showRecent: Bool = false
-    
     @Binding var tabSelection: Int
     @Binding var placeListIdToNavigateTo: String?
     @Binding var goToPlaceList: Int?
+    @State var showRecent: Bool = false
     
     var body: some View {
         HStack {
@@ -67,13 +67,18 @@ struct SingleRowPlaceList: View {
                 HStack {
                     Image(systemName: "rectangle.on.rectangle")
                         .foregroundColor(Color(.gray))
-                }.frame(width: 40, height: 40)
-                    .overlay(Circle().stroke(Color(.lightGray).opacity(0.5), lineWidth: 1))
+                }
+                .frame(width: 40, height: 40)
+                .overlay(Circle()
+                .stroke(Color(.lightGray)
+                .opacity(0.5), lineWidth: 1))
                 .padding(.trailing, 5)
-                
                 VStack(alignment: .leading){
-                    Text(placeList.name).font(.system(size:18)).fontWeight(.semibold).lineLimit(1)
-                    Text("by \(placeList.owner.username)").font(.system(size:12)).lineLimit(1)
+                    Text(placeList.name)
+                        .font(.system(size:18))
+                        .fontWeight(.semibold).lineLimit(1)
+                    Text("by \(placeList.owner.username)")
+                        .font(.system(size:12)).lineLimit(1)
                 }
                 Spacer()
             }

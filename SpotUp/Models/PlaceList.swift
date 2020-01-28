@@ -12,8 +12,5 @@ struct PlaceList: Identifiable, Equatable {
     var modifiedAt: Timestamp? = nil
     var createdAt: Timestamp
     var imageUrl: String? = nil
-    //var titleImage: String
-    //var location: String
-    //var tags: [UUID]
 }
 
