@@ -1,28 +1,21 @@
 import SwiftUI
 
 struct PlaceListView: View {
-    
-    var placeListId: String
-    
-    @Binding var tabSelection: Int
-    
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var firestorePlaceList = FirestorePlaceList()
-    
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    // PROPS
+    var placeListId: String
+    @Binding var tabSelection: Int
+    // LOCAL
     @State var showSheet = false
     @State var sheetSelection = "none"
-    
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
-    
     @State var profileUserIdToNavigateTo: String? = nil
     @State var goToOtherProfile: Int? = nil
-    
     @State var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp? = nil
     @State var imageForAddPlaceToListSheet: UIImage? = nil
-    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         VStack {
@@ -75,22 +68,17 @@ struct PlaceListView: View {
 }
 
 struct InnerPlaceListView: View {
-    
-    var placeListId: String
-    
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
-    
+    // PROPS
+    var placeListId: String
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
-    
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
-    
     @Binding var placeForAddPlaceToListSheet: GMSPlaceWithTimestamp?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
     @Binding var tabSelection: Int
-    
+    // LOCAL
     @State private var selection = 0
     @State var sortByCreationDate: Bool = true
     
@@ -128,8 +116,8 @@ struct InnerPlaceListView: View {
                         HStack {
                             Spacer()
                             ActivityIndicator()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(Color("text-secondary"))
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(Color("text-secondary"))
                             Spacer()
                         }
                         Spacer()
@@ -145,13 +133,13 @@ struct InnerPlaceListView: View {
                         if (!self.firestorePlaceList.places.isEmpty) {
                             ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
                                 PlaceListPlaceRow(place: place,
-                                         placeListId: self.placeListId,
-                                         showSheet: self.$showSheet,
-                                         sheetSelection: self.$sheetSelection,
-                                         placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                         goToPlace: self.$goToPlace,
-                                         placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                         imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                                  placeListId: self.placeListId,
+                                                  showSheet: self.$showSheet,
+                                                  sheetSelection: self.$sheetSelection,
+                                                  placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                  goToPlace: self.$goToPlace,
+                                                  placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                  imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                                     .environmentObject(self.firestorePlaceList)
                             }
                         } else {
@@ -180,10 +168,10 @@ struct InnerPlaceListView: View {
 }
 
 struct PlaceListFollowButton: View {
-    var placeListId: String
-    
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
+    // PROPS
+    var placeListId: String
     
     var body: some View {
         VStack {
@@ -224,6 +212,7 @@ struct PlaceListFollowButton: View {
 
 struct PlaceListSettingsButton: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // PROPS
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     
@@ -245,6 +234,5 @@ struct PlaceListSettingsButton: View {
                 .frame(width: 49, height: 49)
             }
         }
-        
     }
 }

@@ -2,15 +2,16 @@ import SwiftUI
 import FirebaseFirestore
 
 struct FollowSheet: View {
+    // PROPS
     var userIds: [String]
     var sheetTitle: String
-    
-    @State var users: [User] = []
-    @State var isLoading = false
-    
     @Binding var showSheet: Bool
     @Binding var profileUserIdToNavigateTo: String?
     @Binding var goToOtherProfile: Int?
+    
+    // LOCAL
+    @State var users: [User] = []
+    @State var isLoading = false
     
     var body: some View {
         VStack {

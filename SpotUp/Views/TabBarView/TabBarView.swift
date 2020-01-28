@@ -1,9 +1,9 @@
 import SwiftUI
 
 struct TabBarView: View {
-    // LOCAL
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
     @ObservedObject var exploreModel = ExploreModel.shared
+    // LOCAL
     @State var selection = 2
     
     var body: some View {

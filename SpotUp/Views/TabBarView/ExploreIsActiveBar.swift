@@ -44,7 +44,9 @@ struct ExploreIsActiveBar: View {
 }
 
 struct ExploreIsActiveCurrentTargetImage: View {
+    // PROPS
     var image: UIImage
+    
     var body: some View {
         Image(uiImage: image)
             .renderingMode(.original)

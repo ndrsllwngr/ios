@@ -3,6 +3,7 @@ import GooglePlaces
 
 struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
+    
     // PROPS
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
@@ -10,6 +11,7 @@ struct CurrentTargetRow: View {
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    
     // LOCAL
     @State var showActionSheet: Bool = false
     
@@ -147,6 +149,7 @@ struct CurrentTargetRow: View {
 
 struct ExplorePlaceRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
+    
     // PROPS
     var place: ExplorePlace
     @Binding var showSheet: Bool
@@ -155,6 +158,7 @@ struct ExplorePlaceRow: View {
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    
     // LOCAL
     @State var showActionSheet: Bool = false
     
@@ -246,6 +250,7 @@ struct ExplorePlaceRow: View {
 
 struct ExplorePlaceVisitedRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
+    
     // PROPS
     var place: ExplorePlace
     @Binding var showSheet: Bool
@@ -254,6 +259,7 @@ struct ExplorePlaceVisitedRow: View {
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    
     // LOCAL
     @State var showActionSheet: Bool = false
     

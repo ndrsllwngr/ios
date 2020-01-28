@@ -2,11 +2,11 @@ import SwiftUI
 import FirebaseFirestore
 
 struct CreatePlacelistSheet: View {
+    @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
+    // PROPS
     var user: User
     @Binding var showSheet: Bool
-    
-    @ObservedObject private var createPlacelistViewModel = CreatePlacelistViewModel()
-    
+    // LOCAL
     var buttonColor: Color {
         return self.createPlacelistViewModel.isValidplacelist ? Color("brand-color-primary") : Color(.lightGray)
     }

@@ -3,13 +3,14 @@ import FirebaseFirestore
 import GooglePlaces
 
 class FirestorePlaceList: ObservableObject {
-    var placeListListener: ListenerRegistration? = nil
-    var ownerListener: ListenerRegistration? = nil
     
     @Published var placeList: PlaceList = PlaceList(name: "loading", owner: ListOwner(id: "loading", username: "loading"), followerIds: [], createdAt: Timestamp.init())
     @Published var places: [GMSPlaceWithTimestamp] = []
     @Published var isOwnedPlaceList = false
     @Published var isLoadingPlaces = false
+    
+    var placeListListener: ListenerRegistration? = nil
+    var ownerListener: ListenerRegistration? = nil
     
     func addPlaceListListener(placeListId: String, ownUserId: String) {
         // Listener for placeList
@@ -25,6 +26,7 @@ class FirestorePlaceList: ObservableObject {
                     self.placeList = fetchedPlaceList
                     self.isOwnedPlaceList = fetchedPlaceList.owner.id == ownUserId
                     
+                    // Listener for placeList owner
                     self.ownerListener =
                         FirestoreConnection.shared.getUsersRef().document(fetchedPlaceList.owner.id).addSnapshotListener { documentSnapshot, error in
                             guard let documentSnapshot = documentSnapshot else {
@@ -36,6 +38,7 @@ class FirestorePlaceList: ObservableObject {
                                 self.placeList.owner.username = username
                             })
                     }
+                    // Fetch places from places API
                     self.isLoadingPlaces = true
                     let dispatchGroup = DispatchGroup()
                     self.places = []

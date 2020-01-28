@@ -271,7 +271,9 @@ struct ExploreSortButton: View {
 }
 
 struct ExploreMapView : UIViewRepresentable {
+    
     var exploreList: ExploreList
+    
     var defaultLocation = CLLocationCoordinate2D(
         latitude: 48.149552,
         longitude: 11.594079

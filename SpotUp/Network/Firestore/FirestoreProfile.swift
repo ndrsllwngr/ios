@@ -3,14 +3,14 @@ import FirebaseFirestore
 import GooglePlaces
 
 class FirestoreProfile: ObservableObject {
-    var userProfileListener: ListenerRegistration? = nil
-    var placeListsListener: ListenerRegistration? = nil
-    var listOwnerListeners: [ListenerRegistration?] = []
     
     @Published var user: User = User(id: "loading", email: "loading", username: "loading")
     @Published var placeLists: [PlaceList] = []
     
-    // Call when entering view (.onAppear()) to create listeners for all data needed
+    var userProfileListener: ListenerRegistration? = nil
+    var placeListsListener: ListenerRegistration? = nil
+    var listOwnerListeners: [ListenerRegistration?] = []
+    
     func addProfileListener(profileUserId: String) {
         // Listener for my user
         self.userProfileListener = FirestoreConnection.shared.getUsersRef().document(profileUserId).addSnapshotListener { documentSnapshot, error in
@@ -24,10 +24,10 @@ class FirestoreProfile: ObservableObject {
                 self.user = newUser
             })
         }
-        // It would be best to do sorting and only public lists on !isMyProfile here but its not possible with firebase
+        // It would be best to do sorting and only public lists on !isMyProfile here but its not possible with firestore
         let query = FirestoreConnection.shared.getPlaceListsRef().whereField("follower_ids", arrayContains: profileUserId)
         
-        // Listener for my lists
+        // Listener for placelists
         self.placeListsListener = query.addSnapshotListener { querySnapshot, error in
             guard let querySnapshot = querySnapshot else {
                 print("Error retrieving Lists")
@@ -38,7 +38,7 @@ class FirestoreProfile: ObservableObject {
                 return dataToPlaceList(data: data)
             }
             for (i, placeList) in self.placeLists.enumerated() {
-                // Listener for owners of these lists (basically myself)
+                // Listener for owners of these lists
                 self.listOwnerListeners.append(FirestoreConnection.shared.getUsersRef().document(placeList.owner.id).addSnapshotListener { documentSnapshot, error in
                     guard let documentSnapshot = documentSnapshot else {
                         print("Error retrieving user")
@@ -55,11 +55,9 @@ class FirestoreProfile: ObservableObject {
         }
     }
     
-    // Should be called when leaving view (.onDisappear) to remove the listeners again!
     func removeProfileListener(){
         self.userProfileListener?.remove()
         self.placeListsListener?.remove()
-        //self.followedListsListener?.remove()
         self.listOwnerListeners.forEach{ listener in
             listener?.remove()
         }

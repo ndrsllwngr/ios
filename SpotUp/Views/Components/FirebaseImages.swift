@@ -15,7 +15,8 @@ struct FirebaseProfileImage: View {
                 WebImage(url: URL(string: imageUrl!))
                     .onSuccess { image, cacheType in
                         // Success
-                }.renderingMode(.original)
+                }
+                .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
                     .placeholder(Image(systemName: "profile_image_placeholder")) // Placeholder Image
                     // Supports ViewBuilder as well
@@ -35,9 +36,7 @@ struct FirebaseProfileImage: View {
                     .transition(.fade)
                     .scaledToFit()
             }
-            
         }
-        
     }
 }
 
@@ -64,7 +63,6 @@ struct FirebasePlaceListInfoImage: View {
                     .indicator(.activity) // Activity Indicator
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
                     .transition(.fade) // Fade Transition
-                    
             } else {
                 Image(uiImage: UIImage(named: "placelist_image_placeholder")!)
                     .renderingMode(.original)
@@ -72,9 +70,7 @@ struct FirebasePlaceListInfoImage: View {
                     .animation(.easeInOut(duration: 0.5))
                     .transition(.fade)
             }
-            
         }
-        
     }
 }
 
@@ -108,9 +104,6 @@ struct FirebasePlaceListRowImage: View {
                     .animation(.easeInOut(duration: 0.5))
                     .transition(.fade)
             }
-            
         }
-        
     }
 }
-

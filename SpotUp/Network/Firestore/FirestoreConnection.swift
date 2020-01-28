@@ -10,7 +10,6 @@ class FirestoreConnection: ObservableObject {
     private let dbUsersRef = db.collection("users")
     private let dbPlaceListsRef = db.collection("place_lists")
     
-    
     private init(){
         FirestoreConnection.db.clearPersistence()
     }
@@ -30,14 +29,13 @@ class FirestoreConnection: ObservableObject {
     }
     
     func deleteUserInFirestore(userId: String) {
-        
         // When a user deletes his account it is not enough to just delete his reference from firestore
         // To delete a user thoroughly we have to
         let dispatchGroup = DispatchGroup()
         let userRef = dbUsersRef.document(userId)
         userRef.getDocument { documentSnapshot, error in
             guard let documentSnapshot = documentSnapshot else {
-                print("Userdeletion: Error retrieving user")
+                print("UserDeletion: Error retrieving user")
                 return
             }
             documentSnapshot.data().flatMap({ data in
@@ -50,9 +48,9 @@ class FirestoreConnection: ObservableObject {
                         "is_following": FieldValue.arrayRemove([userId])
                     ]) { err in
                         if let err = err {
-                            print("Userdeletion: Error removing user from is_following: \(err)")
+                            print("UserDeletion: Error removing user from is_following: \(err)")
                         } else {
-                            print("Userdeletion: successfully removed user from is_following")
+                            print("UserDeletion: successfully removed user from is_following")
                         }
                         dispatchGroup.leave()
                         }
@@ -65,9 +63,9 @@ class FirestoreConnection: ObservableObject {
                         "is_followed_by": FieldValue.arrayRemove([userId])
                     ]) { err in
                         if let err = err {
-                            print("Userdeletion: Error removing user from is_followed_by: \(err)")
+                            print("UserDeletion: Error removing user from is_followed_by: \(err)")
                         } else {
-                            print("Userdeletion: successfully removed user from is_followed_by")
+                            print("UserDeletion: successfully removed user from is_followed_by")
                         }
                         dispatchGroup.enter()
                         }
@@ -77,7 +75,7 @@ class FirestoreConnection: ObservableObject {
                 dispatchGroup.enter()
                 self.dbPlaceListsRef.whereField("follower_ids", arrayContains: userId).getDocuments { querySnapshot, error in
                     guard let querySnapshot = querySnapshot else {
-                        print("Userdeletion Error retrieving followed PlaceLists")
+                        print("UserDeletion Error retrieving followed PlaceLists")
                         return
                     }
                     dispatchGroup.leave()
@@ -88,9 +86,9 @@ class FirestoreConnection: ObservableObject {
                             "follower_ids": FieldValue.arrayRemove([userId])
                         ]) { err in
                             if let err = err {
-                                print("Userdeletion: Error removing user from followed PlaceList: \(err)")
+                                print("UserDeletion: Error removing user from followed PlaceList: \(err)")
                             } else {
-                                print("Userdeletion: User successfully removed from followed PlaceList")
+                                print("UserDeletion: User successfully removed from followed PlaceList")
                             }
                             dispatchGroup.leave()
                         }
@@ -101,7 +99,7 @@ class FirestoreConnection: ObservableObject {
                 dispatchGroup.enter()
                 self.dbPlaceListsRef.whereField("owner_id", isEqualTo: userId).getDocuments { querySnapshot, error in
                     guard let querySnapshot = querySnapshot else {
-                        print("Userdeletion: Error retrieving owned PlaceLists")
+                        print("UserDeletion: Error retrieving owned PlaceLists")
                         return
                     }
                     dispatchGroup.leave()
@@ -110,27 +108,27 @@ class FirestoreConnection: ObservableObject {
                         let placeList = dataToPlaceList(data: documentSnapshot.data())
                         self.dbPlaceListsRef.document(placeList.id).delete() { err in
                             if let err = err {
-                                print("Userdeletion: Error deleting owned PlaceList: \(err)")
+                                print("UserDeletion: Error deleting owned PlaceList: \(err)")
                             } else {
-                                print("Userdeletion: Owned PlaceList successfully deleted")
+                                print("UserDeletion: Owned PlaceList successfully deleted")
                             }
                             dispatchGroup.leave()
                         }
                     }
                 }
-                // 5. Delete user fitself
+                // 5. Delete user itself
                 dispatchGroup.enter()
                 userRef.delete() { err in
                     if let err = err {
-                        print("Userdeletion: Error removing user: \(err)")
+                        print("UserDeletion: Error removing user: \(err)")
                     } else {
-                        print("Userdeletion: User successfuly deleted")
+                        print("UserDeletion: User successfuly deleted")
                     }
                     dispatchGroup.leave()
                 }
             })
         }
-        // Wait till all tasks finished
+        // Wait till all tasks are finished
         dispatchGroup.wait()
         print("Finished deleteUserInFirestore: User thoroughly removed from firestore")
     }
@@ -141,7 +139,7 @@ class FirestoreConnection: ObservableObject {
             "username": newUserName
         ]) { err in
             if let err = err {
-                print("Error updating User username: \(err)")
+                print("Error updating user username: \(err)")
             } else {
                 print("User username successfully updated")
             }
@@ -154,7 +152,7 @@ class FirestoreConnection: ObservableObject {
             "email": newEmail
         ]) { err in
             if let err = err {
-                print("Error updating User email: \(err)")
+                print("Error updating user email: \(err)")
             } else {
                 print("User email successfully updated")
             }
@@ -168,7 +166,7 @@ class FirestoreConnection: ObservableObject {
         // 2. Add data to place_list document
         listRef.setData(placeListToData(placeList: placeList)) { err in
             if let err = err {
-                print("Error adding document: \(err)")
+                print("Error adding PlaceList: \(err)")
             } else {
                 print("PlaceList added with ID: \(placeList.id)")
             }
@@ -224,7 +222,7 @@ class FirestoreConnection: ObservableObject {
             if let err = err {
                 print("Error adding place to PlaceList: \(err)")
             } else {
-                print("Place successfully added")
+                print("Place successfully added to PlaceList")
             }
         }
         
@@ -247,12 +245,10 @@ class FirestoreConnection: ObservableObject {
             if let err = err {
                 print("Error removing place from PlaceList: \(err)")
             } else {
-                print("Place successfully removed")
+                print("Place successfully removed from PlaceList")
             }
         }
     }
-    
-    
     
     func followPlaceList(userId: String, placeListId: String) {
         let listRef = dbPlaceListsRef.document(placeListId)

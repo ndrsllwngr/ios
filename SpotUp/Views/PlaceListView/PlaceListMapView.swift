@@ -5,6 +5,7 @@ import GooglePlaces
 
 struct PlaceListMapView: View {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // LOCAL
     @State var currentIndex: Int = 0
     @State var placeIdToNavigateTo: String? = nil
     @State var goToPlace: Int? = nil
@@ -29,7 +30,9 @@ struct PlaceListMapView: View {
 
 struct GoogleMapView : UIViewRepresentable {
     @EnvironmentObject var firestorePlaceList: FirestorePlaceList
+    // PROPS
     @Binding var currentIndex: Int
+    // LOCAL
     @Environment(\.colorScheme) var colorScheme: ColorScheme
     var defaultLocation = CLLocationCoordinate2D(
         latitude: 34.6692097,
@@ -79,11 +82,9 @@ struct GoogleMapView : UIViewRepresentable {
         }
     }
     
-    
     func makeCoordinator() -> GoogleMapView.Coordinator {
         return Coordinator(self)
     }
-    
     
     class Coordinator: NSObject, GMSMapViewDelegate {
         var firestorePlaceList: FirestorePlaceList?

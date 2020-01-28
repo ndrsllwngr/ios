@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct ImagePicker: UIViewControllerRepresentable {
-    var imageType: ImageType
     @Environment(\.presentationMode) var presentationMode
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
@@ -24,7 +23,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[.originalImage] as? UIImage {
-                FirebaseStorage.shared.uploadImageToStorage(id: self.firebaseAuthentication.currentUser!.uid, imageType: parent.imageType, uiImage: uiImage)
+                FirebaseStorage.shared.uploadImageToStorage(id: self.firebaseAuthentication.currentUser!.uid, imageType: .PROFILE_IMAGE, uiImage: uiImage)
             }
             parent.presentationMode.wrappedValue.dismiss()
         }
