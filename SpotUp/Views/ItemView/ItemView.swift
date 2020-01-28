@@ -11,11 +11,19 @@ struct ItemView: View {
     @State var photos: [GMSPlacePhotoMetadata]? = []
     @State var gallery: [UIImage] = [UIImage(named: "place_image_placeholder")!]
     @State var showSheet = false
+    @State var isLoading = false
     
     var body: some View {
         VStack(spacing: 0) {
-            if (place == nil) {
-                Text("")
+            if (isLoading) {
+                Spacer()
+                ActivityIndicator()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(Color("text-secondary"))
+                Spacer()
+            }
+            else if (place == nil) {
+                Text("Could not load place")
             } else {
                 // Avoids that scroll view scrolls under navbar
                 Rectangle()
@@ -30,32 +38,34 @@ struct ItemView: View {
                             .offset(y:-40)
                             .padding(.bottom, -40)
                     }
-                    
                 }
-                
             }
         }.onAppear {
+            self.isLoading = true
             getPlace(placeID: self.placeId) { (place: GMSPlace?, error: Error?) in
                 if let error = error {
+                    self.isLoading = false
                     print("An error occurred: \(error.localizedDescription)")
                     return
                 }
                 if let place = place {
                     self.place = place
-                    if let openingHours = place.openingHours{
-                        if let openingHoursTexts = openingHours.weekdayText{
+                    if let openingHours = place.openingHours {
+                        if let openingHoursTexts = openingHours.weekdayText {
                             self.openingHoursText = openingHoursTexts
-                        }}
+                        }
+                    }
                     self.priceLevel = getPlacePriceLevel(priceLevel: place.priceLevel)
-                    if let types = place.types{
-                        self.type = parseType(types:types)}
-                    if let photos = place.photos{
+                    if let types = place.types {
+                        self.type = parseType(types:types)
+                    }
+                    if let photos = place.photos {
                         var tmp:[UIImage] = []
                         for (index, image) in photos.enumerated(){
                             guard index <= 5 else {
-                                print("break")
-                                break}
-                            getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
+                                break
+                            }
+                            getPlaceFoto(photoMetadata: image) { (photo: UIImage?, error: Error?) in
                                 if let error = error {
                                     print("Error loading photo metadata: \(error.localizedDescription)")
                                     return
@@ -63,15 +73,16 @@ struct ItemView: View {
                                 if let photo = photo {
                                     tmp.append(photo)
                                 }
-                                if tmp.isEmpty == false{
+                                if tmp.isEmpty == false {
                                     self.gallery.removeAll()
-                                    self.gallery = tmp}
+                                    self.gallery = tmp
+                                }
                             }
                         }
-                        
                     }
-                    print("Gallery Size: \(String(describing: self.gallery.count))" )
-                    print("The selected place is: \(String(describing: place.name))")
+                    self.isLoading = false
+                    //                    print("Gallery Size: \(String(describing: self.gallery.count))")
+                    //                    print("The selected place is: \(String(describing: place.name))")
                 }
             }
         }
@@ -87,22 +98,21 @@ struct InnerItemView: View {
     @Binding var showSheet: Bool
     
     var body: some View {
-        VStack(spacing: 0){
+        VStack(spacing: 0) {
             // TYPE and PRICE LEVEL
-            ZStack{
-                VStack{
-                    HStack{
+            ZStack {
+                VStack {
+                    HStack {
                         Text(type)
                             .padding(.leading, 15)
                         Spacer()
-                        HStack{
+                        HStack {
                             ForEach (drawSigns(signs: getPlacePriceLevel(priceLevel: place.priceLevel), name: "€"), id: \.self) { sign in
                                 Text(sign)
                             }
                         }
                         .padding(.trailing, 15)
                     }
-                        
                     .frame(width: UIScreen.main.bounds.width, height: 80)
                     .background(Color("bg-primary"))
                     .cornerRadius(15, corners: [.topLeft, .topRight])
@@ -114,27 +124,26 @@ struct InnerItemView: View {
                     .offset(y:-61.5)
             }
             // PLACE NAME and ADDRESS and PHONE and WEBSITE
-            VStack(alignment:.leading, spacing:15) {
-                VStack{
+            VStack(alignment:.leading, spacing: 15) {
+                VStack {
                     Text(place.name != nil ? place.name! : "")
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .foregroundColor(Color("brand-color-primary"))
                         .multilineTextAlignment(.leading)
                 }
-                VStack{
+                VStack {
                     Text(place.formattedAddress != nil ? "\(place.formattedAddress!)" : "")
                         .multilineTextAlignment(.leading)
                 }
-                Button(action:{
-                    if let phoneNumber = self.place.phoneNumber{
+                Button(action: {
+                    if let phoneNumber = self.place.phoneNumber {
                         let prefix = "tel://"
                         let trimmed = phoneNumber.replacingOccurrences(of: " ", with: "")
                         let tel = URL(string:(prefix + trimmed))
                         UIApplication.shared.open(tel!)
                     }
-                })
-                {
+                }) {
                     HStack(spacing:20){
                         Image(systemName: "phone")
                             .foregroundColor(Color("brand-color-primary"))
@@ -146,29 +155,25 @@ struct InnerItemView: View {
                     .padding(.horizontal,30)
                 }
                 
-                
                 Button(action: {
-                                   if let website = self.place.website {
-                                       UIApplication.shared.open(website)
-                                   }
-                               })
-                               {
-                                   HStack(spacing:20){
-                                       Image(systemName: "desktopcomputer")
-                                           .foregroundColor(Color("brand-color-primary"))
-                                       Text("Open Website")
-                                           .foregroundColor(Color("text-primary"))
-                                       Spacer()
-                                       
-                                   }
-                                   .padding(.horizontal, 30)
-                                   
-                               }
+                    if let website = self.place.website {
+                        UIApplication.shared.open(website)
+                    }
+                }) {
+                    HStack(spacing:20) {
+                        Image(systemName: "desktopcomputer")
+                            .foregroundColor(Color("brand-color-primary"))
+                        Text("Open Website")
+                            .foregroundColor(Color("text-primary"))
+                        Spacer()
+                        
+                    }
+                    .padding(.horizontal, 30)
+                }
                 Button(action: {
-                      UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
-                })
-                {
-                    HStack(spacing:20){
+                    UIApplication.shared.open(getUrlForGoogleMapsNavigation(place: self.place))
+                }) {
+                    HStack(spacing:20) {
                         Image(systemName: "arrow.up.right.diamond.fill")
                             .foregroundColor(Color("brand-color-primary"))
                         Text("Directions")
@@ -177,39 +182,31 @@ struct InnerItemView: View {
                         
                     }
                     .padding(.horizontal, 30)
-                    
                 }
             }
             .padding()
             .padding(.horizontal, 15)
             
-            
-            
-            
             // MAP
-            VStack{
-                
-                    ItemMapView(coordinate: place.coordinate)
-                        .frame(width:UIScreen.main.bounds.width-30, height:200)
-                        .cornerRadius(15)
-                        .padding(20)
-                
-                
+            VStack {
+                ItemMapView(coordinate: place.coordinate)
+                    .frame(width:UIScreen.main.bounds.width-30, height:200)
+                    .cornerRadius(15)
+                    .padding(20)
             }
             .frame(width:UIScreen.main.bounds.width-30)
             
             // OPENING HOURS
-            VStack{
-                
-                HStack{
+            VStack {
+                HStack {
                     Text("Opening Hours")
                         .foregroundColor(Color("brand-color-primary"))
                         .font(.headline)
                         .fontWeight(.bold)
                     Spacer()
-                }.padding(.leading, 15)
-                
-                VStack(spacing:10){
+                }
+                .padding(.leading, 15)
+                VStack(spacing:10) {
                     if openingHoursText.count == 0 {
                         Image("placeholder-openingHours-200")
                             .resizable()
@@ -235,22 +232,22 @@ struct InnerItemView: View {
     }
 }
 
-struct ButtonOnTopView: View{
+struct ButtonOnTopView: View {
     var place: GMSPlace
     @Binding var showSheet:Bool
     
     @State var showActionSheet: Bool = false
     
-    var body: some View{
-        
-        HStack{
+    var body: some View {
+        HStack {
             Spacer()
             ZStack(alignment: .center) {
                 Circle().fill(Color("brand-color-primary"))
-                VStack{
+                VStack {
                     Spacer()
                     Image(systemName: "plus")
-                        .font(.title).foregroundColor(Color.white)
+                        .font(.title)
+                        .foregroundColor(Color.white)
                     Spacer()
                 }
             }
@@ -269,17 +266,18 @@ struct ButtonOnTopView: View{
                     .cancel()
                 ])
             }
-        }.padding(.trailing, 63.5)
-        
+        }
+        .padding(.trailing, 63.5)
     }
 }
 
-struct GalleryView:View{
+struct GalleryView: View {
     @Binding var gallery: [UIImage]
+    
     var body : some View {
-        ScrollView(.horizontal,showsIndicators: false){
+        ScrollView(.horizontal,showsIndicators: false) {
             HStack (spacing:5) {
-                ForEach(self.gallery, id:\.self){
+                ForEach(self.gallery, id:\.self) {
                     photo in
                     return HStack{ ItemImageView(image:photo)} .frame(width:UIScreen.main.bounds.width, height:300)
                 }
@@ -300,42 +298,43 @@ struct DateCardView: View {
                     Text(self.day)
                         .foregroundColor(Color.white)
                         .fontWeight(.bold)
-                }.padding(5)
-                    .frame(width:160, height:30)
-                    .background(Color(self.color))
+                }
+                .padding(5)
+                .frame(width:160, height:30)
+                .background(Color(self.color))
                 Spacer()
-                
-                HStack() {
+                HStack {
                     Text(self.hours)
                         .font(.system(size:12))
                     
-                }.padding(.horizontal, 5)
+                }
+                .padding(.horizontal, 5)
                 Spacer()
             }
             .frame(width:160, height:120)
             .cornerRadius(15)
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color(self.color), lineWidth: 1))
-            
-        }.onAppear{
+        }
+        .onAppear {
             self.color = setDateCardColor(today: Date().dayofTheWeek, day:self.day)
         }   
     }
 }
 
-struct ScrollWeekView:View{
+struct ScrollWeekView: View {
     var data : [DateCard]
+    
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false){
-            HStack (spacing:10){
-                ForEach(data, id:\.self) {
-                    item in
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing:10) {
+                ForEach(data, id:\.self) { item in
                     GeometryReader { geometry in
                         DateCardView(day:item.day, hours:item.hours)
                             .rotation3DEffect(Angle(degrees:
                                 Double(geometry.frame(in:.global).minX - 30) / -30), axis:(x:0, y:20, z:0))
                         
-                    }.frame(width:160, height:120)
-                    
+                    }
+                    .frame(width:160, height:120)
                 }
             }.padding(30)
         }
@@ -355,27 +354,27 @@ extension Date {
     }
 }
 
-struct DateCard:Identifiable, Hashable{
+struct DateCard: Identifiable, Hashable {
     var id = UUID()
-    var day:String
-    var hours:String
+    var day: String
+    var hours: String
 }
 
-func parseOpeningHour(openingHour:String)->[String]{
+func parseOpeningHour(openingHour:String) -> [String] {
     let endOfWeekday = openingHour.firstIndex(of: ":")!
     let weekday = openingHour[...endOfWeekday].replacingOccurrences(of: ":", with: "")
     let timeWhole = openingHour[endOfWeekday...]
     let time = timeWhole.replacingCharacters(in: ...timeWhole.startIndex, with: "").replacingOccurrences(of: ",", with: "\n")
-    return [String(weekday), time]
     
+    return [String(weekday), time]
 }
 
-func createDateCardData(openingHoursText:[String])->[DateCard]{
-    var temp:[DateCard] = []
-    for day in openingHoursText{
-        temp.append(DateCard(day:parseOpeningHour(openingHour:day)[0], hours:parseOpeningHour(openingHour:day)[1]))}
-    return temp
+func createDateCardData(openingHoursText:[String]) -> [DateCard]{
+    var temp: [DateCard] = []
+    for day in openingHoursText {
+        temp.append(DateCard(day: parseOpeningHour(openingHour: day)[0], hours: parseOpeningHour(openingHour: day)[1]))}
     
+    return temp
 }
 
 extension StringProtocol {
@@ -384,30 +383,31 @@ extension StringProtocol {
     }
 }
 
-func drawSigns(signs:Int, name:String)->[String]{
-    var temp:[String]=[]
-    if signs>0{
-        for _ in 0..<signs{
+func drawSigns(signs:Int, name:String) -> [String] {
+    var temp: [String] = []
+    if (signs > 0) {
+        for _ in 0..<signs {
             temp.append(name)
         }
-    }else{
+    } else {
         return []
     }
     return temp
 }
 
-func parseType(types:[String])->String{
+func parseType(types:[String]) -> String {
     let temp = types[0].replacingOccurrences(of: "_", with: " ")
     return temp.firstUppercased
     
 }
 
-func setDateCardColor(today:String, day: String)->String {
+func setDateCardColor(today:String, day: String) -> String {
     var color: String
-    if (day.contains(today)){
+    if (day.contains(today)) {
         color = "brand-color-primary"
+    } else {
+        color = "border-daycard"
     }
-    else{color = "border-daycard"}
     return color
 }
 
