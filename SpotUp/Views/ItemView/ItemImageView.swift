@@ -3,6 +3,7 @@ import GooglePlaces
 
 struct ItemImageView: View {
     var image: UIImage
+    
     var body: some View {
         Image(uiImage: image)
             .renderingMode(.original)
@@ -10,6 +11,5 @@ struct ItemImageView: View {
             .scaledToFill()
             .clipShape(Rectangle())
             .frame(height: 300)
-        
     }
 }

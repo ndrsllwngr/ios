@@ -21,6 +21,4 @@ struct ItemMapView: UIViewRepresentable {
         marker.position = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude)
         marker.map = view
     }
-    
-    
 }

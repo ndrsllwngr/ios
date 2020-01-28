@@ -3,15 +3,17 @@ import GooglePlaces
 import SwiftUI
 
 
-class Gallery: ObservableObject, Identifiable{
+class Gallery: ObservableObject, Identifiable {
     @Published var gallery: [UIImage] = []
     
-    func getGallery (images: [GMSPlacePhotoMetadata]?){
+    func getGallery (images: [GMSPlacePhotoMetadata]?) {
         if let images = images{
-            for (index, image) in images.enumerated(){
+            for (index, image) in images.enumerated() {
                 guard index <= 5 else {
-                    break}
-                getPlaceFoto(photoMetadata: image){ (photo: UIImage?, error: Error?) in
+                    break
+        
+                }
+                getPlaceFoto(photoMetadata: image) { (photo: UIImage?, error: Error?) in
                     if let error = error {
                         print("Error loading photo metadata: \(error.localizedDescription)")
                         return
