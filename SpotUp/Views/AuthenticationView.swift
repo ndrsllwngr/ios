@@ -259,7 +259,7 @@ struct AuthenticationView: View {
     func logIn() {
         FirebaseAuthentication.shared.logIn(email: loginViewModel.email, password: loginViewModel.password) { (result, error) in
             if let error = error {
-                print("Error during login: \(error)")
+                print("Error during logixn: \(error)")
                 self.loginErrorText = "\(error)"
             } else {
                 print("success")

@@ -44,7 +44,8 @@ class FirestoreConnection: ObservableObject {
                 // 1. Remove him from all users that were following him
                 if(!user.isFollowedBy.isEmpty) {
                     dispatchGroup.enter()
-                    user.isFollowedBy.forEach { isFollowedById in                      self.dbUsersRef.document(isFollowedById).updateData([
+                    user.isFollowedBy.forEach { isFollowedById in
+                        self.dbUsersRef.document(isFollowedById).updateData([
                         "is_following": FieldValue.arrayRemove([userId])
                     ]) { err in
                         if let err = err {
@@ -59,7 +60,8 @@ class FirestoreConnection: ObservableObject {
                 // 2. Remove him from all users that were followed by him
                 if(!user.isFollowing.isEmpty) {
                     dispatchGroup.enter()
-                    user.isFollowing.forEach { isFollowingId in                            self.dbUsersRef.document(isFollowingId).updateData([
+                    user.isFollowing.forEach { isFollowingId in
+                        self.dbUsersRef.document(isFollowingId).updateData([
                         "is_followed_by": FieldValue.arrayRemove([userId])
                     ]) { err in
                         if let err = err {

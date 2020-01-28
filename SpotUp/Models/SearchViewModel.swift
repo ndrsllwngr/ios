@@ -69,7 +69,8 @@ class SearchViewModel: ObservableObject {
     }
     
     private init() {
-        firestoreSearchCancellable = Publishers.CombineLatest(firestoreSearch.$allPublicPlaceLists,firestoreSearch.$allUsers).sink(receiveValue: {_ in            self.objectWillChange.send()
+        firestoreSearchCancellable = Publishers.CombineLatest(firestoreSearch.$allPublicPlaceLists,firestoreSearch.$allUsers).sink(receiveValue: {_ in
+            self.objectWillChange.send()
         })
         
         isGoogleSearchValidPublisher

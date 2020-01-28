@@ -38,9 +38,6 @@ struct ContentView: View {
     func getUser() {
         FirebaseAuthentication.shared.listen()
     }
-    
-    func setLaunchedBefore() {
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
