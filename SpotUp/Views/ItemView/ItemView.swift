@@ -11,7 +11,7 @@ struct ItemView: View {
     @State var type: String? = nil
     @State var openingHoursText: [String]? = []
     @State var photos: [GMSPlacePhotoMetadata]? = []
-    @State var gallery: [UIImage] = [UIImage(named: "place_image_placeholder")!]
+    @State var gallery: [UIImage] = [UIImage(named: "placeholder-image-place-500")!]
     @State var showSheet = false
     @State var isLoading = false
     
@@ -323,7 +323,7 @@ struct DateCardView: View {
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color(self.color), lineWidth: 1))
         }
         .onAppear {
-            self.color = setDateCardColor(today: Date().dayofTheWeek, day:self.day)
+            self.color = setDateCardColor(day:self.day)
         }   
     }
 }
@@ -358,7 +358,7 @@ extension Date {
     }
     
     private var daysOfTheWeek: [String] {
-        return  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        return  ["Sunday Sonntag", "Monday Montag", "Tuesday Dienstag", "Wednesday Mittwoch", "Thursday Donnerstag", "Friday Freitag ", "Saturday Samstag"]
     }
 }
 
@@ -368,7 +368,7 @@ struct DateCard: Identifiable, Hashable {
     var hours: String
 }
 
-func parseOpeningHour(openingHour:String) -> [String] {
+func parseOpeningHour(openingHour: String) -> [String] {
     let endOfWeekday = openingHour.firstIndex(of: ":")!
     let weekday = openingHour[...endOfWeekday].replacingOccurrences(of: ":", with: "")
     let timeWhole = openingHour[endOfWeekday...]
@@ -377,7 +377,7 @@ func parseOpeningHour(openingHour:String) -> [String] {
     return [String(weekday), time]
 }
 
-func createDateCardData(openingHoursText:[String]) -> [DateCard]{
+func createDateCardData(openingHoursText: [String]) -> [DateCard] {
     var temp: [DateCard] = []
     for day in openingHoursText {
         temp.append(DateCard(day: parseOpeningHour(openingHour: day)[0], hours: parseOpeningHour(openingHour: day)[1]))}
@@ -391,7 +391,7 @@ extension StringProtocol {
     }
 }
 
-func drawSigns(signs:Int, name:String) -> [String] {
+func drawSigns(signs: Int, name: String) -> [String] {
     var temp: [String] = []
     if (signs > 0) {
         for _ in 0..<signs {
@@ -403,15 +403,18 @@ func drawSigns(signs:Int, name:String) -> [String] {
     return temp
 }
 
-func parseType(types:[String]) -> String {
+func parseType(types: [String]) -> String {
     let temp = types[0].replacingOccurrences(of: "_", with: " ")
     return temp.firstUppercased
     
 }
 
-func setDateCardColor(today:String, day: String) -> String {
+func setDateCardColor(day: String) -> String {
     var color: String
-    if (day.contains(today)) {
+    let today = Date().dayofTheWeek
+    print(today)
+    print(day)
+    if (today.contains(day)) {
         color = "brand-color-primary"
     } else {
         color = "border-daycard"
