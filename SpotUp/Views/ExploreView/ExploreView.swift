@@ -116,33 +116,36 @@ struct ExploreActiveView: View {
                         .padding(.leading, 20)
                         .padding(.top, 25)
                         .padding(.trailing, 20)
-                        if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
-                            ForEach (sortExplorePlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
-                            { place in
-                                ExplorePlaceRow(place: place,
-                                                showSheet: self.$showSheet,
-                                                sheetSelection: self.$sheetSelection,
-                                                placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                                goToPlace: self.$goToPlace,
-                                                placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                                imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
-                                    .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                        VStack {
+                            if (!exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}.isEmpty) {
+                                ForEach (sortExplorePlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
+                                { place in
+                                    ExplorePlaceRow(place: place,
+                                                    showSheet: self.$showSheet,
+                                                    sheetSelection: self.$sheetSelection,
+                                                    placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                    goToPlace: self.$goToPlace,
+                                                    placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                    imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                                        .listRowInsets(EdgeInsets()) // removes left and right padding of the list elements
+                                }
+                            } else {
+                                HStack {
+                                    Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw-50")!)
+                                        .renderingMode(.original)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 50.0, alignment: .center)
+                                    Spacer()
+                                    Text("Travel queue is empty")
+                                        .foregroundColor(Color("text-secondary"))
+                                    Spacer()
+                                }
+                                .frame(height: 60)
+                                .padding(.horizontal, 20)
                             }
-                        } else {
-                            HStack {
-                                Image(uiImage: UIImage(named: "explore-empty-trail-sign-bw-50")!)
-                                    .renderingMode(.original)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(height: 50.0, alignment: .center)
-                                Spacer()
-                                Text("Travel queue is empty")
-                                    .foregroundColor(Color("text-secondary"))
-                                Spacer()
-                            }
-                            .frame(height: 60)
-                            .padding(.horizontal, 20)
                         }
+                        .padding(.bottom, 10)
                         if (!exploreModel.exploreList!.places.filter{$0.visited}.isEmpty) {
                             VStack {
                                 HStack {
@@ -166,6 +169,7 @@ struct ExploreActiveView: View {
                                 }
                             }
                             .padding(.bottom, 10)
+                            .padding(.top, -10)
                         }
                     }
                 } else {
