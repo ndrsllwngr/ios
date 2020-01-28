@@ -16,7 +16,7 @@ struct SwipeView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            return ScrollView(.horizontal, showsIndicators: false) {
+            ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: self.spacing) {
                     ForEach((self.firestorePlaceList.places), id: \.self) { place in
                         PlaceCard(place: place.gmsPlace)
