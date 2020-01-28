@@ -21,11 +21,11 @@ struct ExplorePlace: Equatable, Hashable {
 class ExploreModel: ObservableObject {
     
     static let shared = ExploreModel()
-    
-    var locationManager = LocationManager()
-    
+        
     @Published var exploreList: ExploreList? = nil
     @Published var isLoadingPlaces = false
+    
+    var locationManager = LocationManager()
     
     private init(){}
     
@@ -254,19 +254,4 @@ func getVisitedAtStringToDisplay(_ visited_at: Date) -> String {
 
 func getUrlForGoogleMapsNavigation(place: GMSPlace) -> URL {
     return URL(string: "https://www.google.com/maps/search/?api=1&query=\(place.coordinate.latitude),\(place.coordinate.longitude)&query_place_id=\(place.placeID!)")!
-}
-
-func sortExplorePlaces(places: [ExplorePlace], sortByDistance: Bool) ->  [ExplorePlace]{
-    
-    if sortByDistance {
-        return places.sorted{(place1, place2) in
-            if let distance1 = place1.distance, let distance2 = place2.distance {
-                return distance1 < distance2
-            } else {
-                return false
-            }
-        }
-    } else {
-        return places.sorted{(place1, place2) in place1.place.name! < place2.place.name!}
-    }
 }

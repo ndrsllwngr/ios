@@ -175,7 +175,6 @@ class FirestoreConnection: ObservableObject {
         }
     }
     
-    // ToDo update with more parameters
     func updatePlaceList(placeListId: String, newName: String? = nil, isPublic: Bool? = nil,  ownerId: String? = nil, isCollaborative: Bool? = nil) {
         let listRef = dbPlaceListsRef.document(placeListId)
         var data: Dictionary<String, Any> = [:]
@@ -346,7 +345,6 @@ class FirestoreConnection: ObservableObject {
                 }
             }
         }
-        
-        
     }
+    
 }

@@ -8,6 +8,7 @@ struct ProfileSettingsView: View {
     @ObservedObject private var profileSettingsViewModel = ProfileSettingsViewModel()
     
     @State private var showModal = false
+    @State private var offsetValue: CGFloat = 0.0
     
     var body: some View {
         VStack (alignment: .leading, spacing: 0) {

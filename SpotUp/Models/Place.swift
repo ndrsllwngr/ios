@@ -15,4 +15,3 @@ struct GMSPlaceWithTimestamp: Equatable, Hashable {
         return PlaceIDWithTimestamp(placeId: self.gmsPlace.placeID!, addedAt: self.addedAt)
     }
 }
-
