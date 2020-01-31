@@ -12,7 +12,7 @@ struct OnboardingView: View {
         UIHostingController(rootView: Subview(imageString: "placeholder-onboarding-3-200"))
     ]
     var titles = ["Avoid Missing Out", "Join the Community", "Explore at Ease"]
-    var captions =  ["Join SpotUp and experience a better way to share travel tips with your friends.", "Follow your friends’ travels on SpotUp and visit their favourite spots visit their favourite spots or share your own favourite spots.", "SpotUp will guide you to the most nearby places by sorting the spots in your travel list."]
+    var captions =  ["Join SpotUp and experience a better way to share travel tips with your friends.", "Follow your friends’ travels on SpotUp and visit their favourite spots or share your favourite spots.", "SpotUp will guide you to the most nearby places by sorting the spots in your travel list."]
     
     var body: some View {
         VStack(spacing: 0){
