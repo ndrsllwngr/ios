@@ -18,11 +18,11 @@ struct FirebaseProfileImage: View {
                 }
                 .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
-                    .placeholder(Image(systemName: "placeholder-image-profile-500")) // Placeholder Image
                     // Supports ViewBuilder as well
                     .placeholder {
                         Rectangle().foregroundColor(.gray)
                 }
+                    .placeholder(Image(systemName: "placeholder-image-profile-500")) // Placeholder Image
                     .animated() // Supports Animated Image
                     .indicator(.activity) // Activity Indicator
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration
@@ -54,11 +54,11 @@ struct FirebasePlaceListInfoImage: View {
                 }
                 .renderingMode(.original)
                     .resizable() // Resizable like SwiftUI.Image
-                    .placeholder(Image(systemName: "placeholder-image-placelist-500")) // Placeholder Image
                     // Supports ViewBuilder as well
                     .placeholder {
                         Rectangle().foregroundColor(.gray)
                 }
+                    .placeholder(Image(systemName: "placeholder-image-placelist-500")) // Placeholder Image
                     .animated() // Supports Animated Image
                     .indicator(.activity) // Activity Indicator
                     .animation(.easeInOut(duration: 0.5)) // Animation Duration

@@ -2,7 +2,6 @@ import SwiftUI
 
 struct TabBarView: View {
     @ObservedObject var firebaseAuthentication = FirebaseAuthentication.shared
-    @ObservedObject var exploreModel = ExploreModel.shared
     // LOCAL
     @State var selection = 2
     
@@ -37,7 +36,7 @@ struct TabBarView: View {
                     }
                     .padding(.bottom, -10)
                     Spacer()
-                    if (self.exploreModel.exploreList != nil && self.selection != 0) {
+                    if (ExploreModel.shared.exploreList != nil && self.selection != 0) {
                         ExploreIsActiveBar(tabSelection: self.$selection)
                     }
                     CustomTabBar(selection: self.$selection)
