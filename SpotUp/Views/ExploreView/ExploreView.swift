@@ -8,6 +8,7 @@ struct ExploreView: View {
     // PROPS
     @Binding var tabSelection: Int
     // LOCAL
+    @State var showActionSheet: Bool = false
     @State var showSheet: Bool = false
     @State var sheetSelection = "none"
     @State var placeIdToNavigateTo: String? = nil
@@ -24,6 +25,7 @@ struct ExploreView: View {
             }
             if (self.exploreModel.exploreList != nil) {
                 ExploreActiveView(tabSelection: self.$tabSelection,
+                                  showActionSheet: self.$showActionSheet,
                                   showSheet: self.$showSheet,
                                   sheetSelection: self.$sheetSelection,
                                   placeIdToNavigateTo: self.$placeIdToNavigateTo,
@@ -61,6 +63,7 @@ struct ExploreActiveView: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     // PROPS
     @Binding var tabSelection: Int
+    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
@@ -97,12 +100,14 @@ struct ExploreActiveView: View {
                         .foregroundColor(Color("text-secondary"))
                     Spacer()
                 } else if !exploreModel.exploreList!.places.isEmpty {
-                    CurrentTargetRow(showSheet: self.$showSheet,
-                                     sheetSelection: self.$sheetSelection,
-                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
-                                     goToPlace: self.$goToPlace,
-                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
-                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
+                    CurrentTargetRow(                                                 showActionSheet: self.$showActionSheet,
+                                                                                      
+                                                                                      showSheet: self.$showSheet,
+                                                                                      sheetSelection: self.$sheetSelection,
+                                                                                      placeIdToNavigateTo: self.$placeIdToNavigateTo,
+                                                                                      goToPlace: self.$goToPlace,
+                                                                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                                                      imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                         .offset(y: -36)
                         .padding(.bottom, -36)
                     ScrollView {
@@ -121,6 +126,7 @@ struct ExploreActiveView: View {
                                 ForEach (sortExplorePlaces(places: exploreModel.exploreList!.places.filter{$0.id != exploreModel.exploreList!.currentTarget?.id && !$0.visited}, sortByDistance: self.sortByDistance), id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                                 { place in
                                     ExplorePlaceRow(place: place,
+                                                    showActionSheet: self.$showActionSheet,
                                                     showSheet: self.$showSheet,
                                                     sheetSelection: self.$sheetSelection,
                                                     placeIdToNavigateTo: self.$placeIdToNavigateTo,
@@ -159,6 +165,7 @@ struct ExploreActiveView: View {
                                 ForEach (exploreModel.exploreList!.places.filter{$0.visited}.sorted{$0.visited_at! > $1.visited_at!}, id: \.self) // \.self is very important here, otherwise the list wont update the list_item, because it thinks the item is still the same because the id didn't change (if place would be Identifiable)
                                 { place in
                                     ExplorePlaceVisitedRow(place: place,
+                                                           showActionSheet: self.$showActionSheet,
                                                            showSheet: self.$showSheet,
                                                            sheetSelection: self.$sheetSelection,
                                                            placeIdToNavigateTo: self.$placeIdToNavigateTo,

@@ -5,15 +5,13 @@ struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     
     // PROPS
+    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
-    // LOCAL
-    @State var showActionSheet: Bool = false
     
     var body: some View {
         VStack {
@@ -77,36 +75,19 @@ struct CurrentTargetRow: View {
                         .onTapGesture {
                             self.exploreModel.markPlaceAsVisited(self.exploreModel.exploreList!.currentTarget!)
                         }
-                        HStack {
-                            Image(systemName: "ellipsis")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 20, height: 20)
-                        }
-                        .frame(width: 40)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            self.showActionSheet.toggle()
-                        }
-                        .actionSheet(isPresented: self.$showActionSheet) {
-                            ActionSheet(title: Text("\(self.exploreModel.exploreList!.currentTarget!.place.name!)"), buttons: [
-                                .default(Text("Add to collection")) {
-                                    self.showSheet.toggle()
-                                    self.sheetSelection = "add_to_placelist"
-                                    self.placeForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!
-                                    self.imageForAddPlaceToListSheet = self.exploreModel.exploreList!.currentTarget!.image
-                                },
-                                .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.exploreModel.exploreList!.currentTarget!)
-                                },
-                                .cancel()
-                            ])
-                        }
+                        ThreeDotsWithActionSheet(place: self.exploreModel.exploreList!.currentTarget!,
+                                                 buttonColor: Color("text-primary"),
+                                                 showActionSheet: self.$showActionSheet,
+                                                 showSheet: self.$showSheet,
+                                                 sheetSelection: self.$sheetSelection,
+                                                 placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                                 imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
                     }
                     .padding(.leading, 10)
                 } else if (exploreModel.exploreList!.currentTarget == nil && !exploreModel.exploreList!.places.filter{!$0.visited}.isEmpty) {
                     HStack(spacing: 0.0) {
                         VStack(alignment: .center, spacing: 0){
-                        Image(uiImage: UIImage(named: "explore-empty-target-bw-50")!)
+                            Image(uiImage: UIImage(named: "explore-empty-target-bw-50")!)
                                 .renderingMode(.original)
                                 .resizable()
                                 .scaledToFit()
@@ -122,7 +103,7 @@ struct CurrentTargetRow: View {
                 } else {
                     HStack(spacing: 0.0) {
                         VStack(alignment: .center, spacing: 0){
-                        Image(uiImage: UIImage(named: "explore-empty-guidebook-bw-50")!)
+                            Image(uiImage: UIImage(named: "explore-empty-guidebook-bw-50")!)
                                 .renderingMode(.original)
                                 .resizable()
                                 .scaledToFit()
@@ -152,15 +133,13 @@ struct ExplorePlaceRow: View {
     
     // PROPS
     var place: ExplorePlace
+    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
-    // LOCAL
-    @State var showActionSheet: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 0.0) {
@@ -216,30 +195,13 @@ struct ExplorePlaceRow: View {
             .onTapGesture {
                 self.exploreModel.changeCurrentTargetTo(self.place)
             }
-            HStack {
-                Image(systemName: "ellipsis")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-            }
-            .frame(width: 40)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                self.showActionSheet.toggle()
-            }
-            .actionSheet(isPresented: self.$showActionSheet) {
-                ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
-                    .default(Text("Add to collection")) {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "add_to_placelist"
-                        self.placeForAddPlaceToListSheet = self.place
-                        self.imageForAddPlaceToListSheet = self.place.image
-                    },
-                    .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.place)
-                    },
-                    .cancel()
-                ])
-            }
+            ThreeDotsWithActionSheet(place: self.place,
+                                     buttonColor: Color("text-primary"),
+                                     showActionSheet: self.$showActionSheet,
+                                     showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
         }
         .frame(height: 50)
         .padding(.leading, 5)
@@ -253,15 +215,13 @@ struct ExplorePlaceVisitedRow: View {
     
     // PROPS
     var place: ExplorePlace
+    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
     @Binding var goToPlace: Int?
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
-    
-    // LOCAL
-    @State var showActionSheet: Bool = false
     
     var body: some View {
         HStack(alignment: .center, spacing: 0.0) {
@@ -310,34 +270,58 @@ struct ExplorePlaceVisitedRow: View {
             .onTapGesture {
                 self.exploreModel.markPlaceAsUnvisited(self.place)
             }
-            HStack {
-                Image(systemName: "ellipsis")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 20, height: 20)
-                    .foregroundColor(Color("text-secondary"))
-            }
-            .frame(width: 40)
-            .contentShape(Rectangle())
-            .onTapGesture {
-                self.showActionSheet.toggle()
-            }
-            .actionSheet(isPresented: self.$showActionSheet) {
-                ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
-                    .default(Text("Add to collection")) {
-                        self.showSheet.toggle()
-                        self.sheetSelection = "add_to_placelist"
-                        self.placeForAddPlaceToListSheet = self.place
-                        self.imageForAddPlaceToListSheet = self.place.image
-                    },
-                    .destructive(Text("Remove from explore")) { ExploreModel.shared.removePlaceFromExplore(self.place)
-                    },
-                    .cancel()
-                ])
-            }
+            ThreeDotsWithActionSheet(place: self.place,
+                                     buttonColor: Color("text-secondary"),
+                                     showActionSheet: self.$showActionSheet,
+                                     showSheet: self.$showSheet,
+                                     sheetSelection: self.$sheetSelection,
+                                     placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
+                                     imageForAddPlaceToListSheet: self.$imageForAddPlaceToListSheet)
         }
         .frame(height: 50)
         .padding(.leading, 20)
         .padding(.trailing, 10)
     }
+}
+
+struct ThreeDotsWithActionSheet: View {
+    @ObservedObject var exploreModel = ExploreModel.shared
+    // PROPS
+    var place: ExplorePlace
+    var buttonColor: Color
+    @Binding var showActionSheet: Bool
+    @Binding var showSheet: Bool
+    @Binding var sheetSelection: String
+    @Binding var placeForAddPlaceToListSheet: ExplorePlace?
+    @Binding var imageForAddPlaceToListSheet: UIImage?
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "ellipsis")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 20, height: 20)
+                .foregroundColor(buttonColor)
+        }
+        .frame(width: 40)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            self.showActionSheet.toggle()
+        }
+        .actionSheet(isPresented: self.$showActionSheet) {
+            ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
+                .default(Text("Add to collection")) {
+                    self.showSheet.toggle()
+                    self.sheetSelection = "add_to_placelist"
+                    self.placeForAddPlaceToListSheet = self.place
+                    self.imageForAddPlaceToListSheet = self.place.image
+                },
+                .destructive(Text("Remove from explore")) {
+                    self.exploreModel.removePlaceFromExplore(self.place)
+                },
+                .cancel()
+                ])
+        }
+    }
+    
 }

@@ -1,5 +1,6 @@
 import Foundation
 import GooglePlaces
+import Combine
 
 struct ExploreList: Equatable {
     var places: [ExplorePlace] = []
@@ -21,9 +22,14 @@ struct ExplorePlace: Equatable, Hashable {
 class ExploreModel: ObservableObject {
     
     static let shared = ExploreModel()
-        
-    @Published var exploreList: ExploreList? = nil
+    let objectWillChange = PassthroughSubject<Void, Never>()
+    
+
+    @Published var exploreList: ExploreList? = nil {
+        willSet { objectWillChange.send() }
+    }
     @Published var isLoadingPlaces = false
+    
     var locationManager = LocationManager()
     
     private init(){}
@@ -145,12 +151,12 @@ class ExploreModel: ObservableObject {
             self.locationManager.location {
             print("Begin updating distances in explore places")
             // 1. Calculate and set distance to my location for all places
-            self.exploreList!.places = self.exploreList!.places.map { place in
-                var mutablePlace = place
-                let distance = calculateDistance(coordinate: place.place.coordinate,
-                                                 location: location)
-                mutablePlace.distance = distance
-                return mutablePlace
+            self.exploreList!.places.forEach { place in
+                if let index = self.exploreList!.places.firstIndex(where: {$0.id == place.id}) {
+                    let distance = calculateDistance(coordinate: place.place.coordinate,
+                                                                     location: location)
+                    self.exploreList!.places[index].distance = distance
+                }
             }
             // 2. Update distance in current target
             if (exploreList.currentTarget != nil) {
