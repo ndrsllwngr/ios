@@ -5,7 +5,6 @@ struct CurrentTargetRow: View {
     @ObservedObject var exploreModel = ExploreModel.shared
     
     // PROPS
-    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
@@ -77,7 +76,6 @@ struct CurrentTargetRow: View {
                         }
                         ThreeDotsWithActionSheet(place: self.exploreModel.exploreList!.currentTarget!,
                                                  buttonColor: Color("text-primary"),
-                                                 showActionSheet: self.$showActionSheet,
                                                  showSheet: self.$showSheet,
                                                  sheetSelection: self.$sheetSelection,
                                                  placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
@@ -133,7 +131,6 @@ struct ExplorePlaceRow: View {
     
     // PROPS
     var place: ExplorePlace
-    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
@@ -197,7 +194,6 @@ struct ExplorePlaceRow: View {
             }
             ThreeDotsWithActionSheet(place: self.place,
                                      buttonColor: Color("text-primary"),
-                                     showActionSheet: self.$showActionSheet,
                                      showSheet: self.$showSheet,
                                      sheetSelection: self.$sheetSelection,
                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
@@ -215,7 +211,6 @@ struct ExplorePlaceVisitedRow: View {
     
     // PROPS
     var place: ExplorePlace
-    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeIdToNavigateTo: String?
@@ -272,7 +267,6 @@ struct ExplorePlaceVisitedRow: View {
             }
             ThreeDotsWithActionSheet(place: self.place,
                                      buttonColor: Color("text-secondary"),
-                                     showActionSheet: self.$showActionSheet,
                                      showSheet: self.$showSheet,
                                      sheetSelection: self.$sheetSelection,
                                      placeForAddPlaceToListSheet: self.$placeForAddPlaceToListSheet,
@@ -285,15 +279,15 @@ struct ExplorePlaceVisitedRow: View {
 }
 
 struct ThreeDotsWithActionSheet: View {
-    @ObservedObject var exploreModel = ExploreModel.shared
     // PROPS
     var place: ExplorePlace
     var buttonColor: Color
-    @Binding var showActionSheet: Bool
     @Binding var showSheet: Bool
     @Binding var sheetSelection: String
     @Binding var placeForAddPlaceToListSheet: ExplorePlace?
     @Binding var imageForAddPlaceToListSheet: UIImage?
+    // LOCAL
+    @State var showActionSheet: Bool = false
     
     var body: some View {
         HStack {
@@ -307,6 +301,7 @@ struct ThreeDotsWithActionSheet: View {
         .contentShape(Rectangle())
         .onTapGesture {
             self.showActionSheet.toggle()
+            ExploreModel.shared.locationManagerPauseNotifiyingExploreForXSeconds()
         }
         .actionSheet(isPresented: self.$showActionSheet) {
             ActionSheet(title: Text("\(self.place.place.name!)"), buttons: [
@@ -317,10 +312,10 @@ struct ThreeDotsWithActionSheet: View {
                     self.imageForAddPlaceToListSheet = self.place.image
                 },
                 .destructive(Text("Remove from explore")) {
-                    self.exploreModel.removePlaceFromExplore(self.place)
+                    ExploreModel.shared.removePlaceFromExplore(self.place)
                 },
                 .cancel()
-                ])
+            ])
         }
     }
     

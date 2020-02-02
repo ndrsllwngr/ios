@@ -227,6 +227,13 @@ class ExploreModel: ObservableObject {
         }
     }
     
+    func locationManagerPauseNotifiyingExploreForXSeconds() {
+        self.locationManagerStopNotifyingExplore()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.locationManagerBeginNotifyingExplore()
+            }
+    }
+    
 }
 
 func calculateDistance(coordinate: CLLocationCoordinate2D, location: CLLocation) -> CLLocationDistance {
