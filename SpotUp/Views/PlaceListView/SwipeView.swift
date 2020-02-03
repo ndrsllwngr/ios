@@ -17,7 +17,7 @@ struct SwipeView: View {
     var body: some View {
         GeometryReader { geometry in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: self.spacing) {
+                HStack(alignment: .bottom, spacing: self.spacing) {
                     ForEach(sortPlaces(places: self.firestorePlaceList.places, sortByCreationDate: self.sortByCreationDate), id: \.self) { place in
                         PlaceCard(place: place.gmsPlace)
                             .frame(width: geometry.size.width)
@@ -50,7 +50,6 @@ struct SwipeView: View {
                         
                         withAnimation { self.offset = -(geometry.size.width + self.spacing) * CGFloat(self.index) }
                         self.isDragging = false
-                        
                     })
             )
         }.frame(width: 260, height: 150)
