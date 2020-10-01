@@ -79,3 +79,8 @@ Pods/
 SpotUp.xcodeproj/
 
 SpotUp.xcworkspace/
+
+.vscode/settings.json
+
+replacements.txt
+GoogleService-Info.plist
